@@ -146,6 +146,7 @@
 </script>
 
 =======
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -285,5 +286,146 @@
     const classStatus = formatarClasseStatus(status);
 </script>
 
+=======
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Formulários Preenchidos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .status-header {
+            padding: 1rem;
+            color: white;
+        }
+
+        .status-pendente {
+            background-color: #ffc107;
+        }
+
+        .status-analise {
+            background-color: #17a2b8;
+        }
+
+        .status-vistoria {
+            background-color: #6f42c1;
+        }
+
+        .status-aprovado {
+            background-color: #198754;
+        }
+
+        .status-reprovado {
+            background-color: #dc3545;
+        }
+
+        .status-cancelado {
+            background-color: #6c757d;
+        }
+
+        .status-nao-realizada {
+            background-color: #fd7e14;
+        }
+
+        .status-sem-status {
+            background-color: #343a40;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class=" container my-2 text-end">
+        <a href="processo.html" type="button" class="btn btn-primary" id="btnExcluir">
+            <i class="bi bi-trash"></i> Novo
+        </a>
+    </div>
+    <div class="container my-2">
+        <div id="lista-processos"></div>
+    </div>
+
+    <script>
+        const listaContainer = document.getElementById('lista-processos');
+        const processos = Object.keys(localStorage)
+            .filter(chave => chave.startsWith("processo-"))
+            .map(chave => {
+                const dados = JSON.parse(localStorage.getItem(chave));
+                return {
+                    processo: chave.replace("processo-", ""),
+                    ...dados
+                };
+            });
+
+        const gruposPorStatus = {};
+
+        processos.forEach(item => {
+            const status = item.status || "Sem Status";
+            if (!gruposPorStatus[status]) gruposPorStatus[status] = [];
+            gruposPorStatus[status].push(item);
+        });
+
+        // Função que normaliza o nome da classe
+        function formatarClasseStatus(status) {
+            return 'status-' + status.toLowerCase()
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove acentos
+                .replace(/\s+/g, '-') // troca espaço por hífen
+                .replace(/[^a-z0-9\-]/g, ''); // remove símbolos especiais
+        }
+
+        for (const status in gruposPorStatus) {
+            const grupo = gruposPorStatus[status];
+            const classStatus = formatarClasseStatus(status); // ✅ agora sim
+
+            const card = document.createElement("div");
+            card.className = "card mb-4";
+
+            card.innerHTML = `
+            <div class="status-header ${classStatus}">
+              <h5 class="mb-0">${status}</h5>
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-striped m-0">
+                <thead class="table-light">
+                  <tr>
+                    <th>Processo</th>
+                    <th>Instituição</th>
+                    <th>Data de Início</th>
+                    <th>Tipo</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  ${grupo.map(item => `
+                    <tr>
+                      <td><a href="processo.html?processo=${encodeURIComponent(item.processo)}">${item.processo}</a></td>
+                      <td>${item.instituicao || "-"}</td>
+                      <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
+                      <td>${item.tipo || "-"}</td>
+                      <td>${item.status || "-"}</td>
+                    </tr>
+                  `).join("")}
+                </tbody>
+              </table>
+            </div>
+        `;
+
+            listaContainer.appendChild(card);
+        }
+    </script>
+
+</body>
+<script>
+    //ajuste no nome das classes de status
+    function formatarClasseStatus(status) {
+        return 'status-' + status.toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove acentos
+            .replace(/\s+/g, '-') // troca espaço por hífen
+            .replace(/[^a-z0-9\-]/g, ''); // remove símbolos especiais
+    }
+
+    const classStatus = formatarClasseStatus(status);
+</script>
+
+>>>>>>> 2fb588b084ce1e7f40f5f5d762520117f4346aeb
 >>>>>>> ba2015ce0a5b980f93ef068118bd64f8a0522f75
 </html>
