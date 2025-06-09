@@ -706,8 +706,21 @@
 			console.log("Auto-salvo:", processo);
 		}
 		document.querySelectorAll("input, select, textarea").forEach(el => {
-			el.addEventListener("change", salvarAutomaticamente);
-			el.addEventListener("input", salvarAutomaticamente);
+			if (el.id !== "processoBusca") {
+				el.addEventListener("change", salvarAutomaticamente);
+				el.addEventListener("input", salvarAutomaticamente);
+			}
+		});
+
+		let processoTimeout = null;
+
+		document.getElementById("processoBusca").addEventListener("input", function () {
+			clearTimeout(processoTimeout);
+
+			if (this.value.length === 25) {
+				// dá um pequeno tempo pro usuário terminar
+				processoTimeout = setTimeout(salvarAutomaticamente, 500);
+			}
 		});
 
 		// Botão BUSCAR
