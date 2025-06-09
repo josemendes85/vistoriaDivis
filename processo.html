@@ -3,11 +3,25 @@
 
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Formulário de Medidas de Segurança</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
 
 	<style>
+		:root {
+			--primary-color: #0066cc;
+			--success-color: #198754;
+			--warning-color: #ffc107;
+			--danger-color: #dc3545;
+			--info-color: #17a2b8;
+			--secondary-color: #6c757d;
+		}
+
+		.autocomplete-container {
+			position: relative;
+		}
+
 		.autocomplete-list {
 			position: absolute;
 			z-index: 1000;
@@ -17,510 +31,663 @@
 			background-color: #fff;
 			border: 1px solid #ced4da;
 			border-top: none;
+			border-radius: 0 0 0.375rem 0.375rem;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
 		}
 
 		.autocomplete-item {
-			padding: 0.5rem;
+			padding: 0.75rem;
 			cursor: pointer;
+			border-bottom: 1px solid #e9ecef;
+			transition: background-color 0.15s ease-in-out;
 		}
 
-		.autocomplete-item:hover {
+		.autocomplete-item:hover,
+		.autocomplete-item.highlighted {
 			background-color: #e9ecef;
 		}
 
-		.badge {
-			padding: 0.5em 0.75em;
-			font-size: 0.9em;
-			border-radius: 1em;
+		.autocomplete-item:last-child {
+			border-bottom: none;
 		}
 
 		.tag {
-			background-color: #f1f3f5;
-			border: 1px solid #ced4da;
-			border-radius: .25rem;
-			padding: .25rem .5rem;
-			margin-right: .5rem;
-			margin-bottom: .5rem;
+			background-color: #f8f9fa;
+			border: 1px solid #dee2e6;
+			border-radius: 0.375rem;
+			padding: 0.375rem 0.75rem;
+			margin: 0.25rem;
 			display: inline-flex;
 			align-items: center;
+			font-size: 0.875rem;
+			transition: all 0.15s ease-in-out;
 		}
 
-		/* Cores baseadas no status */
+		.tag:hover {
+			background-color: #e9ecef;
+			border-color: #adb5bd;
+		}
+
+		.btn-close-custom {
+			background: none;
+			border: none;
+			font-size: 0.75rem;
+			margin-left: 0.5rem;
+			opacity: 0.5;
+			transition: opacity 0.15s ease-in-out;
+			cursor: pointer;
+		}
+
+		.btn-close-custom:hover {
+			opacity: 1;
+		}
+
+		/* Status Colors */
 		.status-pendente {
-			background-color: #ffc107;
+			background-color: var(--warning-color);
+			color: #000;
 		}
 
 		.status-analise {
-			background-color: #17a2b8;
+			background-color: var(--info-color);
+			color: #fff;
 		}
 
 		.status-vistoria {
 			background-color: #6f42c1;
+			color: #fff;
 		}
 
 		.status-aprovado {
-			background-color: #198754;
+			background-color: var(--success-color);
+			color: #fff;
 		}
 
 		.status-reprovado {
-			background-color: #dc3545;
+			background-color: var(--danger-color);
+			color: #fff;
 		}
 
 		.status-cancelado {
-			background-color: #6c757d;
+			background-color: var(--secondary-color);
+			color: #fff;
 		}
 
 		.status-nao-realizada {
 			background-color: #fd7e14;
+			color: #fff;
 		}
 
 		.status-sem-status {
 			background-color: #343a40;
+			color: #fff;
+		}
+
+		.form-section {
+			margin-bottom: 2rem;
+			padding: 1.5rem;
+			background-color: #f8f9fa;
+			border-radius: 0.5rem;
+		}
+
+		.section-title {
+			margin-bottom: 1rem;
+			padding-bottom: 0.5rem;
+			border-bottom: 2px solid var(--primary-color);
+			color: var(--primary-color);
+			font-weight: 600;
+		}
+
+		.loading-spinner {
+			display: none;
+			text-align: center;
+			padding: 1rem;
+		}
+
+		.toast-container {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			z-index: 1055;
+		}
+
+		.location-icon {
+			transform: scale(2.5);
+			color: #198754;
+			transition: transform 0.3s ease;
+		}
+
+		.location-icon:hover {
+			transform: scale(3);
+		}
+
+		@media (max-width: 768px) {
+			.form-section {
+				padding: 1rem;
+			}
+
+			.location-icon {
+				transform: scale(2);
+			}
 		}
 	</style>
 </head>
 
 <body>
-	<div class="container-fluid mt-2">
-		<h2 id="tituloLaudo" class="text-center">Laudo de Vistoria</h2>
+	<div class="toast-container"></div>
 
-		<form class=" row g-3" autocomplete="off">
+	<div class="container-fluid mt-3">
+		<div class="text-center mb-4">
+			<h2 id="tituloLaudo" class="display-6">Laudo de Vistoria</h2>
+			<p class="text-muted">Sistema de Medidas de Segurança Contra Incêndio</p>
+		</div>
 
-			<div class="col-md-8">
-				<div class="row">
-					<div class="col-md-10">
-						<label for="processoBusca" class="form-label">Processo</label>
+		<form class="needs-validation" novalidate autocomplete="off">
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-file-text me-2"></i>Identificação do Processo
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-8">
+						<div class="row">
+							<div class="col-md-10">
+								<label for="processoBusca" class="form-label">
+									Número do Processo <span class="text-danger">*</span>
+								</label>
+								<div class="input-group">
+									<input type="text" class="form-control" id="processoBusca"
+										placeholder="00000-00000000/0000-00" maxlength="25" required>
+									<button class="btn btn-outline-primary" type="button" id="buscarProcesso"
+										title="Buscar Processo">
+										<i class="bi bi-search"></i>
+									</button>
+									<div class="invalid-feedback">
+										Por favor, informe o número do processo.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						class="col-md-4 bg-gradient bg-success d-flex justify-content-center align-items-center text-light rounded">
+						<i class="bi bi-geo-alt-fill location-icon" title="Localização GPS"></i>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-building me-2"></i>Dados da Instituição
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-4">
+						<label for="cnpj" class="form-label">CNPJ <span class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="cnpj" placeholder="00.000.000/0000-00"
+							maxlength="18" required>
+						<div class="invalid-feedback">CNPJ inválido ou não informado.</div>
+					</div>
+
+					<div class="col-md-8">
+						<label for="instituicao" class="form-label">Razão Social <span
+								class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="instituicao" placeholder="Nome da Instituição"
+							required>
+						<div class="invalid-feedback">Por favor, informe a razão social.</div>
+					</div>
+
+					<div class="col-md-8">
+						<label for="endereco" class="form-label">Endereço Completo <span
+								class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="endereco"
+							placeholder="Rua, número, bairro, cidade - UF" required>
+						<div class="invalid-feedback">Por favor, informe o endereço completo.</div>
+					</div>
+
+					<div class="col-md-4">
+						<label for="localizacao" class="form-label">Coordenadas GPS</label>
 						<div class="input-group">
-							<input type="text" class="form-control" id="processoBusca"
-								placeholder="00000-00000000/0000-00" maxlength="25">
-							<button class="btn btn-outline-secondary" type="button" id="buscarProcesso">
-								<i class="bi bi-search"></i>
+							<input type="text" class="form-control" id="localizacao"
+								placeholder="-15.000000, -47.000000" maxlength="25">
+							<button class="btn btn-outline-success" type="button" id="buscarLocalizacao"
+								title="Obter localização atual">
+								<i class="bi bi-geo-alt-fill"></i>
 							</button>
+						</div>
+						<div class="form-text">Clique no botão para obter sua localização atual</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-diagram-3 me-2"></i>Classificação da Edificação
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-5">
+						<label for="ocupacao" class="form-label">Ocupação <span class="text-danger">*</span></label>
+						<select class="form-select" id="ocupacao" required>
+							<option value="">Selecione a ocupação</option>
+							<option value="01">01 - Residenciais</option>
+							<option value="02">02 - Transitórias</option>
+							<option value="03">03 - Comerciais</option>
+							<option value="04">04 - Serviços Profissionais</option>
+							<option value="05">05 - Escolares</option>
+							<option value="06">06 - Concentração de Público</option>
+							<option value="07">07 - Garagens</option>
+							<option value="08">08 - Hospitalares</option>
+							<option value="09">09 - Industriais</option>
+							<option value="10">10 - Depósitos</option>
+							<option value="11">11 - Armazenamento e instalações de alto risco</option>
+							<option value="12">12 - Especiais</option>
+							<option value="13">13 - Mistas</option>
+						</select>
+						<div class="invalid-feedback">Por favor, selecione a ocupação.</div>
+					</div>
+
+					<div class="col-md-5">
+						<label for="grupo" class="form-label">Grupo <span class="text-danger">*</span></label>
+						<select class="form-select" id="grupo" required>
+							<option value="">Selecione o grupo</option>
+							<option value="01">01 - Residenciais unifamiliares</option>
+							<option value="02">02 - Residenciais multifamiliares</option>
+							<option value="03">03 - Habitações coletivas</option>
+							<option value="04">04 - Hotéis</option>
+							<option value="05">05 - Hotéis residenciais</option>
+							<option value="06">06 - Comércio de pequeno porte</option>
+							<option value="07">07 - Comércio de médio porte</option>
+							<option value="08">08 - Comércio de grande porte</option>
+							<option value="09">09 - Escritórios</option>
+							<option value="10">10 - Agências bancárias</option>
+							<option value="11">11 - Laboratórios e estúdios</option>
+							<option value="12">12 - Serviços de reparação</option>
+							<option value="13">13 - Escolas em geral</option>
+							<option value="14">14 - Escolas especiais</option>
+							<option value="15">15 - Locais para cultura física</option>
+							<option value="16">16 - Pré-escolas</option>
+							<option value="17">17 - Escolas para portadores de deficiências</option>
+							<option value="18">18 - Museus e bibliotecas</option>
+							<option value="19">19 - Templos religiosos</option>
+							<option value="20">20 - Centros esportivos e de exibição</option>
+							<option value="21">21 - Terminais de passageiros</option>
+							<option value="22">22 - Artes cênicas e auditórios</option>
+							<option value="23">23 - Clubes sociais</option>
+							<option value="24">24 - Construções provisórias</option>
+							<option value="25">25 - Restaurantes</option>
+							<option value="26">26 - Garagens em general</option>
+							<option value="27">27 - Oficinas</option>
+							<option value="28">28 - Hangares</option>
+							<option value="29">29 - Hospitais veterinários</option>
+							<option value="30">30 - Hospitais em general</option>
+							<option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
+							<option value="32">32 - Clínicas</option>
+							<option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
+							<option value="34">34 - Indústrias > 300 MJ/m² e < 1200 MJ/m²</option>
+							<option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
+							<option value="36">36 - Depósitos de material incombustível</option>
+							<option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
+							<option value="38">38 - Depósitos > 300 MJ/m² e < 1200 MJ/m²</option>
+							<option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
+							<option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
+							<option value="41">41 - Explosivos</option>
+							<option value="42">42 - Produtos perigosos</option>
+							<option value="43">43 - Vegetações</option>
+							<option value="44">44 - Canteiros de obras</option>
+							<option value="45">45 - Centros esportivos (> 2500 pessoas)</option>
+							<option value="46">46 - Parques de diversões</option>
+							<option value="47">47 - Centrais de comunicação e energia</option>
+							<option value="48">48 - Túneis</option>
+							<option value="49">49 - Silos</option>
+							<option value="50">50 - Locais com restrição de liberdade</option>
+							<option value="51">51 - Destinações variáveis</option>
+						</select>
+						<div class="invalid-feedback">Por favor, selecione o grupo.</div>
+					</div>
+
+					<div class="col-md-2">
+						<label for="area" class="form-label">Área (m²)<span class="text-danger">*</span></label>
+						<input type="number" step="0.01" min="0" class="form-control" id="area" placeholder="0.00"
+							required>
+						<div class="invalid-feedback">Por favor, informe a área.</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-clipboard-check me-2"></i>Dados da Vistoria
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-8">
+						<label for="responsavel" class="form-label">Responsável pela Edificação</label>
+						<input type="text" class="form-control" id="responsavel" placeholder="Nome completo e telefone">
+					</div>
+
+					<div class="col-md-4">
+						<label for="tipo" class="form-label">Tipo de Vistoria <span class="text-danger">*</span></label>
+						<select class="form-select" id="tipo" required>
+							<option value="">Selecione o tipo</option>
+							<option value="RLE">RLE - Relatório de Levantamento de Exigências</option>
+							<option value="Relatório Técnico">Relatório Técnico</option>
+							<option value="Denúncia">Denúncia</option>
+							<option value="Inopinada">Vistoria Inopinada</option>
+							<option value="Dilação de Prazo">Dilação de Prazo</option>
+							<option value="PPCI">PPCI - Plano de Prevenção</option>
+							<option value="Outros">Outros</option>
+						</select>
+						<div class="invalid-feedback">Por favor, selecione o tipo de vistoria.</div>
+					</div>
+
+					<div class="col-md-4">
+						<label for="inicio" class="form-label">Data/Hora de Início</label>
+						<input type="datetime-local" class="form-control" id="inicio">
+					</div>
+
+					<div class="col-md-4">
+						<label for="fim" class="form-label">Data/Hora de Término</label>
+						<input type="datetime-local" class="form-control" id="fim">
+					</div>
+
+					<div class="col-md-4">
+						<label class="form-label">É retorno de vistoria?</label>
+						<div class="d-flex gap-3 mt-2">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="retorno" id="retornoSim" value="sim">
+								<label class="form-check-label" for="retornoSim">Sim</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="retorno" id="retornoNao" value="nao"
+									checked>
+								<label class="form-check-label" for="retornoNao">Não</label>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 
-			<div class="col-md-4 bg-dark d-flex justify-content-center align-items-center text-light">
-				<a href="#" class="bi bi-geo-alt-fill link-light text-end" style="transform: scale(3);"></a>
-			</div>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-person me-2"></i>Dados do Acompanhante
+				</h4>
 
-			<div class="col-md-4">
-				<label for="cnpj" class="form-label">CNPJ</label>
-				<input type="text" class="form-control" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18">
-			</div>
-
-			<div class="col-md-8">
-				<label for="instituicao" class="form-label">Instituição</label>
-				<input type="text" class="form-control" id="instituicao" placeholder="Nome da Instituição">
-			</div>
-
-			<div class="col-md-8">
-				<label for="endereco" class="form-label">Endereço</label>
-				<input type="text" class="form-control" id="endereco" placeholder="Endereço">
-			</div>
-
-			<div class="col-md-4">
-				<label for="localizacao" class="form-label">Localização</label>
-				<div class="input-group">
-					<input type="text" class="form-control" id="localizacao" placeholder="-00.000000, -00.000000"
-						maxlength="25">
-					<button class="btn btn-outline-secondary" type="button" id="buscarLocalizacao">
-						<i class="bi bi-geo-alt-fill"></i>
-					</button>
-				</div>
-			</div>
-
-			<div class="col-md-5">
-				<label for="ocupacao" class="form-label">Ocupação</label>
-				<select class="form-select" id="ocupacao">
-					<option value="">Selecione</option>
-					<option value="01">01 - Residenciais</option>
-					<option value="02">02 - Transitórias</option>
-					<option value="03">03 - Comerciais</option>
-					<option value="04">04 - Serviços Profissionais</option>
-					<option value="05">05 - Escolares</option>
-					<option value="06">06 - Concentração de Público</option>
-					<option value="07">07 - Garagens</option>
-					<option value="08">08 - Hospitalares</option>
-					<option value="09">09 - Industriais</option>
-					<option value="10">10 - Depósitos</option>
-					<option value="11">11 - Armazenamento e instalações de alto risco</option>
-					<option value="12">12 - Especiais</option>
-					<option value="13">13 - Mistas</option>
-				</select>
-			</div>
-
-			<div class="col-md-5">
-				<label for="grupo" class="form-label">Grupo</label>
-				<select class="form-select" id="grupo">
-					<option value="">Selecione</option>
-					<option value="01">01 - Residenciais unifamiliares</option>
-					<option value="02">02 - Residenciais multifamiliares</option>
-					<option value="03">03 - Habitações coletivas</option>
-					<option value="04">04 - Hotéis</option>
-					<option value="05">05 - Hotéis residenciais</option>
-					<option value="06">06 - Comércio de pequeno porte</option>
-					<option value="07">07 - Comércio de médio porte</option>
-					<option value="08">08 - Comércio de grande porte</option>
-					<option value="09">09 - Escritórios</option>
-					<option value="10">10 - Agências bancárias</option>
-					<option value="11">11 - Laboratórios e estúdios</option>
-					<option value="12">12 - Serviços de reparação</option>
-					<option value="13">13 - Escolas em geral</option>
-					<option value="14">14 - Escolas especiais</option>
-					<option value="15">15 - Locais para cultura física</option>
-					<option value="16">16 - Pré-escolas</option>
-					<option value="17">17 - Escolas para portadores de deficiências</option>
-					<option value="18">18 - Museus e bibliotecas</option>
-					<option value="19">19 - Templos religiosos</option>
-					<option value="20">20 - Centros esportivos e de exibição</option>
-					<option value="21">21 - Terminais de passageiros</option>
-					<option value="22">22 - Artes cênicas e auditórios</option>
-					<option value="23">23 - Clubes sociais</option>
-					<option value="24">24 - Construções provisórias</option>
-					<option value="25">25 - Restaurantes</option>
-					<option value="26">26 - Garagens em geral</option>
-					<option value="27">27 - Oficinas</option>
-					<option value="28">28 - Hangares</option>
-					<option value="29">29 - Hospitais veterinários</option>
-					<option value="30">30 - Hospitais em geral</option>
-					<option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
-					<option value="32">32 - Clínicas</option>
-					<option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
-					<option value="34">34 - Indústrias > 300 MJ/m² e < 1200 MJ/m²</option>
-					<option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
-					<option value="36">36 - Depósitos de material incombustível</option>
-					<option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
-					<option value="38">38 - Depósitos > 300 MJ/m² e < 1200 MJ/m²</option>
-					<option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
-					<option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
-					<option value="41">41 - Explosivos</option>
-					<option value="42">42 - Produtos perigosos</option>
-					<option value="43">43 - Vegetações</option>
-					<option value="44">44 - Canteiros de obras</option>
-					<option value="45">45 - Centros esportivos (> 2500 pessoas)</option>
-					<option value="46">46 - Parques de diversões</option>
-					<option value="47">47 - Centrais de comunicação e energia</option>
-					<option value="48">48 - Túneis</option>
-					<option value="49">49 - Silos</option>
-					<option value="50">50 - Locais com restrição de liberdade</option>
-					<option value="51">51 - Destinações variáveis</option>
-				</select>
-			</div>
-
-			<div class="col-md-2">
-				<label for="area" class="form-label">Área(m²)</label>
-				<input type="number" step="0.01" class="form-control" id="area" placeholder="Área">
-			</div>
-
-			<div class="col-md-8">
-				<label for="responsavel" class="form-label">Responsável</label>
-				<input type="text" class="form-control" id="responsavel" placeholder="Nome e telefone do Responsável">
-			</div>
-
-			<div class="col-md-4">
-				<label for="tipo" class="form-label">Tipo</label>
-				<select class="form-select" id="tipo">
-					<option value="">Selecione</option>
-					<option>RLE</option>
-					<option>Relatório Técnico</option>
-					<option>Denúncia</option>
-					<option>Inopinada</option>
-					<option>Dilação de Prazo</option>
-					<option>PPCI</option>
-					<option>Outros</option>
-				</select>
-			</div>
-			<div class="col-md-9">
-				<div class="row">
-					<div class="col-sm-6">
-						<label for="inicio" class="form-label">Início</label>
-						<input type="datetime-local" class="form-control" id="inicio" placeholder="inicio">
+				<div class="row g-3">
+					<div class="col-md-4">
+						<label for="acompanhante" class="form-label">Nome Completo</label>
+						<input type="text" class="form-control" id="acompanhante" placeholder="Nome do acompanhante">
 					</div>
 
-					<div class="col-sm-6">
-						<label for="fim" class="form-label">Fim</label>
-						<input type="datetime-local" class="form-control" id="fim" placeholder="fim">
+					<div class="col-md-3">
+						<label for="cpf" class="form-label">CPF</label>
+						<input type="text" class="form-control" id="cpf" placeholder="000.000.000-00">
+						<div class="invalid-feedback">CPF inválido</div>
 					</div>
-				</div>
-			</div>
 
-			<div class="col-md-3">
-				<label class="form-label d-block">É retorno?</label>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="retorno" id="inlineRadio1" value="sim">
-					<label class="form-check-label" for="inlineRadio1">Sim</label>
-				</div>
-				<div class="form-check form-check-inline">
-					<input class="form-check-input" type="radio" name="retorno" id="inlineRadio2" value="nao" checked>
-					<label class="form-check-label" for="inlineRadio2">Não</label>
-				</div>
-			</div>
+					<div class="col-md-3">
+						<label for="funcao" class="form-label">Função/Cargo</label>
+						<input type="text" class="form-control" id="funcao" placeholder="Função na empresa">
+					</div>
 
-			<div class="col-md-4">
-				<label for="acompanhante" class="form-label">Dados do Acompanhante</label>
-				<input type="text" class="form-control" id="acompanhante" placeholder="Nome">
-			</div>
-			<div class="col-md-2">
-				<label for="cpf" class="form-label"> &nbsp; </label>
-				<input type="text" class="form-control" id="cpf" placeholder="CPF">
-				<div class="invalid-feedback">CPF inválido</div>
-			</div>
-			<div class="col-md-3">
-				<label for="funcao" class="form-label"> &nbsp; </label>
-				<input type="text" class="form-control" id="funcao" placeholder="Função">
-			</div>
-
-			<div class="col-md-3">
-				<label for="status" class="form-label">Status</label>
-				<select class="form-select" id="status">
-					<option value="">Selecione</option>
-					<option>Pendente</option>
-					<option>Análise</option>
-					<option>Vistoria</option>
-					<option>Aprovado</option>
-					<option>Reprovado</option>
-					<option>Cancelado</option>
-					<option>Não Realizada</option>
-				</select>
-			</div>
-
-			<div class="card mb-3">
-				<div class="card-header">Exigências de Segurança</div>
-				<div class="card-body">
-					<div class="mb-3">
-
-						<select class="form-select" id="selectCategoriaExigencia">
-							<option value="">Selecione uma Categoria</option>
+					<div class="col-md-2">
+						<label for="status" class="form-label">Status da Vistoria</label>
+						<select class="form-select" id="status">
+							<option value="">Selecione</option>
+							<option value="Pendente">Pendente</option>
+							<option value="Análise">Em Análise</option>
+							<option value="Vistoria">Em Vistoria</option>
+							<option value="Aprovado">Aprovado</option>
+							<option value="Reprovado">Reprovado</option>
+							<option value="Cancelado">Cancelado</option>
+							<option value="Não Realizada">Não Realizada</option>
 						</select>
 					</div>
-					<div id="categoriasSelecionadas" class="mb-3 d-flex flex-wrap gap-2"></div>
-					<label for="selectCategoriaExigencia" class="form-label">Adicionar Exigência por Categoria:</label>
-					<div id="exigenciasContainer">
+				</div>
+			</div>
+
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-shield-check me-2"></i>Exigências de Segurança Contra Incêndio
+				</h4>
+
+				<div class="mb-3">
+					<label for="selectCategoriaExigencia" class="form-label">Adicionar Categoria de Exigência:</label>
+					<select class="form-select" id="selectCategoriaExigencia">
+						<option value="">Selecione uma categoria para adicionar</option>
+					</select>
+				</div>
+
+				<div id="categoriasSelecionadas" class="mb-3">
+					<div class="d-flex flex-wrap gap-2" id="badgesCategorias"></div>
+				</div>
+
+				<div id="exigenciasContainer" class="loading-spinner">
+					<div class="spinner-border text-primary" role="status">
+						<span class="visually-hidden">Carregando exigências...</span>
 					</div>
 				</div>
 			</div>
 
-			<div class="col-md-12">
-				<label for="observacao" class="form-label">Observação</label>
-				<textarea rows="5" class="form-control" id="observacao" placeholder="Observação"></textarea>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-journal-text me-2"></i>Observações Gerais
+				</h4>
+
+				<div class="mb-3">
+					<label for="observacao" class="form-label">Observações da Vistoria</label>
+					<textarea rows="6" class="form-control" id="observacao"
+						placeholder="Descreva observações relevantes sobre a vistoria, condições encontradas, recomendações, etc."></textarea>
+					<div class="form-text">Utilize este campo para registrar informações importantes sobre a vistoria.
+					</div>
+				</div>
 			</div>
 
-			<div>
-				<a href="index.html" class="btn btn-light" id="btInicio">
-					<i class="bi bi-house"></i> Início
+			<div class="d-flex gap-2 mb-4">
+				<a href="index.html" class="btn btn-outline-secondary">
+					<i class="bi bi-house me-1"></i>Início
 				</a>
 
+				<button type="button" class="btn btn-success" id="btnSalvar">
+					<i class="bi bi-floppy me-1"></i>Salvar
+				</button>
+
+				<button type="button" class="btn btn-primary" id="btnGerar">
+					<i class="bi bi-file-earmark-pdf me-1"></i>Gerar Relatório
+				</button>
+
 				<button type="button" class="btn btn-danger" id="btnExcluir">
-					<i class="bi bi-trash"></i> Excluir
+					<i class="bi bi-trash me-1"></i>Excluir
 				</button>
 			</div>
-
 		</form>
 	</div>
 
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 	<script>
-		// Preenche o formulário automaticamente ao acessar com ?processo=...
-		document.addEventListener("DOMContentLoaded", () => {
-			const params = new URLSearchParams(window.location.search);
-			const processoParam = params.get("processo");
-			if (processoParam) {
-				document.getElementById("processoBusca").value = processoParam;
-				document.getElementById("buscarProcesso").click();
-			}
-		});
-		document.getElementById("status").addEventListener("change", function () {
-			aplicarCorDoStatus(this.value);
-		});
-	</script>
-
-	<script>
-		function aplicarCorDoStatus(status) {
-			const titulo = document.getElementById("tituloLaudo");
-			const classe = formatarClasseStatus(status);
-			titulo.className = `mb-4 text-center text-light ${classe}`;
-		}
-
-		// reusa a mesma função de formatação do lista.html
-		function formatarClasseStatus(status) {
-			return 'status-' + status.toLowerCase()
-				.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-				.replace(/\s+/g, '-')
-				.replace(/[^a-z0-9\-]/g, '');
-		}
-
-	</script>
-
-	<script>
-		//busca a localizacao atual
-		document.getElementById('buscarLocalizacao').addEventListener('click', () => {
-			if (navigator.geolocation) {
-				navigator.geolocation.getCurrentPosition(
-					(position) => {
-						const latitude = position.coords.latitude.toFixed(6);
-						const longitude = position.coords.longitude.toFixed(6);
-						document.getElementById('localizacao').value = `${latitude}, ${longitude}`;
-					},
-					(error) => {
-						switch (error.code) {
-							case error.PERMISSION_DENIED:
-								alert("Permissão negada para acessar a localização.");
-								break;
-							case error.POSITION_UNAVAILABLE:
-								alert("Informação de localização indisponível.");
-								break;
-							case error.TIMEOUT:
-								alert("Tempo de resposta excedido ao tentar obter localização.");
-								break;
-							default:
-								alert("Erro desconhecido ao buscar localização.");
-						}
-					}
-				);
-			} else {
-				alert("Seu navegador não suporta geolocalização.");
-			}
-		});
-
-	</script>
-	<script>
-		// Máscara do processo
-		const processoInput = document.getElementById('processoBusca');
-		processoInput.addEventListener('input', () => {
-			let value = processoInput.value.replace(/\D/g, "");
-			let formattedValue = "";
-
-			if (value.length > 0)
-				formattedValue += value.substring(0, 5);
-			if (value.length > 5)
-				formattedValue += "-" + value.substring(5, 13);
-			if (value.length > 13)
-				formattedValue += "/" + value.substring(13, 17);
-			if (value.length > 17)
-				formattedValue += "-" + value.substring(17, 19);
-
-			processoInput.value = formattedValue;
-		});
-
-		// Máscara do CNPJ
-		const cnpjInput = document.getElementById('cnpj');
-		cnpjInput.addEventListener('input', () => {
-			let value = cnpjInput.value.replace(/\D/g, "");
-			value = value.replace(/^(\d{2})(\d)/, "$1.$2");
-			value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-			value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
-			value = value.replace(/(\d{4})(\d)/, "$1-$2");
-			cnpjInput.value = value.slice(0, 18);
-		});
-	</script>
-
-	<script>
-		// validação e máscara CPF
-		const cpfInput = document.getElementById('cpf');
-
-		cpfInput.addEventListener('input', () => {
-			let value = cpfInput.value.replace(/\D/g, ''); // Remove não números
-			value = value.slice(0, 11); // Limita a 11 dígitos
-
-			// Aplica a máscara CPF: 000.000.000-00
-			if (value.length > 9) {
-				value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-			} else if (value.length > 6) {
-				value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-			} else if (value.length > 3) {
-				value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
-			}
-
-			cpfInput.value = value;
-		});
-
-		// Validação do CPF ao sair do campo
-		cpfInput.addEventListener('blur', () => {
-			const isValid = validarCPF(cpfInput.value);
-			if (!isValid && cpfInput.value !== '') {
-				cpfInput.classList.add('is-invalid');
-			} else {
-				cpfInput.classList.remove('is-invalid');
-			}
-		});
-
-		// Função de validação de CPF
-		function validarCPF(cpf) {
-			cpf = cpf.replace(/[^\d]+/g, '');
-
-			if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
-
-			let soma = 0;
-			for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i); let resto = 11 - (soma % 11); if (resto === 10 ||
-				resto === 11) resto = 0; if (resto !== parseInt(cpf.charAt(9))) return false; soma = 0; for (let i = 0; i < 10; i++) soma
-					+= parseInt(cpf.charAt(i)) * (11 - i); resto = 11 - (soma % 11); if (resto === 10 || resto === 11) resto = 0; if (resto
-						!== parseInt(cpf.charAt(10))) return false; return true;
-		} 
-	</script>
-	<script>
-		const nomesCategoria = {
-			'01': "DOCUMENTAÇÃO",
-			'02': "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
-			'03': "ILUMINAÇÃO DE EMERGÊNCIA",
-			'04': "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
-			'05': "SAÍDAS DE EMERGÊNCIA",
-			'06': "SISTEMA DE PROTEÇÃO POR HIDRANTES",
-			'07': "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
-			'08': "SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
-			'09': "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
-			'10': "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
-			'11': "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
-			'12': "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
-			'13': "BRIGADA DE INCÊNDIO",
-			'14': "ACESSO DE VIATURAS DE SOCORRO",
-			'15': "POSTOS DE COMBUSTÍVEIS",
-			'16': "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
-			'17': "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
-			'18': "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO"
+		// Configuração Global
+		const CONFIG = {
+			AUTO_SAVE_DELAY: 1000,
+			GEOLOCATION_TIMEOUT: 10000,
+			TOAST_DURATION: 3000
 		};
 
-		const sugestoesExigenciasPorCategoria = {
-			'01': ["Instalação", "Manutenção", "Teste Semestral"],
-			'02': ["Verificação", "Bateria", "Lâmpadas"],
-			'03': ["Recarga", "Sinalização", "Localização"],
-			'04': ["Desobstrução", "Portas Corta-Fogo", "Sinalização"],
-			'05': ["Rota de Fuga", "Equipamentos", "Pisos Escorregadios"],
-			'06': ["Pressão", "Mangueiras", "Registro"],
-			'07': ["Teste", "Bicos", "Manutenção"],
-			'08': ["Treinamento", "Equipamentos", "Simulados"],
-			'09': ["Atualização", "Planta", "Divulgação"],
-			'10': ["Teste", "Limpeza", "Bateria"],
-			'11': ["Dampers", "Exaustores", "Manutenção"],
-			'12': ["Portas Corta-Fogo", "Selagem", "Integridade"],
-			'13': ["Rampas", "Corrimãos", "Sinalização Tátil"],
-			'14': ["Brigadistas", "Colaboradores", "Primeiros Socorros"],
-			'15': ["Extintores", "Alarmes", "Hidrantes"],
-			'16': ["Disjuntores", "Fiação", "Quadros Elétricos"],
-			'17': ["Vazamento", "Tubulação", "Válvulas"],
-			'18': ["Coleta Seletiva", "Descarte", "Armazenamento"]
+		// Utilitários
+		const Utils = {
+			// Mostra toast de notificação
+			showToast(message, type = 'info') {
+				const toastContainer = document.querySelector('.toast-container');
+				const toastId = 'toast-' + Date.now();
+
+				const toastHTML = `
+					<div class="toast" id="${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
+						<div class="toast-header">
+							<i class="bi bi-${this.getToastIcon(type)} text-${type} me-2"></i>
+							<strong class="me-auto">Sistema</strong>
+							<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+						</div>
+						<div class="toast-body">${message}</div>
+					</div>
+				`;
+
+				toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+				const toastElement = new bootstrap.Toast(document.getElementById(toastId));
+				toastElement.show();
+
+				setTimeout(() => {
+					document.getElementById(toastId)?.remove();
+				}, CONFIG.TOAST_DURATION + 1000);
+			},
+
+			getToastIcon(type) {
+				const icons = {
+					success: 'check-circle',
+					danger: 'exclamation-triangle',
+					warning: 'exclamation-triangle',
+					info: 'info-circle'
+				};
+				return icons[type] || 'info-circle';
+			},
+
+			// Debounce para evitar múltiplas execuções
+			debounce(func, wait) {
+				let timeout;
+				return function executedFunction(...args) {
+					const later = () => {
+						clearTimeout(timeout);
+						func(...args);
+					};
+					clearTimeout(timeout);
+					timeout = setTimeout(later, wait);
+				};
+			},
+
+			// Formatar classe CSS do status
+			formatarClasseStatus(status) {
+				return 'status-' + status.toLowerCase()
+					.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+					.replace(/\s+/g, '-')
+					.replace(/[^a-z0-9\-]/g, '');
+			},
+
+			// Validar CPF
+			validarCPF(cpf) {
+				cpf = cpf.replace(/[^\d]+/g, '');
+
+				if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+				let soma = 0;
+				for (let i = 0; i < 9; i++) {
+					soma += parseInt(cpf.charAt(i)) * (10 - i);
+				}
+
+				let resto = 11 - (soma % 11);
+				if (resto === 10 || resto === 11) resto = 0;
+				if (resto !== parseInt(cpf.charAt(9))) return false;
+
+				soma = 0;
+				for (let i = 0; i < 10; i++) {
+					soma += parseInt(cpf.charAt(i)) * (11 - i);
+				}
+
+				resto = 11 - (soma % 11);
+				if (resto === 10 || resto === 11) resto = 0;
+				if (resto !== parseInt(cpf.charAt(10))) return false;
+
+				return true;
+			}
 		};
 
+		// Dados das exigências
+		const DADOS_SISTEMA = {
+			categorias: {
+				'01': "DOCUMENTAÇÃO",
+				'02': "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
+				'03': "ILUMINAÇÃO DE EMERGÊNCIA",
+				'04': "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
+				'05': "SAÍDAS DE EMERGÊNCIA",
+				'06': "SISTEMA DE PROTEÇÃO POR HIDRANTES",
+				'07': "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
+				'08': "SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
+				'09': "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
+				'10': "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
+				'11': "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
+				'12': "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
+				'13': "BRIGADA DE INCÊNDIO",
+				'14': "ACESSO DE VIATURAS DE SOCORRO",
+				'15': "POSTOS DE COMBUSTÍVEIS",
+				'16': "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
+				'17': "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
+				'18': "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO"
+			},
+
+			exigencias: {
+				'01': [
+					"01.001 - Apresentar o Projeto de Segurança Contra Incêndio e Pânico (Projeto de Incêndio) impresso, devidamente aprovado pelo Corpo de Bombeiros Militar do Distrito Federal (CBMDF), de acordo com o Decreto nº 21.361/2000. (Arts. 3º, § 1º, e 6º, do Dec. 23.154/2002)",
+					"01.002 - Apresentar o Projeto de Segurança Contra Incêndio e Pânico de Modificação (Projeto de Incêndio de Alteração), devidamente aprovado pelo CBMDF, com o redimensionamento das medidas de segurança contra incêndio e pânico, em função da ampliação de área, aumento da altura, mudança de ocupação ou layout, aumento da população ou do risco da edificação, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
+					"01.003 - Apresentar a Anotação de Responsabilidade Técnica (ART), Registro de Responsabilidade Técnica (RRT) ou Termo de Responsabilidade Técnica (TRT), de execução ou manutenção das medidas de segurança contra incêndio e pânico instaladas, emitida por responsável técnico e visada junto ao respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
+					"01.004 - Apresentar ao Agente Fiscalizador o laudo do teste de estanqueidade do sistema de alimentação, distribuição e armazenamento de Gás Liquefeito de Petróleo (GLP) da edificação/estabelecimento, juntamente com documento de responsabilidade técnica de sua realização, visado no seu respectivo órgão de classe, de acordo com a NT 05/2021-PARTE I-CBMDF. O referido laudo poderá possuir validade máxima de 05 anos, podendo variar para menos em função de riscos decorrentes das situações construtivas, das condições ambientais e de uso. No caso de troca da empresa fornecedora de gás, troca de componentes, alteração da rede de alimentação ou constatação de desgastes críticos deve ser realizado teste de estanqueidade, de acordo com os itens 5.23.1 e 5.23.2 da NBR 13523/2019 da ABNT e itens 1.1, 2.3 e 5.1.3 da NT 05/2021-PARTE I-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+					"01.005 - Apresentar o laudo de continuidade e aterramento elétrico do Sistema de Proteção contra Descargas Atmosféricas (SPDA) da edificação (estruturas contendo munição ou explosivos, ou em locais expostos à corrosão atmosféricas severa ou ainda estruturas pertencentes a fornecedores de serviços considerados essenciais (energia, água, sinais, etc), com validade máxima de 01 ano e documento de responsabilidade técnica de sua execução, visado no respectivo órgão de classe NBR 5419-3:2015 da ABNT. (Arts. 3º, II, m, e 6º, do Dec. 23.154/2002)",
+					"01.006 - Apresentar o laudo de continuidade e aterramento elétrico do Sistema de Proteção contra Descargas Atmosféricas (SPDA) da edificação, com validade máxima de 03 anos e o documento de responsabilidade técnica de sua execução, visado no respectivo órgão de classe NBR 5419-3:2015 da ABNT. (Arts. 3º, II, m, e 6º, do Dec. 23.154/2002)",
+					"01.007 - Apresentar a ART - Anotação de Responsabilidade Técnica de execução do grupo moto gerador instalado quando previsto nos sistemas obrigatórios, visada no respectivo órgão de classe, conforme NT 41/2024-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+					"01.008 - O documento de requerimento de solicitação de Licença de Funcionamento/Vistoria a Pedido deve estar disponível, especificando o endereço completo, CNPJ atualizado, razão social, nome fantasia, contato telefônico do proprietário e atividade pretendida.",
+					"01.009 - Apresentar alvará de construção (Habite-se).",
+					"01.010 - Apresentar Parecer de Aprovação do Projeto de incêndio com área conforme alvará de construção (Habite-se).",
+					"01.011 - Deverá estar presente para acompanhamento da vistoria, o interessado ou alguém por este indicado, portando o Projeto de Incêndio, aprovado e impresso, para a conferência dos sistemas de segurança contra incêndio e pânico, bem como as chaves para acesso a todas as dependências da edificação, incluindo casa de bombas e assemelhados. (Habite-se)",
+				],
+				'02': ["Sinalização correta", "Saídas desobstruídas", "Placas de emergência visíveis"],
+				'03': ["Iluminação de emergência funcional", "Baterias carregadas", "Locais de saída iluminados"],
+				'04': ["Extintores dentro da validade", "Extintores desobstruídos", "Sinalização de extintores"],
+				'05': ["Portas de emergência desobstruídas", "Rotas de fuga sinalizadas", "Barras antipânico funcionando"],
+				'06': ["Hidrantes em bom estado", "Mangueiras pressurizadas", "Chaves de hidrante acessíveis"],
+				'07': ["SPDA inspecionado", "Aterramento funcionando", "Captores instalados"],
+				'08': ["Instalação de GLP conforme norma", "Vazamentos controlados", "Ventilação adequada"],
+				'09': ["Detectores de fumaça funcionando", "Alarmes sonoros/visuais", "Central de alarme monitorada"],
+				'10': ["Chuveiros automáticos desobstruídos", "Manutenção em dia", "Pressão da água adequada"],
+				'11': ["Fiação elétrica em bom estado", "Quadros elétricos organizados", "Disjuntores funcionando"],
+				'12': ["PPCI aprovado e atualizado", "Plantas de emergência acessíveis", "Treinamento de equipe"],
+				'13': ["Brigadistas treinados", "Equipamentos de proteção individual", "Plano de ação em emergências"],
+				'14': ["Acesso de viaturas livre", "Vias de acesso sinalizadas", "Áreas de manobra desobstruídas"],
+				'15': ["Bombas de combustível aterradas", "Sinalização de segurança", "Extintores próximos às bombas"],
+				'16': ["Área de armazenamento de GLP segura", "Recipientes afastados de fontes de calor", "Ventilação adequada"],
+				'17': ["Food truck com extintor adequado", "Instalação de gás segura", "Saída desobstruída"],
+				'18': ["Comercialização de fogos de artifício em local seguro", "Armazenamento conforme normas", "Sinalização de perigo"]
+			}
+		};
 
 		let camposDeExigenciasAtivos = {}; // Para controlar quais categorias já estão ativas e suas exigências
 
 		document.addEventListener('DOMContentLoaded', () => {
 			preencherSelectCategorias();
+
+			// Preenche o formulário automaticamente ao acessar com ?processo=...
+			const params = new URLSearchParams(window.location.search);
+			const processoParam = params.get("processo");
+			if (processoParam) {
+				const processoInput = document.getElementById("processoBusca");
+				if (processoInput) {
+					processoInput.value = processoParam;
+					document.getElementById("buscarProcesso").click();
+				}
+			}
+
+			// Apply initial status color on load
+			aplicarCorDoStatus(document.getElementById("status").value || "Sem Status");
 		});
 
 		function preencherSelectCategorias() {
-			const select = document.getElementById('selectCategoriaExigencia'); // Nome corrigido
-			for (const chave in nomesCategoria) {
+			const select = document.getElementById('selectCategoriaExigencia');
+			for (const chave in DADOS_SISTEMA.categorias) {
 				const option = document.createElement('option');
 				option.value = chave;
-				option.textContent = nomesCategoria[chave];
+				option.textContent = DADOS_SISTEMA.categorias[chave];
 				select.appendChild(option);
 			}
 		}
 
-		document.getElementById('selectCategoriaExigencia').addEventListener('change', function () { // Nome corrigido
+		document.getElementById('selectCategoriaExigencia').addEventListener('change', function () {
 			const categoria = this.value;
 			if (categoria && !camposDeExigenciasAtivos[categoria]) {
 				adicionarCategoria(categoria);
@@ -537,16 +704,18 @@
 			divCategoria.classList.add('card', 'mb-3', 'p-3');
 
 			divCategoria.innerHTML = `
-		<div class="d-flex justify-content-between align-items-center mb-3">
-			<h5 class="mb-0">${nomesCategoria[categoria]}</h5>
-			<button type="button" class="btn-close" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')"></button>
-		</div>
-		<div class="mb-3">
-			<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${nomesCategoria[categoria]}" data-categoria="${categoria}">
-			<div class="autocomplete-list"></div>
-		</div>
-		<div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
-	`;
+				<div class="d-flex justify-content-between align-items-center mb-3">
+					<h5 class="mb-0">${DADOS_SISTEMA.categorias[categoria]}</h5>
+					<button type="button" class="btn-close-custom" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')"></button>
+				</div>
+				<div class="mb-3">
+					<div class="autocomplete-container">
+						<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${DADOS_SISTEMA.categorias[categoria]}" data-categoria="${categoria}">
+						<div class="autocomplete-list"></div>
+					</div>
+				</div>
+				<div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
+			`;
 			container.appendChild(divCategoria);
 
 			// Marca categoria como ativa, mesmo sem exigência
@@ -560,30 +729,27 @@
 		}
 
 		function adicionarBadgeCategoria(categoria) {
-			const wrapper = document.getElementById("categoriasSelecionadas");
+			const wrapper = document.getElementById("badgesCategorias");
 
 			// Impede duplicação visual
 			if (document.getElementById(`badge-categoria-${categoria}`)) return;
 
 			const span = document.createElement("span");
-			span.className = "badge bg-secondary tag";
+			span.className = "tag status-sem-status"; // Using a neutral tag style, adjust as needed
 			span.id = `badge-categoria-${categoria}`;
 			span.innerHTML = `
-		${nomesCategoria[categoria]}
-		<button type="button" class="btn-close btn-close-white ms-2" onclick="removerCategoria('${categoria}')"></button>
-	`;
+				${DADOS_SISTEMA.categorias[categoria]}
+				<button type="button" class="btn-close-custom" onclick="removerCategoria('${categoria}')"></button>
+			`;
 
 			wrapper.appendChild(span);
 		}
-
-
 
 		function removerCategoria(categoria) {
 			document.getElementById(`exigencias-categoria-${categoria}`)?.remove();
 			document.getElementById(`badge-categoria-${categoria}`)?.remove();
 			delete camposDeExigenciasAtivos[categoria];
 		}
-
 
 		function adicionarExigencia(categoria, exigencia) {
 			if (!camposDeExigenciasAtivos[categoria]) {
@@ -593,37 +759,46 @@
 				camposDeExigenciasAtivos[categoria].push(exigencia);
 
 				const badgesContainer = document.getElementById(`exigencias-inputs-${categoria}`);
-				const badgeHtml = `
-                    <span class="badge bg-secondary me-2" id="badge-${categoria}-${exigencia}">
-                        ${exigencia}
-                        <button type="button" class="btn-close btn-close-white" onclick="removerExigencia('${categoria}', '${exigencia}')" aria-label="Remover"></button>
-                    </span>
-                    <input type="hidden" name="exigencias[]" value="${exigencia}">
-                `;
-				const tempDiv = document.createElement('div');
-				tempDiv.innerHTML = badgeHtml.trim();
-				badgesContainer.appendChild(tempDiv.firstChild);
-				badgesContainer.appendChild(tempDiv.lastChild); // Adiciona também o input hidden
+				// Encode exigency string for use in ID to prevent issues with special characters
+				const encodedExigency = btoa(exigencia).replace(/=/g, ''); // Remove padding for cleaner ID
 
-				// Re-setup do autocomplete para atualizar a lista
+				// Cria o elemento <span> para a tag visível
+				const tagSpan = document.createElement('span');
+				tagSpan.className = "tag";
+				tagSpan.id = `tag-${categoria}-${encodedExigency}`;
+				tagSpan.innerHTML = `
+                    ${exigencia}
+                    <button type="button" class="btn-close-custom" onclick="removerExigencia('${categoria}', '${encodedExigency}', '${exigencia}')" aria-label="Remover"></button>
+                `;
+
+				// Cria o elemento <input type="hidden"> para coletar o dado
+				const hiddenInput = document.createElement('input');
+				hiddenInput.type = 'hidden';
+				hiddenInput.name = 'exigencias[]'; // Importante para coletar com querySelectorAll
+				hiddenInput.value = exigencia;
+
+				badgesContainer.appendChild(tagSpan);
+				badgesContainer.appendChild(hiddenInput); // Adiciona o input oculto
+
+				// Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
 				const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
 				if (autocompleteInput) {
-					// Simula um "input" para forçar a atualização da lista de sugestões
 					const event = new Event('input', { bubbles: true, cancelable: true });
 					autocompleteInput.dispatchEvent(event);
 				}
 			}
 		}
 
-		function removerExigencia(categoria, exigencia) {
+		function removerExigencia(categoria, encodedExigenciaId, exigenciaValue) {
 			if (camposDeExigenciasAtivos[categoria]) {
-				const index = camposDeExigenciasAtivos[categoria].indexOf(exigencia);
+				const index = camposDeExigenciasAtivos[categoria].indexOf(exigenciaValue);
 				if (index > -1) {
 					camposDeExigenciasAtivos[categoria].splice(index, 1);
-					// Remove o badge
-					document.getElementById(`badge-${categoria}-${exigencia}`)?.remove();
-					// Remove o input hidden associado
-					document.querySelector(`input[name="exigencias[]"][value="${exigencia}"]`)?.remove();
+					// Remove the tag element by its ID
+					document.getElementById(`tag-${categoria}-${encodedExigenciaId}`)?.remove();
+
+					// Remove all hidden inputs with this specific exigency value
+					document.querySelectorAll(`input[name="exigencias[]"][value="${exigenciaValue}"]`).forEach(input => input.remove());
 
 					if (camposDeExigenciasAtivos[categoria].length === 0) {
 						removerCategoria(categoria);
@@ -639,18 +814,6 @@
 			}
 		}
 
-		//Botao excluir
-		document.getElementById("btnExcluir").addEventListener("click", () => {
-			const processo = document.getElementById("processoBusca").value;
-			if (!processo) return alert("Nenhum processo carregado.");
-
-			if (confirm(`Deseja realmente excluir o processo ${processo}?`)) {
-				localStorage.removeItem(`processo-${processo}`);
-				alert("Processo excluído!");
-				window.location.href = "index.html";
-			}
-		});
-
 		function setupAutocomplete(inputElement, categoria) {
 			const autocompleteList = inputElement.nextElementSibling; // O div.autocomplete-list logo após o input
 
@@ -663,7 +826,7 @@
 					return;
 				}
 
-				const sugestoes = sugestoesExigenciasPorCategoria[categoria] || [];
+				const sugestoes = DADOS_SISTEMA.exigencias[categoria] || [];
 				// Filtra as sugestões, removendo as que já estão ativas para esta categoria
 				const filteredSugestoes = sugestoes.filter(sugestao =>
 					sugestao.toLowerCase().includes(searchTerm) &&
@@ -697,71 +860,242 @@
 			});
 		}
 
-		// Salvar Automaticamente
+
+		// Máscara do processo
+		const processoInput = document.getElementById('processoBusca');
+		if (processoInput) { // Ensure element exists before adding listener
+			processoInput.addEventListener('input', () => {
+				let value = processoInput.value.replace(/\D/g, "");
+				let formattedValue = "";
+
+				if (value.length > 0)
+					formattedValue += value.substring(0, 5);
+				if (value.length > 5)
+					formattedValue += "-" + value.substring(5, 13);
+				if (value.length > 13)
+					formattedValue += "/" + value.substring(13, 17);
+				if (value.length > 17)
+					formattedValue += "-" + value.substring(17, 19);
+
+				processoInput.value = formattedValue;
+			});
+		}
+
+
+		// Máscara do CNPJ
+		const cnpjInput = document.getElementById('cnpj');
+		cnpjInput.addEventListener('input', () => {
+			let value = cnpjInput.value.replace(/\D/g, "");
+			value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+			value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+			value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+			value = value.replace(/(\d{4})(\d)/, "$1-$2");
+			cnpjInput.value = value.slice(0, 18);
+		});
+
+		// Validação e máscara CPF
+		const cpfInput = document.getElementById('cpf');
+
+		cpfInput.addEventListener('input', () => {
+			let value = cpfInput.value.replace(/\D/g, ''); // Remove não números
+			value = value.slice(0, 11); // Limita a 11 dígitos
+
+			// Aplica a máscara CPF: 000.000.000-00
+			if (value.length > 9) {
+				value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+			} else if (value.length > 6) {
+				value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+			} else if (value.length > 3) {
+				value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+			}
+
+			cpfInput.value = value;
+		});
+
+		// Validação do CPF ao sair do campo
+		cpfInput.addEventListener('blur', () => {
+			const isValid = Utils.validarCPF(cpfInput.value);
+			if (!isValid && cpfInput.value !== '') {
+				cpfInput.classList.add('is-invalid');
+			} else {
+				cpfInput.classList.remove('is-invalid');
+			}
+		});
+
+
+		// Busca a localização atual
+		document.getElementById('buscarLocalizacao').addEventListener('click', () => {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+						const latitude = position.coords.latitude.toFixed(6);
+						const longitude = position.coords.longitude.toFixed(6);
+						document.getElementById('localizacao').value = `${latitude}, ${longitude}`;
+						Utils.showToast("Localização obtida com sucesso!", "success");
+					},
+					(error) => {
+						let errorMessage = "Erro desconhecido ao buscar localização.";
+						switch (error.code) {
+							case error.PERMISSION_DENIED:
+								errorMessage = "Permissão negada para acessar a localização.";
+								break;
+							case error.POSITION_UNAVAILABLE:
+								errorMessage = "Informação de localização indisponível.";
+								break;
+							case error.TIMEOUT:
+								errorMessage = "Tempo de resposta excedido ao tentar obter localização.";
+								break;
+						}
+						Utils.showToast(errorMessage, "danger");
+					},
+					{ timeout: CONFIG.GEOLOCATION_TIMEOUT }
+				);
+			} else {
+				Utils.showToast("Seu navegador não suporta geolocalização.", "danger");
+			}
+		});
+
+		// Apply status color to title
+		function aplicarCorDoStatus(status) {
+			const titulo = document.getElementById("tituloLaudo");
+			// Remove existing status classes (e.g., status-pendente, status-aprovado)
+			titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
+
+			const classe = Utils.formatarClasseStatus(status);
+			if (status) {
+				titulo.classList.add('text-light', classe);
+			} else {
+				titulo.classList.add('text-dark', 'status-sem-status'); // Default for no status
+			}
+		}
+
+		document.getElementById("status").addEventListener("change", function () {
+			aplicarCorDoStatus(this.value);
+		});
+
+
+		// Salvar Automaticamente e Carregar
 		function salvarAutomaticamente() {
-			const processo = document.getElementById("processoBusca").value;
-			if (!processo) return;
+			const processoInput = document.getElementById("processoBusca");
+			if (!processoInput) {
+				console.error("Element with ID 'processoBusca' not found when attempting to auto-save.");
+				return; // Exit if the element doesn't exist
+			}
+			const processo = processoInput.value;
+
+			if (!processo || processo.length !== 22) { // Ensure a full process number is entered
+				Utils.showToast("Informe o número do processo completo para salvar.", "warning");
+				return;
+			}
 			const dados = coletarDadosDoFormulario();
 			localStorage.setItem(`processo-${processo}`, JSON.stringify(dados));
+			Utils.showToast("Dados salvos automaticamente!", "success");
 			console.log("Auto-salvo:", processo);
 		}
+
 		document.querySelectorAll("input, select, textarea").forEach(el => {
+			// Exclude process search input from immediate auto-save, as it triggers a load
 			if (el.id !== "processoBusca") {
-				el.addEventListener("change", salvarAutomaticamente);
-				el.addEventListener("input", salvarAutomaticamente);
+				el.addEventListener("change", Utils.debounce(salvarAutomaticamente, CONFIG.AUTO_SAVE_DELAY));
+				el.addEventListener("input", Utils.debounce(salvarAutomaticamente, CONFIG.AUTO_SAVE_DELAY));
 			}
 		});
 
-		let processoTimeout = null;
+		const processoBuscaElement = document.getElementById("processoBusca");
+		if (processoBuscaElement) {
+			processoBuscaElement.addEventListener("blur", () => {
+				// Only auto-save if a full process number is entered (25 chars for mask)
+				if (processoBuscaElement.value.length === 25) {
+					salvarAutomaticamente();
+				}
+			});
+		}
 
-		document.getElementById("processoBusca").addEventListener("blur", () => {
-			if (document.getElementById("processoBusca").value.length === 25) {
-				salvarAutomaticamente();
-			}
-		});
 
 		// Botão BUSCAR
 		document.getElementById("buscarProcesso").addEventListener("click", function () {
-			const processo = document.getElementById("processoBusca").value;
-			if (!processo) return alert("Informe o número do processo para buscar.");
+			const processoInput = document.getElementById("processoBusca");
+			if (!processoInput) {
+				console.error("Element with ID 'processoBusca' not found when attempting to search.");
+				Utils.showToast("Erro interno: campo de processo não encontrado.", "danger");
+				return;
+			}
+			const processoBuscaValue = processoInput.value; // Store the exact value from the input
 
-			const dados = localStorage.getItem(`processo-${processo}`);
-			if (!dados) return alert("Processo não encontrado.");
+			if (!processoBuscaValue || processoBuscaValue.length !== 22) {
+				Utils.showToast("Informe o número do processo completo para buscar.", "warning");
+				return;
+			}
 
-			preencherFormulario(JSON.parse(dados));
+			const dados = localStorage.getItem(`processo-${processoBuscaValue}`);
+			if (!dados) {
+				Utils.showToast("Processo não encontrado.", "danger");
+				// Clear the form if not found
+				document.querySelector('form').reset();
+				document.getElementById('tituloLaudo').className = 'display-6'; // Reset title style
+				document.getElementById('exigenciasContainer').innerHTML = '';
+				document.getElementById('badgesCategorias').innerHTML = '';
+				camposDeExigenciasAtivos = {};
+				document.getElementById("retornoNao").checked = true; // Set default radio
+				return;
+			}
+
+			const parsedData = JSON.parse(dados);
+			// ADICIONE ESTA LINHA: Garante que o campo de processo seja preenchido com o valor que foi buscado
+			parsedData.processoBusca = processoBuscaValue;
+
+			preencherFormulario(parsedData);
+			Utils.showToast("Processo carregado com sucesso!", "success");
 		});
+
+		// Botão SALVAR MANUALMENTE
+		document.getElementById("btnSalvar").addEventListener("click", () => {
+			const form = document.querySelector('.needs-validation');
+			if (!form.checkValidity()) {
+				form.classList.add('was-validated');
+				Utils.showToast("Por favor, preencha todos os campos obrigatórios.", "danger");
+				return;
+			}
+			salvarAutomaticamente(); // This will save the current form state
+			Utils.showToast("Dados salvos com sucesso!", "success");
+		});
+
 
 		function coletarDadosDoFormulario() {
 			const exigencias = [];
-			const categoriasSelecionadas = Object.keys(camposDeExigenciasAtivos);
 			document.querySelectorAll('input[name="exigencias[]"]').forEach(input => {
 				exigencias.push(input.value);
 			});
 
+			const categoriasSelecionadas = Object.keys(camposDeExigenciasAtivos);
+
 			return {
-				cnpj: document.getElementById("cnpj").value,
-				instituicao: document.getElementById("instituicao").value,
-				endereco: document.getElementById("endereco").value,
-				localizacao: document.getElementById("localizacao").value,
-				ocupacao: document.getElementById("ocupacao").value,
-				grupo: document.getElementById("grupo").value,
-				area: document.getElementById("area").value,
-				responsavel: document.getElementById("responsavel").value,
-				tipo: document.getElementById("tipo").value,
-				inicio: document.getElementById("inicio").value,
-				fim: document.getElementById("fim").value,
-				retorno: document.getElementById("inlineRadio1").checked,
-				acompanhante: document.getElementById("acompanhante").value,
-				cpf: document.getElementById("cpf").value,
-				funcao: document.getElementById("funcao").value,
-				status: document.getElementById("status").value,
-				observacao: document.getElementById("observacao").value,
+				processoBusca: document.getElementById("processoBusca")?.value || "",
+				cnpj: document.getElementById("cnpj")?.value || "",
+				instituicao: document.getElementById("instituicao")?.value || "",
+				endereco: document.getElementById("endereco")?.value || "",
+				localizacao: document.getElementById("localizacao")?.value || "",
+				ocupacao: document.getElementById("ocupacao")?.value || "",
+				grupo: document.getElementById("grupo")?.value || "",
+				area: document.getElementById("area")?.value || "",
+				responsavel: document.getElementById("responsavel")?.value || "",
+				tipo: document.getElementById("tipo")?.value || "",
+				inicio: document.getElementById("inicio")?.value || "",
+				fim: document.getElementById("fim")?.value || "",
+				retorno: document.getElementById("retornoSim")?.checked || false,
+				acompanhante: document.getElementById("acompanhante")?.value || "",
+				cpf: document.getElementById("cpf")?.value || "",
+				funcao: document.getElementById("funcao")?.value || "",
+				status: document.getElementById("status")?.value || "",
+				observacao: document.getElementById("observacao")?.value || "",
 				categoriasSelecionadas: categoriasSelecionadas,
-				exigencias: exigencias // Já é um array coletado
+				exigencias: exigencias
 			};
 		}
 
 		function preencherFormulario(data) {
+			// Use optional chaining (?.) for robustness when assigning values
+			document.getElementById("processoBusca").value = data.processoBusca || "";
 			document.getElementById("cnpj").value = data.cnpj || "";
 			document.getElementById("instituicao").value = data.instituicao || "";
 			document.getElementById("endereco").value = data.endereco || "";
@@ -773,7 +1107,11 @@
 			document.getElementById("tipo").value = data.tipo || "";
 			document.getElementById("inicio").value = data.inicio || "";
 			document.getElementById("fim").value = data.fim || "";
-			document.getElementById("inlineRadio1").checked = !!data.retorno;
+			if (data.retorno) {
+				document.getElementById("retornoSim").checked = true;
+			} else {
+				document.getElementById("retornoNao").checked = true;
+			}
 			document.getElementById("acompanhante").value = data.acompanhante || "";
 			document.getElementById("cpf").value = data.cpf || "";
 			document.getElementById("funcao").value = data.funcao || "";
@@ -781,24 +1119,67 @@
 			document.getElementById("observacao").value = data.observacao || "";
 			aplicarCorDoStatus(data.status || "Sem Status");
 
-			// Limpa as exigências existentes antes de preencher
-			for (const categoria in camposDeExigenciasAtivos) {
-				document.getElementById(`exigencias-categoria-${categoria}`)?.remove();
-			}
-			camposDeExigenciasAtivos = {}; // Reseta o controle de categorias ativas
+			// Clear existing exigencies and categories before re-filling
+			document.getElementById('exigenciasContainer').innerHTML = '';
+			document.getElementById('badgesCategorias').innerHTML = '';
+			camposDeExigenciasAtivos = {}; // Reset the control of active categories
 
 			if (data.exigencias && Array.isArray(data.exigencias)) {
 				data.exigencias.forEach(exigencia => {
-					for (const categoria in sugestoesExigenciasPorCategoria) {
-						if (sugestoesExigenciasPorCategoria[categoria].includes(exigencia)) {
-							// Adiciona a exigência, que por sua vez adicionará a categoria se necessário
-							adicionarExigencia(categoria, exigencia);
-							break; // Sai do loop de categorias, pois a exigência foi encontrada
+					for (const categoriaKey in DADOS_SISTEMA.exigencias) {
+						if (DADOS_SISTEMA.exigencias[categoriaKey].includes(exigencia)) {
+							adicionarExigencia(categoriaKey, exigencia);
+							break;
 						}
 					}
 				});
 			}
+
+			// Also re-add any categories that were selected but had no exigencies
+			if (data.categoriasSelecionadas && Array.isArray(data.categoriasSelecionadas)) {
+				data.categoriasSelecionadas.forEach(cat => {
+					if (!camposDeExigenciasAtivos[cat] && DADOS_SISTEMA.categorias[cat]) { // Only add if not already added by an exigency and category exists
+						adicionarCategoria(cat);
+					}
+				});
+			}
 		}
+
+		// Botão EXCLUIR
+		document.getElementById("btnExcluir").addEventListener("click", () => {
+			const processoInput = document.getElementById("processoBusca");
+			if (!processoInput) {
+				Utils.showToast("Nenhum processo carregado para excluir (campo de processo não encontrado).", "warning");
+				return;
+			}
+			const processo = processoInput.value;
+
+			if (!processo || processo.length !== 22) {
+				Utils.showToast("Nenhum processo completo carregado para excluir.", "warning");
+				return;
+			}
+
+			if (confirm(`Deseja realmente excluir o processo ${processo}?`)) {
+				localStorage.removeItem(`processo-${processo}`);
+				Utils.showToast("Processo excluído!", "success");
+				// Clear the form after deletion
+				document.querySelector('form').reset();
+				document.getElementById('tituloLaudo').className = 'display-6'; // Reset title style
+				document.getElementById('exigenciasContainer').innerHTML = '';
+				document.getElementById('badgesCategorias').innerHTML = '';
+				camposDeExigenciasAtivos = {};
+				document.getElementById("retornoNao").checked = true; // Set default radio
+			}
+		});
+
+		// "Gerar Relatório" button
+		document.getElementById("btnGerar").addEventListener("click", () => {
+			const dadosDoFormulario = coletarDadosDoFormulario();
+			console.log("Dados coletados para o relatório:", dadosDoFormulario);
+			Utils.showToast("Dados do formulário enviados para o console (F12 > Console).", "info");
+			Utils.showToast("Funcionalidade completa de Gerar Relatório (PDF, etc.) não implementada.", "warning");
+		});
+
 	</script>
 </body>
 

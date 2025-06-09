@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Formulário de Medidas de Segurança</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		:root {
+			--primary-color: #0066cc;
+			--success-color: #198754;
+			--warning-color: #ffc107;
+			--danger-color: #dc3545;
+			--info-color: #17a2b8;
+			--secondary-color: #6c757d;
+		}
+
+		.autocomplete-container {
+			position: relative;
+		}
+
+		.autocomplete-list {
+			position: absolute;
+			z-index: 1000;
+			width: 100%;
+			max-height: 200px;
+			overflow-y: auto;
+			background-color: #fff;
+			border: 1px solid #ced4da;
+			border-top: none;
+			border-radius: 0 0 0.375rem 0.375rem;
+			box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+		}
+
+		.autocomplete-item {
+			padding: 0.75rem;
+			cursor: pointer;
+			border-bottom: 1px solid #e9ecef;
+			transition: background-color 0.15s ease-in-out;
+		}
+
+		.autocomplete-item:hover,
+		.autocomplete-item.highlighted {
+			background-color: #e9ecef;
+		}
+
+		.autocomplete-item:last-child {
+			border-bottom: none;
+		}
+
+		.tag {
+			background-color: #f8f9fa;
+			border: 1px solid #dee2e6;
+			border-radius: 0.375rem;
+			padding: 0.375rem 0.75rem;
+			margin: 0.25rem;
+			display: inline-flex;
+			align-items: center;
+			font-size: 0.875rem;
+			transition: all 0.15s ease-in-out;
+		}
+
+		.tag:hover {
+			background-color: #e9ecef;
+			border-color: #adb5bd;
+		}
+
+		.btn-close-custom {
+			background: none;
+			border: none;
+			font-size: 0.75rem;
+			margin-left: 0.5rem;
+			opacity: 0.5;
+			transition: opacity 0.15s ease-in-out;
+			cursor: pointer;
+		}
+
+		.btn-close-custom:hover {
+			opacity: 1;
+		}
+
+		/* Status Colors */
+		.status-pendente {
+			background-color: var(--warning-color);
+			color: #000;
+		}
+
+		.status-analise {
+			background-color: var(--info-color);
+			color: #fff;
+		}
+
+		.status-vistoria {
+			background-color: #6f42c1;
+			color: #fff;
+		}
+
+		.status-aprovado {
+			background-color: var(--success-color);
+			color: #fff;
+		}
+
+		.status-reprovado {
+			background-color: var(--danger-color);
+			color: #fff;
+		}
+
+		.status-cancelado {
+			background-color: var(--secondary-color);
+			color: #fff;
+		}
+
+		.status-nao-realizada {
+			background-color: #fd7e14;
+			color: #fff;
+		}
+
+		.status-sem-status {
+			background-color: #343a40;
+			color: #fff;
+		}
+
+		.form-section {
+			margin-bottom: 2rem;
+			padding: 1.5rem;
+			background-color: #f8f9fa;
+			border-radius: 0.5rem;
+		}
+
+		.section-title {
+			margin-bottom: 1rem;
+			padding-bottom: 0.5rem;
+			border-bottom: 2px solid var(--primary-color);
+			color: var(--primary-color);
+			font-weight: 600;
+		}
+
+		.loading-spinner {
+			display: none;
+			text-align: center;
+			padding: 1rem;
+		}
+
+		.toast-container {
+			position: fixed;
+			top: 20px;
+			right: 20px;
+			z-index: 1055;
+		}
+
+		.location-icon {
+			transform: scale(2.5);
+			color: #198754;
+			transition: transform 0.3s ease;
+		}
+
+		.location-icon:hover {
+			transform: scale(3);
+		}
+
+		@media (max-width: 768px) {
+			.form-section {
+				padding: 1rem;
+			}
+
+			.location-icon {
+				transform: scale(2);
+			}
+		}
+	</style>
+</head>
+
+<body>
+	<!-- Toast Container -->
+	<div class="toast-container"></div>
+
+	<div class="container-fluid mt-3">
+		<div class="text-center mb-4">
+			<h2 id="tituloLaudo" class="display-6">Laudo de Vistoria</h2>
+			<p class="text-muted">Sistema de Medidas de Segurança Contra Incêndio</p>
+		</div>
+
+		<form class="needs-validation" novalidate autocomplete="off">
+			<!-- Seção: Identificação do Processo -->
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-file-text me-2"></i>Identificação do Processo
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-8">
+						<div class="row">
+							<div class="col-md-10">
+								<label for="processoBusca" class="form-label">
+									Número do Processo <span class="text-danger">*</span>
+								</label>
+								<div class="input-group">
+									<input type="text" class="form-control" id="processoBusca"
+										placeholder="00000-00000000/0000-00" maxlength="25" required>
+									<button class="btn btn-outline-primary" type="button" id="buscarProcesso"
+										title="Buscar Processo">
+										<i class="bi bi-search"></i>
+									</button>
+									<div class="invalid-feedback">
+										Por favor, informe o número do processo.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div
+						class="col-md-4 bg-gradient bg-success d-flex justify-content-center align-items-center text-light rounded">
+						<i class="bi bi-geo-alt-fill location-icon" title="Localização GPS"></i>
+					</div>
+				</div>
+			</div>
+
+			<!-- Seção: Dados da Instituição -->
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-building me-2"></i>Dados da Instituição
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-4">
+						<label for="cnpj" class="form-label">CNPJ <span class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="cnpj" placeholder="00.000.000/0000-00"
+							maxlength="18" required>
+						<div class="invalid-feedback">CNPJ inválido ou não informado.</div>
+					</div>
+
+					<div class="col-md-8">
+						<label for="instituicao" class="form-label">Razão Social <span
+								class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="instituicao" placeholder="Nome da Instituição"
+							required>
+						<div class="invalid-feedback">Por favor, informe a razão social.</div>
+					</div>
+
+					<div class="col-md-8">
+						<label for="endereco" class="form-label">Endereço Completo <span
+								class="text-danger">*</span></label>
+						<input type="text" class="form-control" id="endereco"
+							placeholder="Rua, número, bairro, cidade - UF" required>
+						<div class="invalid-feedback">Por favor, informe o endereço completo.</div>
+					</div>
+
+					<div class="col-md-4">
+						<label for="localizacao" class="form-label">Coordenadas GPS</label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="localizacao"
+								placeholder="-15.000000, -47.000000" maxlength="25">
+							<button class="btn btn-outline-success" type="button" id="buscarLocalizacao"
+								title="Obter localização atual">
+								<i class="bi bi-geo-alt-fill"></i>
+							</button>
+						</div>
+						<div class="form-text">Clique no botão para obter sua localização atual</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Seção: Classificação da Edificação -->
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-diagram-3 me-2"></i>Classificação da Edificação
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-5">
+						<label for="ocupacao" class="form-label">Ocupação <span class="text-danger">*</span></label>
+						<select class="form-select" id="ocupacao" required>
+							<option value="">Selecione a ocupação</option>
+							<option value="01">01 - Residenciais</option>
+							<option value="02">02 - Transitórias</option>
+							<option value="03">03 - Comerciais</option>
+							<option value="04">04 - Serviços Profissionais</option>
+							<option value="05">05 - Escolares</option>
+							<option value="06">06 - Concentração de Público</option>
+							<option value="07">07 - Garagens</option>
+							<option value="08">08 - Hospitalares</option>
+							<option value="09">09 - Industriais</option>
+							<option value="10">10 - Depósitos</option>
+							<option value="11">11 - Armazenamento e instalações de alto risco</option>
+							<option value="12">12 - Especiais</option>
+							<option value="13">13 - Mistas</option>
+						</select>
+						<div class="invalid-feedback">Por favor, selecione a ocupação.</div>
+					</div>
+
+					<div class="col-md-5">
+						<label for="grupo" class="form-label">Grupo <span class="text-danger">*</span></label>
+						<select class="form-select" id="grupo" required>
+							<option value="">Selecione o grupo</option>
+							<option value="01">01 - Residenciais unifamiliares</option>
+							<option value="02">02 - Residenciais multifamiliares</option>
+							<option value="03">03 - Habitações coletivas</option>
+							<option value="04">04 - Hotéis</option>
+							<option value="05">05 - Hotéis residenciais</option>
+							<option value="06">06 - Comércio de pequeno porte</option>
+							<option value="07">07 - Comércio de médio porte</option>
+							<option value="08">08 - Comércio de grande porte</option>
+							<option value="09">09 - Escritórios</option>
+							<option value="10">10 - Agências bancárias</option>
+							<option value="11">11 - Laboratórios e estúdios</option>
+							<option value="12">12 - Serviços de reparação</option>
+							<option value="13">13 - Escolas em geral</option>
+							<option value="14">14 - Escolas especiais</option>
+							<option value="15">15 - Locais para cultura física</option>
+							<option value="16">16 - Pré-escolas</option>
+							<option value="17">17 - Escolas para portadores de deficiências</option>
+							<option value="18">18 - Museus e bibliotecas</option>
+							<option value="19">19 - Templos religiosos</option>
+							<option value="20">20 - Centros esportivos e de exibição</option>
+							<option value="21">21 - Terminais de passageiros</option>
+							<option value="22">22 - Artes cênicas e auditórios</option>
+							<option value="23">23 - Clubes sociais</option>
+							<option value="24">24 - Construções provisórias</option>
+							<option value="25">25 - Restaurantes</option>
+							<option value="26">26 - Garagens em geral</option>
+							<option value="27">27 - Oficinas</option>
+							<option value="28">28 - Hangares</option>
+							<option value="29">29 - Hospitais veterinários</option>
+							<option value="30">30 - Hospitais em geral</option>
+							<option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
+							<option value="32">32 - Clínicas</option>
+							<option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
+							<option value="34">34 - Indústrias > 300 MJ/m² e < 1200 MJ/m²</option>
+							<option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
+							<option value="36">36 - Depósitos de material incombustível</option>
+							<option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
+							<option value="38">38 - Depósitos > 300 MJ/m² e < 1200 MJ/m²</option>
+							<option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
+							<option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
+							<option value="41">41 - Explosivos</option>
+							<option value="42">42 - Produtos perigosos</option>
+							<option value="43">43 - Vegetações</option>
+							<option value="44">44 - Canteiros de obras</option>
+							<option value="45">45 - Centros esportivos (> 2500 pessoas)</option>
+							<option value="46">46 - Parques de diversões</option>
+							<option value="47">47 - Centrais de comunicação e energia</option>
+							<option value="48">48 - Túneis</option>
+							<option value="49">49 - Silos</option>
+							<option value="50">50 - Locais com restrição de liberdade</option>
+							<option value="51">51 - Destinações variáveis</option>
+						</select>
+						<div class="invalid-feedback">Por favor, selecione o grupo.</div>
+					</div>
+
+					<div class="col-md-2">
+						<label for="area" class="form-label">Área (m²)<span class="text-danger">*</span></label>
+						<input type="number" step="0.01" min="0" class="form-control" id="area" placeholder="0.00"
+							required>
+						<div class="invalid-feedback">Por favor, informe a área.</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Seção: Dados da Vistoria -->
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-clipboard-check me-2"></i>Dados da Vistoria
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-8">
+						<label for="responsavel" class="form-label">Responsável pela Edificação</label>
+						<input type="text" class="form-control" id="responsavel" placeholder="Nome completo e telefone">
+					</div>
+
+					<div class="col-md-4">
+						<label for="tipo" class="form-label">Tipo de Vistoria <span class="text-danger">*</span></label>
+						<select class="form-select" id="tipo" required>
+							<option value="">Selecione o tipo</option>
+							<option value="RLE">RLE - Relatório de Levantamento de Exigências</option>
+							<option value="Relatório Técnico">Relatório Técnico</option>
+							<option value="Denúncia">Denúncia</option>
+							<option value="Inopinada">Vistoria Inopinada</option>
+							<option value="Dilação de Prazo">Dilação de Prazo</option>
+							<option value="PPCI">PPCI - Plano de Prevenção</option>
+							<option value="Outros">Outros</option>
+						</select>
+						<div class="invalid-feedback">Por favor, selecione o tipo de vistoria.</div>
+					</div>
+
+					<div class="col-md-4">
+						<label for="inicio" class="form-label">Data/Hora de Início</label>
+						<input type="datetime-local" class="form-control" id="inicio">
+					</div>
+
+					<div class="col-md-4">
+						<label for="fim" class="form-label">Data/Hora de Término</label>
+						<input type="datetime-local" class="form-control" id="fim">
+					</div>
+
+					<div class="col-md-4">
+						<label class="form-label">É retorno de vistoria?</label>
+						<div class="d-flex gap-3 mt-2">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="retorno" id="retornoSim" value="sim">
+								<label class="form-check-label" for="retornoSim">Sim</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="retorno" id="retornoNao" value="nao"
+									checked>
+								<label class="form-check-label" for="retornoNao">Não</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Seção: Dados do Acompanhante -->
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-person me-2"></i>Dados do Acompanhante
+				</h4>
+
+				<div class="row g-3">
+					<div class="col-md-4">
+						<label for="acompanhante" class="form-label">Nome Completo</label>
+						<input type="text" class="form-control" id="acompanhante" placeholder="Nome do acompanhante">
+					</div>
+
+					<div class="col-md-3">
+						<label for="cpf" class="form-label">CPF</label>
+						<input type="text" class="form-control" id="cpf" placeholder="000.000.000-00">
+						<div class="invalid-feedback">CPF inválido</div>
+					</div>
+
+					<div class="col-md-3">
+						<label for="funcao" class="form-label">Função/Cargo</label>
+						<input type="text" class="form-control" id="funcao" placeholder="Função na empresa">
+					</div>
+
+					<div class="col-md-2">
+						<label for="status" class="form-label">Status da Vistoria</label>
+						<select class="form-select" id="status">
+							<option value="">Selecione</option>
+							<option value="Pendente">Pendente</option>
+							<option value="Análise">Em Análise</option>
+							<option value="Vistoria">Em Vistoria</option>
+							<option value="Aprovado">Aprovado</option>
+							<option value="Reprovado">Reprovado</option>
+							<option value="Cancelado">Cancelado</option>
+							<option value="Não Realizada">Não Realizada</option>
+						</select>
+					</div>
+				</div>
+			</div>
+
+			<!-- Seção: Exigências de Segurança -->
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-shield-check me-2"></i>Exigências de Segurança Contra Incêndio
+				</h4>
+
+				<div class="mb-3">
+					<label for="selectCategoriaExigencia" class="form-label">Adicionar Categoria de Exigência:</label>
+					<select class="form-select" id="selectCategoriaExigencia">
+						<option value="">Selecione uma categoria para adicionar</option>
+					</select>
+				</div>
+
+				<div id="categoriasSelecionadas" class="mb-3">
+					<div class="d-flex flex-wrap gap-2" id="badgesCategorias"></div>
+				</div>
+
+				<div id="exigenciasContainer" class="loading-spinner">
+					<div class="spinner-border text-primary" role="status">
+						<span class="visually-hidden">Carregando exigências...</span>
+					</div>
+				</div>
+			</div>
+
+			<!-- Seção: Observações -->
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-journal-text me-2"></i>Observações Gerais
+				</h4>
+
+				<div class="mb-3">
+					<label for="observacao" class="form-label">Observações da Vistoria</label>
+					<textarea rows="6" class="form-control" id="observacao"
+						placeholder="Descreva observações relevantes sobre a vistoria, condições encontradas, recomendações, etc."></textarea>
+					<div class="form-text">Utilize este campo para registrar informações importantes sobre a vistoria.
+					</div>
+				</div>
+			</div>
+
+			<!-- Botões de Ação -->
+			<div class="d-flex gap-2 mb-4">
+				<a href="index.html" class="btn btn-outline-secondary">
+					<i class="bi bi-house me-1"></i>Início
+				</a>
+
+				<button type="button" class="btn btn-success" id="btnSalvar">
+					<i class="bi bi-floppy me-1"></i>Salvar
+				</button>
+
+				<button type="button" class="btn btn-primary" id="btnGerar">
+					<i class="bi bi-file-earmark-pdf me-1"></i>Gerar Relatório
+				</button>
+
+				<button type="button" class="btn btn-danger" id="btnExcluir">
+					<i class="bi bi-trash me-1"></i>Excluir
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script>
+		// Configuração Global
+		const CONFIG = {
+			AUTO_SAVE_DELAY: 1000,
+			GEOLOCATION_TIMEOUT: 10000,
+			TOAST_DURATION: 3000
+		};
+
+		// Utilitários
+		const Utils = {
+			// Mostra toast de notificação
+			showToast(message, type = 'info') {
+				const toastContainer = document.querySelector('.toast-container');
+				const toastId = 'toast-' + Date.now();
+
+				const toastHTML = `
+					<div class="toast" id="${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
+						<div class="toast-header">
+							<i class="bi bi-${this.getToastIcon(type)} text-${type} me-2"></i>
+							<strong class="me-auto">Sistema</strong>
+							<button type="button" class="btn-close" data-bs-dismiss="toast"></button>
+						</div>
+						<div class="toast-body">${message}</div>
+					</div>
+				`;
+
+				toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+				const toastElement = new bootstrap.Toast(document.getElementById(toastId));
+				toastElement.show();
+
+				setTimeout(() => {
+					document.getElementById(toastId)?.remove();
+				}, CONFIG.TOAST_DURATION + 1000);
+			},
+
+			getToastIcon(type) {
+				const icons = {
+					success: 'check-circle',
+					danger: 'exclamation-triangle',
+					warning: 'exclamation-triangle',
+					info: 'info-circle'
+				};
+				return icons[type] || 'info-circle';
+			},
+
+			// Debounce para evitar múltiplas execuções
+			debounce(func, wait) {
+				let timeout;
+				return function executedFunction(...args) {
+					const later = () => {
+						clearTimeout(timeout);
+						func(...args);
+					};
+					clearTimeout(timeout);
+					timeout = setTimeout(later, wait);
+				};
+			},
+
+			// Formatar classe CSS do status
+			formatarClasseStatus(status) {
+				return 'status-' + status.toLowerCase()
+					.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+					.replace(/\s+/g, '-')
+					.replace(/[^a-z0-9\-]/g, '');
+			},
+
+			// Validar CPF
+			validarCPF(cpf) {
+				cpf = cpf.replace(/[^\d]+/g, '');
+
+				if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+				let soma = 0;
+				for (let i = 0; i < 9; i++) {
+					soma += parseInt(cpf.charAt(i)) * (10 - i);
+				}
+
+				let resto = 11 - (soma % 11);
+				if (resto === 10 || resto === 11) resto = 0;
+				if (resto !== parseInt(cpf.charAt(9))) return false;
+
+				soma = 0;
+				for (let i = 0; i < 10; i++) {
+					soma += parseInt(cpf.charAt(i)) * (11 - i);
+				}
+
+				resto = 11 - (soma % 11);
+				if (resto === 10 || resto === 11) resto = 0;
+				if (resto !== parseInt(cpf.charAt(10))) return false;
+
+				return true;
+			}
+		};
+
+		// Dados das exigências
+		const DADOS_SISTEMA = {
+			categorias: {
+				'01': "DOCUMENTAÇÃO",
+				'02': "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
+				'03': "ILUMINAÇÃO DE EMERGÊNCIA",
+				'04': "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
+				'05': "SAÍDAS DE EMERGÊNCIA",
+				'06': "SISTEMA DE PROTEÇÃO POR HIDRANTES",
+				'07': "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
+				'08': "SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
+				'09': "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
+				'10': "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
+				'11': "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
+				'12': "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
+				'13': "BRIGADA DE INCÊNDIO",
+				'14': "ACESSO DE VIATURAS DE SOCORRO",
+				'15': "POSTOS DE COMBUSTÍVEIS",
+				'16': "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
+				'17': "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
+				'18': "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO"
+			},
+
+			exigencias: {
+				'01': [
+					"01.001 - Apresentar o Projeto de Segurança Contra Incêndio e Pânico (Projeto de Incêndio) impresso, devidamente aprovado pelo Corpo de Bombeiros Militar do Distrito Federal (CBMDF), de acordo com o Decreto nº 21.361/2000. (Arts. 3º, § 1º, e 6º, do Dec. 23.154/2002)",
+					"01.002 - Apresentar o Projeto de Segurança Contra Incêndio e Pânico de Modificação (Projeto de Incêndio de Alteração), devidamente aprovado pelo CBMDF, com o redimensionamento das medidas de segurança contra incêndio e pânico, em função da ampliação de área, aumento da altura, mudança de ocupação ou layout, aumento da população ou do risco da edificação, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
+					"01.003 - Apresentar a Anotação de Responsabilidade Técnica (ART), Registro de Responsabilidade Técnica (RRT) ou Termo de Responsabilidade Técnica (TRT), de execução ou manutenção das medidas de segurança contra incêndio e pânico instaladas, emitida por responsável técnico e visada junto ao respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
+					"01.004 -
