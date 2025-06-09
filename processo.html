@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Formulário de Medidas de Segurança</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		.autocomplete-list {
+			position: absolute;
+			z-index: 1000;
+			width: 100%;
+			max-height: 200px;
+			overflow-y: auto;
+			background-color: #fff;
+			border: 1px solid #ced4da;
+			border-top: none;
+		}
+
+		.autocomplete-item {
+			padding: 0.5rem;
+			cursor: pointer;
+		}
+
+		.autocomplete-item:hover {
+			background-color: #e9ecef;
+		}
+
+		.badge {
+			padding: 0.5em 0.75em;
+			font-size: 0.9em;
+			border-radius: 1em;
+		}
+
+		.tag {
+			background-color: #f1f3f5;
+			border: 1px solid #ced4da;
+			border-radius: .25rem;
+			padding: .25rem .5rem;
+			margin-right: .5rem;
+			margin-bottom: .5rem;
+			display: inline-flex;
+			align-items: center;
+		}
+
+		/* Cores baseadas no status */
+		.status-pendente {
+			background-color: #ffc107;
+		}
+
+		.status-analise {
+			background-color: #17a2b8;
+		}
+
+		.status-vistoria {
+			background-color: #6f42c1;
+		}
+
+		.status-aprovado {
+			background-color: #198754;
+		}
+
+		.status-reprovado {
+			background-color: #dc3545;
+		}
+
+		.status-cancelado {
+			background-color: #6c757d;
+		}
+
+		.status-nao-realizada {
+			background-color: #fd7e14;
+		}
+
+		.status-sem-status {
+			background-color: #343a40;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container-fluid mt-2">
+		<h2 id="tituloLaudo" class="text-center">Laudo de Vistoria</h2>
+
+		<form class=" row g-3" autocomplete="off">
+
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-10">
+						<label for="processoBusca" class="form-label">Processo</label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="processoBusca"
+								placeholder="00000-00000000/0000-00" maxlength="25">
+							<button class="btn btn-outline-secondary" type="button" id="buscarProcesso">
+								<i class="bi bi-search"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 bg-dark d-flex justify-content-center align-items-center text-light">
+				<a href="#" class="bi bi-geo-alt-fill link-light text-end" style="transform: scale(3);"></a>
+			</div>
+
+			<div class="col-md-4">
+				<label for="cnpj" class="form-label">CNPJ</label>
+				<input type="text" class="form-control" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18">
+			</div>
+
+			<div class="col-md-8">
+				<label for="instituicao" class="form-label">Instituição</label>
+				<input type="text" class="form-control" id="instituicao" placeholder="Nome da Instituição">
+			</div>
+
+			<div class="col-md-8">
+				<label for="endereco" class="form-label">Endereço</label>
+				<input type="text" class="form-control" id="endereco" placeholder="Endereço">
+			</div>
+
+			<div class="col-md-4">
+				<label for="localizacao" class="form-label">Localização</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="localizacao" placeholder="-00.000000, -00.000000"
+						maxlength="25">
+					<button class="btn btn-outline-secondary" type="button" id="buscarLocalizacao">
+						<i class="bi bi-geo-alt-fill"></i>
+					</button>
+				</div>
+			</div>
+
+			<div class="col-md-5">
+				<label for="ocupacao" class="form-label">Ocupação</label>
+				<select class="form-select" id="ocupacao">
+					<option value="">Selecione</option>
+					<option value="01">01 - Residenciais</option>
+					<option value="02">02 - Transitórias</option>
+					<option value="03">03 - Comerciais</option>
+					<option value="04">04 - Serviços Profissionais</option>
+					<option value="05">05 - Escolares</option>
+					<option value="06">06 - Concentração de Público</option>
+					<option value="07">07 - Garagens</option>
+					<option value="08">08 - Hospitalares</option>
+					<option value="09">09 - Industriais</option>
+					<option value="10">10 - Depósitos</option>
+					<option value="11">11 - Armazenamento e instalações de alto risco</option>
+					<option value="12">12 - Especiais</option>
+					<option value="13">13 - Mistas</option>
+				</select>
+			</div>
+
+			<div class="col-md-5">
+				<label for="grupo" class="form-label">Grupo</label>
+				<select class="form-select" id="grupo">
+					<option value="">Selecione</option>
+					<option value="01">01 - Residenciais unifamiliares</option>
+					<option value="02">02 - Residenciais multifamiliares</option>
+					<option value="03">03 - Habitações coletivas</option>
+					<option value="04">04 - Hotéis</option>
+					<option value="05">05 - Hotéis residenciais</option>
+					<option value="06">06 - Comércio de pequeno porte</option>
+					<option value="07">07 - Comércio de médio porte</option>
+					<option value="08">08 - Comércio de grande porte</option>
+					<option value="09">09 - Escritórios</option>
+					<option value="10">10 - Agências bancárias</option>
+					<option value="11">11 - Laboratórios e estúdios</option>
+					<option value="12">12 - Serviços de reparação</option>
+					<option value="13">13 - Escolas em geral</option>
+					<option value="14">14 - Escolas especiais</option>
+					<option value="15">15 - Locais para cultura física</option>
+					<option value="16">16 - Pré-escolas</option>
+					<option value="17">17 - Escolas para portadores de deficiências</option>
+					<option value="18">18 - Museus e bibliotecas</option>
+					<option value="19">19 - Templos religiosos</option>
+					<option value="20">20 - Centros esportivos e de exibição</option>
+					<option value="21">21 - Terminais de passageiros</option>
+					<option value="22">22 - Artes cênicas e auditórios</option>
+					<option value="23">23 - Clubes sociais</option>
+					<option value="24">24 - Construções provisórias</option>
+					<option value="25">25 - Restaurantes</option>
+					<option value="26">26 - Garagens em geral</option>
+					<option value="27">27 - Oficinas</option>
+					<option value="28">28 - Hangares</option>
+					<option value="29">29 - Hospitais veterinários</option>
+					<option value="30">30 - Hospitais em geral</option>
+					<option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
+					<option value="32">32 - Clínicas</option>
+					<option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
+					<option value="34">34 - Indústrias > 300 MJ/m² e < 1200 MJ/m²</option>
+					<option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
+					<option value="36">36 - Depósitos de material incombustível</option>
+					<option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
+					<option value="38">38 - Depósitos > 300 MJ/m² e < 1200 MJ/m²</option>
+					<option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
+					<option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
+					<option value="41">41 - Explosivos</option>
+					<option value="42">42 - Produtos perigosos</option>
+					<option value="43">43 - Vegetações</option>
+					<option value="44">44 - Canteiros de obras</option>
+					<option value="45">45 - Centros esportivos (> 2500 pessoas)</option>
+					<option value="46">46 - Parques de diversões</option>
+					<option value="47">47 - Centrais de comunicação e energia</option>
+					<option value="48">48 - Túneis</option>
+					<option value="49">49 - Silos</option>
+					<option value="50">50 - Locais com restrição de liberdade</option>
+					<option value="51">51 - Destinações variáveis</option>
+				</select>
+			</div>
+
+			<div class="col-md-2">
+				<label for="area" class="form-label">Área(m²)</label>
+				<input type="number" step="0.01" class="form-control" id="area" placeholder="Área">
+			</div>
+
+			<div class="col-md-8">
+				<label for="responsavel" class="form-label">Responsável</label>
+				<input type="text" class="form-control" id="responsavel" placeholder="Nome e telefone do Responsável">
+			</div>
+
+			<div class="col-md-4">
+				<label for="tipo" class="form-label">Tipo</label>
+				<select class="form-select" id="tipo">
+					<option value="">Selecione</option>
+					<option>RLE</option>
+					<option>Relatório Técnico</option>
+					<option>Denúncia</option>
+					<option>Inopinada</option>
+					<option>Dilação de Prazo</option>
+					<option>PPCI</option>
+					<option>Outros</option>
+				</select>
+			</div>
+			<div class="col-md-9">
+				<div class="row">
+					<div class="col-sm-6">
+						<label for="inicio" class="form-label">Início</label>
+						<input type="datetime-local" class="form-control" id="inicio" placeholder="inicio">
+					</div>
+
+					<div class="col-sm-6">
+						<label for="fim" class="form-label">Fim</label>
+						<input type="datetime-local" class="form-control" id="fim" placeholder="fim">
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<label class="form-label d-block">É retorno?</label>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="retorno" id="inlineRadio1" value="sim">
+					<label class="form-check-label" for="inlineRadio1">Sim</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="retorno" id="inlineRadio2" value="nao" checked>
+					<label class="form-check-label" for="inlineRadio2">Não</label>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<label for="acompanhante" class="form-label">Dados do Acompanhante</label>
+				<input type="text" class="form-control" id="acompanhante" placeholder="Nome">
+			</div>
+			<div class="col-md-2">
+				<label for="cpf" class="form-label"> &nbsp; </label>
+				<input type="text" class="form-control" id="cpf" placeholder="CPF">
+				<div class="invalid-feedback">CPF inválido</div>
+			</div>
+			<div class="col-md-3">
+				<label for="funcao" class="form-label"> &nbsp; </label>
+				<input type="text" class="form-control" id="funcao" placeholder="Função">
+			</div>
+
+			<div class="col-md-3">
+				<label for="status" class="form-label">Status</label>
+				<select class="form-select" id="status">
+					<option value="">Selecione</option>
+					<option>Pendente</option>
+					<option>Análise</option>
+					<option>Vistoria</option>
+					<option>Aprovado</option>
+					<option>Reprovado</option>
+					<option>Cancelado</option>
+					<option>Não Realizada</option>
+				</select>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-header">Exigências de Segurança</div>
+				<div class="card-body">
+					<div class="mb-3">
+
+						<select class="form-select" id="selectCategoriaExigencia">
+							<option value="">Selecione uma Categoria</option>
+						</select>
+					</div>
+					<div id="categoriasSelecionadas" class="mb-3 d-flex flex-wrap gap-2"></div>
+					<label for="selectCategoriaExigencia" class="form-label">Adicionar Exigência por Categoria:</label>
+					<div id="exigenciasContainer">
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<label for="observacao" class="form-label">Observação</label>
+				<textarea rows="5" class="form-control" id="observacao" placeholder="Observação"></textarea>
+			</div>
+
+			<div>
+				<a href="index.html" class="btn btn-light" id="btInicio">
+					<i class="bi bi-house"></i> Início
+				</a>
+
+				<button type="button" class="btn btn-danger" id="btnExcluir">
+					<i class="bi bi-trash"></i> Excluir
+				</button>
+			</div>
+
+		</form>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script>
+		// Preenche o formulário automaticamente ao acessar com ?processo=...
+		document.addEventListener("DOMContentLoaded", () => {
+			const params = new URLSearchParams(window.location.search);
+			const processoParam = params.get("processo");
+			if (processoParam) {
+				document.getElementById("processoBusca").value = processoParam;
+				document.getElementById("buscarProcesso").click();
+			}
+		});
+		document.getElementById("status").addEventListener("change", function () {
+			aplicarCorDoStatus(this.value);
+		});
+	</script>
+
+	<script>
+		function aplicarCorDoStatus(status) {
+			const titulo = document.getElementById("tituloLaudo");
+			const classe = formatarClasseStatus(status);
+			titulo.className = `mb-4 text-center text-light ${classe}`;
+		}
+
+		// reusa a mesma função de formatação do lista.html
+		function formatarClasseStatus(status) {
+			return 'status-' + status.toLowerCase()
+				.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+				.replace(/\s+/g, '-')
+				.replace(/[^a-z0-9\-]/g, '');
+		}
+
+	</script>
+
+	<script>
+		//busca a localizacao atual
+		document.getElementById('buscarLocalizacao').addEventListener('click', () => {
+			if (navigator.geolocation) {
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+						const latitude = position.coords.latitude.toFixed(6);
+						const longitude = position.coords.longitude.toFixed(6);
+						document.getElementById('localizacao').value = `${latitude}, ${longitude}`;
+					},
+					(error) => {
+						switch (error.code) {
+							case error.PERMISSION_DENIED:
+								alert("Permissão negada para acessar a localização.");
+								break;
+							case error.POSITION_UNAVAILABLE:
+								alert("Informação de localização indisponível.");
+								break;
+							case error.TIMEOUT:
+								alert("Tempo de resposta excedido ao tentar obter localização.");
+								break;
+							default:
+								alert("Erro desconhecido ao buscar localização.");
+						}
+					}
+				);
+			} else {
+				alert("Seu navegador não suporta geolocalização.");
+			}
+		});
+
+	</script>
+	<script>
+		// Máscara do processo
+		const processoInput = document.getElementById('processoBusca');
+		processoInput.addEventListener('input', () => {
+			let value = processoInput.value.replace(/\D/g, "");
+			let formattedValue = "";
+
+			if (value.length > 0)
+				formattedValue += value.substring(0, 5);
+			if (value.length > 5)
+				formattedValue += "-" + value.substring(5, 13);
+			if (value.length > 13)
+				formattedValue += "/" + value.substring(13, 17);
+			if (value.length > 17)
+				formattedValue += "-" + value.substring(17, 19);
+
+			processoInput.value = formattedValue;
+		});
+
+		// Máscara do CNPJ
+		const cnpjInput = document.getElementById('cnpj');
+		cnpjInput.addEventListener('input', () => {
+			let value = cnpjInput.value.replace(/\D/g, "");
+			value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+			value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+			value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+			value = value.replace(/(\d{4})(\d)/, "$1-$2");
+			cnpjInput.value = value.slice(0, 18);
+		});
+	</script>
+
+	<script>
+		// validação e máscara CPF
+		const cpfInput = document.getElementById('cpf');
+
+		cpfInput.addEventListener('input', () => {
+			let value = cpfInput.value.replace(/\D/g, ''); // Remove não números
+			value = value.slice(0, 11); // Limita a 11 dígitos
+
+			// Aplica a máscara CPF: 000.000.000-00
+			if (value.length > 9) {
+				value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+			} else if (value.length > 6) {
+				value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+			} else if (value.length > 3) {
+				value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+			}
+
+			cpfInput.value = value;
+		});
+
+		// Validação do CPF ao sair do campo
+		cpfInput.addEventListener('blur', () => {
+			const isValid = validarCPF(cpfInput.value);
+			if (!isValid && cpfInput.value !== '') {
+				cpfInput.classList.add('is-invalid');
+			} else {
+				cpfInput.classList.remove('is-invalid');
+			}
+		});
+
+		// Função de validação de CPF
+		function validarCPF(cpf) {
+			cpf = cpf.replace(/[^\d]+/g, '');
+
+			if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+			let soma = 0;
+			for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i); let resto = 11 - (soma % 11); if (resto === 10 ||
+				resto === 11) resto = 0; if (resto !== parseInt(cpf.charAt(9))) return false; soma = 0; for (let i = 0; i < 10; i++) soma
+					+= parseInt(cpf.charAt(i)) * (11 - i); resto = 11 - (soma % 11); if (resto === 10 || resto === 11) resto = 0; if (resto
+						!== parseInt(cpf.charAt(10))) return false; return true;
+		} 
+	</script>
+	<script>
+		const nomesCategoria = {
+			'01': "DOCUMENTAÇÃO",
+			'02': "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
+			'03': "ILUMINAÇÃO DE EMERGÊNCIA",
+			'04': "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
+			'05': "SAÍDAS DE EMERGÊNCIA",
+			'06': "SISTEMA DE PROTEÇÃO POR HIDRANTES",
+			'07': "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
+			'08': "SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
+			'09': "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
+			'10': "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
+			'11': "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
+			'12': "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
+			'13': "BRIGADA DE INCÊNDIO",
+			'14': "ACESSO DE VIATURAS DE SOCORRO",
+			'15': "POSTOS DE COMBUSTÍVEIS",
+			'16': "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
+			'17': "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
+			'18': "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO"
+		};
+
+		const sugestoesExigenciasPorCategoria = {
+			'01': ["Instalação", "Manutenção", "Teste Semestral"],
+			'02': ["Verificação", "Bateria", "Lâmpadas"],
+			'03': ["Recarga", "Sinalização", "Localização"],
+			'04': ["Desobstrução", "Portas Corta-Fogo", "Sinalização"],
+			'05': ["Rota de Fuga", "Equipamentos", "Pisos Escorregadios"],
+			'06': ["Pressão", "Mangueiras", "Registro"],
+			'07': ["Teste", "Bicos", "Manutenção"],
+			'08': ["Treinamento", "Equipamentos", "Simulados"],
+			'09': ["Atualização", "Planta", "Divulgação"],
+			'10': ["Teste", "Limpeza", "Bateria"],
+			'11': ["Dampers", "Exaustores", "Manutenção"],
+			'12': ["Portas Corta-Fogo", "Selagem", "Integridade"],
+			'13': ["Rampas", "Corrimãos", "Sinalização Tátil"],
+			'14': ["Brigadistas", "Colaboradores", "Primeiros Socorros"],
+			'15': ["Extintores", "Alarmes", "Hidrantes"],
+			'16': ["Disjuntores", "Fiação", "Quadros Elétricos"],
+			'17': ["Vazamento", "Tubulação", "Válvulas"],
+			'18': ["Coleta Seletiva", "Descarte", "Armazenamento"]
+		};
+
+
+		let camposDeExigenciasAtivos = {}; // Para controlar quais categorias já estão ativas e suas exigências
+
+		document.addEventListener('DOMContentLoaded', () => {
+			preencherSelectCategorias();
+		});
+
+		function preencherSelectCategorias() {
+			const select = document.getElementById('selectCategoriaExigencia'); // Nome corrigido
+			for (const chave in nomesCategoria) {
+				const option = document.createElement('option');
+				option.value = chave;
+				option.textContent = nomesCategoria[chave];
+				select.appendChild(option);
+			}
+		}
+
+		document.getElementById('selectCategoriaExigencia').addEventListener('change', function () { // Nome corrigido
+			const categoria = this.value;
+			if (categoria && !camposDeExigenciasAtivos[categoria]) {
+				adicionarCategoria(categoria);
+				this.value = ""; // Reseta o select
+			}
+		});
+
+		function adicionarCategoria(categoria) {
+			if (camposDeExigenciasAtivos[categoria]) return;
+
+			const container = document.getElementById('exigenciasContainer');
+			const divCategoria = document.createElement('div');
+			divCategoria.id = `exigencias-categoria-${categoria}`;
+			divCategoria.classList.add('card', 'mb-3', 'p-3');
+
+			divCategoria.innerHTML = `
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<h5 class="mb-0">${nomesCategoria[categoria]}</h5>
+			<button type="button" class="btn-close" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')"></button>
+		</div>
+		<div class="mb-3">
+			<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${nomesCategoria[categoria]}" data-categoria="${categoria}">
+			<div class="autocomplete-list"></div>
+		</div>
+		<div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
+	`;
+			container.appendChild(divCategoria);
+
+			// Marca categoria como ativa, mesmo sem exigência
+			camposDeExigenciasAtivos[categoria] = [];
+
+			// Mostra como tag também
+			adicionarBadgeCategoria(categoria);
+
+			const autocompleteInput = divCategoria.querySelector('.exigencia-autocomplete');
+			setupAutocomplete(autocompleteInput, categoria);
+		}
+
+		function adicionarBadgeCategoria(categoria) {
+			const wrapper = document.getElementById("categoriasSelecionadas");
+
+			// Impede duplicação visual
+			if (document.getElementById(`badge-categoria-${categoria}`)) return;
+
+			const span = document.createElement("span");
+			span.className = "badge bg-secondary tag";
+			span.id = `badge-categoria-${categoria}`;
+			span.innerHTML = `
+		${nomesCategoria[categoria]}
+		<button type="button" class="btn-close btn-close-white ms-2" onclick="removerCategoria('${categoria}')"></button>
+	`;
+
+			wrapper.appendChild(span);
+		}
+
+
+
+		function removerCategoria(categoria) {
+			document.getElementById(`exigencias-categoria-${categoria}`)?.remove();
+			document.getElementById(`badge-categoria-${categoria}`)?.remove();
+			delete camposDeExigenciasAtivos[categoria];
+		}
+
+
+		function adicionarExigencia(categoria, exigencia) {
+			if (!camposDeExigenciasAtivos[categoria]) {
+				adicionarCategoria(categoria);
+			}
+			if (!camposDeExigenciasAtivos[categoria].includes(exigencia)) {
+				camposDeExigenciasAtivos[categoria].push(exigencia);
+
+				const badgesContainer = document.getElementById(`exigencias-inputs-${categoria}`);
+				const badgeHtml = `
+                    <span class="badge bg-secondary me-2" id="badge-${categoria}-${exigencia}">
+                        ${exigencia}
+                        <button type="button" class="btn-close btn-close-white" onclick="removerExigencia('${categoria}', '${exigencia}')" aria-label="Remover"></button>
+                    </span>
+                    <input type="hidden" name="exigencias[]" value="${exigencia}">
+                `;
+				const tempDiv = document.createElement('div');
+				tempDiv.innerHTML = badgeHtml.trim();
+				badgesContainer.appendChild(tempDiv.firstChild);
+				badgesContainer.appendChild(tempDiv.lastChild); // Adiciona também o input hidden
+
+				// Re-setup do autocomplete para atualizar a lista
+				const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
+				if (autocompleteInput) {
+					// Simula um "input" para forçar a atualização da lista de sugestões
+					const event = new Event('input', { bubbles: true, cancelable: true });
+					autocompleteInput.dispatchEvent(event);
+				}
+			}
+		}
+
+		function removerExigencia(categoria, exigencia) {
+			if (camposDeExigenciasAtivos[categoria]) {
+				const index = camposDeExigenciasAtivos[categoria].indexOf(exigencia);
+				if (index > -1) {
+					camposDeExigenciasAtivos[categoria].splice(index, 1);
+					// Remove o badge
+					document.getElementById(`badge-${categoria}-${exigencia}`)?.remove();
+					// Remove o input hidden associado
+					document.querySelector(`input[name="exigencias[]"][value="${exigencia}"]`)?.remove();
+
+					if (camposDeExigenciasAtivos[categoria].length === 0) {
+						removerCategoria(categoria);
+					}
+
+					// Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
+					const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
+					if (autocompleteInput) {
+						const event = new Event('input', { bubbles: true, cancelable: true });
+						autocompleteInput.dispatchEvent(event);
+					}
+				}
+			}
+		}
+
+		//Botao excluir
+		document.getElementById("btnExcluir").addEventListener("click", () => {
+			const processo = document.getElementById("processoBusca").value;
+			if (!processo) return alert("Nenhum processo carregado.");
+
+			if (confirm(`Deseja realmente excluir o processo ${processo}?`)) {
+				localStorage.removeItem(`processo-${processo}`);
+				alert("Processo excluído!");
+				window.location.href = "lista.html";
+			}
+		});
+
+		function setupAutocomplete(inputElement, categoria) {
+			const autocompleteList = inputElement.nextElementSibling; // O div.autocomplete-list logo após o input
+
+			inputElement.addEventListener('input', function () {
+				const searchTerm = this.value.toLowerCase();
+				autocompleteList.innerHTML = ''; // Limpa a lista anterior
+
+				if (searchTerm.length === 0) {
+					autocompleteList.style.display = 'none';
+					return;
+				}
+
+				const sugestoes = sugestoesExigenciasPorCategoria[categoria] || [];
+				// Filtra as sugestões, removendo as que já estão ativas para esta categoria
+				const filteredSugestoes = sugestoes.filter(sugestao =>
+					sugestao.toLowerCase().includes(searchTerm) &&
+					!camposDeExigenciasAtivos[categoria].includes(sugestao)
+				);
+
+				if (filteredSugestoes.length > 0) {
+					filteredSugestoes.forEach(sugestao => {
+						const item = document.createElement('div');
+						item.classList.add('autocomplete-item');
+						item.textContent = sugestao;
+						item.addEventListener('click', () => {
+							adicionarExigencia(categoria, sugestao);
+							inputElement.value = ''; // Limpa o input após adicionar
+							autocompleteList.innerHTML = '';
+							autocompleteList.style.display = 'none';
+						});
+						autocompleteList.appendChild(item);
+					});
+					autocompleteList.style.display = 'block';
+				} else {
+					autocompleteList.style.display = 'none';
+				}
+			});
+
+			// Oculta a lista de autocomplete quando o input perde o foco
+			inputElement.addEventListener('blur', () => {
+				setTimeout(() => {
+					autocompleteList.style.display = 'none';
+				}, 100); // Pequeno atraso para permitir o clique no item
+			});
+		}
+
+		// Salvar Automaticamente
+		function salvarAutomaticamente() {
+			const processo = document.getElementById("processoBusca").value;
+			if (!processo) return;
+			const dados = coletarDadosDoFormulario();
+			localStorage.setItem(`processo-${processo}`, JSON.stringify(dados));
+			console.log("Auto-salvo:", processo);
+		}
+		document.querySelectorAll("input, select, textarea").forEach(el => {
+			el.addEventListener("change", salvarAutomaticamente);
+			el.addEventListener("input", salvarAutomaticamente);
+		});
+
+		// Botão BUSCAR
+		document.getElementById("buscarProcesso").addEventListener("click", function () {
+			const processo = document.getElementById("processoBusca").value;
+			if (!processo) return alert("Informe o número do processo para buscar.");
+
+			const dados = localStorage.getItem(`processo-${processo}`);
+			if (!dados) return alert("Processo não encontrado.");
+
+			preencherFormulario(JSON.parse(dados));
+		});
+
+		function coletarDadosDoFormulario() {
+			const exigencias = [];
+			const categoriasSelecionadas = Object.keys(camposDeExigenciasAtivos);
+			document.querySelectorAll('input[name="exigencias[]"]').forEach(input => {
+				exigencias.push(input.value);
+			});
+
+			return {
+				cnpj: document.getElementById("cnpj").value,
+				instituicao: document.getElementById("instituicao").value,
+				endereco: document.getElementById("endereco").value,
+				localizacao: document.getElementById("localizacao").value,
+				ocupacao: document.getElementById("ocupacao").value,
+				grupo: document.getElementById("grupo").value,
+				area: document.getElementById("area").value,
+				responsavel: document.getElementById("responsavel").value,
+				tipo: document.getElementById("tipo").value,
+				inicio: document.getElementById("inicio").value,
+				fim: document.getElementById("fim").value,
+				retorno: document.getElementById("inlineRadio1").checked,
+				acompanhante: document.getElementById("acompanhante").value,
+				cpf: document.getElementById("cpf").value,
+				funcao: document.getElementById("funcao").value,
+				status: document.getElementById("status").value,
+				observacao: document.getElementById("observacao").value,
+				categoriasSelecionadas: categoriasSelecionadas,
+				exigencias: exigencias // Já é um array coletado
+			};
+		}
+
+		function preencherFormulario(data) {
+			document.getElementById("cnpj").value = data.cnpj || "";
+			document.getElementById("instituicao").value = data.instituicao || "";
+			document.getElementById("endereco").value = data.endereco || "";
+			document.getElementById("localizacao").value = data.localizacao || "";
+			document.getElementById("ocupacao").value = data.ocupacao || "";
+			document.getElementById("grupo").value = data.grupo || "";
+			document.getElementById("area").value = data.area || "";
+			document.getElementById("responsavel").value = data.responsavel || "";
+			document.getElementById("tipo").value = data.tipo || "";
+			document.getElementById("inicio").value = data.inicio || "";
+			document.getElementById("fim").value = data.fim || "";
+			document.getElementById("inlineRadio1").checked = !!data.retorno;
+			document.getElementById("acompanhante").value = data.acompanhante || "";
+			document.getElementById("cpf").value = data.cpf || "";
+			document.getElementById("funcao").value = data.funcao || "";
+			document.getElementById("status").value = data.status || "";
+			document.getElementById("observacao").value = data.observacao || "";
+			aplicarCorDoStatus(data.status || "Sem Status");
+
+			// Limpa as exigências existentes antes de preencher
+			for (const categoria in camposDeExigenciasAtivos) {
+				document.getElementById(`exigencias-categoria-${categoria}`)?.remove();
+			}
+			camposDeExigenciasAtivos = {}; // Reseta o controle de categorias ativas
+
+			if (data.exigencias && Array.isArray(data.exigencias)) {
+				data.exigencias.forEach(exigencia => {
+					for (const categoria in sugestoesExigenciasPorCategoria) {
+						if (sugestoesExigenciasPorCategoria[categoria].includes(exigencia)) {
+							// Adiciona a exigência, que por sua vez adicionará a categoria se necessário
+							adicionarExigencia(categoria, exigencia);
+							break; // Sai do loop de categorias, pois a exigência foi encontrada
+						}
+					}
+				});
+			}
+		}
+	</script>
+</body>
+
+=======
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Formulário de Medidas de Segurança</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+	<style>
+		.autocomplete-list {
+			position: absolute;
+			z-index: 1000;
+			width: 100%;
+			max-height: 200px;
+			overflow-y: auto;
+			background-color: #fff;
+			border: 1px solid #ced4da;
+			border-top: none;
+		}
+
+		.autocomplete-item {
+			padding: 0.5rem;
+			cursor: pointer;
+		}
+
+		.autocomplete-item:hover {
+			background-color: #e9ecef;
+		}
+
+		.badge {
+			padding: 0.5em 0.75em;
+			font-size: 0.9em;
+			border-radius: 1em;
+		}
+
+		.tag {
+			background-color: #f1f3f5;
+			border: 1px solid #ced4da;
+			border-radius: .25rem;
+			padding: .25rem .5rem;
+			margin-right: .5rem;
+			margin-bottom: .5rem;
+			display: inline-flex;
+			align-items: center;
+		}
+
+		/* Cores baseadas no status */
+		.status-pendente {
+			background-color: #ffc107;
+		}
+
+		.status-analise {
+			background-color: #17a2b8;
+		}
+
+		.status-vistoria {
+			background-color: #6f42c1;
+		}
+
+		.status-aprovado {
+			background-color: #198754;
+		}
+
+		.status-reprovado {
+			background-color: #dc3545;
+		}
+
+		.status-cancelado {
+			background-color: #6c757d;
+		}
+
+		.status-nao-realizada {
+			background-color: #fd7e14;
+		}
+
+		.status-sem-status {
+			background-color: #343a40;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="container mt-2">
+		<h2 id="tituloLaudo" class="mb-4 text-center">Laudo de Vistoria</h2>
+
+		<form class=" row g-3" autocomplete="off">
+
+			<div class="col-md-8">
+				<div class="row">
+					<div class="col-md-10">
+						<label for="processoBusca" class="form-label">Processo</label>
+						<div class="input-group">
+							<input type="text" class="form-control" id="processoBusca"
+								placeholder="00000-00000000/0000-00" maxlength="25">
+							<button class="btn btn-outline-secondary" type="button" id="buscarProcesso">
+								<i class="bi bi-search"></i>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-4 bg-dark d-flex justify-content-center align-items-center text-light">
+				<a href="#" class="bi bi-geo-alt-fill link-light text-end" style="transform: scale(3);"></a>
+			</div>
+
+			<div class="col-md-4">
+				<label for="cnpj" class="form-label">CNPJ</label>
+				<input type="text" class="form-control" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18">
+			</div>
+
+			<div class="col-md-8">
+				<label for="instituicao" class="form-label">Instituição</label>
+				<input type="text" class="form-control" id="instituicao" placeholder="Nome da Instituição">
+			</div>
+
+			<div class="col-md-8">
+				<label for="endereco" class="form-label">Endereço</label>
+				<input type="text" class="form-control" id="endereco" placeholder="Endereço">
+			</div>
+
+			<div class="col-md-4">
+				<label for="localizacao" class="form-label">Localização</label>
+				<div class="input-group">
+					<input type="text" class="form-control" id="localizacao" placeholder="-00.000000, -00.000000"
+						maxlength="25">
+					<button class="btn btn-outline-secondary" type="button" id="buscarLocalizacao">
+						<i class="bi bi-geo-alt-fill"></i>
+					</button>
+				</div>
+			</div>
+
+			<div class="col-md-5">
+				<label for="ocupacao" class="form-label">Ocupação</label>
+				<select class="form-select" id="ocupacao">
+					<option value="">Selecione</option>
+					<option value="01">01 - Residenciais</option>
+					<option value="02">02 - Transitórias</option>
+					<option value="03">03 - Comerciais</option>
+					<option value="04">04 - Serviços Profissionais</option>
+					<option value="05">05 - Escolares</option>
+					<option value="06">06 - Concentração de Público</option>
+					<option value="07">07 - Garagens</option>
+					<option value="08">08 - Hospitalares</option>
+					<option value="09">09 - Industriais</option>
+					<option value="10">10 - Depósitos</option>
+					<option value="11">11 - Armazenamento e instalações de alto risco</option>
+					<option value="12">12 - Especiais</option>
+					<option value="13">13 - Mistas</option>
+				</select>
+			</div>
+
+			<div class="col-md-5">
+				<label for="grupo" class="form-label">Grupo</label>
+				<select class="form-select" id="grupo">
+					<option value="">Selecione</option>
+					<option value="01">01 - Residenciais unifamiliares</option>
+					<option value="02">02 - Residenciais multifamiliares</option>
+					<option value="03">03 - Habitações coletivas</option>
+					<option value="04">04 - Hotéis</option>
+					<option value="05">05 - Hotéis residenciais</option>
+					<option value="06">06 - Comércio de pequeno porte</option>
+					<option value="07">07 - Comércio de médio porte</option>
+					<option value="08">08 - Comércio de grande porte</option>
+					<option value="09">09 - Escritórios</option>
+					<option value="10">10 - Agências bancárias</option>
+					<option value="11">11 - Laboratórios e estúdios</option>
+					<option value="12">12 - Serviços de reparação</option>
+					<option value="13">13 - Escolas em geral</option>
+					<option value="14">14 - Escolas especiais</option>
+					<option value="15">15 - Locais para cultura física</option>
+					<option value="16">16 - Pré-escolas</option>
+					<option value="17">17 - Escolas para portadores de deficiências</option>
+					<option value="18">18 - Museus e bibliotecas</option>
+					<option value="19">19 - Templos religiosos</option>
+					<option value="20">20 - Centros esportivos e de exibição</option>
+					<option value="21">21 - Terminais de passageiros</option>
+					<option value="22">22 - Artes cênicas e auditórios</option>
+					<option value="23">23 - Clubes sociais</option>
+					<option value="24">24 - Construções provisórias</option>
+					<option value="25">25 - Restaurantes</option>
+					<option value="26">26 - Garagens em geral</option>
+					<option value="27">27 - Oficinas</option>
+					<option value="28">28 - Hangares</option>
+					<option value="29">29 - Hospitais veterinários</option>
+					<option value="30">30 - Hospitais em geral</option>
+					<option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
+					<option value="32">32 - Clínicas</option>
+					<option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
+					<option value="34">34 - Indústrias > 300 MJ/m² e < 1200 MJ/m²</option>
+					<option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
+					<option value="36">36 - Depósitos de material incombustível</option>
+					<option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
+					<option value="38">38 - Depósitos > 300 MJ/m² e < 1200 MJ/m²</option>
+					<option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
+					<option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
+					<option value="41">41 - Explosivos</option>
+					<option value="42">42 - Produtos perigosos</option>
+					<option value="43">43 - Vegetações</option>
+					<option value="44">44 - Canteiros de obras</option>
+					<option value="45">45 - Centros esportivos (> 2500 pessoas)</option>
+					<option value="46">46 - Parques de diversões</option>
+					<option value="47">47 - Centrais de comunicação e energia</option>
+					<option value="48">48 - Túneis</option>
+					<option value="49">49 - Silos</option>
+					<option value="50">50 - Locais com restrição de liberdade</option>
+					<option value="51">51 - Destinações variáveis</option>
+				</select>
+			</div>
+
+			<div class="col-md-2">
+				<label for="area" class="form-label">Área(m²)</label>
+				<input type="number" step="0.01" class="form-control" id="area" placeholder="Área">
+			</div>
+
+			<div class="col-md-8">
+				<label for="responsavel" class="form-label">Responsável</label>
+				<input type="text" class="form-control" id="responsavel" placeholder="Nome e telefone do Responsável">
+			</div>
+
+			<div class="col-md-4">
+				<label for="tipo" class="form-label">Tipo</label>
+				<select class="form-select" id="tipo">
+					<option value="">Selecione</option>
+					<option>RLE</option>
+					<option>Relatório Técnico</option>
+					<option>Denúncia</option>
+					<option>Inopinada</option>
+					<option>Dilação de Prazo</option>
+					<option>PPCI</option>
+					<option>Outros</option>
+				</select>
+			</div>
+			<div class="col-md-9">
+				<div class="row">
+					<div class="col-sm-6">
+						<label for="inicio" class="form-label">Início</label>
+						<input type="datetime-local" class="form-control" id="inicio" placeholder="inicio">
+					</div>
+
+					<div class="col-sm-6">
+						<label for="fim" class="form-label">Fim</label>
+						<input type="datetime-local" class="form-control" id="fim" placeholder="fim">
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-3">
+				<label class="form-label d-block">É retorno?</label>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="retorno" id="inlineRadio1" value="sim">
+					<label class="form-check-label" for="inlineRadio1">Sim</label>
+				</div>
+				<div class="form-check form-check-inline">
+					<input class="form-check-input" type="radio" name="retorno" id="inlineRadio2" value="nao" checked>
+					<label class="form-check-label" for="inlineRadio2">Não</label>
+				</div>
+			</div>
+
+			<div class="col-md-4">
+				<label for="acompanhante" class="form-label">Dados do Acompanhante</label>
+				<input type="text" class="form-control" id="acompanhante" placeholder="Nome">
+			</div>
+			<div class="col-md-2">
+				<label for="cpf" class="form-label"> &nbsp; </label>
+				<input type="text" class="form-control" id="cpf" placeholder="CPF">
+				<div class="invalid-feedback">CPF inválido</div>
+			</div>
+			<div class="col-md-3">
+				<label for="funcao" class="form-label"> &nbsp; </label>
+				<input type="text" class="form-control" id="funcao" placeholder="Função">
+			</div>
+
+			<div class="col-md-3">
+				<label for="status" class="form-label">Status</label>
+				<select class="form-select" id="status">
+					<option value="">Selecione</option>
+					<option>Pendente</option>
+					<option>Análise</option>
+					<option>Vistoria</option>
+					<option>Aprovado</option>
+					<option>Reprovado</option>
+					<option>Cancelado</option>
+					<option>Não Realizada</option>
+				</select>
+			</div>
+
+			<div class="card mb-3">
+				<div class="card-header">Exigências de Segurança</div>
+				<div class="card-body">
+					<div class="mb-3">
+
+						<select class="form-select" id="selectCategoriaExigencia">
+							<option value="">Selecione uma Categoria</option>
+						</select>
+					</div>
+					<div id="categoriasSelecionadas" class="mb-3 d-flex flex-wrap gap-2"></div>
+					<label for="selectCategoriaExigencia" class="form-label">Adicionar Exigência por Categoria:</label>
+					<div id="exigenciasContainer">
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-12">
+				<label for="observacao" class="form-label">Observação</label>
+				<textarea rows="5" class="form-control" id="observacao" placeholder="Observação"></textarea>
+			</div>
+
+			<div>
+				<a href="index.html" class="btn btn-light" id="btInicio">
+					<i class="bi bi-house"></i> Início
+				</a>
+
+				<button type="button" class="btn btn-danger" id="btnExcluir">
+					<i class="bi bi-trash"></i> Excluir
+				</button>
+			</div>
+
+		</form>
+	</div>
+
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+	<script>
+		// Preenche o formulário automaticamente ao acessar com ?processo=...
+		document.addEventListener("DOMContentLoaded", () => {
+			const params = new URLSearchParams(window.location.search);
+			const processoParam = params.get("processo");
+			if (processoParam) {
+				document.getElementById("processoBusca").value = processoParam;
+				document.getElementById("buscarProcesso").click();
+			}
+		});
+		document.getElementById("status").addEventListener("change", function () {
+			aplicarCorDoStatus(this.value);
+		});
+	</script>
+
+	<script>
+		function aplicarCorDoStatus(status) {
+			const titulo = document.getElementById("tituloLaudo");
+			const classe = formatarClasseStatus(status);
+			titulo.className = `mb-4 text-center text-light ${classe}`;
+		}
+
+		// reusa a mesma função de formatação do lista.html
+		function formatarClasseStatus(status) {
+			return 'status-' + status.toLowerCase()
+				.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+				.replace(/\s+/g, '-')
+				.replace(/[^a-z0-9\-]/g, '');
+		}
+
+	</script>
+	<script>
+		// Máscara do processo
+		const processoInput = document.getElementById('processoBusca');
+		processoInput.addEventListener('input', () => {
+			let value = processoInput.value.replace(/\D/g, "");
+			let formattedValue = "";
+
+			if (value.length > 0)
+				formattedValue += value.substring(0, 5);
+			if (value.length > 5)
+				formattedValue += "-" + value.substring(5, 13);
+			if (value.length > 13)
+				formattedValue += "/" + value.substring(13, 17);
+			if (value.length > 17)
+				formattedValue += "-" + value.substring(17, 19);
+
+			processoInput.value = formattedValue;
+		});
+
+		// Máscara do CNPJ
+		const cnpjInput = document.getElementById('cnpj');
+		cnpjInput.addEventListener('input', () => {
+			let value = cnpjInput.value.replace(/\D/g, "");
+			value = value.replace(/^(\d{2})(\d)/, "$1.$2");
+			value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+			value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
+			value = value.replace(/(\d{4})(\d)/, "$1-$2");
+			cnpjInput.value = value.slice(0, 18);
+		});
+	</script>
+
+	<script>
+		// validação e máscara CPF
+		const cpfInput = document.getElementById('cpf');
+
+		cpfInput.addEventListener('input', () => {
+			let value = cpfInput.value.replace(/\D/g, ''); // Remove não números
+			value = value.slice(0, 11); // Limita a 11 dígitos
+
+			// Aplica a máscara CPF: 000.000.000-00
+			if (value.length > 9) {
+				value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+			} else if (value.length > 6) {
+				value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+			} else if (value.length > 3) {
+				value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+			}
+
+			cpfInput.value = value;
+		});
+
+		// Validação do CPF ao sair do campo
+		cpfInput.addEventListener('blur', () => {
+			const isValid = validarCPF(cpfInput.value);
+			if (!isValid && cpfInput.value !== '') {
+				cpfInput.classList.add('is-invalid');
+			} else {
+				cpfInput.classList.remove('is-invalid');
+			}
+		});
+
+		// Função de validação de CPF
+		function validarCPF(cpf) {
+			cpf = cpf.replace(/[^\d]+/g, '');
+
+			if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+
+			let soma = 0;
+			for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i); let resto = 11 - (soma % 11); if (resto === 10 ||
+				resto === 11) resto = 0; if (resto !== parseInt(cpf.charAt(9))) return false; soma = 0; for (let i = 0; i < 10; i++) soma
+					+= parseInt(cpf.charAt(i)) * (11 - i); resto = 11 - (soma % 11); if (resto === 10 || resto === 11) resto = 0; if (resto
+						!== parseInt(cpf.charAt(10))) return false; return true;
+		} 
+	</script>
+	<script>
+		const nomesCategoria = {
+			'01': "DOCUMENTAÇÃO",
+			'02': "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
+			'03': "ILUMINAÇÃO DE EMERGÊNCIA",
+			'04': "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
+			'05': "SAÍDAS DE EMERGÊNCIA",
+			'06': "SISTEMA DE PROTEÇÃO POR HIDRANTES",
+			'07': "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
+			'08': "SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
+			'09': "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
+			'10': "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
+			'11': "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
+			'12': "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
+			'13': "BRIGADA DE INCÊNDIO",
+			'14': "ACESSO DE VIATURAS DE SOCORRO",
+			'15': "POSTOS DE COMBUSTÍVEIS",
+			'16': "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
+			'17': "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
+			'18': "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO"
+		};
+
+		const sugestoesExigenciasPorCategoria = {
+			'01': ["Instalação", "Manutenção", "Teste Semestral"],
+			'02': ["Verificação", "Bateria", "Lâmpadas"],
+			'03': ["Recarga", "Sinalização", "Localização"],
+			'04': ["Desobstrução", "Portas Corta-Fogo", "Sinalização"],
+			'05': ["Rota de Fuga", "Equipamentos", "Pisos Escorregadios"],
+			'06': ["Pressão", "Mangueiras", "Registro"],
+			'07': ["Teste", "Bicos", "Manutenção"],
+			'08': ["Treinamento", "Equipamentos", "Simulados"],
+			'09': ["Atualização", "Planta", "Divulgação"],
+			'10': ["Teste", "Limpeza", "Bateria"],
+			'11': ["Dampers", "Exaustores", "Manutenção"],
+			'12': ["Portas Corta-Fogo", "Selagem", "Integridade"],
+			'13': ["Rampas", "Corrimãos", "Sinalização Tátil"],
+			'14': ["Brigadistas", "Colaboradores", "Primeiros Socorros"],
+			'15': ["Extintores", "Alarmes", "Hidrantes"],
+			'16': ["Disjuntores", "Fiação", "Quadros Elétricos"],
+			'17': ["Vazamento", "Tubulação", "Válvulas"],
+			'18': ["Coleta Seletiva", "Descarte", "Armazenamento"]
+		};
+
+
+		let camposDeExigenciasAtivos = {}; // Para controlar quais categorias já estão ativas e suas exigências
+
+		document.addEventListener('DOMContentLoaded', () => {
+			preencherSelectCategorias();
+		});
+
+		function preencherSelectCategorias() {
+			const select = document.getElementById('selectCategoriaExigencia'); // Nome corrigido
+			for (const chave in nomesCategoria) {
+				const option = document.createElement('option');
+				option.value = chave;
+				option.textContent = nomesCategoria[chave];
+				select.appendChild(option);
+			}
+		}
+
+		document.getElementById('selectCategoriaExigencia').addEventListener('change', function () { // Nome corrigido
+			const categoria = this.value;
+			if (categoria && !camposDeExigenciasAtivos[categoria]) {
+				adicionarCategoria(categoria);
+				this.value = ""; // Reseta o select
+			}
+		});
+
+		function adicionarCategoria(categoria) {
+			if (camposDeExigenciasAtivos[categoria]) return;
+
+			const container = document.getElementById('exigenciasContainer');
+			const divCategoria = document.createElement('div');
+			divCategoria.id = `exigencias-categoria-${categoria}`;
+			divCategoria.classList.add('card', 'mb-3', 'p-3');
+
+			divCategoria.innerHTML = `
+		<div class="d-flex justify-content-between align-items-center mb-3">
+			<h5 class="mb-0">${nomesCategoria[categoria]}</h5>
+			<button type="button" class="btn-close" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')"></button>
+		</div>
+		<div class="mb-3">
+			<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${nomesCategoria[categoria]}" data-categoria="${categoria}">
+			<div class="autocomplete-list"></div>
+		</div>
+		<div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
+	`;
+			container.appendChild(divCategoria);
+
+			// Marca categoria como ativa, mesmo sem exigência
+			camposDeExigenciasAtivos[categoria] = [];
+
+			// Mostra como tag também
+			adicionarBadgeCategoria(categoria);
+
+			const autocompleteInput = divCategoria.querySelector('.exigencia-autocomplete');
+			setupAutocomplete(autocompleteInput, categoria);
+		}
+
+		function adicionarBadgeCategoria(categoria) {
+			const wrapper = document.getElementById("categoriasSelecionadas");
+
+			// Impede duplicação visual
+			if (document.getElementById(`badge-categoria-${categoria}`)) return;
+
+			const span = document.createElement("span");
+			span.className = "badge bg-secondary tag";
+			span.id = `badge-categoria-${categoria}`;
+			span.innerHTML = `
+		${nomesCategoria[categoria]}
+		<button type="button" class="btn-close btn-close-white ms-2" onclick="removerCategoria('${categoria}')"></button>
+	`;
+
+			wrapper.appendChild(span);
+		}
+
+
+
+		function removerCategoria(categoria) {
+			document.getElementById(`exigencias-categoria-${categoria}`)?.remove();
+			document.getElementById(`badge-categoria-${categoria}`)?.remove();
+			delete camposDeExigenciasAtivos[categoria];
+		}
+
+
+		function adicionarExigencia(categoria, exigencia) {
+			if (!camposDeExigenciasAtivos[categoria]) {
+				adicionarCategoria(categoria);
+			}
+			if (!camposDeExigenciasAtivos[categoria].includes(exigencia)) {
+				camposDeExigenciasAtivos[categoria].push(exigencia);
+
+				const badgesContainer = document.getElementById(`exigencias-inputs-${categoria}`);
+				const badgeHtml = `
+                    <span class="badge bg-secondary me-2" id="badge-${categoria}-${exigencia}">
+                        ${exigencia}
+                        <button type="button" class="btn-close btn-close-white" onclick="removerExigencia('${categoria}', '${exigencia}')" aria-label="Remover"></button>
+                    </span>
+                    <input type="hidden" name="exigencias[]" value="${exigencia}">
+                `;
+				const tempDiv = document.createElement('div');
+				tempDiv.innerHTML = badgeHtml.trim();
+				badgesContainer.appendChild(tempDiv.firstChild);
+				badgesContainer.appendChild(tempDiv.lastChild); // Adiciona também o input hidden
+
+				// Re-setup do autocomplete para atualizar a lista
+				const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
+				if (autocompleteInput) {
+					// Simula um "input" para forçar a atualização da lista de sugestões
+					const event = new Event('input', { bubbles: true, cancelable: true });
+					autocompleteInput.dispatchEvent(event);
+				}
+			}
+		}
+
+		function removerExigencia(categoria, exigencia) {
+			if (camposDeExigenciasAtivos[categoria]) {
+				const index = camposDeExigenciasAtivos[categoria].indexOf(exigencia);
+				if (index > -1) {
+					camposDeExigenciasAtivos[categoria].splice(index, 1);
+					// Remove o badge
+					document.getElementById(`badge-${categoria}-${exigencia}`)?.remove();
+					// Remove o input hidden associado
+					document.querySelector(`input[name="exigencias[]"][value="${exigencia}"]`)?.remove();
+
+					if (camposDeExigenciasAtivos[categoria].length === 0) {
+						removerCategoria(categoria);
+					}
+
+					// Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
+					const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
+					if (autocompleteInput) {
+						const event = new Event('input', { bubbles: true, cancelable: true });
+						autocompleteInput.dispatchEvent(event);
+					}
+				}
+			}
+		}
+
+		//Botao excluir
+		document.getElementById("btnExcluir").addEventListener("click", () => {
+			const processo = document.getElementById("processoBusca").value;
+			if (!processo) return alert("Nenhum processo carregado.");
+
+			if (confirm(`Deseja realmente excluir o processo ${processo}?`)) {
+				localStorage.removeItem(`processo-${processo}`);
+				alert("Processo excluído!");
+				window.location.href = "lista.html";
+			}
+		});
+
+		function setupAutocomplete(inputElement, categoria) {
+			const autocompleteList = inputElement.nextElementSibling; // O div.autocomplete-list logo após o input
+
+			inputElement.addEventListener('input', function () {
+				const searchTerm = this.value.toLowerCase();
+				autocompleteList.innerHTML = ''; // Limpa a lista anterior
+
+				if (searchTerm.length === 0) {
+					autocompleteList.style.display = 'none';
+					return;
+				}
+
+				const sugestoes = sugestoesExigenciasPorCategoria[categoria] || [];
+				// Filtra as sugestões, removendo as que já estão ativas para esta categoria
+				const filteredSugestoes = sugestoes.filter(sugestao =>
+					sugestao.toLowerCase().includes(searchTerm) &&
+					!camposDeExigenciasAtivos[categoria].includes(sugestao)
+				);
+
+				if (filteredSugestoes.length > 0) {
+					filteredSugestoes.forEach(sugestao => {
+						const item = document.createElement('div');
+						item.classList.add('autocomplete-item');
+						item.textContent = sugestao;
+						item.addEventListener('click', () => {
+							adicionarExigencia(categoria, sugestao);
+							inputElement.value = ''; // Limpa o input após adicionar
+							autocompleteList.innerHTML = '';
+							autocompleteList.style.display = 'none';
+						});
+						autocompleteList.appendChild(item);
+					});
+					autocompleteList.style.display = 'block';
+				} else {
+					autocompleteList.style.display = 'none';
+				}
+			});
+
+			// Oculta a lista de autocomplete quando o input perde o foco
+			inputElement.addEventListener('blur', () => {
+				setTimeout(() => {
+					autocompleteList.style.display = 'none';
+				}, 100); // Pequeno atraso para permitir o clique no item
+			});
+		}
+
+		// Salvar Automaticamente
+		function salvarAutomaticamente() {
+			const processo = document.getElementById("processoBusca").value;
+			if (!processo) return;
+			const dados = coletarDadosDoFormulario();
+			localStorage.setItem(`processo-${processo}`, JSON.stringify(dados));
+			console.log("Auto-salvo:", processo);
+		}
+		document.querySelectorAll("input, select, textarea").forEach(el => {
+			el.addEventListener("change", salvarAutomaticamente);
+			el.addEventListener("input", salvarAutomaticamente);
+		});
+
+		// Botão BUSCAR
+		document.getElementById("buscarProcesso").addEventListener("click", function () {
+			const processo = document.getElementById("processoBusca").value;
+			if (!processo) return alert("Informe o número do processo para buscar.");
+
+			const dados = localStorage.getItem(`processo-${processo}`);
+			if (!dados) return alert("Processo não encontrado.");
+
+			preencherFormulario(JSON.parse(dados));
+		});
+
+		function coletarDadosDoFormulario() {
+			const exigencias = [];
+			const categoriasSelecionadas = Object.keys(camposDeExigenciasAtivos);
+			document.querySelectorAll('input[name="exigencias[]"]').forEach(input => {
+				exigencias.push(input.value);
+			});
+
+			return {
+				cnpj: document.getElementById("cnpj").value,
+				instituicao: document.getElementById("instituicao").value,
+				endereco: document.getElementById("endereco").value,
+				localizacao: document.getElementById("localizacao").value,
+				ocupacao: document.getElementById("ocupacao").value,
+				grupo: document.getElementById("grupo").value,
+				area: document.getElementById("area").value,
+				responsavel: document.getElementById("responsavel").value,
+				tipo: document.getElementById("tipo").value,
+				inicio: document.getElementById("inicio").value,
+				fim: document.getElementById("fim").value,
+				retorno: document.getElementById("inlineRadio1").checked,
+				acompanhante: document.getElementById("acompanhante").value,
+				cpf: document.getElementById("cpf").value,
+				funcao: document.getElementById("funcao").value,
+				status: document.getElementById("status").value,
+				observacao: document.getElementById("observacao").value,
+				categoriasSelecionadas: categoriasSelecionadas,
+				exigencias: exigencias // Já é um array coletado
+			};
+		}
+
+		function preencherFormulario(data) {
+			document.getElementById("cnpj").value = data.cnpj || "";
+			document.getElementById("instituicao").value = data.instituicao || "";
+			document.getElementById("endereco").value = data.endereco || "";
+			document.getElementById("localizacao").value = data.localizacao || "";
+			document.getElementById("ocupacao").value = data.ocupacao || "";
+			document.getElementById("grupo").value = data.grupo || "";
+			document.getElementById("area").value = data.area || "";
+			document.getElementById("responsavel").value = data.responsavel || "";
+			document.getElementById("tipo").value = data.tipo || "";
+			document.getElementById("inicio").value = data.inicio || "";
+			document.getElementById("fim").value = data.fim || "";
+			document.getElementById("inlineRadio1").checked = !!data.retorno;
+			document.getElementById("acompanhante").value = data.acompanhante || "";
+			document.getElementById("cpf").value = data.cpf || "";
+			document.getElementById("funcao").value = data.funcao || "";
+			document.getElementById("status").value = data.status || "";
+			document.getElementById("observacao").value = data.observacao || "";
+			aplicarCorDoStatus(data.status || "Sem Status");
+
+			// Limpa as exigências existentes antes de preencher
+			for (const categoria in camposDeExigenciasAtivos) {
+				document.getElementById(`exigencias-categoria-${categoria}`)?.remove();
+			}
+			camposDeExigenciasAtivos = {}; // Reseta o controle de categorias ativas
+
+			if (data.exigencias && Array.isArray(data.exigencias)) {
+				data.exigencias.forEach(exigencia => {
+					for (const categoria in sugestoesExigenciasPorCategoria) {
+						if (sugestoesExigenciasPorCategoria[categoria].includes(exigencia)) {
+							// Adiciona a exigência, que por sua vez adicionará a categoria se necessário
+							adicionarExigencia(categoria, exigencia);
+							break; // Sai do loop de categorias, pois a exigência foi encontrada
+						}
+					}
+				});
+			}
+		}
+	</script>
+</body>
+
+>>>>>>> ba2015ce0a5b980f93ef068118bd64f8a0522f75
+
+</html>
