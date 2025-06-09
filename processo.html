@@ -714,12 +714,9 @@
 
 		let processoTimeout = null;
 
-		document.getElementById("processoBusca").addEventListener("input", function () {
-			clearTimeout(processoTimeout);
-
-			if (this.value.length === 25) {
-				// dá um pequeno tempo pro usuário terminar
-				processoTimeout = setTimeout(salvarAutomaticamente, 500);
+		document.getElementById("processoBusca").addEventListener("blur", () => {
+			if (document.getElementById("processoBusca").value.length === 25) {
+				salvarAutomaticamente();
 			}
 		});
 
