@@ -490,7 +490,7 @@
 				</a>
 
 				<button type="button" class="btn btn-success" id="btnSalvar">
-					<i class="bi bi-floppy me-1"></i>Salvar
+					<i class="bi bi-save me-1"></i>Salvar
 				</button>
 
 				<button type="button" class="btn btn-primary" id="btnGerar">
@@ -989,7 +989,7 @@
 			}
 			const dados = coletarDadosDoFormulario();
 			localStorage.setItem(`processo-${processo}`, JSON.stringify(dados));
-			Utils.showToast("Dados salvos automaticamente!", "success");
+			// Utils.showToast("Dados salvos automaticamente!", "success");
 			console.log("Auto-salvo:", processo);
 		}
 
@@ -1169,6 +1169,7 @@
 				document.getElementById('badgesCategorias').innerHTML = '';
 				camposDeExigenciasAtivos = {};
 				document.getElementById("retornoNao").checked = true; // Set default radio
+				window.location.href = "index.html";
 			}
 		});
 
