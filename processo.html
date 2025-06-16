@@ -160,6 +160,29 @@
 			transform: scale(3);
 		}
 
+		.location-link-full {
+			display: flex;
+			/* Para centralizar o conteúdo (o ícone) dentro do link */
+			width: 100%;
+			/* Faz o link ocupar toda a largura da div pai */
+			height: 100%;
+			/* Faz o link ocupar toda a altura da div pai */
+			justify-content: center;
+			/* Centraliza horizontalmente o ícone */
+			align-items: center;
+			/* Centraliza verticalmente o ícone */
+			text-decoration: none;
+			/* Opcional: remove o sublinhado padrão do link */
+			color: inherit;
+			/* Opcional: herda a cor do texto do pai (para o ícone) */
+		}
+
+		.location-link-full:hover {
+			background-color: rgba(255, 255, 255, 0.1);
+			/* Um leve escurecimento no hover */
+			/* ou qualquer outro efeito visual que você desejar */
+		}
+
 		@media (max-width: 768px) {
 			.form-section {
 				padding: 1rem;
@@ -168,6 +191,12 @@
 			.location-icon {
 				transform: scale(2);
 			}
+		}
+
+		#gpsContainer {
+			background-image: url("bgmap.png");
+			opacity: 0.5;
+			color: #000;
 		}
 	</style>
 </head>
@@ -221,10 +250,10 @@
 							<option value="Não Realizada">Não Realizada</option>
 						</select>
 					</div>
-					<div class="col-md-4 bg-gradient bg-primary-subtle d-flex justify-content-center align-items-center text-light rounded"
+					<div class="col-md-4 d-flex justify-content-center align-items-center text-light rounded"
 						id="gpsContainer">
 						<a id="locationLink" href="#" target="_blank" title="Localização GPS"
-							class="bi bi-geo-alt-fill location-icon">
+							class="location-link-full"> <i class="bi bi-geo-alt-fill location-icon text-black"></i>
 						</a>
 					</div>
 				</div>
@@ -2088,6 +2117,7 @@
 			document.getElementById("status").value = data.status || "";
 			document.getElementById("observacao").value = data.observacao || "";
 			aplicarCorDoStatus(data.status || "Sem Status");
+			aplicarCorDoStatus(data.geolocation || "Sem Status");
 
 			// Clear existing exigencies and categories before re-filling
 			document.getElementById('exigenciasContainer').innerHTML = '';
