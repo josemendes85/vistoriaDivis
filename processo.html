@@ -188,9 +188,9 @@
 				</h4>
 
 				<div class="row g-3">
-					<div class="col-md-8">
+					<div class="col-md-6">
 						<div class="row">
-							<div class="col-md-10">
+							<div class="col-md-12">
 								<label for="processoBusca" class="form-label">
 									Número do Processo <span class="text-danger">*</span>
 								</label>
@@ -208,9 +208,21 @@
 							</div>
 						</div>
 					</div>
-
-					<div
-						class="col-md-4 bg-gradient bg-success d-flex justify-content-center align-items-center text-light rounded">
+					<div class="col-md-2">
+						<label for="status" class="form-label">Status da Vistoria</label>
+						<select class="form-select" id="status">
+							<option value="">Selecione</option>
+							<option value="Pendente">Pendente</option>
+							<option value="Análise">Em Análise</option>
+							<option value="Vistoria">Em Vistoria</option>
+							<option value="Aprovado">Aprovado</option>
+							<option value="Reprovado">Reprovado</option>
+							<option value="Cancelado">Cancelado</option>
+							<option value="Não Realizada">Não Realizada</option>
+						</select>
+					</div>
+					<div class="col-md-4 bg-gradient bg-primary-subtle d-flex justify-content-center align-items-center text-light rounded"
+						id="gpsContainer">
 						<a id="locationLink" href="#" target="_blank" title="Localização GPS"
 							class="bi bi-geo-alt-fill location-icon">
 						</a>
@@ -427,23 +439,9 @@
 						<div class="invalid-feedback">CPF inválido</div>
 					</div>
 
-					<div class="col-md-3">
+					<div class="col-md-5">
 						<label for="funcao" class="form-label">Função/Cargo</label>
 						<input type="text" class="form-control" id="funcao" placeholder="Função na empresa">
-					</div>
-
-					<div class="col-md-2">
-						<label for="status" class="form-label">Status da Vistoria</label>
-						<select class="form-select" id="status">
-							<option value="">Selecione</option>
-							<option value="Pendente">Pendente</option>
-							<option value="Análise">Em Análise</option>
-							<option value="Vistoria">Em Vistoria</option>
-							<option value="Aprovado">Aprovado</option>
-							<option value="Reprovado">Reprovado</option>
-							<option value="Cancelado">Cancelado</option>
-							<option value="Não Realizada">Não Realizada</option>
-						</select>
 					</div>
 				</div>
 			</div>
@@ -1883,6 +1881,7 @@
 						const latitude = position.coords.latitude.toFixed(6);
 						const longitude = position.coords.longitude.toFixed(6);
 						document.getElementById('localizacao').value = `${latitude}, ${longitude}`;
+						salvarAutomaticamente();
 						Utils.showToast("Localização obtida com sucesso!", "success");
 					},
 					(error) => {
@@ -2042,7 +2041,6 @@
 				observacao: document.getElementById("observacao")?.value || "",
 				categoriasSelecionadas: categoriasSelecionadas,
 				exigencias: exigencias,
-				//gps: document.getElementById("gps").value || "123456"
 			};
 		}
 
@@ -2092,9 +2090,10 @@
 			const locationLink = document.getElementById('locationLink'); // O link <a>
 			const locationIcon = document.getElementById('locationGpsIcon'); // O <i> (se você usa o ID do <i> para estilos/seleção em outro lugar)
 
+
 			const coordenadas = data.localizacao; // Pega a localização dos dados passados para a função
 
-			if (locationLink && coordenadas) {
+			if (localizacao && coordenadas) {
 				// Formata as coordenadas para o Google Maps (substitui espaços por nada e garante vírgula)
 				const coordsFormatted = coordenadas.replace(/\s/g, '');
 				const googleMapsUrl = `http://maps.google.com/maps?q=${coordsFormatted}`;
@@ -2102,16 +2101,14 @@
 				locationLink.href = googleMapsUrl; // Define o href do link
 				locationLink.title = `Abrir no Google Maps: ${coordsFormatted}`; // Atualiza o título (tooltip)
 				locationLink.style.cursor = 'pointer'; // Torna o cursor indicativo de clicável
-				// locationLink.style.opacity = '1'; // Se você quiser garantir visibilidade total do ícone
-				// Se houver algum efeito de loading spinner ou de visibilidade que precisa ser desativado
-				// após carregar os dados, você deve desativá-lo aqui.
-				// Ex: if (locationIcon) { locationIcon.style.display = 'block'; }
-			} else if (locationLink) {
-				// Se não houver coordenadas, define o link para um placeholder e o título apropriado
-				locationLink.href = '#';
-				locationLink.title = 'Localização GPS (não disponível)';
-				locationLink.style.cursor = 'default';
-				// locationLink.style.opacity = '0.5'; // Ou esconda o ícone se não houver dados
+				console.log("com localizaocao");
+				console.log(coordsFormatted);
+				gpsContainer.classList.add('d-flex');
+			} else {
+				const gpsContainer = document.getElementById('gpsContainer');
+				console.log("SEM localizaocao");
+				gpsContainer.classList.remove('d-flex');
+				gpsContainer.style.display = 'none';
 			}
 			// Also re-add any categories that were selected but had no exigencies
 			if (data.categoriasSelecionadas && Array.isArray(data.categoriasSelecionadas)) {
