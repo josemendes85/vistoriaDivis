@@ -280,7 +280,7 @@
 				</h4>
 
 				<div class="row g-3">
-					<div class="col-md-5">
+					<div class="col-md-3">
 						<label for="ocupacao" class="form-label">Ocupação <span class="text-danger">*</span></label>
 						<select class="form-select" id="ocupacao" required>
 							<option value="">Selecione a ocupação</option>
@@ -301,7 +301,7 @@
 						<div class="invalid-feedback">Por favor, selecione a ocupação.</div>
 					</div>
 
-					<div class="col-md-5">
+					<div class="col-md-3">
 						<label for="grupo" class="form-label">Grupo <span class="text-danger">*</span></label>
 						<select class="form-select" id="grupo" required>
 							<option value="">Selecione o grupo</option>
@@ -361,11 +361,26 @@
 					</div>
 
 					<div class="col-md-2">
-						<label for="area" class="form-label">Área (m²)<span class="text-danger">*</span></label>
+						<label for="area" class="form-label">Área(m²)<span class="text-danger">*</span></label>
 						<input type="number" step="0.01" min="0" class="form-control" id="area" placeholder="0.00"
 							required>
 						<div class="invalid-feedback">Por favor, informe a área.</div>
 					</div>
+
+					<div class="col-md-2">
+						<label for="altura" class="form-label">Altura(m)<span class="text-danger">*</span></label>
+						<input type="number" step="0.01" min="0" class="form-control" id="altura" placeholder="0.00"
+							required>
+						<div class="invalid-feedback">Por favor, informe a altura.</div>
+					</div>
+
+					<div class="col-md-2">
+						<label for="pavimentos" class="form-label">Pavimentos<span class="text-danger">*</span></label>
+						<input type="number" step="1" min="0" class="form-control" id="pavimentos" placeholder="0"
+							required>
+						<div class="invalid-feedback">Por favor, informe a pavimentos.</div>
+					</div>
+
 				</div>
 			</div>
 
@@ -2029,6 +2044,8 @@
 				ocupacao: document.getElementById("ocupacao")?.value || "",
 				grupo: document.getElementById("grupo")?.value || "",
 				area: document.getElementById("area")?.value || "",
+				altura: document.getElementById("altura")?.value || "",
+				pavimentos: document.getElementById("pavimentos")?.value || "",
 				responsavel: document.getElementById("responsavel")?.value || "",
 				tipo: document.getElementById("tipo")?.value || "",
 				inicio: document.getElementById("inicio")?.value || "",
@@ -2054,6 +2071,8 @@
 			document.getElementById("ocupacao").value = data.ocupacao || "";
 			document.getElementById("grupo").value = data.grupo || "";
 			document.getElementById("area").value = data.area || "";
+			document.getElementById("altura").value = data.altura || "";
+			document.getElementById("pavimentos").value = data.pavimentos || "";
 			document.getElementById("responsavel").value = data.responsavel || "";
 			document.getElementById("tipo").value = data.tipo || "";
 			document.getElementById("inicio").value = data.inicio || "";
