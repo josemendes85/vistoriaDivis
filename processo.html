@@ -300,8 +300,7 @@
 					<div class="col-md-4">
 						<label for="localizacao" class="form-label">Coordenadas GPS</label>
 						<div class="input-group">
-							<input type="text" class="form-control text-uppercase" id="localizacao"
-								placeholder="-15.000000, -47.000000" maxlength="25">
+							<input type="tel" class="form-control" id="localizacao" placeholder="-00.00000, -00.00000">
 							<button class="btn btn-outline-success" type="button" id="buscarLocalizacao"
 								title="Obter localização atual">
 								<i class="bi bi-geo-alt-fill"></i>
@@ -1886,7 +1885,7 @@
 		}
 
 
-		// Máscara do CNPJ
+		// Máscara do CNPJ //00.000.000/0000-00
 		const cnpjInput = document.getElementById('cnpj');
 		cnpjInput.addEventListener('input', () => {
 			let value = cnpjInput.value.replace(/\D/g, "");
@@ -1926,7 +1925,44 @@
 			}
 		});
 
+		// Lógica para a máscara de Localização
+		const localizacaoInput = document.getElementById('localizacao');
+		localizacaoInput.addEventListener('input', () => {
+			let value = localizacaoInput.value.replace(/\D/g, ""); // Remove tudo que não é dígito
 
+			// Aplica o primeiro hífen (da latitude)
+			// Ex: "123" -> "-123"
+			if (value.length > 0) {
+				value = "-" + value;
+			}
+
+			// Aplica o ponto decimal da latitude
+			// Ex: "-123456" -> "-12.3456"
+			if (value.length > 3) { // Considerando o hífen e 2 dígitos (-XX)
+				value = value.replace(/^(-?\d{2})(\d)/, "$1.$2");
+			}
+
+			// Aplica a vírgula e o espaço após a latitude completa
+			// Ex: "-12.345678" -> "-12.34567, 8"
+			if (value.length > 10) { // Considerando: -XX.YYYYY (10 caracteres no total)
+				value = value.replace(/^(-?\d{2}\.\d{6})(\d)/, "$1, $2");
+			}
+
+			// Aplica o segundo hífen (da longitude)
+			// Ex: "-12.34567, 890" -> "-12.34567, -890"
+			if (value.length > 16) { // Considerando: -XX.YYYYY,  (14 caracteres)
+				value = value.replace(/^(-?\d{2}\.\d{6}, )(\d{1,2})/, "$1-$2");
+			}
+
+			// Aplica o ponto decimal da longitude
+			// Ex: "-12.34567, -89012" -> "-12.34567, -89.012"
+			if (value.length > 18) { // Considerando: -XX.YYYYY, -XX (17 caracteres)
+				value = value.replace(/^(-?\d{2}\.\d{6}, -\d{2})(\d)/, "$1.$2");
+			}
+
+			// Limita o tamanho final ao da máscara completa (1 hífen + 2 d.int + 1 ponto + 5 d.dec + 1 vírgula + 1 espaço + 1 hífen + 2 d.int + 1 ponto + 5 d.dec = 20 caracteres)
+			localizacaoInput.value = value.slice(0, 22);
+		});
 		// Busca a localização atual
 		document.getElementById('buscarLocalizacao').addEventListener('click', () => {
 			if (navigator.geolocation) {
