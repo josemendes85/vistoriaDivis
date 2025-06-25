@@ -179,50 +179,62 @@
             }
             listaContainer.innerHTML = ''; // Limpa a lista existente
 
-            // A lógica de mostrar/esconder noProcessesMessage já é feita em carregarEExibirProcessos.
-            // Apenas para garantir que não haja duplicação de lógica ou erro.
-            // Apenas preocupe-se em criar os cards aqui.
+            // Define a ordem desejada dos status
+            const ordenacaoStatus = [
+                "Sem Status",
+                "Pendente",
+                "Em Análise",
+                "Em Vistoria",
+                "Aprovado",
+                "Reprovado",
+                "Não Realizada",
+                "Cancelado"
+            ];
 
-            for (const status in processosAgrupados) {
+            // Itera sobre a ordem definida, garantindo que os cards sejam criados na sequência
+            ordenacaoStatus.forEach(status => {
                 const grupo = processosAgrupados[status];
-                const classStatus = formatarClasseStatus(status); // Chama a função de formatação
 
-                const card = document.createElement('div');
-                card.className = 'col-md-12 mb-4';
-                card.innerHTML = `
-                <div class="card shadow-sm">
-                    <div class="card-header status-header ${classStatus}">
-                        <h5 class="mb-0">${status} (${grupo.length} Processos)</h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <table class="table table-striped m-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>Processo</th>
-                                    <th>Instituição</th>
-                                    <th>Data de Início</th>
-                                    <th>Tipo</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${grupo.map(item => `
-                                    <tr>
-                                        <td><a href="processo.html?processo=${encodeURIComponent(item.processo)}">${item.processo}</a></td>
-                                        <td>${item.instituicao || "-"}</td>
-                                        <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
-                                        <td>${item.tipo || "-"}</td>
-                                        <td>${item.status || "-"}</td>
-                                    </tr>
-                                `).join("")}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            `;
+                // Somente renderiza o card se houver processos para aquele status
+                if (grupo && grupo.length > 0) {
+                    const classStatus = formatarClasseStatus(status); // Chama a função de formatação
 
-                listaContainer.appendChild(card);
-            }
+                    const card = document.createElement('div');
+                    card.className = 'col-md-12 mb-4';
+                    card.innerHTML = `
+                        <div class="card shadow-sm">
+                            <div class="card-header status-header ${classStatus}">
+                                <h5 class="mb-0">${status} (${grupo.length} Processos)</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <table class="table table-striped m-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Processo</th>
+                                            <th>Instituição</th>
+                                            <th>Data de Início</th>
+                                            <th>Tipo</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${grupo.map(item => `
+                                            <tr>
+                                                <td><a href="processo.html?processo=${encodeURIComponent(item.processo)}">${item.processo}</a></td>
+                                                <td>${item.instituicao || "-"}</td>
+                                                <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
+                                                <td>${item.tipo || "-"}</td>
+                                                <td>${item.status || "-"}</td>
+                                            </tr>
+                                        `).join("")}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `;
+                    listaContainer.appendChild(card);
+                }
+            });
         }
 
         // 3. Função principal para carregar e exibir (chama renderizarProcessos)
