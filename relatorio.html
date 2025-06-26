@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório do Processo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .report-container {
+            background-color: #ffffff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        }
+
+        .report-section-title {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #dee2e6;
+            color: #0066cc;
+            /* Cor primária do seu tema */
+        }
+
+        .report-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .report-item strong {
+            color: #343a40;
+        }
+
+        /* Estilos para exigências e observações */
+        .exigencia-item {
+            margin-left: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .exigencia-item .badge {
+            font-size: 0.75em;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="display-6">Relatório Detalhado do Processo</h2>
+            <div>
+                <button class="btn btn-primary me-2" onclick="window.print()">
+                    <i class="bi bi-printer me-2"></i>Imprimir
+                </button>
+                <button class="btn btn-secondary" onclick="window.history.back()">
+                    <i class="bi bi-arrow-left me-2"></i>Voltar
+                </button>
+            </div>
+        </div>
+
+        <div class="report-container" id="reportContent">
+            <p class="text-center text-muted">Carregando dados do relatório...</p>
+            <div id="noDataMessage" class="text-center text-muted" style="display: none;">
+                <i class="bi bi-exclamation-triangle display-4 mb-3"></i>
+                <h3>Nenhum dado de processo encontrado.</h3>
+                <p>Por favor, volte ao formulário e gere o relatório novamente.</p>
+                <a href="processo.html" class="btn btn-primary mt-3">Ir para o Formulário</a>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const reportContent = document.getElementById('reportContent');
+            const noDataMessage = document.getElementById('noDataMessage');
+            const dadosRelatorioJSON = localStorage.getItem('dadosRelatorio');
+
+            if (dadosRelatorioJSON) {
+                try {
+                    const dados = JSON.parse(dadosRelatorioJSON);
+                    reportContent.innerHTML = ''; // Limpa a mensagem de carregamento
+                    noDataMessage.style.display = 'none';
+
+                    // Função auxiliar para formatar campo se existir
+                    const formatField = (label, value) => {
+                        return value ? `<div class="report-item"><strong>${label}:</strong> ${value}</div>` : '';
+                    };
+
+                    // Função auxiliar para exibir exigências (anteriormente displayCheckboxes)
+                    // Agora adaptada para lidar com um objeto de exigências marcadas,
+                    // caso exigencias aninhadas ainda venham nesse formato.
+                    const displayNestedExigencias = (label, obj) => {
+                        let content = '';
+                        // Filtra apenas os itens que são verdadeiros no objeto de exigências
+                        const checkedItems = Object.keys(obj).filter(key => obj[key]);
+                        if (checkedItems.length > 0) {
+                            content += `<div class="report-item"><strong>${label}:</strong></div>`;
+                            content += `<ul class="list-unstyled exigencia-list">`;
+                            checkedItems.forEach(item => {
+                                content += `<li class="exigencia-item">- ${item}</li>`;
+                            });
+                            content += `</ul>`;
+                        }
+                        return content;
+                    };
+
+                    // Renderizar dados básicos e os campos adicionais solicitados
+                    reportContent.innerHTML += `
+                <h4 class="report-section-title">Informações Gerais</h4>
+                ${formatField('Número do Processo', dados.processoBusca)}
+                ${formatField('Instituição', dados.instituicao)}
+                ${formatField('CNPJ', dados.cnpj)}
+                ${formatField('CPF', dados.cpf)}
+                ${formatField('Email', dados.email)}
+                ${formatField('Telefone', dados.telefone)}
+                ${formatField('Endereço', dados.endereco)}
+                ${formatField('Coordenadas GPS', dados.localizacao)}
+                ${formatField('Tipo de Vistoria', dados.tipo)}
+                ${formatField('Data de Início', dados.inicio ? new Date(dados.inicio).toLocaleString() : '')}
+                ${formatField('Data de Término', dados.termino ? new Date(dados.termino).toLocaleString() : '')}
+                ${formatField('Status do Processo', dados.status)}
+                ${formatField('Número do Laudo', dados.numeroLaudo)}
+                ${formatField('Responsável', dados.responsavel)}
+                ${formatField('Acompanhante', dados.acompanhante)}
+                ${formatField('Função do Acompanhante', dados.funcao)}
+                ${formatField('Ocupação do Local', dados.ocupacao)}
+                ${formatField('Altura', dados.altura)}
+                ${formatField('Área', dados.area)}
+                ${formatField('Pavimentos', dados.pavimentos)}
+                ${formatField('Grupo', dados.grupo)}
+                ${formatField('Observação Adicional', dados.observacao)}
+            `;
+
+                    // Exibir Categorias Selecionadas por ID
+                    if (dados.categoriasSelecionadas && Array.isArray(dados.categoriasSelecionadas) && dados.categoriasSelecionadas.length > 0) {
+                        reportContent.innerHTML += `
+                    <h4 class="report-section-title">Categorias Selecionadas (IDs)</h4>
+                    <div class="report-item">
+                        <ul class="list-unstyled">
+                            ${dados.categoriasSelecionadas.map(id => `<li>- ${id}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                    }
+
+                    // --- NOVO: Exibir a lista geral de Exigências (array de strings) ---
+                    if (dados.exigencias && Array.isArray(dados.exigencias) && dados.exigencias.length > 0) {
+                        reportContent.innerHTML += `
+                    <h4 class="report-section-title">Exigências Gerais Selecionadas</h4>
+                    <div class="report-item">
+                        <ul class="list-unstyled">
+                            ${dados.exigencias.map(exigencia => `<li>- ${exigencia}</li>`).join('')}
+                        </ul>
+                    </div>
+                `;
+                    }
+
+                    // Renderizar Observações Gerais
+                    if (dados.observacoesGerais) {
+                        reportContent.innerHTML += `
+                    <h4 class="report-section-title">Observações Gerais do Processo</h4>
+                    <div class="report-item">${dados.observacoesGerais}</div>
+                `;
+                    }
+
+                    // Renderizar Exigências e Observações por Categoria (se ainda existirem exigências aninhadas nesse formato)
+                    if (dados.categoriasExigencias) {
+                        reportContent.innerHTML += `
+                    <h4 class="report-section-title">Exigências e Observações Detalhadas por Categoria</h4>
+                `;
+                        for (const categoriaId in dados.categoriasExigencias) {
+                            const categoriaData = dados.categoriasExigencias[categoriaId];
+                            if (categoriaData) { // Garante que a categoria existe
+                                reportContent.innerHTML += `
+                            <h5 class="mt-3">${categoriaData.nomeCategoria}</h5>
+                            ${displayNestedExigencias('Exigências Marcadas (da Categoria)', categoriaData.exigencias)}
+                            ${categoriaData.observacaoCategoria ? `<div class="report-item"><strong>Observação da Categoria:</strong> ${categoriaData.observacaoCategoria}</div>` : ''}
+                        `;
+                            }
+                        }
+                    }
+
+                    // Renderizar outras observações (retornoSim/retornoNao e observacaoRetorno)
+                    if (dados.retornoSim || dados.retornoNao) {
+                        reportContent.innerHTML += `
+                    <h4 class="report-section-title">Retorno de Visita</h4>
+                    <div class="report-item">
+                        <strong>Retorno Necessário:</strong> ${dados.retornoSim ? 'Sim' : (dados.retornoNao ? 'Não' : '-')}
+                    </div>
+                    ${formatField('Observação do Retorno', dados.observacaoRetorno)}
+                `;
+                    }
+
+                    // Renderizar dados da vistoria (Fotos da Vistoria)
+                    if (dados.fotosVistoria && dados.fotosVistoria.length > 0) {
+                        reportContent.innerHTML += `
+                    <h4 class="report-section-title">Fotos da Vistoria</h4>
+                    <div class="report-item">
+                        <ul class="list-unstyled">
+                            ${dados.fotosVistoria.map(foto => `<li>${foto.nome || foto.caminho || foto}</li>`).join('')}
+                        </ul>
+                        <p class="text-muted small">
+                            (As imagens não são exibidas diretamente no relatório; apenas seus nomes/caminhos são listados.)
+                        </p>
+                    </div>
+                `;
+                    }
+
+                } catch (e) {
+                    console.error("Erro ao parsear dados do relatório do localStorage:", e);
+                    reportContent.innerHTML = '';
+                    noDataMessage.style.display = 'block';
+                }
+            } else {
+                noDataMessage.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -2290,9 +2290,17 @@
 		// "Gerar Relatório" button
 		document.getElementById("btnGerar").addEventListener("click", () => {
 			const dadosDoFormulario = coletarDadosDoFormulario();
+
+			// Salva os dados do formulário no localStorage
+			// 'dadosRelatorio' é a chave que usaremos no relatorio.html para recuperar os dados
+			localStorage.setItem('dadosRelatorio', JSON.stringify(dadosDoFormulario));
+
+			// Redireciona para a página do relatório
+			window.location.href = 'relatorio.html';
+
+			// Os consoles e toasts de "dados enviados para o console" não são mais necessários aqui
 			console.log("Dados coletados para o relatório:", dadosDoFormulario);
 			Utils.showToast("Dados do formulário enviados para o console (F12 > Console).", "info");
-			Utils.showToast("Funcionalidade completa de Gerar Relatório (PDF, etc.) não implementada.", "warning");
 		});
 
 	</script>
