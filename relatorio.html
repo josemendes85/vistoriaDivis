@@ -81,6 +81,28 @@
             const noDataMessage = document.getElementById('noDataMessage');
             const dadosRelatorioJSON = localStorage.getItem('dadosRelatorio');
 
+            // Mapeamento de IDs para títulos das categorias
+            const categoryTitles = {
+                '001': "DOCUMENTAÇÃO",
+                '002': "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
+                '003': "ILUMINAÇÃO DE EMERGÊNCIA",
+                '004': "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
+                '005': "SAÍDAS DE EMERGÊNCIA",
+                '006': "SISTEMA DE PROTEÇÃO POR HIDRANTES",
+                '007': "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
+                '008': "SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
+                '009': "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
+                '010': "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
+                '011': "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
+                '012': "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
+                '013': "BRIGADA DE INCÊNDIO",
+                '014': "ACESSO DE VIATURAS DE SOCORRO",
+                '015': "POSTOS DE COMBUSTÍVEIS",
+                '016': "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
+                '017': "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
+                '018': "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO"
+            };
+
             if (dadosRelatorioJSON) {
                 try {
                     const dados = JSON.parse(dadosRelatorioJSON);
@@ -93,11 +115,8 @@
                     };
 
                     // Função auxiliar para exibir exigências (anteriormente displayCheckboxes)
-                    // Agora adaptada para lidar com um objeto de exigências marcadas,
-                    // caso exigencias aninhadas ainda venham nesse formato.
                     const displayNestedExigencias = (label, obj) => {
                         let content = '';
-                        // Filtra apenas os itens que são verdadeiros no objeto de exigências
                         const checkedItems = Object.keys(obj).filter(key => obj[key]);
                         if (checkedItems.length > 0) {
                             content += `<div class="report-item"><strong>${label}:</strong></div>`;
@@ -137,19 +156,19 @@
                 ${formatField('Observação Adicional', dados.observacao)}
             `;
 
-                    // Exibir Categorias Selecionadas por ID
+                    // --- MODIFICADO: Exibir Categorias Selecionadas usando os títulos ---
                     if (dados.categoriasSelecionadas && Array.isArray(dados.categoriasSelecionadas) && dados.categoriasSelecionadas.length > 0) {
                         reportContent.innerHTML += `
-                    <h4 class="report-section-title">Categorias Selecionadas (IDs)</h4>
+                    <h4 class="report-section-title">Categorias Selecionadas</h4>
                     <div class="report-item">
                         <ul class="list-unstyled">
-                            ${dados.categoriasSelecionadas.map(id => `<li>- ${id}</li>`).join('')}
+                            ${dados.categoriasSelecionadas.map(id => `<li>- ${categoryTitles[id] || id}</li>`).join('')}
                         </ul>
                     </div>
                 `;
                     }
 
-                    // --- NOVO: Exibir a lista geral de Exigências (array de strings) ---
+                    // Exibir a lista geral de Exigências (array de strings)
                     if (dados.exigencias && Array.isArray(dados.exigencias) && dados.exigencias.length > 0) {
                         reportContent.innerHTML += `
                     <h4 class="report-section-title">Exigências Gerais Selecionadas</h4>
@@ -177,8 +196,9 @@
                         for (const categoriaId in dados.categoriasExigencias) {
                             const categoriaData = dados.categoriasExigencias[categoriaId];
                             if (categoriaData) { // Garante que a categoria existe
+                                // Usa categoryTitles para o título da categoria
                                 reportContent.innerHTML += `
-                            <h5 class="mt-3">${categoriaData.nomeCategoria}</h5>
+                            <h5 class="mt-3">${categoryTitles[categoriaId] || categoriaData.nomeCategoria || categoriaId}</h5>
                             ${displayNestedExigencias('Exigências Marcadas (da Categoria)', categoriaData.exigencias)}
                             ${categoriaData.observacaoCategoria ? `<div class="report-item"><strong>Observação da Categoria:</strong> ${categoriaData.observacaoCategoria}</div>` : ''}
                         `;
