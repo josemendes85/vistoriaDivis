@@ -9,7 +9,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="manifest" href="/manifest.json">
     <style>
-        /* Variáveis de cores consistentes com o formulario_melhorado.html / processo.html */
+        /* Variáveis de cores consistentes para os status */
         :root {
             --primary-color: #0066cc;
             --success-color: #198754;
@@ -17,6 +17,12 @@
             --danger-color: #dc3545;
             --info-color: #17a2b8;
             --secondary-color: #6c757d;
+            --purple-color: #6f42c1;
+            /* Cor para 'Em Vistoria' */
+            --orange-color: #fd7e14;
+            /* Cor para 'Não Realizada' */
+            --dark-color: #343a40;
+            /* Cor para 'Sem Status' */
         }
 
         /* Estilo para o cabeçalho dos cards de status */
@@ -39,8 +45,7 @@
         }
 
         .status-vistoria {
-            background-color: #6f42c1;
-            /* Cor para 'Em Vistoria' */
+            background-color: var(--purple-color);
         }
 
         .status-aprovado {
@@ -56,23 +61,20 @@
         }
 
         .status-nao-realizada {
-            background-color: #fd7e14;
-            /* Cor para 'Não Realizada' (laranja) */
+            background-color: var(--orange-color);
         }
 
         .status-sem-status {
-            background-color: #343a40;
-            /* Cor para 'Sem Status' (cinza escuro) */
+            background-color: var(--dark-color);
         }
 
-        /* Estilo de seção replicado do formulário (para filtros e botão Novo Processo) */
+        /* Estilo de seção para filtros e botão Novo Processo */
         .form-section {
             margin-bottom: 2rem;
             padding: 1.5rem;
             background-color: #f8f9fa;
             border-radius: 0.5rem;
             box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
-            /* Sombra suave */
         }
 
         .section-title {
@@ -89,7 +91,6 @@
             top: 20px;
             right: 20px;
             z-index: 1055;
-            /* Garante que o toast apareça acima de outros elementos */
         }
     </style>
     <script>
@@ -160,45 +161,57 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // 1. Função para formatar classes de status (usada por renderizarProcessos)
+        /**
+         * Gera uma classe CSS formatada para o status fornecido.
+         * Remove acentos, espaços e caracteres especiais.
+         * @param {string} status - O status do processo (ex: "Em Vistoria").
+         * @returns {string} A classe CSS formatada (ex: "status-vistoria").
+         */
         function formatarClasseStatus(status) {
+            // Converte para minúsculas, normaliza para remover acentos e troca espaços por hífens.
             return 'status-' + status.toLowerCase()
-                .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // remove acentos
-                .replace(/\s+/g, '-') // troca espaço por hífen
-                .replace(/[^a-z0-9\-]/g, ''); // remove símbolos especiais
+                .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                .replace(/\s+/g, '-')
+                .replace(/[^a-z0-9\-]/g, ''); // Remove caracteres não alfanuméricos exceto hífens
         }
 
-        // 2. Função para renderizar os processos no HTML (chamada por carregarEExibirProcessos)
+        /**
+         * Renderiza os cards de processos agrupados por status no HTML.
+         * @param {Object} processosAgrupados - Objeto onde as chaves são os status e os valores são arrays de processos.
+         */
         function renderizarProcessos(processosAgrupados) {
             const listaContainer = document.getElementById('listaContainer');
             if (!listaContainer) {
-                console.error("Elemento com ID 'listaContainer' não encontrado!");
+                console.error("Erro: Elemento com ID 'listaContainer' não encontrado!");
                 return;
             }
-            listaContainer.innerHTML = ''; // Limpa a lista existente
+            listaContainer.innerHTML = ''; // Limpa a lista existente antes de renderizar novamente
 
-            // Define a ordem desejada dos status
+            // Define a ordem desejada para exibição dos cards de status
             const ordenacaoStatus = [
                 "Sem Status",
                 "Pendente",
-                "Análise",
-                "Vistoria",
+                "Análise", // Corrigido para "Análise" para corresponder ao valor do select
+                "Vistoria", // Corrigido para "Vistoria" para corresponder ao valor do select
                 "Aprovado",
                 "Reprovado",
                 "Não Realizada",
                 "Cancelado"
             ];
 
-            // Itera sobre a ordem definida, garantindo que os cards sejam criados na sequência
+            // Itera sobre a ordem definida para garantir que os cards sejam criados na sequência
             ordenacaoStatus.forEach(status => {
+                // A chave do grupo pode ser ligeiramente diferente se o nome do status vier com "Em " (ex: "Em Análise")
+                // Precisamos verificar as duas possibilidades.
+                // Aqui, usamos o status do array ordenacaoStatus como chave principal.
                 const grupo = processosAgrupados[status];
 
                 // Somente renderiza o card se houver processos para aquele status
                 if (grupo && grupo.length > 0) {
-                    const classStatus = formatarClasseStatus(status); // Chama a função de formatação
+                    const classStatus = formatarClasseStatus(status); // Gera a classe CSS para o cabeçalho
 
                     const card = document.createElement('div');
-                    card.className = 'col-md-12 mb-4';
+                    card.className = 'col-md-12 mb-4'; // Card ocupa a largura total
                     card.innerHTML = `
                         <div class="card shadow-sm">
                             <div class="card-header status-header ${classStatus}">
@@ -235,15 +248,17 @@
             });
         }
 
-        // 3. Função principal para carregar e exibir (chama renderizarProcessos)
+        /**
+         * Carrega os processos do localStorage, aplica filtros e os exibe no HTML.
+         */
         function carregarEExibirProcessos() {
-            console.log("Iniciando carregamento e exibição de processos...");
             const processos = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
                 if (key.startsWith('processo-')) {
                     try {
                         const data = JSON.parse(localStorage.getItem(key));
+                        console.log(`Lendo chave: ${key}, Dados:`, data); // Adicione esta linha
                         if (data && data.processoBusca && data.instituicao) {
                             processos.push({
                                 processo: data.processoBusca,
@@ -252,76 +267,90 @@
                                 tipo: data.tipo,
                                 status: data.status || "Sem Status"
                             });
+                            console.log("Processo adicionado:", data.processoBusca); // Adicione esta linha
+                        } else {
+                            console.warn(`Dados incompletos para a chave ${key}:`, data); // E esta
                         }
                     } catch (e) {
                         console.error(`Erro ao parsear dados do localStorage para a chave ${key}:`, e);
                     }
                 }
             }
-            console.log("Processos encontrados no localStorage (antes do filtro):", processos.length, processos);
+            console.log("Processos carregados (antes do filtro):", processos); // E esta
+
 
             const noProcessesMessage = document.getElementById('noProcessesMessage');
-            console.log("Valor de noProcessesMessage ao buscar:", noProcessesMessage);
-
             if (!noProcessesMessage) {
                 console.error("Erro: O elemento com ID 'noProcessesMessage' NÃO foi encontrado no DOM. Verifique o HTML.");
-                renderizarProcessos(processos); // Tenta renderizar mesmo sem a mensagem, para mostrar dados
-                return;
+                // Continua para renderizar processos se o elemento de mensagem não for encontrado
             }
 
+            // Obtém os valores dos filtros
             const searchTerm = document.getElementById('filtroPesquisa').value.toLowerCase();
             const filterStatus = document.getElementById('filtroStatus').value;
-            const filterTipo = ""; // Mantido vazio se não há <select id="filtroTipo"> no HTML
+            // filtroTipo não está presente no HTML atual, mantido para compatibilidade futura
+            const filterTipo = "";
 
+            // Filtra os processos com base nos critérios de pesquisa e status
             const processosFiltrados = processos.filter(p => {
                 const matchesSearch = searchTerm === "" ||
                     p.processo.toLowerCase().includes(searchTerm) ||
                     p.instituicao.toLowerCase().includes(searchTerm);
 
+                // Compara o status do processo com o status selecionado no filtro
+                // Considera "Todos os Status" se o filtro for vazio
                 const matchesStatus = filterStatus === "" || p.status === filterStatus;
+
+                // O filtro de tipo é sempre verdadeiro, pois não há filtro de tipo no HTML
                 const matchesTipo = filterTipo === "" || p.tipo === filterTipo;
 
                 return matchesSearch && matchesStatus && matchesTipo;
             });
 
+            // Agrupa os processos filtrados por status
             const agrupamentoPorStatus = {};
             processosFiltrados.forEach(p => {
-                const statusKey = p.status || "Sem Status";
+                const statusKey = p.status || "Sem Status"; // Usa "Sem Status" se o status for nulo/indefinido
                 if (!agrupamentoPorStatus[statusKey]) {
                     agrupamentoPorStatus[statusKey] = [];
                 }
                 agrupamentoPorStatus[statusKey].push(p);
             });
 
-            // Esconde ou mostra a mensagem "Nenhum processo encontrado"
-            if (processosFiltrados.length === 0) {
-                noProcessesMessage.style.display = 'block';
-            } else {
-                noProcessesMessage.style.display = 'none';
+            // Mostra ou esconde a mensagem "Nenhum processo encontrado"
+            if (noProcessesMessage) { // Verifica se o elemento existe antes de manipulá-lo
+                if (processosFiltrados.length === 0) {
+                    noProcessesMessage.style.display = 'block';
+                } else {
+                    noProcessesMessage.style.display = 'none';
+                }
             }
 
+            // Renderiza os processos agrupados no HTML
             renderizarProcessos(agrupamentoPorStatus);
         }
 
-        // 4. Inicia o carregamento e exibição quando o DOM estiver completamente carregado
-        document.addEventListener('DOMContentLoaded', carregarEExibirProcessos);
+        // Adiciona event listeners quando o DOM estiver completamente carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            // Carrega e exibe os processos na carga inicial da página
+            carregarEExibirProcessos();
 
-        // 5. Adiciona event listeners para os filtros
-        // Listener para o campo de pesquisa (filtroPesquisa)
-        const filtroPesquisa = document.getElementById('filtroPesquisa');
-        if (filtroPesquisa) {
-            filtroPesquisa.addEventListener('input', carregarEExibirProcessos); // Chama a função a cada digitação
-        } else {
-            console.warn("Elemento 'filtroPesquisa' não encontrado, filtro de pesquisa não funcionará.");
-        }
+            // Adiciona listener para o campo de pesquisa
+            const filtroPesquisa = document.getElementById('filtroPesquisa');
+            if (filtroPesquisa) {
+                filtroPesquisa.addEventListener('input', carregarEExibirProcessos);
+            } else {
+                console.warn("Elemento 'filtroPesquisa' não encontrado. O filtro de pesquisa não funcionará.");
+            }
 
-        // Listener para o filtro de status (filtroStatus)
-        const filtroStatus = document.getElementById('filtroStatus');
-        if (filtroStatus) {
-            filtroStatus.addEventListener('change', carregarEExibirProcessos); // Chama a função quando a seleção muda
-        } else {
-            console.warn("Elemento 'filtroStatus' não encontrado, filtro de status não funcionará.");
-        }
+            // Adiciona listener para o filtro de status
+            const filtroStatus = document.getElementById('filtroStatus');
+            if (filtroStatus) {
+                filtroStatus.addEventListener('change', carregarEExibirProcessos);
+            } else {
+                console.warn("Elemento 'filtroStatus' não encontrado. O filtro de status não funcionará.");
+            }
+        });
     </script>
 </body>
 
