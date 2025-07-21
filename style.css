@@ -5,6 +5,14 @@
 	--danger-color: #dc3545;
 	--info-color: #17a2b8;
 	--secondary-color: #6c757d;
+	--purple-color: #6f42c1;
+    /* Cor para 'Em Vistoria' */
+    --orange-color: #fd7e14;
+    /* Cor para 'Não Realizada' */
+    --dark-color: #343a40;
+    /* Cor para 'Sem Status' */
+    --light-green-color: #90ee90;
+    /* Nova cor para Concluído */
 }
 .autocomplete-container {
 	position: relative;
@@ -93,6 +101,9 @@
 .status-sem-status {
 	background-color: #343a40;
 	color: #fff;
+}
+.status-concluido {
+	background-color: var(--light-green-color);
 }
 .form-section {
 	margin-bottom: 2rem;
