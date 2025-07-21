@@ -1750,6 +1750,91 @@
 
 		document.addEventListener('DOMContentLoaded', () => {
 			preencherSelectCategorias();
+			// Masking inputs
+            $('#cpf').mask('000.000.000-00', { reverse: true });
+            $('#cnpj').mask('00.000.000/0000-00', { reverse: true });
+            $('#areaConstruida').mask('000.000.000.000.000,00', { reverse: true });
+
+			// CNPJ Lookup Functionality
+			const cnpjInput = document.getElementById('cnpj');
+			const enderecoInput = document.getElementById('endereco');
+			const instituicaoInput = document.getElementById('instituicao'); 
+			const localizacaoInput = document.getElementById('localizacao');
+
+			cnpjInput.addEventListener('blur', function () {
+			let cnpj = cnpjInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+
+			if (cnpj.length === 14) { // Verifica se o CNPJ tem 14 dígitos
+				Utils.showToast("Buscando dados do CNPJ...", "info");
+				// Usando BrasilAPI (resolvendo o problema de CORS)
+				fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`)
+					.then(response => {
+						if (!response.ok) {
+							return response.json().then(err => { throw new Error(err.message || 'Erro ao buscar CNPJ.'); });
+						}
+						return response.json();
+					})
+					.then(data => {
+						if (data.type === 'invalid_parameter' || data.type === 'service_error') {
+							throw new Error(data.message || 'CNPJ não encontrado ou inválido pela API.');
+						}
+
+						const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.bairro}, ${data.municipio} - ${data.uf}`;
+						enderecoInput.value = enderecoCompleto.toUpperCase();
+						instituicaoInput.value = data.razao_social.toUpperCase(); 
+
+						enderecoInput.classList.remove('is-invalid');
+						instituicaoInput.classList.remove('is-invalid');
+						Utils.showToast("Dados do CNPJ preenchidos!", "success");
+
+						// -------- NOVA LÓGICA PARA BUSCAR COORDENADAS --------
+						const enderecoParaGeocodificar = encodeURIComponent(enderecoCompleto + ', Brasil'); // Adicione 'Brasil' para melhor precisão
+						Utils.showToast("Buscando coordenadas geográficas...", "info");
+						fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${enderecoParaGeocodificar}&limit=1`)
+							.then(geoResponse => {
+								if (!geoResponse.ok) {
+									throw new Error('Erro ao buscar coordenadas. Status: ' + geoResponse.status);
+								}
+								return geoResponse.json();
+							})
+							.then(geoData => {
+								if (geoData.length > 0) {
+									const lat = parseFloat(geoData[0].lat).toFixed(6); // Formata para 6 casas decimais
+									const lon = parseFloat(geoData[0].lon).toFixed(6); // Formata para 6 casas decimais
+									localizacaoInput.value = `${lat}, ${lon}`;
+									localizacaoInput.classList.remove('is-invalid');
+									Utils.showToast("Coordenadas geográficas preenchidas!", "success");
+								} else {
+									localizacaoInput.value = '';
+									localizacaoInput.classList.add('is-invalid');
+									Utils.showToast("Coordenadas não encontradas para o endereço.", "warning");
+								}
+							})
+							.catch(geoError => {
+								console.error('Erro na requisição da API de Geocodificação:', geoError);
+								localizacaoInput.value = '';
+								localizacaoInput.classList.add('is-invalid');
+								Utils.showToast('Erro ao buscar coordenadas. Tente novamente mais tarde.', "danger");
+							});
+						// ---------------- FIM DA NOVA LÓGICA ----------------
+
+					})
+					.catch(error => {
+						console.error('Erro na requisição da API de CNPJ:', error);
+						enderecoInput.value = '';
+						instituicaoInput.value = '';
+						localizacaoInput.value = ''; // Limpa também a localização em caso de erro no CNPJ
+						enderecoInput.classList.add('is-invalid');
+						instituicaoInput.classList.add('is-invalid');
+						localizacaoInput.classList.add('is-invalid');
+						Utils.showToast(`Ocorreu um erro ao buscar os dados: ${error.message || 'Verifique o CNPJ ou sua conexão.'}`, "danger");
+					});
+			} else {
+				enderecoInput.value = '';
+				instituicaoInput.value = '';
+				localizacaoInput.value = ''; // Limpa se o CNPJ não tiver 14 dígitos
+			}
+		});
 
 			// Preenche o formulário automaticamente ao acessar com ?processo=...
 			const params = new URLSearchParams(window.location.search);
