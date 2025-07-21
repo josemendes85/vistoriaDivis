@@ -317,6 +317,7 @@
 				</h4>
 
 				<div class="row g-3">
+					<!--
 					<div class="col-md-3">
 						<label for="ocupacao" class="form-label">Ocupação <span class="text-danger">*</span></label>
 						<select class="form-select" id="ocupacao" required>
@@ -396,7 +397,91 @@
 						</select>
 						<div class="invalid-feedback">Por favor, selecione o grupo.</div>
 					</div>
+					-->
 
+					<div class="col-md-6">
+						<label for="ocupacao" class="form-label">Ocupação <span class="text-danger">*</span></label>
+						<select class="form-select" id="ocupacao" required>
+							<option value="">Selecione a ocupação</option>
+							<optgroup label="Residenciais">
+								<option value="01">01 - Residenciais unifamiliares</option>
+								<option value="02">02 - Residenciais multifamiliares</option>
+							</optgroup>
+							<optgroup label="Transitórias">
+								<option value="03">03 - Habitações coletivas</option>
+								<option value="04">04 - Hotéis</option>
+								<option value="05">05 - Hotéis residenciais</option>
+							</optgroup>
+							<optgroup label="Comerciais">
+								<option value="06">06 - Comércio de pequeno porte</option>
+								<option value="07">07 - Comércio de médio porte</option>
+								<option value="08">08 - Comércio de grande porte</option>
+							</optgroup>
+							<optgroup label="Serviços Profissionais">
+								<option value="09">09 - Escritórios</option>
+								<option value="10">10 - Agências bancárias</option>
+								<option value="11">11 - Laboratórios e estúdios</option>
+								<option value="12">12 - Serviços de reparação</option>
+							</optgroup>
+							<optgroup label="Escolares">
+								<option value="13">13 - Escolas em geral</option>
+								<option value="14">14 - Escolas especiais</option>
+								<option value="15">15 - Locais para cultura física</option>
+								<option value="16">16 - Pré-escolas</option>
+								<option value="17">17 - Escolas para portadores de deficiências</option>
+							</optgroup>
+							<optgroup label="Concentração de Público">
+								<option value="18">18 - Museus e bibliotecas</option>
+								<option value="19">19 - Templos religiosos</option>
+								<option value="20">20 - Centros esportivos e de exibição</option>
+								<option value="21">21 - Terminais de passageiros</option>
+								<option value="22">22 - Artes cênicas e auditórios</option>
+								<option value="23">23 - Clubes sociais</option>
+								<option value="24">24 - Construções provisórias</option>
+								<option value="25">25 - Restaurantes</option>
+							</optgroup>
+							<optgroup label="Garagens">
+								<option value="26">26 - Garagens em geral</option>
+								<option value="27">27 - Oficinas</option>
+								<option value="28">28 - Hangares</option>
+							</optgroup>
+							<optgroup label="Hospitalares">
+								<option value="29">29 - Hospitais veterinários</option>
+								<option value="30">30 - Hospitais em geral</option>
+								<option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
+								<option value="32">32 - Clínicas</option>
+							</optgroup>
+							<optgroup label="Industriais">
+								<option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
+								<option value="34">34 - Indústrias > 300 MJ/m² e < 1200 MJ/m²</option>
+								<option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
+							</optgroup>
+							<optgroup label="Depósitos">
+								<option value="36">36 - Depósitos de material incombustível</option>
+								<option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
+								<option value="38">38 - Depósitos > 300 MJ/m² e < 1200 MJ/m²</option>
+								<option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
+							</optgroup>
+							<optgroup label="Armazenamento e Instalações de alto risco">
+								<option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
+								<option value="41">41 - Explosivos</option>
+								<option value="42">42 - Produtos perigosos</option>
+							</optgroup>
+							<optgroup label="Especiais">
+								<option value="43">43 - Vegetações</option>
+								<option value="44">44 - Canteiros de obras</option>
+								<option value="45">45 - Centros esportivos (> 2500 pessoas)</option>
+								<option value="46">46 - Parques de diversões</option>
+								<option value="47">47 - Centrais de comunicação e energia</option>
+								<option value="48">48 - Túneis</option>
+								<option value="49">49 - Silos</option>
+								<option value="50">50 - Locais com restrição de liberdade</option>
+							</optgroup>
+							<optgroup label="Mistas">
+								<option value="51">51 - Destinações variáveis</option>
+							</optgroup>
+						</select>
+					</div>
 					<div class="col-md-2">
 						<label for="area" class="form-label">Área(m²)<span class="text-danger">*</span></label>
 						<input type="number" step="0.01" min="0" class="form-control" id="area" placeholder="0.00"
@@ -441,7 +526,8 @@
 							<option value="Relatório Técnico">Relatório Técnico</option>
 							<option value="Denúncia">Denúncia</option>
 							<option value="Inopinada">Vistoria Inopinada</option>
-							<option value="Dilação de Prazo">Dilação de Prazo</option>
+							<option value="ADP">Análise de Dilação de Prazo</option>
+							<option value="DPV">Dilação de Prazo Vencida</option>
 							<option value="PPCI">PPCI - Plano de Prevenção</option>
 							<option value="Outros">Outros</option>
 						</select>
@@ -2126,7 +2212,7 @@
 				endereco: document.getElementById("endereco")?.value || "",
 				localizacao: document.getElementById("localizacao")?.value || "",
 				ocupacao: document.getElementById("ocupacao")?.value || "",
-				grupo: document.getElementById("grupo")?.value || "",
+				//grupo: document.getElementById("grupo")?.value || "",
 				area: document.getElementById("area")?.value || "",
 				altura: document.getElementById("altura")?.value || "",
 				pavimentos: document.getElementById("pavimentos")?.value || "",
@@ -2154,7 +2240,7 @@
 			document.getElementById("endereco").value = data.endereco || "";
 			document.getElementById("localizacao").value = data.localizacao || "";
 			document.getElementById("ocupacao").value = data.ocupacao || "";
-			document.getElementById("grupo").value = data.grupo || "";
+			//document.getElementById("grupo").value = data.grupo || "";
 			document.getElementById("area").value = data.area || "";
 			document.getElementById("altura").value = data.altura || "";
 			document.getElementById("pavimentos").value = data.pavimentos || "";
