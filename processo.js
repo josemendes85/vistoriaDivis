@@ -1093,7 +1093,7 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			preencherSelectCategorias();
 			// Masking inputs
-            $('#cpf').mask('000.000.000-00', { reverse: true });
+            $('#cpf').mask('000.000.000-00', { reverse: false });
             $('#cnpj').mask('00.000.000/0000-00', { reverse: true });
             $('#areaConstruida').mask('000.000.000.000.000,00', { reverse: true });
 
@@ -1420,22 +1420,6 @@
 
 		// Validação e máscara CPF
 		const cpfInput = document.getElementById('cpf');
-
-		cpfInput.addEventListener('input', () => {
-			let value = cpfInput.value.replace(/\D/g, ''); // Remove não números
-			value = value.slice(0, 11); // Limita a 11 dígitos
-
-			// Aplica a máscara CPF: 000.000.000-00
-			if (value.length > 9) {
-				value = value.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
-			} else if (value.length > 6) {
-				value = value.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
-			} else if (value.length > 3) {
-				value = value.replace(/(\d{3})(\d{1,3})/, '$1.$2');
-			}
-
-			cpfInput.value = value;
-		});
 
 		// Validação do CPF ao sair do campo
 		cpfInput.addEventListener('blur', () => {
