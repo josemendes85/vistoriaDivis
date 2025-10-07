@@ -21,8 +21,8 @@
 	position: absolute;
 	z-index: 1000;
 	width: 100%;
-	max-height: 200px;
-	overflow-y: auto;
+	max-height: 400px;
+	overflow-y: scroll;
 	background-color: #fff;
 	border: 1px solid #ced4da;
 	border-top: none;
