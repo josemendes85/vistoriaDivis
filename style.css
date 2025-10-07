@@ -171,3 +171,6 @@
 	opacity: 0.5;
 	color: #000;
 }
+#observacao{
+	overflow-y: scroll;
+}
