@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferramenta de Backup - Vistorias DIVIS</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .backup-card {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Container para Toast (mensagens de notificação) -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3"></div>
+
+    <div class="backup-card bg-white">
+        <h2 class="text-center mb-4">Gerenciamento de Dados</h2>
+        <p class="text-center text-muted mb-4">
+            Faça o backup de todos os dados salvos localmente ou restaure-os de um arquivo JSON.
+        </p>
+
+        <!-- Botão de Exportar/Backup -->
+        <div class="mb-3">
+            <button class="btn btn-success w-100 py-3" id="btnExportBackup">
+                <i class="bi bi-download me-2"></i>Fazer Backup (Exportar Dados)
+            </button>
+        </div>
+
+        <!-- Botão de Importar/Restaurar -->
+        <div class="mb-3">
+            <label for="fileInputBackup" class="btn btn-warning w-100 py-3 mb-0 text-dark">
+                <i class="bi bi-upload me-2"></i>Restaurar Dados (Importar Backup)
+            </label>
+            <!-- Input de arquivo escondido para upload -->
+            <input type="file" id="fileInputBackup" accept="application/json" style="display: none;">
+        </div>
+
+        <p class="text-center mt-4"><a href="index.html" class="text-primary"><i class="bi bi-arrow-left"></i> Voltar para a lista</a></p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Chaves do localStorage que o sistema utiliza
+        const LOCAL_STORAGE_GROUP_ORDER_KEY = 'vistorias_process_status_group_order';
+        const LOCAL_STORAGE_ITEM_ORDER_PREFIX = 'vistorias_process_item_order_'; 
+        const PROCESS_KEY_PREFIX = 'processo-'; // Prefixo para os processos
+
+        /**
+         * Função para exibir mensagens Toast do Bootstrap.
+         */
+        function showToast(message, bgClass = 'bg-primary') {
+            const toastContainer = document.querySelector('.toast-container');
+            if (!toastContainer) return;
+
+            const toastId = 'toast-' + Date.now();
+            const toastHtml = `
+                <div id="${toastId}" class="toast align-items-center text-white ${bgClass} border-0" role="alert" aria-live="assertive" aria-atomic="true" data-bs-delay="5000">
+                    <div class="d-flex">
+                        <div class="toast-body">${message}</div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            `;
+            toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+            
+            const toastEl = document.getElementById(toastId);
+            const toast = new bootstrap.Toast(toastEl);
+            toast.show();
+        }
+
+        /**
+         * Cria um objeto JSON contendo todas as chaves do localStorage do sistema.
+         * @returns {Object} Objeto com as chaves e valores do localStorage.
+         */
+        function createBackupData() {
+            const backupData = {};
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                // Inclui processos e ordens de status
+                if (key.startsWith(PROCESS_KEY_PREFIX) || key === LOCAL_STORAGE_GROUP_ORDER_KEY || key.startsWith(LOCAL_STORAGE_ITEM_ORDER_PREFIX)) {
+                    backupData[key] = localStorage.getItem(key);
+                }
+            }
+            return backupData;
+        }
+
+        /**
+         * Executa o download do backup como um arquivo JSON.
+         */
+        function exportBackup() {
+            const data = createBackupData();
+            if (Object.keys(data).length === 0) {
+                showToast("Não há dados de processos para exportar.", 'bg-danger');
+                return;
+            }
+
+            const json = JSON.stringify(data, null, 2);
+            const blob = new Blob([json], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            // Define o nome do arquivo de backup
+            a.download = `backup_vistorias_divis_${new Date().toISOString().slice(0, 10)}.json`;
+            a.href = url;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast("Backup exportado com sucesso!", 'bg-success');
+        }
+
+        /**
+         * Carrega e importa o backup de um arquivo JSON.
+         * @param {Event} event - O evento de mudança do input de arquivo.
+         */
+        function importBackup(event) {
+            const file = event.target.files[0];
+            if (!file) {
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                try {
+                    const backupData = JSON.parse(e.target.result);
+                    let importedCount = 0;
+
+                    if (!confirm(`Tem certeza que deseja RESTAURAR o backup? Isso substituirá TODOS os dados de processos e ordens (${Object.keys(backupData).length} itens) com os dados do arquivo.`)) {
+                        return;
+                    }
+
+                    // Limpar apenas as chaves de processo e ordem existentes
+                    for (let i = localStorage.length - 1; i >= 0; i--) {
+                        const key = localStorage.key(i);
+                         if (key.startsWith(PROCESS_KEY_PREFIX) || key === LOCAL_STORAGE_GROUP_ORDER_KEY || key.startsWith(LOCAL_STORAGE_ITEM_ORDER_PREFIX)) {
+                            localStorage.removeItem(key);
+                        }
+                    }
+
+                    // Importar os novos dados
+                    for (const key in backupData) {
+                        localStorage.setItem(key, backupData[key]);
+                        importedCount++;
+                    }
+
+                    showToast(`Restauração concluída. ${importedCount} itens importados.`, 'bg-success');
+                    
+                    // Opcional: Redirecionar para a lista após a importação.
+                    setTimeout(() => {
+                        window.location.href = 'index.html'; 
+                    }, 1500);
+
+                } catch (error) {
+                    console.error("Erro ao importar backup:", error);
+                    showToast("Erro ao processar o arquivo de backup. Verifique se é um JSON válido.", 'bg-danger');
+                }
+                // Limpa o valor do input para permitir o upload do mesmo arquivo novamente
+                event.target.value = ''; 
+            };
+
+            reader.onerror = function () {
+                showToast("Erro ao ler o arquivo.", 'bg-danger');
+                event.target.value = '';
+            };
+
+            reader.readAsText(file);
+        }
+
+        // Adiciona event listeners quando o DOM estiver completamente carregado
+        document.addEventListener('DOMContentLoaded', () => {
+            const btnExport = document.getElementById('btnExportBackup');
+            if (btnExport) {
+                btnExport.addEventListener('click', exportBackup);
+            }
+
+            const fileInput = document.getElementById('fileInputBackup');
+            if (fileInput) {
+                fileInput.addEventListener('change', importBackup);
+            }
+        });
+    </script>
+</body>
+
+</html>
