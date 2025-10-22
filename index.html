@@ -6,12 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vistorias DIVIS - Lista de Processos</title>
 
-    <!-- PWA: Manifesto e ícones -->
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#ffffff">
     <link rel="icon" href="icons/icon_128x128.png">
 
-    <!-- iOS suporte -->
     <link rel="apple-touch-icon" href="icons/icon_128x128.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     
@@ -19,6 +17,20 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     
     <link rel="stylesheet" href="style.css"> 
+    
+    <style>
+        .drag-process {
+            cursor: grab;
+        }
+        .drag-process:active {
+            cursor: grabbing;
+        }
+        /* Estilo para a célula de handle, se necessário */
+        .drag-handle-cell {
+            width: 30px; /* Garante que o handle não ocupe muito espaço */
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
@@ -73,7 +85,67 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
     <script>
+        // Chave do localStorage para salvar a ordem dos grupos (se necessário, mantida como fallback)
+        const LOCAL_STORAGE_GROUP_ORDER_KEY = 'vistorias_process_status_group_order';
+        // Prefixo para salvar a ordem dos processos *dentro* de cada status
+        const LOCAL_STORAGE_ITEM_ORDER_PREFIX = 'vistorias_process_item_order_'; 
+
+
+        /**
+         * Retorna a ordem de status salva no localStorage ou a ordem padrão se não houver nenhuma.
+         * (Mantida para manter a ordenação dos cards de grupo, mas não é estritamente necessária para a ordenação dos itens).
+         * @returns {string[]} Um array com os nomes dos status na ordem desejada.
+         */
+        function getStatusOrder() {
+            const defaultOrder = [
+                "Sem Status", "Pendente", "Análise", "Vistoria", "Aprovado", 
+                "Reprovado", "Não Realizada", "Cancelado", "Concluído"
+            ];
+            const savedOrderJson = localStorage.getItem(LOCAL_STORAGE_GROUP_ORDER_KEY);
+            if (savedOrderJson) {
+                try {
+                    const savedOrder = JSON.parse(savedOrderJson);
+                    const fullOrder = [...new Set([...savedOrder, ...defaultOrder])];
+                    return fullOrder;
+                } catch (e) {
+                    return defaultOrder;
+                }
+            }
+            return defaultOrder;
+        }
+
+        /**
+         * Retorna a ordem salva dos processos (itens) para um status específico.
+         * @param {string} statusKey - O status para o qual a ordem está sendo solicitada.
+         * @returns {string[] | null} Um array de números de processo ou null.
+         */
+        function getItemOrder(statusKey) {
+            try {
+                const savedOrder = localStorage.getItem(LOCAL_STORAGE_ITEM_ORDER_PREFIX + statusKey);
+                return savedOrder ? JSON.parse(savedOrder) : null;
+            } catch (e) {
+                console.error(`Erro ao ler ordem dos itens para ${statusKey}:`, e);
+                return null;
+            }
+        }
+
+        /**
+         * Salva a nova ordem de processos (itens) para um status específico.
+         * @param {string} statusKey - O status do grupo.
+         * @param {string[]} newOrder - Array de números de processo na nova ordem.
+         */
+        function saveItemOrder(statusKey, newOrder) {
+            try {
+                localStorage.setItem(LOCAL_STORAGE_ITEM_ORDER_PREFIX + statusKey, JSON.stringify(newOrder));
+                console.log(`Nova ordem de itens salva para ${statusKey}:`, newOrder);
+            } catch (e) {
+                console.error(`Erro ao salvar a ordem dos itens para ${statusKey}:`, e);
+            }
+        }
+
+
         /**
          * Gera uma classe CSS formatada para o status fornecido.
          * Remove acentos, espaços e caracteres especiais.
@@ -81,11 +153,10 @@
          * @returns {string} A classe CSS formatada (ex: "status-vistoria").
          */
         function formatarClasseStatus(status) {
-            // Converte para minúsculas, normaliza para remover acentos e troca espaços por hífens.
             return 'status-' + status.toLowerCase()
                 .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
                 .replace(/\s+/g, '-')
-                .replace(/[^a-z0-9\-]/g, ''); // Remove caracteres não alfanuméricos exceto hífens
+                .replace(/[^a-z0-9\-]/g, '');
         }
 
         /**
@@ -98,29 +169,57 @@
                 console.error("Erro: Elemento com ID 'listaContainer' não encontrado!");
                 return;
             }
-            listaContainer.innerHTML = ''; // Limpa a lista existente antes de renderizar novamente
+            listaContainer.innerHTML = ''; 
 
-            // Define a ordem desejada para exibição dos cards de status
-            const ordenacaoStatus = [
-                "Sem Status",
-                "Pendente",
-                "Análise",
-                "Vistoria",
-                "Aprovado",
-                "Reprovado",
-                "Não Realizada",
-                "Cancelado",
-                "Concluído" // Adicionado para garantir que o grupo "Concluído" seja o último
-            ];
+            const ordenacaoStatus = getStatusOrder();
+            const statusPresentes = Object.keys(processosAgrupados).filter(status => processosAgrupados[status].length > 0);
+            let statusParaRenderizar = ordenacaoStatus.filter(status => statusPresentes.includes(status));
+            statusPresentes.forEach(status => {
+                if (!statusParaRenderizar.includes(status)) {
+                    statusParaRenderizar.push(status);
+                }
+            });
 
-            // Itera sobre a ordem definida para garantir que os cards sejam criados na sequência
-            ordenacaoStatus.forEach(status => {
-                const grupo = processosAgrupados[status];
+            statusParaRenderizar.forEach(status => {
+                let grupo = processosAgrupados[status];
                 if (grupo && grupo.length > 0) {
-                    const classStatus = formatarClasseStatus(status); // Gera a classe CSS para o cabeçalho
+                    const classStatus = formatarClasseStatus(status);
+                    
+                    // 1. Aplicar a ordem salva dos itens
+                    const ordemSalva = getItemOrder(status);
+                    if (ordemSalva) {
+                        const mapaProcessos = new Map(grupo.map(p => [p.processo, p]));
+                        const grupoOrdenado = [];
+                        
+                        // Adiciona processos na ordem salva
+                        ordemSalva.forEach(processoNum => {
+                            if (mapaProcessos.has(processoNum)) {
+                                grupoOrdenado.push(mapaProcessos.get(processoNum));
+                                mapaProcessos.delete(processoNum); // Remove do mapa
+                            }
+                        });
+
+                        // Adiciona processos novos (que não estavam na ordem salva) no final
+                        grupoOrdenado.push(...Array.from(mapaProcessos.values()));
+                        grupo = grupoOrdenado; // Usa o grupo ordenado/atualizado
+                    }
 
                     const card = document.createElement('div');
-                    card.className = 'col-md-12 mb-4'; // Card ocupa a largura total
+                    card.className = 'col-md-12 mb-4'; 
+                    
+                    // Renderiza as linhas dos processos
+                    const tbodyContent = grupo.map(item => `
+                        <tr class="drag-process" data-id="${item.processo}"> 
+                            <td class="drag-handle-cell"><i class="bi bi-grip-vertical"></i></td>
+                            <td><a href="processo.html?processo=${encodeURIComponent(item.processo)}">${item.processo}</a></td>
+                            <td>${item.instituicao || "-"}</td>
+                            <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
+                            <td>${item.tipo || "-"}</td>
+                            <td>${item.status || (item.status || "-")}</td> 
+                        </tr>
+                    `).join("");
+
+                    // A tabela e o TBODY precisam ser criados para o Sortable
                     card.innerHTML = `
                         <div class="card shadow-sm">
                             <div class="card-header status-header ${classStatus}">
@@ -130,31 +229,49 @@
                                 <table class="table table-striped m-0">
                                     <thead class="table-light">
                                         <tr>
-                                            <th>Processo</th>
+                                            <th class="drag-handle-cell"></th> <th>Processo</th>
                                             <th>Instituição</th>
                                             <th>Data de Início</th>
                                             <th>Tipo</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tbody>
-                                        ${grupo.map(item => `
-                                            <tr>
-                                                <td><a href="processo.html?processo=${encodeURIComponent(item.processo)}">${item.processo}</a></td>
-                                                <td>${item.instituicao || "-"}</td>
-                                                <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
-                                                <td>${item.tipo || "-"}</td>
-                                                <td>${item.status || (item.status || "-")}</td> </tr>
-                                        `).join("")}
+                                    <tbody id="sortable-list-${formatarClasseStatus(status)}" data-status-key="${status}">
+                                        ${tbodyContent}
                                     </tbody>
                                 </table>
                             </div>
                         </div>
                     `;
                     listaContainer.appendChild(card);
+                    
+                    // 2. Inicializa o Sortable em cada <tbody>
+                    initializeSortable(document.getElementById(`sortable-list-${formatarClasseStatus(status)}`), status);
                 }
             });
         }
+        
+        /**
+         * Inicializa a funcionalidade de arrastar e soltar (SortableJS) em um tbody.
+         * @param {HTMLElement} tbody - O elemento tbody que contém os itens arrastáveis.
+         * @param {string} statusKey - O status do grupo para salvar a ordem.
+         */
+        function initializeSortable(tbody, statusKey) {
+            new Sortable(tbody, {
+                animation: 150, 
+                handle: '.drag-handle-cell', // Apenas a célula com o ícone será arrastável
+                onEnd: function (evt) {
+                    // Obtém a nova ordem dos processos (os valores de data-id de cada TR)
+                    const novaOrdem = Array.from(tbody.children)
+                        .map(tr => tr.getAttribute('data-id'))
+                        .filter(id => id !== null); 
+
+                    // Salva a nova ordem no localStorage usando o status como chave
+                    saveItemOrder(statusKey, novaOrdem);
+                },
+            });
+        }
+
 
         /**
          * Carrega os processos do localStorage, aplica filtros e os exibe no HTML.
@@ -166,17 +283,15 @@
                 if (key.startsWith('processo-')) {
                     try {
                         const data = JSON.parse(localStorage.getItem(key));
-                        console.log(`Lendo chave: ${key}, Dados:`, data);
                         if (data && data.processoBusca && data.instituicao) {
                             processos.push({
                                 processo: data.processoBusca,
                                 instituicao: data.instituicao,
                                 inicio: data.inicio,
                                 tipo: data.tipo,
-                                status: data.status || "Sem Status", // Mantém o status original para filtro e agrupamento
-                                checkConcluido: data.checkConcluido // Garante que checkConcluido esteja como boolean (true/false)
+                                status: data.status || "Sem Status", 
+                                checkConcluido: data.checkConcluido 
                             });
-                            console.log("Processo adicionado:", data.processoBusca);
                         } else {
                             console.warn(`Dados incompletos para a chave ${key}:`, data);
                         }
@@ -185,39 +300,29 @@
                     }
                 }
             }
-            console.log("Processos carregados (antes do filtro):", processos);
 
             const noProcessesMessage = document.getElementById('noProcessesMessage');
-            if (!noProcessesMessage) {
-                console.error("Erro: O elemento com ID 'noProcessesMessage' NÃO foi encontrado no DOM. Verifique o HTML.");
-            }
+            // ... (Lógica de filtragem permanece a mesma) ...
 
-            // Obtém os valores dos filtros
             const searchTerm = document.getElementById('filtroPesquisa').value.toLowerCase();
             const filterStatus = document.getElementById('filtroStatus').value;
             const filterTipo = "";
 
-            // Filtra os processos com base nos critérios de pesquisa e status
             const processosFiltrados = processos.filter(p => {
                 const matchesSearch = searchTerm === "" ||
                     p.processo.toLowerCase().includes(searchTerm) ||
                     p.instituicao.toLowerCase().includes(searchTerm);
 
-                // Compara o status do processo com o status selecionado no filtro
-                // Se o filtro for "Concluído", verifica a propriedade checkConcluido,
-                // caso contrário, usa o status original.
-                const matchesStatus = filterStatus === "" ||
-                                      (filterStatus === "Concluído" ? p.checkConcluido : p.status === filterStatus);
-
+                const statusProcesso = p.checkConcluido ? "Concluído" : (p.status || "Sem Status");
+                const matchesStatus = filterStatus === "" || statusProcesso === filterStatus;
                 const matchesTipo = filterTipo === "" || p.tipo === filterTipo;
 
                 return matchesSearch && matchesStatus && matchesTipo;
             });
 
-            // Agrupa os processos filtrados por status
+            // Agrupa os processos filtrados por status (chave de grupo para renderização/sortable)
             const agrupamentoPorStatus = {};
             processosFiltrados.forEach(p => {
-                // Se checkConcluido for true, agrupa como "Concluído" para o card, senão usa o status original
                 const statusKey = p.checkConcluido ? "Concluído" : (p.status || "Sem Status");
                 if (!agrupamentoPorStatus[statusKey]) {
                     agrupamentoPorStatus[statusKey] = [];
@@ -225,7 +330,6 @@
                 agrupamentoPorStatus[statusKey].push(p);
             });
 
-            // Mostra ou esconde a mensagem "Nenhum processo encontrado"
             if (noProcessesMessage) {
                 if (processosFiltrados.length === 0) {
                     noProcessesMessage.style.display = 'block';
@@ -234,29 +338,22 @@
                 }
             }
 
-            // Renderiza os processos agrupados no HTML
+            // Renderiza os processos e inicializa o Sortable para os itens
             renderizarProcessos(agrupamentoPorStatus);
         }
 
         // Adiciona event listeners quando o DOM estiver completamente carregado
         document.addEventListener('DOMContentLoaded', () => {
-            // Carrega e exibe os processos na carga inicial da página
             carregarEExibirProcessos();
 
-            // Adiciona listener para o campo de pesquisa
             const filtroPesquisa = document.getElementById('filtroPesquisa');
             if (filtroPesquisa) {
                 filtroPesquisa.addEventListener('input', carregarEExibirProcessos);
-            } else {
-                console.warn("Elemento 'filtroPesquisa' não encontrado. O filtro de pesquisa não funcionará.");
             }
 
-            // Adiciona listener para o filtro de status
             const filtroStatus = document.getElementById('filtroStatus');
             if (filtroStatus) {
                 filtroStatus.addEventListener('change', carregarEExibirProcessos);
-            } else {
-                console.warn("Elemento 'filtroStatus' não encontrado. O filtro de status não funcionará.");
             }
         });
     </script>
