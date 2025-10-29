@@ -1152,7 +1152,8 @@
 
 						const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.bairro}, ${data.municipio} - ${data.uf}`;
 						enderecoInput.value = enderecoCompleto.toUpperCase();
-						instituicaoInput.value = data.razao_social.toUpperCase(); 
+						const nomeParaInput = data.nome_fantasia || data.razao_social;
+        				instituicaoInput.value = nomeParaInput.toUpperCase();
 
 						enderecoInput.classList.remove('is-invalid');
 						instituicaoInput.classList.remove('is-invalid');
