@@ -1149,8 +1149,8 @@
 						if (data.type === 'invalid_parameter' || data.type === 'service_error') {
 							throw new Error(data.message || 'CNPJ não encontrado ou inválido pela API.');
 						}
-
-						const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.bairro}, ${data.municipio} - ${data.uf}`;
+						console.log(data);
+						const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf}`;
 						enderecoInput.value = enderecoCompleto.toUpperCase();
 						const nomeParaInput = data.nome_fantasia || data.razao_social;
         				instituicaoInput.value = nomeParaInput.toUpperCase();
