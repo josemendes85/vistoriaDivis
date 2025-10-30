@@ -64,6 +64,7 @@
 			},
 
 			// Validar CPF
+			/*
 			validarCPF(cpf) {
 				cpf = cpf.replace(/[^\d]+/g, '');
 
@@ -89,6 +90,7 @@
 
 				return true;
 			}
+			*/
 		};
 
 		// Dados das exigências
@@ -1122,7 +1124,7 @@
 		document.addEventListener('DOMContentLoaded', () => {
 			preencherSelectCategorias();
 			// Masking inputs
-            $('#cpf').mask('000.000.000-00', { reverse: false });
+            //$('#cpf').mask('000.000.000-00', { reverse: false });
             $('#cnpj').mask('00.000.000/0000-00', { reverse: true });
             $('#areaConstruida').mask('000.000.000.000.000,00', { reverse: true });
 
@@ -1449,17 +1451,17 @@
 		});
 
 		// Validação e máscara CPF
-		const cpfInput = document.getElementById('cpf');
+		/*const cpfInput = document.getElementById('cpf');*/
 
 		// Validação do CPF ao sair do campo
-		cpfInput.addEventListener('blur', () => {
+		/*cpfInput.addEventListener('blur', () => {
 			const isValid = Utils.validarCPF(cpfInput.value);
 			if (!isValid && cpfInput.value !== '') {
 				cpfInput.classList.add('is-invalid');
 			} else {
 				cpfInput.classList.remove('is-invalid');
 			}
-		});
+		});*/
 
 		// Lógica para a máscara de Localização
 		const localizacaoInput = document.getElementById('localizacao');
@@ -1663,7 +1665,7 @@
 				fim: document.getElementById("fim")?.value || "",
 				retorno: document.getElementById("retornoSim")?.checked || false,
 				acompanhante: document.getElementById("acompanhante")?.value.toUpperCase() || "",
-				cpf: document.getElementById("cpf")?.value || "",
+				//cpf: document.getElementById("cpf")?.value || "",
 				funcao: document.getElementById("funcao")?.value.value.toUpperCase() || "",
 				status: document.getElementById("status")?.value || "",
 				observacao: document.getElementById("observacao")?.value || "",
@@ -1695,7 +1697,7 @@
 				document.getElementById("retornoNao").checked = true;
 			}
 			document.getElementById("acompanhante").value = data.acompanhante || "";
-			document.getElementById("cpf").value = data.cpf || "";
+			//document.getElementById("cpf").value = data.cpf || "";
 			document.getElementById("funcao").value = data.funcao || "";
 			document.getElementById("status").value = data.status || "";
 			document.getElementById("observacao").value = data.observacao || "";
