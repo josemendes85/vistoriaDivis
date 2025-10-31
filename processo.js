@@ -1569,7 +1569,7 @@
 			const dados = coletarDadosDoFormulario();
 			localStorage.setItem(`processo-${processo}`, JSON.stringify(dados));
 			// Utils.showToast("Dados salvos automaticamente!", "success");
-			console.log("Auto-salvo:", localStorage);
+			console.log("Auto-salvo:", processo);
 		}
 
 		document.querySelectorAll("input, select, textarea").forEach(el => {
@@ -1651,22 +1651,22 @@
 			return {
 				processoBusca: document.getElementById("processoBusca")?.value || "",
 				cnpj: document.getElementById("cnpj")?.value || "",
-				instituicao: document.getElementById("instituicao")?.value.value.toUpperCase() || "",
-				endereco: document.getElementById("endereco")?.value.value.toUpperCase() || "",
+				instituicao: document.getElementById("instituicao")?.value.toUpperCase() || "",
+				endereco: document.getElementById("endereco")?.value.toUpperCase() || "",
 				localizacao: document.getElementById("localizacao")?.value || "",
 				ocupacao: document.getElementById("ocupacao")?.value || "",
 				//grupo: document.getElementById("grupo")?.value || "",
 				area: document.getElementById("area")?.value || "",
 				altura: document.getElementById("altura")?.value || "",
 				pavimentos: document.getElementById("pavimentos")?.value || "",
-				responsavel: document.getElementById("responsavel")?.value.value.toUpperCase() || "",
+				responsavel: document.getElementById("responsavel")?.value.toUpperCase() || "",
 				tipo: document.getElementById("tipo")?.value || "",
 				inicio: document.getElementById("inicio")?.value || "",
 				fim: document.getElementById("fim")?.value || "",
 				retorno: document.getElementById("retornoSim")?.checked || false,
 				acompanhante: document.getElementById("acompanhante")?.value.toUpperCase() || "",
 				//cpf: document.getElementById("cpf")?.value || "",
-				funcao: document.getElementById("funcao")?.value.value.toUpperCase() || "",
+				funcao: document.getElementById("funcao")?.value.toUpperCase() || "",
 				status: document.getElementById("status")?.value || "",
 				observacao: document.getElementById("observacao")?.value || "",
 				categoriasSelecionadas: categoriasSelecionadas,
