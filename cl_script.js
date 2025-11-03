@@ -61,7 +61,7 @@ const checklistData = [
     { id: "02.040", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "A sinalização de equipamento de combate a incêndio deve possuir forma quadrada ou retangular, cor do fundo (cor de segurança) vermelha, cor do símbolo (cor de contraste) branca ou amarela fotoluminescente, margem (opcional) fotoluminescente e proporcionalidades paramétricas, de acordo com a Tabela 1.1 do Anexo 1 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
     { id: "02.041", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "A sinalização de equipamentos de combate a incêndio deve apresentar efeito fotoluminescente, de acordo com a alínea b do item 5.7.3 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
     { id: "02.042", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "Quando os equipamentos de proteção contra incêndio forem instalados em pilares, devem ser sinalizadas todas as faces de pilar/coluna, preferencialmente à 1,80m de altura, conforme código 28 da tabela \"d\" do anexo 2, que estiverem voltadas para os corredores de circulação de pessoas ou veículos, de acordo com a alínea j do item 6.1.4 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
-    { id: "02.043", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "A sinalização de piso para indicar a localização e para evitar a obstrução por materiais dos extintores de incêndio, dos hidrantes de incêndio, dos mangotinhos e dos acionadores manuais, nas indústrias, depósitos e garagens, código 27 da tabela \"d\" do anexo 2 (quadrado 1m x 1m, fundo vermelho 0,7m x 0,7m, borda amarela de largura 0,15m), deve ser pintada nopiso onde deve estar localizado os referidos equipamentos, de acordo com a alínea i do item 6.1.4 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
+    { id: "02.043", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "A sinalização de piso para indicar a localização e para evitar a obstrução por materiais dos extintores de incêndio, dos hidrantes de incêndio, dos mangotinhos e dos acionadores manuais, nas indústrias, depósitos e garagens, código 27 da tabela \"d\" do anexo 2 (quadrado 1m x 1m, fundo vermelho 0,7m x 0,7m, borda amarela de largura 0,15m), deve ser pintada no piso onde deve estar localizado os referidos equipamentos, de acordo com a alínea i do item 6.1.4 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
     { id: "02.044", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "Quando houver obstáculos que dificultem ou impeçam a visualização direta da sinalização dos equipamentos de proteção contra incêndio no plano vertical, a mesma deve ser repetida a uma altura suficiente para proporcionar a respectiva visualização, de acordo com a alínea k do item 6.1.4 da NT 22/2020 CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
     { id: "02.045", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "Quando a visualização direta do equipamento ou sua sinalização não for possível no plano horizontal a sua localização deve ser indicada a partir do ponto de boa visibilidade mais próxima. A sinalização deve incluir o símbolo do equipamento em questão e uma seta indicativa, sendo que o conjunto não deve distar mais que 7,5 m do equipamento, de acordo com a alínea l do item 6.1.4 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
     { id: "02.046", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "A sinalização de equipamento de combate a incêndio, quando existirem situações onde a visualização não seja possível apenas com a instalação da placa acima do equipamento, deve-se adotar placa adicional em dupla face perpendicularmente à superfície da placa instalada na parede ou pilar do tipo placa angular, de acordo com o item 5.7.8 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)" },
@@ -99,8 +99,273 @@ const checklistData = [
     { id: "02.078", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "Nas instalações do gerador deve ser adotada sinalização adequada de segurança, destinada à  advertência e à identificação de riscos de choque elétrico, de acordo com a NR - 26 do Ministério do Trabalho."},
     { id: "02.079", title: "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO", text: "A sinalização de orientação e salvamento para Elevador de Emergência deve ser instalada de acordo  com a figura S-23 da NBR 16.820/2022. (Art. 6º, do Dec. 23.154/2002)"},
 
-    
+    { id: "03.001", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A iluminação de emergência deve ser instalada em conformidade com a NT21/2020-CBMDF. (Art. 6º,  do Dec. 23.154/2002)"},
+    { id: "03.002", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema de iluminação de emergência deve ser instalado em conformidade com o Projeto de  Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.003", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de  Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de iluminação de  emergência instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo  com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.004", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A iluminação de emergência deve ser prevista como iluminação de aclaramento, obrigatória em todos  os locais da edificação que integram uma rota de fuga, vertical ou horizontal, além dos ambientes destinados  a salas de aulas, dormitórios coletivos e aqueles que permitam concentração mínima de 50 pessoas, conforme  item 5.3 da NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.005", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Nas edificações destinadas à concentração de público, a iluminação de aclaramento deve ser  dimensionada inclusive para a área de banheiros, conforme item 5.3.1 da NT21/2020-CBMDF. (Art. 6º, do Dec.  23.154/2002)"},
+    { id: "03.006", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O afastamento entre os pontos de luz, com a finalidade de aclaramento, deve ser no máximo o  equivalente a 04 (quatro) vezes a altura de sua instalação em relação ao piso, conforme item 6.2 da NT21/2020 CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.007", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Instalar pontos de luz em altura inferior à que se encontram locais de saída/exaustão de fumaça,  visando minimizar a obstrução da iluminação de emergência por ocorrência de um 'colchão' de fumaça no teto,  de acordo com o item 6.4 da NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.008", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Devem ser instaladas faixas com iluminação própria no chão, corredores, rodapés e/ou escadas  favorecendo a localização da saída, nos ambientes em que seja obrigatório o dimensionamento do sistema de  iluminação de emergência e não apresentem ventilação natural cruzada ou não existam aberturas no teto ou  sistemas de exaustão de fumaça, de acordo com o item 6.5 da NT21/2020-CBMDF.  (Arts. 3º, III, b, e 6º, do  Dec. 23.154/2002)"},
+    { id: "03.009", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Retirar os projetores ou faróis localizados em escadas ou áreas em desnível, onde sombra ou  ofuscamento podem ocasionar acidentes, de acordo com o item 8.2.8 da NBR 10898/2013 da ABNT. (Art. 6º,  do Dec. 23.154/2002)"},
+    { id: "03.010", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O ambiente para instalação da fonte energia centralizada deve ser isolado do acesso ao público geral,  seja para o sistema com baterias recarregáveis ou grupo motogerador, conforme item 5.6.1 da NT21/2020 CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.011", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "No emprego de fonte de energia centralizada, o ambiente para instalação da fonte de energia  centralizado deve possuir paredes construídas para tempo de resistência ao fogo de 02 (duas) horas, conforme  item 5.6.1 da NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.012", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "No emprego de fonte de energia centralizada, o ambiente para instalação deve possuir ventilação para  o exterior da edificação ou dotada de ventilação mecânica adequada, conforme item 5.6.1 da NT21/2020 CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.013", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A localização dos componentes da fonte de energia centralizada deve ser em local que não ofereça  riscos de explosão, fogo ou propagação de fumaça, acidentes em funcionamento, obstrução à saída da  edificação ou dificulte a organização de socorro, possua fácil acesso e espaço para movimentação ao pessoal  especializado para inspeção e manutenção, conforme alínea d do item 4.2 da NBR 10898/2013 da ABNT. (Art.  6º, do Dec. 23.154/2002)"},
+    { id: "03.014", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Deve ser garantido um tempo máximo de interrupção de 3 segundos para comutação entre baterias  alternativas, conforme item 5.1.1.5 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.015", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A área das baterias do sistema de iluminação de emergência deve ser ventilada, de acordo com a alínea  p do item 4.1.2 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.016", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema centralizado com baterias recarregáveis deve possuir recarga automática com supervisão  permanente em painel de controle, conforme item 5.5.2 da NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.017", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema centralizado com baterias recarregáveis deve possuir sinalização no painel de controle do  sistema e mostrar a situação de recarga, flutuação e o controle das proteções das baterias e estar sob  permanente supervisão humana, conforme alínea i do item 4.1.2 da NBR 10898/13 da ABNT. (Art. 6º, do Dec.  23.154/2002)"},
+    { id: "03.018", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema centralizado de iluminação de emergência com bateria não pode ser utilizado para alimentar  qualquer outro circuito ou equipamento na edificação, de modo a não interferir no tempo da autonomia da  iluminação de emergência, conforme alínea o do item 4.1.2 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec.  23.154/2002)"},
+    { id: "03.019", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O tempo máximo de comutação para o grupo motogerador do sistema de iluminação de emergência  deve ser de 12 segundos, de acordo com a alínea a do item 4.1.3 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec.  23.154/2002)"},
+    { id: "03.020", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O escapamento dos gases do grupo motogerador do sistema de iluminação de emergência deve ser  direcionado para área segura, de acordo com o item 9.4.2 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec.  23.154/2002)"},
+    { id: "03.021", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A quantidade de combustível destinado ao grupo motogerador do sistema de iluminação de  emergência deve assegurar o funcionamento no tempo garantido de autonomia do sistema do motogerador,  incluindo o consumo nos arranques periódicos essenciais e os testes de manutenção preventivos e corretivos,  com periodicidade de 30 dias, de acordo com a alínea h do item 4.1.3 da NBR 10898/2013 da ABNT. (Art. 6º,  do Dec. 23.154/2002)"},
+    { id: "03.022", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Os painéis de controle, as baterias de arranque e as instalações de armazenamento de combustível do  sistema do grupo motogerador podem ser compartimentados de forma a evitar a propagação de um eventual  incêndio entre as partes, conforme alínea k do item 4.1.3 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec.  23.154/2002)"},
+    { id: "03.023", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema centralizado com grupo motogerador de iluminação de emergência deve ter o acesso ao  gerador de forma irrestrita desde a área externa da edificação, sem a passagem por áreas com material  combustível, conforme alínea b do item 4.4.1 da NBR 10898/13 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.024", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema centralizado com grupo motogerador deve possuir painéis de controle com indicador de  quantidade de combustível, botão de arranque manual, supervisão de temperatura de água de resfriamento  do motor em local visível, dispositivos de proteção elétrico do gerador contra sobrecarga, conforme alínea c do  item 4.1.3 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.025", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema centralizado com grupo motogerador deve estar apoiado em base, com isoladores de  vibrações, dreno com filtro de cascalho para absorver a perda de óleo combustível e líquidos lubrificantes e  parafuso de dreno no ponto mais baixo, conforme alínea e do item 4.1.3 da NBR 10898/2013 da ABNT. (Art.  6º, do Dec. 23.154/2002)"},
+    { id: "03.026", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema grupo motogerador de iluminação de emergência quando possuir tanques de  armazenamento de combustível com volume superior ou igual a 200 litros deve ser montado dentro de bacias  de contenção com dreno e filtro de cascalho, de acordo com a alínea l do item 4.1.3 da NBR 10898/2013 da  ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.027", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema de iluminação de emergência deve estar em perfeito estado de funcionamento, de acordo  com o item 9.1 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.028", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A tensão de alimentação da iluminação de emergência deve ser no máximo de 30 Vcc, em qualquer  área fora das rotas de fuga, protegidas contra fogo ou em áreas com material combustível, devendo ser  respeitada mesmo quando fornecida por grupo motogerador ou conjunto de baterias, conforme itens 5.8.1 e  5.8.2 da NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.029", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A tensão de alimentação poderá ser mantida em 110/220 Vca, nas áreas protegidas para escoamento,  livres de materiais combustíveis e separadas por porta corta-fogo em caso de falta de energia por incêndio e  no uso de grupo motogerador automático com circuitos especiais para iluminação de emergência; deve-se  observar que qualquer passagem dos cabos por áreas de risco proíbe o uso da tensão de 110/220 Vca da rede  nominal ou gerador, de acordo com o item 4.4 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.030", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O nível mínimo de iluminamento no piso deve ser de 05 lux em locais com desnível (escadas ou  passagens com obstáculos) e 03 lux em locais planos (corredores, halls e locais sem obstáculos), de acordo com  as alíneas a e b do item 6.7 da NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.031", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O sistema de iluminação de emergência não pode ter autonomia menor que 1h (uma hora) de  funcionamento, incluindo uma perda não maior que 10% de sua luminosidade inicial, conforme item 5.9.1 da  NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.032", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A comutação deve ser automática para bloco autônomo de acordo com a alínea b do item 4.1.1 da  NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.033", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "O invólucro da luminária do sistema de iluminação de emergência deve oferecer resistência contra  impacto de água, sem causar danos mecânicos nem o desprendimento da luminária do local da montagem, de  acordo com o item 4.3.5 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.034", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "A luminária do sistema de iluminação de emergência deve ter sua fixação rígida de forma a impedir  queda acidental, remoção sem auxílio de ferramenta, impedindo-a de ser avariada ou colocada fora de serviço,  de acordo com o item 8.1.1 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.035", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Não são admitidas ligações em série de pontos de luz do sistema de iluminação de emergência, de  acordo com o item 4.4.3 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.036", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Os condutores e suas derivações do sistema de iluminação de emergência devem sempre passar em  eletrodutos com caixas de passagem, de acordo com o item 4.4.5 da NBR 10898/2013 da ABNT. (Art. 6º, do  Dec. 23.154/2002)"},
+    { id: "03.037", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "No caso de instalação aparente, a tubulação e as caixas de passagem do sistema de iluminação de  emergência devem ser metálicas, de acordo com o item 4.4.6 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec.  23.154/2002)"},
+    { id: "03.038", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "No caso de bloco autônomo, do sistema de iluminação de emergência, os eletrodutos podem ser de  plástico, e devem ser protegidos contra danos mecânicos, de acordo com o item 4.4.6 da NBR 10898/2013 da  ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.039", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Os eletrodutos utilizados para condutores de iluminação de emergência não podem ser usados para  outros fins, salvo instalação de detecção e alarme de incêndio ou de comunicação, conforme a ABNT NBR 5410,  contanto que as tensões de alimentação estejam abaixo de 30 Vcc e todos os circuitos devidamente protegidos  contra curtos-circuitos, de acordo com o item 4.4.7 da NBR 10898/2013 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.040", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Caso seja adotada a iluminação para sinalização a mesma deve possuir fluxo luminoso mínimo igual a  30 lumens. Neste tipo de iluminação, a função de sinalização deve ser obtida pelo emprego de formas, letras,  símbolos gráficos e cores conforme determina a norma técnica específica para sinalização de segurança contra  incêndio e pânico, conforme item 6.8 da NT21/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.041", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "As luminárias a serem instaladas em áreas classificadas como de atmosfera explosiva, devem estar  aprovadas de acordo com exigências das respectivas normas que definem a classificação da área e os requisitos  para equipamentos elétricos. Caso o tipo de sistema adotado nesses locais utilize alimentação centralizada, a  bateria deve estar localizada em local fora da área de risco, de acordo com o item 6.9 da NT21/2020-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.042", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Os blocos autônomos de iluminação de emergência não podem conter qualquer tipo de interruptor  manual, do tipo liga/desliga, desativando a bateria do bloco autônomo de emergência, de acordo com a alínea  'i' do item 6.1.2.1 da ABNT NBR 10898/2023. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "03.043", title: "ILUMINAÇÃO DE EMERGÊNCIA", text: "Instalar iluminação de emergência em ambientes de risco, tais como subestações, galerias  subterrâneas, sala de geradores, casa de bombas de incêndio etc., de acordo com o Anexo E, item E.2 da ABNT  NBR 10898/2023. (Art. 6º, do Dec. 23.154/2002)"},
+
+    { id: "04.001", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores de incêndio devem ser instalados em conformidade com a NT 03/2015CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.002", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O sistema de proteção por extintores de incêndio deve ser instalado em conformidade com o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.003", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de proteção por extintores de incêndio instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.004", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar extintores de incêndio portáteis para a proteção das três classes de fogo A, B e C, de acordo com o item 4.1.1.3 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.004", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar extintores de incêndio portáteis para a proteção das três classes de fogo A, B e C, de acordo com o item 4.1.1.3 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.005", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar extintores de incêndio portáteis para a proteção da classe de fogo A, de acordo com a letra a do item 4.1.1.3 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.006", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar extintores de incêndio portáteis para a proteção da classe de fogo B, de acordo com a letra b do item 4.1.1.3 da NT 03/2015 do CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.007", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar extintores de incêndio portáteis para a proteção da classe de fogo C, de acordo com a letra c do item 4.1.1.3 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.008", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar extintores de incêndio portáteis para a proteção da classe de fogo K, de acordo com o item 6.4.12 da NT 24/2022-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.009", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os agentes extintores devem ser selecionados de acordo com a natureza do fogo, selecionados conforme Tabela 1 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.010", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A capacidade extintora mínima de cada tipo de extintor portátil, para o combate aos fogos das classes A e B, de acordo com a classificação de risco, deve obedecer a Tabela 2 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.011", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A distância máxima a ser percorrida até se alcançar o extintor portátil, para o combate aos fogos das classes A e B, em conformidade com o risco da edificação ou da área de risco, deve obedecer a Tabela 3 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.012", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A quantidade e a capacidade extintora dos extintores portáteis destinados à proteção das centrais de GLP são definidas pela quantidade total do referido gás, devendo obedecer a Tabela 4 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.013", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A quantidade e a capacidade extintora dos extintores portáteis destinados à proteção das áreas de armazenamento de GLP são definidas pela classe do armazenamento e pela consequente quantidade total de botijões do referido gás prevista para cada classe, devendo obedecer a Tabela 5 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.014", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A quantidade e a capacidade extintora dos extintores portáteis destinados à proteção dos tanques aéreos fechados de armazenamento de líquidos inflamáveis e combustíveis são definidas pela capacidade total de cada tanque, devendo obedecer a Tabela 6 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.015", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os tanques de armazenamento de líquidos inflamáveis e combustíveis enterrados devem ser atendidos por um extintor portátil de pó com capacidade extintora de 20B, próximo ao local de enchimento e/ou saída (bomba) de cada tanque, independente da sua capacidade de armazenamento, de acordo com o item 4.1.1.10 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.016", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Para a proteção de tanques de armazenamento de líquidos inflamáveis e combustíveis em recipientes abertos deve ser considerada a proporção da capacidade extintora de 20B, para cada metro quadrado de superfície de líquido, de acordo com o item 4.1.1.11 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.017", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores devem ser dimensionados de maneira que haja menor probabilidade do fogo bloquear seus acessos, de acordo com o item 4.1.2.6 e 4.2.2.4 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.018", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores devem ser instalados de maneira que sejam visíveis, para que todos os usuários fiquem familiarizados com a suas localizações, de acordo com o item 4.1.2.6 e 4.2.2.4 da NT 03/2015CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.019", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores devem ser instalados de maneira que permaneçam protegidos contra intempéries e danos físicos em potencial, de acordo com os itens 4.1.2.6 e 4.2.2.4 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.020", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores devem ser instalados de maneira que não fiquem obstruídos por pilhas de mercadorias, matérias-primas ou qualquer outro material, de acordo com os itens 4.1.2.6 e 4.2.2.4 da NT 03/2015-CBMDF. (Arts. 4º, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.021", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores devem ser instalados de maneira que estejam junto aos acessos dos riscos, de acordo com os itens 4.1.2.6 e 4.2.2.4 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.022", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores devem ser instalados de maneira que não fiquem no interior de escadas e de antecâmaras de escadas, de acordo com os itens 4.1.2.6 e 4.2.2.4 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.023", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores devem ser instalados de maneira que não fiquem dentro de vagas de veículos, em garagens, de acordo com os itens 4.1.2.6 e 4.2.2.4 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.024", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Quando os extintores portáteis forem instalados em paredes, pilares ou divisórias, a altura máxima deverá ser de 1,60 m, medido do piso acabado até a sua alça de manuseio, e a altura mínima deverá ser de 10 cm, medido do piso acabado até a sua parte inferior, de acordo com o item 4.1.2.1 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.025", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores instalados sobre o piso acabado devem permanecer apoiados em suportes apropriados, com altura entre 10 cm e 20 cm do piso, de acordo com o item 4.1.2.2 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.026", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Suportes de piso devem ser fixados no piso onde forem instalados, de tal forma a evitar a remoção, mesmo que temporária, do extintor de incêndio, e danos físicos causados por choques mecânicos, sendo vedada a instalação do extintor diretamente sobre o piso, de acordo com o item 4.1.2.3 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.027", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores portáteis devem ser instalados nos caminhos normais de passagem, incluindo saídas das áreas, devendo haver no mínimo um extintor de incêndio localizado a não mais de 05 m da porta de acesso da entrada principal da edificação, entrada do pavimento ou entrada da área de risco, de acordo com o item 4.1.2.4 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.028", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Deve ser instalado, no mínimo, um extintor portátil por pavimento e mezanino, independente da área da edificação e área de risco, de acordo com o item 4.1.2.5 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.029", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores portáteis devem ser corretamente dimensionados, de acordo com item 4.1.2.6 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.030", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores portáteis devem ser adequados às classes de fogo existentes na edificação ou na área de risco a ser protegida, de acordo com o item 4.1.2.7 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.031", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Quando a edificação possuir riscos especiais tais como: casas de caldeiras, casas de força elétrica, casas de bomba, queimadores, casas de máquinas, central de GLP, galerias de transmissão, e similares, estes devem ser protegidos por extintores portáteis extras, independentemente da proteção geral da edificação, de acordo com o item 4.1.2.8 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.032", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Nos riscos especiais, situados em recintos fechados, os extintores portáteis devem ser instalados no lado externo, a no máximo 05 m da entrada destes riscos, de acordo com o item 4.1.2.9 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.033", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "As unidades extintoras devem ser as correspondentes a um só extintor, não sendo aceitas combinações de dois ou mais extintores, com exceção das unidades extintoras destinadas ao combate dos fogos de classe A, para as quais se permite a combinação de no máximo duas unidades extintoras, de acordo com o item 4.1.2.10 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.034", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "No mínimo 50% do número total de unidades extintoras exigidas para cada risco devem ser constituídos por extintores portáteis, de acordo com o item 4.1.2.11 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.035", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar extintores de incêndio sobre rodas para a proteção da classe de fogo a ser extinto, de acordo com o item 4.2.1.3 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.036", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os agentes extintores devem ser selecionados de acordo com a natureza do fogo, selecionados conforme a Tabela 7 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.037", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A capacidade extintora mínima de cada tipo de extintor sobre rodas, para o combate aos fogos das classes A e B, de acordo com a classificação de risco, deve obedecer a Tabela 8 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.038", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A distância máxima a ser percorrida até se alcançar o extintor sobre rodas, para o combate aos fogos das classes A e B, em conformidade com o risco da edificação ou da área de risco deve obedecer a Tabela 9 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.039", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A quantidade e a capacidade extintora dos extintores sobre rodas destinados à proteção das áreas de armazenamento de GLP são definidas pela classe do armazenamento e pela consequente quantidade total de botijões do referido gás prevista para cada classe, devendo obedecer a Tabela 10 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.040", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A quantidade e a capacidade extintora dos extintores sobre rodas destinados à proteção dos tanques aéreos fechados de armazenamento de líquidos inflamáveis e combustíveis são definidas pela capacidade total de cada tanque, devendo obedecer a Tabela 11 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.041", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nos postos de abastecimento, conforme alínea a do item 4.2.2.1 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.042", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nos depósitos de GLP com capacidade superior a 6.240 kg ou 480 botijões, conforme alínea b do item 4.2.2.1 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.043", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nos depósitos de líquidos inflamáveis e combustíveis, com capacidade superior a 5.000 litros, conforme alínea c do item 4.2.2.1 da NT 03/2015CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.044", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nos depósitos e indústrias de explosivos e fogos de artifício, conforme alínea d do item 4.2.2.1 da NT 03/2015-CBMDF."},
+    { id: "04.045", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nos depósitos e indústrias classificadas como de risco alto, segundo a Norma Técnica específica, conforme alínea e do item 4.2.2.1 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.046", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nos helipontos e heliportos, conforme alínea f do item 4.2.2.1 da NT 03/2015-CBMDF."},
+    { id: "04.047", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nos hangares, conforme alínea g do item 4.2.2.1 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.048", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Devem ser empregados obrigatoriamente extintores sobre rodas nas subestações elétricas, casa de máquinas de geradores elétricos e setores técnicos de transformadores refrigerados a óleo e acessórios elétricos, em áreas externas, conforme alínea h do item 4.2.2.1 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.049", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Nas edificações e áreas de risco onde é exigido o emprego de extintores sobre rodas, é vedada a soma das capacidades extintoras de vários extintores portáteis, como alternativa para substituí-lo, de acordo com o item 4.2.2.2 da NT 03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.050", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Não é permitida a proteção de edificações ou áreas de risco unicamente por extintores sobre rodas, admitindo-se no máximo a proteção da metade da área total correspondente ao risco, considerando o complemento por extintores portáteis, de forma alternada entre extintores portáteis e sobre rodas na área de risco, de acordo com o item 4.2.2.3 da NT 03/2015-CBMDF."},
+    { id: "04.051", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores sobre rodas devem ser corretamente dimensionados, de acordo com item 4.2.2.4 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.052", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores sobre rodas devem ser localizados em pontos estratégicos, e sua proteção deve ser restrita ao nível do piso em que se encontram, de acordo com o item 4.2.2.5 da NT 03/2015-CBMDF. (Arts. 3º, I, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.053", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores sobre rodas devem ser instalados em locais que permitam o livre acesso a qualquer parte da área protegida, sem impedimentos de portas, soleiras, degraus no piso, materiais e equipamentos, de acordo com o item 4.2.2.6 da NT 03/2015-CBMDF. (Arts. 4º, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.054", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Não é considerado como extintor sobre rodas o conjunto de dois ou mais extintores instalados sobre um mesmo suporte e cujo acionamento seja individualizado, de acordo com o item 4.2.2.7 da NT 03/2015CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.055", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar sinalização de extintores (quadrada ou retangular, fundo vermelho, símbolo branco ou amarelo e margem branca ou amarela), de acordo com a NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.056", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Dever ser instalada sinalização em todas as faces do pilar que possui extintor instalado, de acordo com a alínea j do item 6.1.4 da NT 22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.057", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar sinalização de piso, logo abaixo dos extintores (quadrado vermelho 70 x 70 cm com moldura amarela de 15 cm) em garagens, depósitos e indústrias, de acordo com a alínea I do item 6.1.4 da NT 22/2020CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.058", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os extintores devem estar lacrados, com a pressão adequada e possuir selo de conformidade concedida por órgão credenciado pelo Sistema Brasileiro de Certificação (INMETRO), de acordo com o item 5.2.1 da NT 03/2015-CBMDF."},
+    { id: "04.059", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Para efeito de vistoria, o prazo de validade da carga e a garantia de funcionamento dos extintores portáteis e sobre rodas deve ser aquele estabelecido pelo fabricante, se novo, ou pela empresa de manutenção certificada pelo Inmetro e credenciada pelo CBMDF, se recarregado, de acordo com o item 5.2.1 da NT 03/2015CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.060", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os aparelhos extintores de incêndio devem ser vermelhos, de acordo com a NBR 7195/95 da ABNT. (Arts. 3º, I, h, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.061", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Realizar recarga dos extintores que se encontram descarregados, ou com o prazo de validade e/ou garantia vencidos, conforme a NBR 12962/16 da ABNT. (Arts. 3º, I, b, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.062", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Realizar teste hidrostático nos extintores que se encontram com este teste vencido, conforme a NBR 12962/16 da ABNT. (Arts. 3º, I, c, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.063", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Realizar manutenção nos extintores que se encontram com lacre violado ou vencido, de acordo com o item 5.3 da NBR 12962/16 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.064", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Realizar manutenção nos extintores que se encontram com o quadro de instrução ilegível ou inexistente, de acordo com o item 5.3 da NBR 12962/16 da ABNT. (Arts. 3º, I, g, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.065", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Realizar manutenção nos extintores que se encontram com inexistência de algum componente, mangueira de descarga apresentando danos, deformação ou ressecamento, de acordo com o item 5.3 da NBR 12962/16 da ABNT. (Arts. 4º, c, e 6º, do Dec. 23.154/2002)"},
+    { id: "04.066", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Realizar manutenção nos extintores que se encontram com corrosão no recipiente ou em partes que possam ser submetidas à pressão momentânea ou estejam submetidas à pressão permanente e/ou partes externas contendo mecanismos ou sistema de acionamento mecânico, de acordo com o item 5.3 da NBR 12962/16 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.067", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Realizar manutenção nos extintores que se encontram com inexistência ou elegibilidade das gravações originais de fabricação ou do último ensaio hidrostático, de acordo com o item 5.3 da NBR 12962/16 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.068", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O anel de identificação da manutenção dos extintores de incêndio deve ser confeccionado de acordo com as opões descritas nas alíneas a ou b, do item C.1, Anexo C, da PORTARIA INMETRO N° 58/2022."},
+    { id: "04.069", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O anel de identificação da Manutenção, confeccionado em material plástico, deve ser indeformável nas suas dimensões, na cor referente ao ano de sua manutenção, e com dimensões compatíveis com cada um dos modelos de extintor de incêndio, de modo que o mesmo somente possa ser colocado ou removido com a prévia desmontagem do extintor. Esse anel deve possuir entalhes radiais equidistantes entre si (no mínimo, quatro entalhes), que permitam sua ruptura antes de alcançar uma deformação de 20 mm, de acordo com a alínea a, do item C.1, Anexo C, da Portaria INMETRO N° 58/2022."},
+    { id: "04.070", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O anel de identificação da manutenção dos extintores de incêndio em alumínio ou aço inox, deve ser indeformável nas suas dimensões, sem pintura e com dimensões compatíveis com cada um dos modelos de extintor de incêndio, de modo que o mesmo somente possa ser colocado ou removido com a prévia desmontagem do extintor, de acordo com a alínea b, do item C.1, Anexo C, da Portaria INMETRO N° 58/2022."},
+    { id: "04.071", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Instalar modelo de anéis de identificação da manutenção nos extintores de incêndio conforme cronograma de cores, de acordo com a tabela do Anexo C, da Portaria INMETRO N° 58/2022: a) 01/01/2020 a 31/12/2020 - anel de manutenção cor verde; b) 01/01/2021 a 31/12/2021 - anel de manutenção cor branca; c) 01/01/2022 a 31/12/2022 - anel de manutenção cor azul; d) 01/01/2023 a 31/12/2023 - anel de manutenção cor preta; e) 01/01/2024 a 31/12/2024 - anel de manutenção cor alaranjada; f) 01/01/2025 a 31/01/2025 - anel de manutenção cor púrpura."},
+    { id: "04.072", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O Anel de Identificação da Manutenção deve conter, obrigatoriamente, a identificação do fornecedor, podendo ser usado o nome ou o logotipo deste. Adicionalmente, os anéis de alumínio ou aço inox devem conter também o ano da realização da manutenção, de acordo com o item C.4, do Anexo C, da Portaria INMETRO Nº 58/2022."},
+    { id: "04.073", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Nos extintores de incêndio portáteis de pressurização direta, o Anel de Identificação de Manutenção deve ser instalado entre a válvula de descarga e o cilindro ou recipiente do extintor de incêndio, de maneira que não seja possível a retirada desse anel sem a desmontagem da válvula de descarga do cilindro ou recipiente, de acordo com o item C.6, do Anexo C, da Portaria INMETRO Nº 58/2022."},
+    { id: "04.074", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Nos extintores de incêndio sobre rodas com pressurização direta, o Anel de Identificação de Manutenção deve ser instalado entre o indicador de pressão e a válvula, de maneira que não seja possível a retirada desse anel sem a retirada do indicador de pressão, de acordo com o item C.6, do Anexo C, da Portaria INMETRO Nº 58/2022."},
+    { id: "04.075", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os selos de identificação da conformidade devem ser gravados de forma visível e legível nos mostradores dos indicadores de pressão dos extintores de incêndio, conforme item 5.1, do Anexo II, da Portaria INMETRO nº 109/2022."},
+    { id: "04.076", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O selo de identificação da conformidade, bem como o número do registro devem ser impressos no mostrador dos indicadores de pressão certificados nos extintores de incêndio, conforme item 1, do Anexo II, da Portaria INMETRO nº 109/2022."},
+    { id: "04.077", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O Selo de Identificação da Conformidade a ser impresso no mostrador é o modelo compacto, constante do item 2, do Anexo II, da Portaria INMETRO nº 109/2022."},
+    { id: "04.078", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A capacidade extintora mínima para extintores portáteis com carga de pó para as classes de fogo A, B e C é de 2-A, 20-B e C, respectivamente, de acordo com a alínea “e” do item 5.5.1.1 da ABNT NBR 12.693/2021. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.078", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "O selo de identificação da conformidade a ser impresso no mostrador dos indicadores de pressão dos extintores de incêndio é o modelo compacto nível 4, definido na Portaria INMETRO nº 179."},
+    { id: "04.079", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "A capacidade extintora mínima para extintores sobre rodas com carga de pó para as classes de fogo A, B e C é de 6-A, 80-B e C, respectivamente, de acordo com a alínea “e” do item 5.5.1.4 da ABNT NBR 12.693/2021. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.080", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Os abrigos para extintores não podem estar fechados a chave e devem ter uma superfície transparente que possibilite a visualização do extintor em seu interior, de acordo com o item 5.3.3 da ABNT NBR 12.693/2021. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.081", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Quando instalados em locais sujeitos ao vandalismo, os abrigos podem estar fechados a chave, desde que existam meios que permitam o rápido acesso ao equipamento em situação de emergência, de acordo com o item 5.3.3 da ABNT NBR 12.693/2021. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "04.082", title: "SISTEMAS DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO", text: "Em estádios, hospitais psiquiátricos, reformatórios e locais onde a liberdade das pessoas sofre restrições, os extintores devem ser instalados em locais com acesso privativo, de acordo com o item 5.3.13 da ABNT NBR 12.693/2021. (Art. 6º, do Dec. 23.154/2002)"},
+
+    { id: "05.001", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para a edificação as saídas de emergência necessárias para garantir o abandono seguro de toda a população em conformidade com a NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.002", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para a edificação as saídas de emergência necessárias para garantir o abandono seguro de toda a população, em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.003", title: "SAÍDAS DE EMERGÊNCIA", text: "Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de saídas de emergência instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.004", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas que abrem para dentro de rotas de saída, em ângulo de 180º, em seu movimento de abrir, no sentido do trânsito de saída, não podem diminuir a largura efetiva destas em valor menor que a metade, sempre mantendo uma largura mínima livre de 1,20m para as ocupações em geral e de 1,65m para os grupos de concentração de público de acordo com a NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.005", title: "SAÍDAS DE EMERGÊNCIA", text: "A largura mínima das saídas de emergência deve ser de 2,20m, para permitir a passagem de macas, camas e outros, no grupo 30 de ocupação hospitalar, de acordo com a alínea b do item 4.1.3.1.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.006", title: "SAÍDAS DE EMERGÊNCIA", text: "Em estabelecimento de atenção primária a saúde (Grupo 32), a largura mínima das saídas de emergência deverá ser de 1,20m, de acordo com o item 21.10.1 da IN 01/2021 - DESEG/CBMDF."},
+    { id: "05.007", title: "SAÍDAS DE EMERGÊNCIA", text: "Em estabelecimento de atenção secundária a saúde (Grupos 31 e 30), a largura mínima das saídas de emergências deverá ser de 1,65m, de acordo com o item 21.10.1 da IN 01/2021 - DESEG/CBMDF."},
+    { id: "05.008", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para a edificação a largura das saídas de emergência, atendendo a Tabela 05 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.009", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para edificação a largura das saídas de emergência, em conformidade com o Projeto de Incêndio aprovado no CBMDF, conforme o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.010", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para a edificação o número de escadas de emergência, atendendo ao distanciamento máximo a percorrer e as Tabelas 10 e 11 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.011", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para edificação o número de escadas de emergência, em conformidade com o projeto aprovado no CBMDF, conforme Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.012", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para a edificação as distâncias máximas a percorrer para as edificações com chuveiros automáticos e sistema de detecção automática, de acordo com tabela 6 da Decisão Técnica 04/2021CSESCIP/CBMDF."},
+    { id: "05.013", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para a edificação o número de saídas de emergência, atendendo ao distanciamento máximo a percorrer e as Tabelas 10 e 11 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.014", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar para a edificação o número de saídas de emergência, em conformidade com o Projeto de Incêndio aprovado no CBMDF, conforme o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.015", title: "SAÍDAS DE EMERGÊNCIA", text: "Os acessos devem ter pé-direito mínimo de 2,50m, com exceção de obstáculos representados por vigas, vergas de portas, e outros, cuja altura mínima livre deve ser de 2m, de acordo com a alínea d do item 4.2.1.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.016", title: "SAÍDAS DE EMERGÊNCIA", text: "Os acessos devem permanecer livres de quaisquer obstáculos, tais como móveis, divisórias móveis, locais para exposição de mercadorias, e outros, de forma permanente, mesmo quando o prédio esteja supostamente fora de uso, de acordo com o item 4.2.1.2 da NT10/2015-CBMDF.  (Arts. 3º, III, a, e 6º, do Dec. 23.154/2002)"},
+    { id: "05.017", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação as portas do sistema de saídas de emergência, em conformidade com o projeto aprovado no CBMDF, conforme Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.018", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas das rotas de saída e aquelas das salas com capacidade acima de 50 pessoas e em comunicação com os acessos e descargas devem abrir no sentido do trânsito de saída, de acordo com o item 4.2.2.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.019", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas que conduzem às escadas ou rampas devem ser dispostas de modo a não diminuírem a largura efetiva de circulação destas, de acordo com o item 4.2.2.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.020", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas devem ter as dimensões mínimas de luz, de acordo com o item 4.2.2.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.021", title: "SAÍDAS DE EMERGÊNCIA", text: "A colocação de fechaduras nas portas de acesso e descargas é permitida desde que seja possível a abertura pelo lado interno, sem necessidade de chave, admitindo-se que a abertura pelo lado externo seja feita apenas por meio de chave, dispensando-se maçanetas, neste caso o acesso à chave deve ser facilitado aos bombeiros, de acordo com o item 4.2.2.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.022", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas das rotas de saída que possuem sistemas de abertura automáticos devem possuir sistema antipânico, que em caso de falta de energia, pane ou defeito de seu sistema, mantenham as portas abertas, de acordo com o item 4.2.2.8.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.023", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas corta-fogo e as portas dimensionadas exclusivamente para saídas de emergência devem possuir a cor vermelha e serem sinalizadas conforme Norma Técnica específica, de acordo com o item 4.2.2.9.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.024", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas corta-fogo e as portas dimensionadas exclusivamente para saídas de emergência devem ser providas de dispositivos mecânicos e automáticos, de modo a permanecerem fechadas, mas destrancadas, no sentido do fluxo de saída, sendo admissível que se mantenham abertas, desde que disponham de dispositivo de fechamento, quando necessário, de acordo com o item 4.2.2.9.4 da NT10/2015-CBMDF. (Arts. 3º, III, c, e 6º, do Decreto nº 23.154/2002)"},
+    { id: "05.025", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas corta-fogo devem ser instaladas de forma a atender às premissas básicas de projeto, previstas em relação às frestas. As portas corta-fogo utilizadas em espaço pressurizado devem ter dispositivos de fechamento capazes de mantê-las fechadas, mesmo sob a ação do sistema de pressurização, de acordo com o item 4.2.2.9.5 da NT10/2015-CBMDF.  (Arts. 3º, III, c, e 6º, do Decreto 23.154)"},
+    { id: "05.026", title: "SAÍDAS DE EMERGÊNCIA", text: "Em salas com capacidade acima de 200 pessoas e nas rotas de saída dos locais de reunião com capacidade acima de 200 pessoas, as portas de comunicação com os acessos, escadas e descarga devem ser dotadas de barras antipânico, de acordo com o item 4.2.2.10.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.027", title: "SAÍDAS DE EMERGÊNCIA", text: "Quando utilizada, a barra antipânico deve ser o único meio existente na porta, para abri-la no sentido de fuga, de acordo com o item 4.2.2.10.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.028", title: "SAÍDAS DE EMERGÊNCIA", text: "É vedada, no lado contrário ao sentido de fuga, a utilização de qualquer dispositivo ou mecanismo de travamento ou trancamento da porta que interfira no funcionamento normal da barra antipânico, de acordo com o item 4.2.2.10.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.029", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação, a(s) escada(s), em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.030", title: "SAÍDAS DE EMERGÊNCIA", text: "As escadas devem ter os pisos com condições antiderrapantes, e que permaneçam antiderrapantes com o uso, de acordo com a alínea g do item 4.3.1.1.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.031", title: "SAÍDAS DE EMERGÊNCIA", text: "Os degraus devem ter espelhos, altura h, compreendidos entre 16 cm e 18 cm, de acordo com a alínea a do item 4.3.1.1.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.032", title: "SAÍDAS DE EMERGÊNCIA", text: "Os degraus devem ter pisos, largura b, compreendidos entre 28 cm e 32 cm, de acordo com a alínea b do item 4.3.1.1.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.033", title: "SAÍDAS DE EMERGÊNCIA", text: "Nos degraus as dimensões dos pisos devem ser constantes em toda a escada, de acordo com a alínea c do item 4.3.1.1.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.034", title: "SAÍDAS DE EMERGÊNCIA", text: "As paredes das caixas de escadas, das guardas, dos acessos e das descargas devem ter acabamento liso, de acordo com a alínea a do item 4.3.1.1.10 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.035", title: "SAÍDAS DE EMERGÊNCIA", text: "As caixas de escadas não podem ser utilizadas como depósitos, mesmo por curto espaço de tempo, nem para a localização de quaisquer móveis ou equipamentos, de acordo com a alínea b do item 4.3.1.1.10 da NT10/2015-CBMDF. (Arts. 5º, b, e 6º, do Dec. 23.154/2002)"},
+    { id: "05.036", title: "SAÍDAS DE EMERGÊNCIA", text: "Nas caixas de escadas, não podem existir aberturas para tubulações de lixo, para passagem para rede elétrica, centros de distribuição elétrica, armários para medidores de gás e assemelhados, excetuadas as escadas não enclausuradas, de acordo com a alínea c do item 4.3.1.1.10 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.037", title: "SAÍDAS DE EMERGÊNCIA", text: "A edificação deve possuir escada(s) enclausurada(s) protegida(s), de acordo com as Tabelas 10 e 11 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.038", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação, a(s) escada(s) enclausurada(s) protegida(s), em conformidade com o projeto aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.039", title: "SAÍDAS DE EMERGÊNCIA", text: "A(s) escada(s) enclausurada(s) protegida(s) devem ter portas corta-fogo P-60 no acesso à caixa de escada, e preferencialmente, dotadas de vidros aramados transparentes com 0,50m² de área, no máximo, de acordo com a alínea b do item 4.3.1.6.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.040", title: "SAÍDAS DE EMERGÊNCIA", text: "A(s) escada(s) enclausurada(s) protegida(s) deve(m) ser dotada(s) de janela ou alçapão de alivio de fumaça que permita a ventilação permanente em seu término superior, com área de abertura efetiva mínima de 1,00m², podendo estar localizado na parede no teto ou no máximo a 15 cm deste, do término da escada, de acordo com a letra d do item 4.3.1.6.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.041", title: "SAÍDAS DE EMERGÊNCIA", text: "A(s) escada(s) enclausurada(s) protegida(s) deve(m) possuir ventilação permanente inferior, com área de 1,20m² no mínimo, no solo, podendo esta ventilação ser por veneziana na própria porta de saída do térreo ou em local conveniente da caixa da escada ou corredor da descarga, que permita a entrada de ar puro, em condições análogas à tomada de ar dos dutos de ventilação, de acordo com o item 4.3.1.8.4 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.042", title: "SAÍDAS DE EMERGÊNCIA", text: "As janelas das escadas protegidas devem ter área de ventilação efetiva mínima de 0,80m², em cada pavimento e caixilhos fixados na posição aberta quando do tipo basculante, sendo vedados os tipos de abrir com o eixo vertical e maxim ar, de acordo com as alíneas b e e do item 4.3.1.6.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.043", title: "SAÍDAS DE EMERGÊNCIA", text: "A edificação deve possuir escadas(s) enclausurada(s) a prova de fumaça, de acordo com as Tabelas 10 e 11 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.044", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação, a(s) escada(s) à prova de fumaça, em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.045", title: "SAÍDAS DE EMERGÊNCIA", text: "A(s) escada(s) enclausurada(s) à prova de fumaça devem ter portas corta-fogo PF-60 no acesso à caixa de escada, de acordo com a letra b, do item 4.3.1.8.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.046", title: "SAÍDAS DE EMERGÊNCIA", text: "O(s) acesso(s) à(s) antecâmara(s) da(s) escada(s) enclausurada(s) à prova de fumaça devem ter portas corta-fogo P-60, de acordo com a letra c, do item 4.3.1.8.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.047", title: "SAÍDAS DE EMERGÊNCIA", text: "A edificação deve possuir escada(s) enclausurada(s) a prova de fumaça pressurizada, de acordo com as Tabelas 10 e 11 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.048", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação, a(s) escada(s) à prova de fumaça pressurizada, em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.049", title: "SAÍDAS DE EMERGÊNCIA", text: "A(s) escada(s) enclausurada(s) à prova de fumaça pressurizada quando dimensionada com antecâmara, devem ter portas corta-fogo PF-60 em seu acesso, e na comunicação com a caixa da escada portas corta-fogo P - 60, de acordo com a alínea a do item 4.3.1.10.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.050", title: "SAÍDAS DE EMERGÊNCIA", text: "A(s) escada(s) enclausurada(s) à prova de fumaça pressurizada quando dispensada a antecâmara, devem ter portas corta-fogo PF-60 em seu acesso a caixa de escada, de acordo com a alínea b do item 4.3.1.10.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.051", title: "SAÍDAS DE EMERGÊNCIA", text: "O conjunto moto-ventilador, para pressurização da escada, deve ser alojado em compartimento de uso exclusivo com caixa enclausurada por paredes resistentes ao fogo, com TRRF mínimo de 02 h, de acordo com a Norma Técnica específica, além de possuir em seu acesso porta corta-fogo PF-90, de acordo com a alínea 'a' do item 4.3.1.10.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.052", title: "SAÍDAS DE EMERGÊNCIA", text: "O conjunto moto - ventilador, para pressurização da escada, deve possuir antecâmara de segurança quando o compartimento estiver localizado no subsolo ou outro pavimento sob risco de captar a fumaça de um incêndio, sendo que a antecâmara deve ser dotada de porta corta-fogo P-90 na entrada e entre esta e o compartimento de porta corta-fogo PF-30, de acordo com a alínea b do item 4.3.1.10.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.053", title: "SAÍDAS DE EMERGÊNCIA", text: "Os dutos de alvenaria podem ser utilizados, desde que somente para a distribuição do ar de pressurização e que sua superfície interna seja rebocada ou revestida com chapas metálicas, ou outro material incombustível, de modo a se obter uma superfície lisa e estanque a vazamentos, de acordo com a alínea i do item 4.3.1.10.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.054", title: "SAÍDAS DE EMERGÊNCIA", text: "Considerando as diferentes condições a que é submetido o sistema de pressurização, deve ser previsto um dispositivo (damper de alívio mecânico ou eletrônico) que impeça que a pressão no interior da escada de segurança se eleve acima de 60 Pa, de acordo com a NBR 14880 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.055", title: "SAÍDAS DE EMERGÊNCIA", text: "O sistema de pressurização deve ser acionado através de um sistema automatizado de detecção de fumaça e acionadores manuais de alarme em situação de emergência, de acordo com a alínea e do item 4.3.1.10.5 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.056", title: "SAÍDAS DE EMERGÊNCIA", text: "Nos edifícios em que os detectores de fumaça forem instalados apenas para acionar o estado de emergência do sistema de pressurização, esses detectores devem ser posicionados nos halls de acesso à escada de segurança, de acordo com a alínea a do item 4.3.1.10.5 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.057", title: "SAÍDAS DE EMERGÊNCIA", text: "A instalação dos detectores de fumaça dentro do espaço pressurizado (caixa de escada) não é aceitável, de acordo com a alínea b do item 4.3.1.10.5 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.058", title: "SAÍDAS DE EMERGÊNCIA", text: "Um acionador manual do tipo 'liga' deve ser sempre instalado na sala de controle central de serviços do edifício, no compartimento do ventilador de pressurização e na portaria ou guarita de entrada do edifício, de acordo com a alínea f do item 4.3.1.10.5 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.059", title: "SAÍDAS DE EMERGÊNCIA", text: "A parada do sistema de pressurização, em situação de emergência, somente poderá ser realizada de modo manual no painel de controle dos ventiladores, de acordo com a alínea g do item 4.3.1.10.5 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.060", title: "SAÍDAS DE EMERGÊNCIA", text: "Quando utilizado destravadores eletromagnéticos para portas corta-fogo, o seu circuito deve estar interligado, para ser acionado através da central de comando de detecção de incêndio e alarme. A porta deve ser destravada automaticamente no caso de alarme de incêndio ou falta de energia elétrica, de acordo com a alínea h do item 4.3.1.10.5 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.061", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação a(s) rampa(s), em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.062", title: "SAÍDAS DE EMERGÊNCIA", text: "Apresentar rampa na descarga e acesso dos elevadores de emergência, de acordo com a alínea a do item 4.3.2.1.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.063", title: "SAÍDAS DE EMERGÊNCIA", text: "Apresentar rampa quando a altura a vencer for inferior a 0,48m, já que são vedados lanços de escadas com menos de três degraus, de acordo com a alínea b do item 4.3.2.1.1 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.064", title: "SAÍDAS DE EMERGÊNCIA", text: "Apresentar rampa quando a altura a ser vencida não permitir o dimensionamento equilibrado dos degraus de uma escada, de acordo com a alínea c do item 4.3.2.1.1 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.065", title: "SAÍDAS DE EMERGÊNCIA", text: "Apresentar rampa para unir o nível externo ao nível do saguão térreo na edificação, de acordo com a alínea d do item 4.3.2.1.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.066", title: "SAÍDAS DE EMERGÊNCIA", text: "As rampas não devem terminar em degraus ou soleiras, devendo ser precedidas e sucedidas sempre por patamares planos, de acordo com o item 4.3.2.1.3 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.067", title: "SAÍDAS DE EMERGÊNCIA", text: "Não é permitida a colocação de portas em rampas, estas devem estar situadas sempre em patamares planos, com largura não inferior à da folha da porta de cada lado do vão, de acordo com o item 4.3.2.1.7 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.068", title: "SAÍDAS DE EMERGÊNCIA", text: "As rampas devem ter os pisos com condições antiderrapantes, e que permaneçam antiderrapantes com o uso, de acordo com o item 4.3.2.1.10 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.069", title: "SAÍDAS DE EMERGÊNCIA", text: "A edificação deve possuir elevador de emergência, de acordo com a Tabela 09 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.070", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação, o(s) elevador(es) de emergência, em conformidade com o Projeto de Incêndio aprovado junto ao CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.071", title: "SAÍDAS DE EMERGÊNCIA", text: "Os elevadores de emergência devem ter circuito de alimentação de energia elétrica com chave própria independente da chave geral do edifício, possuindo este circuito chave reversível no piso da descarga, que possibilite que ele seja ligado a um gerador externo na falta de energia elétrica na rede pública, de acordo com a alínea d do item 4.3.3.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.072", title: "SAÍDAS DE EMERGÊNCIA", text: "A casa de máquinas deve ter porta corta-fogo PF - 90 em seu acesso, de acordo com a alínea f do item 4.3.3.2 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.073", title: "SAÍDAS DE EMERGÊNCIA", text: "O painel de comando deve estar localizado no pavimento da descarga, de acordo com a alínea a do item 4.3.3.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.074", title: "SAÍDAS DE EMERGÊNCIA", text: "O painel de comando deve possuir chave de comando de reversão para permitir a volta do elevador a este piso, em caso de emergência, de acordo com a alínea b do item 4.3.3.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.075", title: "SAÍDAS DE EMERGÊNCIA", text: "O painel de comando deve possuir dispositivo de retorno e bloqueio dos carros no pavimento da descarga, anulando as chamas existentes, de modo que as respectivas portas permaneçam abertas, sem prejuízo do fechamento do vão do poço nos demais pavimentos, de acordo com a alínea c do item 4.3.3.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.076", title: "SAÍDAS DE EMERGÊNCIA", text: "O painel de comando deve possuir duplo comando automático e manual reversível, mediante chamada apropriada, de acordo com a alínea d do item 4.3.3.6 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.077", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação a(s) descarga(s), em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.078", title: "SAÍDAS DE EMERGÊNCIA", text: "A edificação deve possuir área(s) de refúgio, de acordo com a Tabela 09 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.079", title: "SAÍDAS DE EMERGÊNCIA", text: "Adequar na edificação a(s) área(s) de refúgio, em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.080", title: "SAÍDAS DE EMERGÊNCIA", text: "Em escadas PFP, a área de refúgio deve ter portas corta-fogo PF-60 em seu acesso, e portas corta-fogo P-60 na comunicação com a caixa da escada quando posicionada em antecâmaras. Quando não posicionada em antecâmaras, ou seja, ligadas diretamente a caixa de escada, ter porta corta-fogo PF-60, de acordo com a alínea b do item 4.5.2 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.081", title: "SAÍDAS DE EMERGÊNCIA", text: "Em escadas PF, a área de refúgio deve ter portas corta-fogo P-60 em seu acesso, e portas corta-fogo PF-60 na comunicação com a caixa da escada quando posicionada em antecâmaras. Quando não posicionada em antecâmaras, ou seja, ligadas diretamente a caixa de escada, ter porta corta-fogo PF-60, de acordo com a alínea c do item 4.5.2 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.082", title: "SAÍDAS DE EMERGÊNCIA", text: "A área de refúgio deve ser delimitada por faixa amarela de 10 cm de largura, de acordo com a Norma Técnica específica de Sinalização de Segurança Contra Incêndio, de acordo com a alínea j do item 4.5.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.083", title: "SAÍDAS DE EMERGÊNCIA", text: "A área de refúgio deve possuir equipamento de comunicação interno (tipo interfone), situado à no máximo 1,20m de altura, ligado a central de alarme e/ou portaria da edificação, de acordo com a alínea k do item 4.5.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.084", title: "SAÍDAS DE EMERGÊNCIA", text: "Instalar corrimão na(s) escada(s), de acordo com a alínea d do item 4.3.1.1.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.085", title: "SAÍDAS DE EMERGÊNCIA", text: "Instalar corrimão na(s) rampa(s), de acordo com o item 4.3.2.1.8 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.086", title: "SAÍDAS DE EMERGÊNCIA", text: "O(s) corrimão(s) deve(m) ser instalado(s) em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.087", title: "SAÍDAS DE EMERGÊNCIA", text: "Para degraus isolados e escadas, a altura dos corrimãos deve ser de 0,80 cm a 0,92 cm do piso, medidos de sua geratriz superior, de acordo com o item 4.6.1.1 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.088", title: "SAÍDAS DE EMERGÊNCIA", text: "Para rampas e opcionalmente para escadas, os corrimãos laterais devem ser instalados a duas alturas: 0,92m e 0,70m do piso, medidos da geratriz superior, de acordo com o item 4.6.1.2 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.089", title: "SAÍDAS DE EMERGÊNCIA", text: "Uma escada pode ter corrimãos em diversas alturas, além do corrimão principal na altura normal exigida; em escolas, jardins de infância e assemelhados, se for o caso, deve haver corrimãos nas alturas indicadas para os respectivos usuários, além do corrimão principal, de acordo com o item 4.6.1.3 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.090", title: "SAÍDAS DE EMERGÊNCIA", text: "Os corrimãos devem ser projetados de forma a poderem ser agarrados fácil e confortavelmente, permitindo um contínuo deslocamento da mão ao longo de toda a sua extensão, sem encontrar quaisquer obstruções, arestas ou soluções de continuidade. Devem ter largura entre 38mm e 45mm, sendo preferencialmente de seção circular, de acordo com o item 4.6.1.4 da NT10/2015-CBMDF. (Arts. 3º, III, h, e 6º, do Dec. 23.154/2002)"},
+    { id: "05.091", title: "SAÍDAS DE EMERGÊNCIA", text: "Os corrimãos devem estar afastados 4,0 cm da parede quando embutidos na parede, devem estar afastados 15,0 cm da face superior da reentrância, de acordo com o item 4.6.1.5 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.092", title: "SAÍDAS DE EMERGÊNCIA", text: "Não são aceitáveis, em saídas de emergência, corrimãos constituídos por elementos com arestas vivas, tábuas largas, e outros, de acordo com o item 4.6.1.6 da NT10/2015-CBMDF.  (Art. 3º, III, h, e 6º, do Dec. 23.154/2002)"},
+    { id: "05.093", title: "SAÍDAS DE EMERGÊNCIA", text: "Os corrimãos devem ser instalados em ambos os lados de degraus isolados, de escadas e de rampas, de acordo com o item 4.6.1.7 da NT10/2015-CBMDF. Exceto quando em degraus isolados, escadas ou rampas com largura inferior a 1,00m os corrimãos podem ser instalados em apenas um lado, de acordo com o item 4.6.1.8 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.094", title: "SAÍDAS DE EMERGÊNCIA", text: "Os corrimãos laterais devem ser contínuos, sem interrupção nos patamares das escadas ou rampas, de acordo com o item 4.6.1.9 da NT10/2015-CBMDF.  (Arts. 3º, III, h, e 6º, do Dec. 23.154/2002)"},
+    { id: "05.095", title: "SAÍDAS DE EMERGÊNCIA", text: "As extremidades dos corrimãos devem ter acabamento recurvado, ser fixadas ou justapostas à parede ou piso, ou ainda ter desenho contínuo, sem protuberâncias, de acordo com o item 4.6.1.12 da NT10/2015-CBMDF. (Arts. 3º, III, h, e 6º, do Dec. 23.154/2002)"},
+    { id: "05.096", title: "SAÍDAS DE EMERGÊNCIA", text: "Escadas com mais de 2,40m de largura devem ter corrimão intermediário, no máximo, a cada 1,80m, de acordo com o item 4.6.1.13 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.097", title: "SAÍDAS DE EMERGÊNCIA", text: "Os corrimãos intermediários, somente devem ser interrompidos quando o comprimento do patamar for superior a 1,40m, garantindo o espaçamento mínimo de 0,80m entre o término de um segmento e o início do seguinte, de acordo com o item 4.6.1.13 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.098", title: "SAÍDAS DE EMERGÊNCIA", text: "As extremidades dos corrimãos intermediários devem ser dotadas de balaústres ou outros dispositivos para evitar acidentes, de acordo com o item 4.6.1.14 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.099", title: "SAÍDAS DE EMERGÊNCIA", text: "Os materiais e exigências estruturais dos corrimãos, detalhes construtivos, instalação, entre outros itens, devem atender aos requisitos normativos previstos na NBR 9077 da ABNT, de acordo com o item 4.6.1.16 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.100", title: "SAÍDAS DE EMERGÊNCIA", text: "Instalar guarda-corpo na(s) escada(s), de acordo com a alínea e do item 4.3.1.1.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.101", title: "SAÍDAS DE EMERGÊNCIA", text: "Instalar guarda-corpo na(s) rampa(s), de acordo com o item 4.3.2.1.8 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.102", title: "SAÍDAS DE EMERGÊNCIA", text: "Os guarda-corpos devem ser instalados em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.103", title: "SAÍDAS DE EMERGÊNCIA", text: "Toda saída de emergência deve ser protegida de ambos os lados por paredes ou guardas (guarda-corpos) contínuas, sempre que houver qualquer desnível maior de 19 cm, para evitar quedas, de acordo com o item 4.6.2.1 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.104", title: "SAÍDAS DE EMERGÊNCIA", text: "As escadas e rampas que não forem isoladas das áreas adjacentes por paredes devem dispor de guarda-corpo associado ao corrimão, de acordo com o item 4.6.2.2 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.105", title: "SAÍDAS DE EMERGÊNCIA", text: "A altura mínima do guarda-corpo, considerada entre o piso acabado e a parte superior do peitoril, incluindo eventuais muretas deve ser de 1,05m, de acordo com o item 4.6.2.3 da NT10/2015-CBMDF.  (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.106", title: "SAÍDAS DE EMERGÊNCIA", text: "A altura das guardas em escadas externas, de seus patamares, de balcões e assemelhados, quando a mais de 12,00m acima do solo adjacente, deve ser de, no mínimo, 1,30m, de acordo com o item 4.6.2.5 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.107", title: "SAÍDAS DE EMERGÊNCIA", text: "As guardas constituídas por balaustradas, grades, telas e assemelhados, isto é, as guardas vazadas, devem ter balaústres verticais, grades, telas, vidros de segurança laminados ou aramados, de modo que uma esfera de 11 cm de diâmetro não possa passar por nenhuma abertura, de acordo com a alínea a do item 4.6.2.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.108", title: "SAÍDAS DE EMERGÊNCIA", text: "Os guarda-corpos constituídos por perfis (do tipo gradil), a distância entre perfis (vão luz) não deve ser superior a 11 cm, de acordo com a alínea b do item 4.6.2.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.109", title: "SAÍDAS DE EMERGÊNCIA", text: "Os guarda-corpos devem ser isentos de aberturas, saliências, reentrâncias ou quaisquer elementos que possam enganchar em roupas, de acordo com a alínea c do item 4.6.2.6 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.110", title: "SAÍDAS DE EMERGÊNCIA", text: "É vedada a utilização, de componentes que facilitem a escalada por crianças (ornamentos e travessas que possam ser utilizados como degraus), de acordo com o item 4.6.2.7 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.111", title: "SAÍDAS DE EMERGÊNCIA", text: "Os materiais e exigências estruturais dos guarda-corpos, detalhes construtivos, instalação, entre outros itens, devem atender aos requisitos normativos previstos na NBR 14718 da ABNT, de acordo com o item 4.6.2.8 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.112", title: "SAÍDAS DE EMERGÊNCIA", text: "Os vidros utilizados como guarda-corpo devem ser de segurança, não estilhaçável, do tipo laminado ou aramado, de acordo com o item 4.6.3.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.113", title: "SAÍDAS DE EMERGÊNCIA", text: "Deve ser instalada sinalização complementar nos vidros, e em qualquer elemento translúcido ou transparente, utilizados em esquadrias destinadas ao fechamento de vãos que fazem parte da rota de saída, de acordo com a Norma Técnica específica de sinalização de segurança contra incêndio, de acordo com o item 4.6.3.1 da NT10/2015-CBMDF. (Arts. 3º, III,b, e 6º, do Dec. 23.154/2002)"},
+    { id: "05.114", title: "SAÍDAS DE EMERGÊNCIA", text: "As construções subterrâneas (ou subsolos) e as edificações sem janela, conforme conceito dado pela NBR 9077 da ABNT, devem atender o dimensionamento das saídas e escadas verificados na Tabela 11 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.115", title: "SAÍDAS DE EMERGÊNCIA", text: "Instalar placa com a indicação da capacidade de público para local ou pavimento, de acordo com o projeto aprovado. A placa deverá ser fixada em local visível ao público e de tamanho compatível ao local, conforme Decisão Técnica 05/2021-CSESCIP/CBMDF - Fixação da população para fins de adequações das saídas de emergência das edificações existentes."},
+    { id: "05.116", title: "SAÍDAS DE EMERGÊNCIA", text: "Instalar placa com a indicação da capacidade de público para a população exclusivamente para área de quadras poliesportivas sem arquibancadas, localizadas dentro das edificações com destinações escolares, única e exclusivamente para fins da prática esportiva, sendo proibida a ocupação/uso para fins ou atividade de concentração de público, de acordo com o projeto aprovado. A placa deverá ser fixada em local visível ao público e de tamanho compatível ao local, conforme Decisão Técnica 10/2021-CSESCIP/CBMDF - Cálculo da população exclusivamente para área de quadras poliesportivas."},
+    { id: "05.117", title: "SAÍDAS DE EMERGÊNCIA", text: "Em qualquer edificação, os pavimentos sem saída em nível para o espaço livre exterior devem ser dotados de escadas, enclausuradas ou não, as quais devem atender a todos os pavimentos, acima e abaixo da descarga, mas terminando obrigatoriamente no piso desta, não podendo ter comunicação direta com outro lanço na mesma prumada, devendo ter compartimentação com resistência de 02 h ao fogo, na divisão entre os lanços ascendente e descendente em relação ao piso de descarga, exceto para escadas não enclausuradas, onde a interrupção deve ser apresentada por meio de sinalização de segurança contra incêndio e iluminação de emergência, de acordo com a alínea f do item 4.3.1.1.1 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.118", title: "SAÍDAS DE EMERGÊNCIA", text: "A lógica do funcionamento do sistema de detecção de fumaça deve assegurar que todos os detectores instalados na edificação ativem o sistema de pressurização na presença de fumaça, exceto os posicionados no interior do compartimento dos ventiladores, que deve ter ação inversa, desligando ou mantendo inativo o sistema, de modo a não transferir a fumaça para o interior da escada. O comando destas operações deve partir da central de detecção e alarme, que deve monitorar todos os detectores instalados, de acordo com o item 6.7.11 da NBR 14.880/2014. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.119", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas devem ter condições de serem abertas com um único movimento e suas maçanetas devem ser do tipo alavanca, instaladas a uma altura entre 0,90m e 1,10m, de acordo com o item 4.2.2.11.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "05.120", title: "SAÍDAS DE EMERGÊNCIA", text: "Quando as portas forem providas de dispositivos de acionamento pelo usuário, estes devem estar instalados à altura entre 0,90m e 1,10m do piso acabado. Quando instalados no sentido de varredura da porta, os dispositivos devem distar entre 0,80m e 1,00m da área de abertura, de acordo com o item 4.2.2.11.4 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
 ];
+// 1. Função para extrair os títulos únicos e popular o filtro
+function populateFilter() {
+    const filterSelect = document.getElementById('filter-select');
+    // Mapeia, remove duplicatas e adiciona 'MOSTRAR TODOS'
+    const uniqueTitles = ['MOSTRAR TODOS', ...new Set(checklistData.map(item => item.title))];
+
+    filterSelect.innerHTML = ''; // Limpa opções antigas
+    uniqueTitles.forEach(title => {
+        const option = document.createElement('option');
+        option.value = title;
+        option.textContent = title;
+        filterSelect.appendChild(option);
+    });
+}
+// NOVO: Armazenamento global dos IDs dos itens selecionados para preservar o estado no filtro.
+let selectedItemIds = [];
+
 
 // 1. Função para extrair os títulos únicos e popular o filtro
 function populateFilter() {
@@ -119,123 +384,150 @@ function populateFilter() {
 
 
 // ******************************************************
-// FUNÇÕES DE UTILIDADE E BUSCA (AGORA COM SUPORTE A HTML)
+// FUNÇÕES DE UTILIDADE E ESTADO (MODIFICADAS)
 // ******************************************************
 
-// Fallback (Método antigo, apenas texto simples)
-function fallbackCopy(text, successMessage) {
-    navigator.clipboard.writeText(text).then(() => {
-        const messageElement = document.getElementById('copy-message');
-        messageElement.textContent = successMessage;
-        messageElement.classList.add('show');
-        
-        setTimeout(() => {
-            messageElement.classList.remove('show');
-        }, 2000);
-    }).catch(err => {
-        console.error('Erro ao copiar (Fallback): ', err);
-        alert('Erro ao copiar o texto. Por favor, verifique as permissões do navegador.');
-    });
-}
-
-// Função utilitária para copiar texto e mostrar feedback (NOVA VERSÃO - Múltiplos formatos)
-function copyToClipboard(plainText, htmlText, successMessage) {
-    
-    // 1. Tenta usar a API ClipboardItem (suporta vários formatos)
-    if (typeof ClipboardItem !== 'undefined') {
-        const blobPlain = new Blob([plainText], { type: 'text/plain' });
-        const blobHtml = new Blob([htmlText], { type: 'text/html' });
-
-        const item = new ClipboardItem({
-            'text/plain': blobPlain,
-            'text/html': blobHtml
-        });
-        
-        navigator.clipboard.write([item]).then(() => {
-            const messageElement = document.getElementById('copy-message');
-            messageElement.textContent = successMessage;
-            messageElement.classList.add('show');
-            
-            setTimeout(() => {
-                messageElement.classList.remove('show');
-            }, 2000);
-        }).catch(err => {
-            console.error('Erro ao copiar (ClipboardItem): ', err);
-            // Fallback para o método antigo se a nova API falhar
-            fallbackCopy(plainText, successMessage);
-        });
-    
-    // 2. Fallback para navegadores que não suportam ClipboardItem
-    } else {
-        fallbackCopy(plainText, successMessage);
-    }
-}
-
-
-// 1. Função para atualizar o contador de itens selecionados
+// 1. Função para atualizar o contador de itens selecionados (agora usa o array de estado)
 function updateSelectionCount() {
-    const count = document.querySelectorAll('.checklist-item.selected').length;
+    // Usa o array de estado global
+    const count = selectedItemIds.length;
     const button = document.getElementById('copy-selected-btn');
     button.textContent = `Copiar Itens Selecionados (${count})`;
 }
 
-// 2. Função para alternar a seleção de um item (chamada no clique)
-function toggleSelection(element) {
-    element.classList.toggle('selected');
-    updateSelectionCount(); // Atualiza o contador após a seleção/desseleção
+// FUNÇÃO: Deseleciona todos os itens e atualiza o contador (MODIFICADA)
+function clearSelection() {
+    // Limpa o estado global
+    selectedItemIds = []; 
+    // Deseleciona apenas os itens que estão VISÍVEIS (removendo a classe)
+    document.querySelectorAll('.checklist-item.selected').forEach(item => {
+        item.classList.remove('selected');
+    });
+    updateSelectionCount();
 }
 
-// 3. NOVA FUNÇÃO: Copiar todos os itens selecionados
-function copySelectedItems() {
-    const selectedItems = document.querySelectorAll('.checklist-item.selected');
+
+// Função utilitária para copiar texto (simples e HTML) e mostrar feedback (MANTIDA)
+function copyToClipboard(plainText, htmlText, successMessage) {
+    // Verifica se a API de cópia mais avançada (rich text) está disponível
+    if (typeof ClipboardItem !== 'undefined' && navigator.clipboard.write) {
+        // Usa ClipboardItem para copiar texto simples E HTML (rich text)
+        const blobPlain = new Blob([plainText], { type: 'text/plain' });
+        const blobHtml = new Blob([htmlText], { type: 'text/html' });
+        
+        const data = [
+            new ClipboardItem({
+                'text/plain': blobPlain,
+                'text/html': blobHtml
+            })
+        ];
+
+        navigator.clipboard.write(data).then(() => {
+            // Lógica de feedback de sucesso
+            const messageElement = document.getElementById('copy-message');
+            messageElement.textContent = successMessage;
+            messageElement.classList.add('show');
+            
+            // Remove a mensagem após 2 segundos
+            setTimeout(() => {
+                messageElement.classList.remove('show');
+            }, 2000);
+
+            // **NOVA FUNCIONALIDADE**: Deseleciona todos os itens após a cópia bem-sucedida.
+            clearSelection();
+
+        }).catch(err => {
+            console.error('Erro ao copiar HTML/Rich Text: ', err);
+            // Fallback: tenta a cópia simples
+            navigator.clipboard.writeText(plainText).then(() => {
+                const messageElement = document.getElementById('copy-message');
+                messageElement.textContent = successMessage + ' (apenas texto simples - fallback)';
+                messageElement.classList.add('show');
+                setTimeout(() => {
+                    messageElement.classList.remove('show');
+                }, 2000);
+                
+                // **NOVA FUNCIONALIDADE**: Deseleciona todos os itens após a cópia bem-sucedida.
+                clearSelection();
+            }).catch(err => {
+                console.error('Erro ao copiar fallback: ', err);
+                alert('Erro ao copiar o texto. Por favor, verifique as permissões do navegador.');
+            });
+        });
+
+    } else {
+        // Fallback para navegadores sem suporte a ClipboardItem (apenas texto simples)
+        navigator.clipboard.writeText(plainText).then(() => {
+            const messageElement = document.getElementById('copy-message');
+            messageElement.textContent = successMessage + ' (apenas texto simples - fallback)';
+            messageElement.classList.add('show');
+            setTimeout(() => {
+                messageElement.classList.remove('show');
+            }, 2000);
+            
+            // **NOVA FUNCIONALIDADE**: Deseleciona todos os itens após a cópia bem-sucedida.
+            clearSelection();
+            
+        }).catch(err => {
+            console.error('Erro ao copiar fallback: ', err);
+            alert('Erro ao copiar o texto. Por favor, verifique as permissões do navegador.');
+        });
+    }
+}
+
+
+// 2. Função para alternar a seleção de um item (chamada no clique) (MODIFICADA)
+function toggleSelection(element, itemId) {
+    element.classList.toggle('selected');
     
-    if (selectedItems.length === 0) {
+    const index = selectedItemIds.indexOf(itemId);
+    
+    if (index > -1) {
+        // Se já estava selecionado, remove o ID do array de estado
+        selectedItemIds.splice(index, 1);
+    } else {
+        // Se não estava selecionado, adiciona o ID ao array de estado
+        selectedItemIds.push(itemId);
+    }
+    
+    updateSelectionCount(); // Atualiza o contador
+}
+
+// 3. NOVA FUNÇÃO: Copiar todos os itens selecionados (MODIFICADA para usar o array de estado)
+function copySelectedItems() {
+    if (selectedItemIds.length === 0) {
         alert('Selecione pelo menos um item para copiar!');
         return;
     }
 
-    const selectedTexts = Array.from(selectedItems)
-        .map(item => item.getAttribute('data-full-text'));
-
+    // Filtra os dados originais usando os IDs selecionados
+    const selectedTexts = checklistData
+        .filter(item => selectedItemIds.includes(item.id))
+        .map(item => `${item.id} - ${item.text}`);
+    
     // 1. TEXTO SIMPLES: Usa uma única quebra de linha
     const plainTextToCopy = selectedTexts.join('\r\n');
     
     // 2. TEXTO HTML: Inclui a formatação de parágrafo completa
     // ESTILO DESEJADO: font-size:12pt;font-family:Calibri;text-indent:25mm;text-align:justify;word-wrap:normal;margin:6pt;
-    // const paragraphStyle = 'font-size:12pt;font-family:Calibri;text-indent:25mm;text-align:justify;word-wrap:normal;margin:6pt;';
+    const paragraphStyle = 'font-size:12pt;font-family:Calibri;text-indent:25mm;text-align:justify;word-wrap:normal;margin:6pt;';
     
     const htmlToCopy = selectedTexts
         // Envolve cada linha em uma tag <p> com o estilo definido
-        .map(text => `<p class="I01_Justificado_Recuo_Primeira_Linha">${text}</p>`)
+        .map(text => `<p style="${paragraphStyle}">${text}</p>`)
         .join(''); // Junta sem separador extra, pois as tags <p> criam os parágrafos
 
-    const successMessage = `✅ ${selectedItems.length} item(ns) copiado(s) para a área de transferência!`;
+    const successMessage = `✅ ${selectedTexts.length} item(ns) copiado(s) para a área de transferência!`;
     
     // Chama a função de cópia que lida com texto e HTML
     copyToClipboard(plainTextToCopy, htmlToCopy, successMessage);
 }
 
 
-// Funções de Filtro e Busca (MANTIDAS)
-function populateFilter() {
-    // ... (Mantida igual)
-    const filterSelect = document.getElementById('filter-select');
-    const uniqueTitles = ['MOSTRAR TODOS', ...new Set(checklistData.map(item => item.title))];
-
-    filterSelect.innerHTML = ''; 
-    uniqueTitles.forEach(title => {
-        const option = document.createElement('option');
-        option.value = title;
-        option.textContent = title;
-        filterSelect.appendChild(option);
-    });
-}
+// Funções de Filtro e Busca (REMOVIDA A LÓGICA DE LIMPAR SELEÇÃO)
 
 function searchChecklist(searchTerm) {
-    // ... (Mantida igual, mas garante que a seleção seja limpa ao buscar)
-    document.querySelectorAll('.checklist-item.selected').forEach(item => item.classList.remove('selected'));
-    updateSelectionCount();
-
+    // A seleção é PRESERVADA porque o estado está no array selectedItemIds
     const filterSelect = document.getElementById('filter-select');
     filterSelect.value = 'MOSTRAR TODOS';
     filterSelect.disabled = searchTerm.trim().length > 0;
@@ -256,10 +548,7 @@ function searchChecklist(searchTerm) {
 }
 
 function filterChecklist(selectedTitle) {
-    // ... (Mantida igual, mas garante que a seleção seja limpa ao filtrar)
-    document.querySelectorAll('.checklist-item.selected').forEach(item => item.classList.remove('selected'));
-    updateSelectionCount();
-    
+    // A seleção é PRESERVADA porque o estado está no array selectedItemIds
     document.getElementById('search-input').value = '';
     
     let filteredData;
@@ -274,7 +563,7 @@ function filterChecklist(selectedTitle) {
 }
 
 
-// 4. Função de renderização (MODIFICADA para chamar toggleSelection)
+// 4. Função de renderização (MODIFICADA para preservar o estado visual)
 function renderChecklist(dataToRender = checklistData) {
     const container = document.getElementById('checklist-container');
     container.innerHTML = '';
@@ -306,12 +595,17 @@ function renderChecklist(dataToRender = checklistData) {
             const itemDiv = document.createElement('div');
             itemDiv.classList.add('checklist-item');
             
-            // Define o texto completo para cópia (será lido pela função copySelectedItems)
+            // Define o texto completo para cópia (método alternativo)
             const fullText = `${item.id} - ${item.text}`;
             itemDiv.setAttribute('data-full-text', fullText);
             
-            // **MUDANÇA AQUI**: Clique agora alterna a seleção
-            itemDiv.onclick = () => toggleSelection(itemDiv);
+            // NOVO: Aplica a classe 'selected' se o ID estiver no array global
+            if (selectedItemIds.includes(item.id)) {
+                itemDiv.classList.add('selected');
+            }
+            
+            // **MUDANÇA AQUI**: Clique agora chama toggleSelection com o itemDiv e o ID
+            itemDiv.onclick = () => toggleSelection(itemDiv, item.id);
 
             // Conteúdo visível do item
             itemDiv.innerHTML = `<span class="item-id">${item.id}</span> ${item.text}`;
