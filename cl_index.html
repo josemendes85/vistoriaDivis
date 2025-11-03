@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Segurança Contra Incêndio</title>
+    <link rel="stylesheet" href="cl_style.css"> 
+</head>
+<body>
+    <header>
+        <h1>Checklist de Segurança Contra Incêndio e Pânico</h1>
+    </header>
+
+    <div class="controls">
+        <label for="search-input">Buscar por texto ou número (ex.: 01.001, SPDA):</label>
+        <input type="text" id="search-input" onkeyup="searchChecklist(this.value)" placeholder="Digite para filtrar os itens...">
+        <br><br>
+        
+        <label for="filter-select">Filtrar por Título (Agrupamento):</label>
+        <select id="filter-select" onchange="filterChecklist(this.value)">
+            </select>
+        
+        <hr style="margin: 15px 0;">
+        
+        <button id="copy-selected-btn" onclick="copySelectedItems()">Copiar Itens Selecionados (0)</button>
+        <p style="font-size: 0.9em; color: #777;">Clique em um item da lista para selecioná-lo/desselecioná-lo.</p>
+
+    </div>
+
+    <div id="checklist-container">
+        </div>
+
+    <p id="copy-message" class="copy-success"></p>
+
+    <script src="cl_script.js"></script> 
+</body>
+</html>
