@@ -1162,9 +1162,10 @@
 						Utils.showToast("Dados do CNPJ preenchidos!", "success");
 
 						// -------- NOVA LÓGICA PARA BUSCAR COORDENADAS --------
-						const enderecoParaGeocodificar = encodeURIComponent(enderecoCompleto + ', Brasil'); // Adicione 'Brasil' para melhor precisão
+/*
+						const enderecoParaGeocodificar = encodeURIComponent(data.razao_social + ' ' + data.logradouro); // Adicione 'Brasil' para melhor precisão
 						Utils.showToast("Buscando coordenadas geográficas...", "info");
-						fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${enderecoParaGeocodificar}&limit=1`)
+						fetch(`https://nominatim.openstreetmap.org/ui/search.html?q=${enderecoParaGeocodificar}&limit=1`)
 							.then(geoResponse => {
 								if (!geoResponse.ok) {
 									throw new Error('Erro ao buscar coordenadas. Status: ' + geoResponse.status);
@@ -1191,7 +1192,7 @@
 								Utils.showToast('Erro ao buscar coordenadas. Tente novamente mais tarde.', "danger");
 							});
 						// ---------------- FIM DA NOVA LÓGICA ----------------
-
+*/
 					})
 					.catch(error => {
 						console.error('Erro na requisição da API de CNPJ:', error);

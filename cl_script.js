@@ -348,6 +348,137 @@ const checklistData = [
     { id: "05.118", title: "SAÍDAS DE EMERGÊNCIA", text: "A lógica do funcionamento do sistema de detecção de fumaça deve assegurar que todos os detectores instalados na edificação ativem o sistema de pressurização na presença de fumaça, exceto os posicionados no interior do compartimento dos ventiladores, que deve ter ação inversa, desligando ou mantendo inativo o sistema, de modo a não transferir a fumaça para o interior da escada. O comando destas operações deve partir da central de detecção e alarme, que deve monitorar todos os detectores instalados, de acordo com o item 6.7.11 da NBR 14.880/2014. (Art. 6º, do Dec. 23.154/2002)"},
     { id: "05.119", title: "SAÍDAS DE EMERGÊNCIA", text: "As portas devem ter condições de serem abertas com um único movimento e suas maçanetas devem ser do tipo alavanca, instaladas a uma altura entre 0,90m e 1,10m, de acordo com o item 4.2.2.11.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
     { id: "05.120", title: "SAÍDAS DE EMERGÊNCIA", text: "Quando as portas forem providas de dispositivos de acionamento pelo usuário, estes devem estar instalados à altura entre 0,90m e 1,10m do piso acabado. Quando instalados no sentido de varredura da porta, os dispositivos devem distar entre 0,80m e 1,00m da área de abertura, de acordo com o item 4.2.2.11.4 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+
+    { id: "06.001", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O sistema de hidrantes de parede deve ser instalado em conformidade com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.002", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O sistema de proteção por hidrantes de parede deve ser instalado em conformidade com o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.003", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de hidrante de parede instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.004", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os hidrantes de parede devem ser instalados de forma que a distância entre eles não seja maior que 30m, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.005", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A altura de instalação do hidrante de parede deve estar entre 1,30 a 1,50m medida da face superior do piso acabado ao eixo horizontal do registro de hidrante, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.006", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os hidrantes de parede devem ser instalados de forma que haja, no mínimo, um hidrante por pavimento, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.007", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os hidrantes de parede devem ser instalados de modo que qualquer ponto seja alcançado simultaneamente por duas linhas de mangueira de hidrantes distintos, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.008", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os hidrantes de parede devem ser instalados em locais estratégicos de modo a evitar que em caso de incêndio fiquem bloqueados pelo fogo, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.009", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os hidrantes de parede instalados em garagens, não podem estar localizados de forma que seu acesso fique dificultado por veículo estacionado, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.010", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os abrigos dos hidrantes devem dispor no mínimo de mangueira de incêndio e um esguicho, de acordo com o a NT04/2000-CBMDF. (Arts. 4º, d, e 6º, do Dec. 23.154/2002)"},
+    { id: "06.011", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As mangueiras de incêndio devem estar acondicionadas de maneira que facilite o seu manuseio, de acordo com a NT04/2000-CBMDF. (Arts. 3º, II, c, e 6º, do Dec. 23.154/2002)"},
+    { id: "06.012", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O comprimento das linhas de mangueira deve ser de no máximo 30m, dividido em duas mangueiras de 15m, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.013", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O diâmetro das mangueiras deve ser de no mínimo 38mm, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.014", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Substituir ou manutenir as mangueiras de incêndio que se encontram danificadas, de acordo com a NBR 12779/04 da ABNT. (Arts. 3º, II, d, e 6º, do Dec. 23.154/2002)"},
+    { id: "06.015", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A RTI - Reserva Técnica de Incêndio deve possuir capacidade, em litros de água, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.016", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O reservatório de água destinada à RTI - Reserva Técnica de Incêndio, deve ser resistente a 04 horas de fogo e superior, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.017", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O reservatório quando externo metálico ou de polietileno deve ter distanciamento mínimo de 03m da edificação, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.018", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Apresentar reservatório superior ou apresentar dados que justifiquem a utilização de reservatório inferior, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.019", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A saída de consumo do reservatório superior deve sair lateralmente a esta, de forma a manter a RTI - Reserva Técnica de Incêndio, pela diferença do nível da canalização da saída e o fundo da caixa d'água, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.020", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A canalização do dreno de limpeza da caixa d'água deve ser metálica no mínimo até o registro."},
+    { id: "06.021", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A altura do reservatório elevado ou a capacidade das bombas deverá suprir a vazão e pressão mínima exigida, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.022", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Deve ser instalado no mínimo 02 bombas de incêndio, sendo uma principal e outra reserva ambas com as mesmas especificações, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.023", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Instalar válvula de retenção e derivação 'by pass' na rede hidráulica de incêndio a fim de garantir o funcionamento do sistema por gravidade, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.024", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O conjunto de bombas de incêndio deve entrar em funcionamento automaticamente quando da utilização do sistema de hidrante de parede, de acordo com a NBR 13714/00 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.025", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As bombas de incêndio devem possuir instalação independente da rede elétrica geral, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.026", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Deve ser instalado dreno para teste de funcionamento das bombas de incêndio, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.027", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Instalar registro antes e depois das bombas e válvulas de retenção na saída das bombas para evitar refluxo de água no sistema, de acordo com a NBR 13714/00 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.028", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Instalar dois sistemas de alimentação podendo ser elétrico ou a explosão, sendo o último com combustível suficiente para funcionamento durante 02 horas, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.029", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As bombas de incêndio devem ser locadas em abrigo com dimensões mínimas de 1,50 x 1,50 x 1,50m, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.030", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os abrigos dos hidrantes não podem ser utilizados como depósitos de materiais estranhos ao sistema mesmo por curto espaço de tempo, de acordo com a NT04/2000-CBMDF. (Arts. 5º, c, e 6º, do Dec. 23.154/2002)"},
+    { id: "06.031", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O acesso ao abrigo deve possuir dimensões mínimas de 1,40 x 0,50m, no caso de acesso por alçapão, este deve possuir dimensões mínimas de 0,70 x 0,70m, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.032", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Identificar o barramento de energia do conjunto de bombas de incêndio, de acordo com a NT04/2000CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.033", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O quadro de comando das bombas deve ser instalado de maneira a não possuir ponto neutro, conforme a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.034", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O quadro de comando das bombas deve ser instalado na casa de bombas, conforme Anexo B da NBR 13714/2000 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.035", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O conjunto de bombas deve ser instalado de forma que na falha da bomba principal, a bomba reserva entre em funcionamento automaticamente, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.036", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As bombas de incêndio devem possuir dispositivos que possibilitem o acionamento manual, de acordo a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.037", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As bombas de incêndio devem funcionar manualmente, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.038", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As bombas de incêndio que não estiverem situadas abaixo do nível de tomada d'água (afogadas) devem ter um dispositivo de escorva automática, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.039", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O material utilizado nas canalizações, conexões e registros utilizados no sistema de hidrante devem ser de ferro fundido, galvanizado, aço galvanizado e cobre resistentes às pressões internas e esforços mecânicos, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.040", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Alterar o diâmetro da canalização (50mm para A e B-1 e 63mm para demais riscos), de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.041", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A canalização do barrilete deve ser um diâmetro nominal acima do diâmetro da canalização utilizada no sistema, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.042", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A canalização de incêndio aparente deve ser pintada na cor vermelha, de acordo com a NT04/2000CBMDF. (Arts. 3º, II, g, e 6º, do Dec. 23.154/2002)"},
+    { id: "06.043", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Quando da utilização de canalizações externa a edificação do tipo termoplástica estas devem ser enterradas a no mínimo 50 cm e resistentes às pressões internas e esforços mecânicos necessários ao funcionamento do sistema, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.044", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Instalar sinalização de piso dos hidrantes de parede locados em garagens, indústrias ou depósitos (quadrado vermelho 70 x 70 cm com moldura amarela de 15 cm), de acordo com a alínea I do item 6.1.4 da NT22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.045", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os abrigos dos hidrantes devem ser pintados na cor vermelha, com dimensões suficientes para acomodar o registro, o esguicho e a mangueira, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.046", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Instalar hidrante de recalque, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.047", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Instalar adaptador e tampão de 2 e 1/2 pol., de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.048", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Locar o hidrante de recalque entre 01 e 10m do meio-fio da via de acesso, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.049", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A caixa do hidrante de recalque deve ter as dimensões de 0,50 x 0,50 x 0,50m, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.050", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O hidrante de recalque deve possuir válvula de retenção que possibilite o fluxo de água somente para o interior da edificação, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.051", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A tampa da caixa do hidrante de recalque deve ser de ferro com a inscrição INCÊNDIO e pintada na cor vermelha, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.052", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O registro do hidrante de recalque deve ficar no máximo a 15 cm de profundidade e ângulo de 45° de forma que facilite o engate da mangueira da viatura do CBMDF, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.053", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O hidrante de recalque localizado na fachada da edificação deve possuir fácil acesso e sinalização de modo a facilitar sua visualização, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.054", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Manutenir o hidrante de recalque que se encontra danificado de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.055", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A pressão na saída do requinte nos hidrantes deve ser entre 10 e 40mca, de acordo com a NT04/2000CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.056", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A vazão mínima no requinte deve estar de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.057", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O jato d'água deve atingir a uma distância mínima de 10m, com o esguicho na posição horizontal a 01m de altura, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.058", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os abrigos dos hidrantes não podem ser fechados por chaves ou cadeados, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.059", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os esguichos dos hidrantes de parede devem ser do tipo reguláveis de acordo com o a NT04/2000CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.060", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os registros dos hidrantes devem ser do tipo globo com adaptador para junta storz de 38 ou 63mm, onde serão estabelecidas as linhas de mangueiras, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.061", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Manutenir os abrigos dos hidrantes de parede que se encontram danificados, de acordo com a NT04/2000-CBMDF. (Arts. 3º, II, b, e 6º, do Dec. 23.154/2002)"},
+    { id: "06.062", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Substituir ou manutenir esguichos, adaptadores ou engates, que se encontram danificados, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.063", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Apresentar memoriais descritivos e de cálculos do sistema de hidrantes de parede, de acordo com a IN 001/2021 - DESEG/CBMDF."},
+    { id: "06.064", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Instalar puxadores nas portas dos abrigos dos hidrantes de parede, de acordo com a NT04/2000CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.065", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Retirar vazamentos do sistema de hidrantes de parede, conforme a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.066", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As mangueiras de incêndio devem ser do tipo compatível à destinação da edificação em conformidade ao item 4.1 da NBR 11861/98 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.067", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "A mangueira deve ser identificada com o nome e/ou marca do fabricante, número da NBR 11861/98 da ABNT, tipo de mangueira, mês e ano de fabricação. Esta marcação deve ser indelével, em caracteres de 25mm de altura mínima, iniciando à distância de 0,5m a 1,4m de cada extremidade da mangueira, em conformidade ao item 4.3 da NBR 11861/98 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.068", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Toda mangueira deve receber uma identificação individual, por meio de uma abraçadeira plástica numerada (tipo lacre) presa no corpo da mangueira, próximo à união, realizada por empresa capacitada, a partir de sua primeira inspeção, conforme item 4 da NBR 12779/09 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.069", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Deverá ser apresentado o último relatório válido de inspeção e de manutenção como documento comprobatório de aprovação da mangueira para uso em combate a incêndio, conforme item 4.9 da NBR 12779/09 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.070", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "O certificado de inspeção e de manutenção deve ter como informações mínimas: identificação individual, fabricante, marca do duto flexível e uniões, diâmetro, comprimento, tipo, inspeção ou manutenção, data de execução, data da próxima inspeção e/ou manutenção, nome e assinatura do responsável pela inspeção e/ou manutenção, conforme item 4.7 da NBR 12779/09 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.071", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Deverá ser apresentado o certificado de inspeção da mangueira de incêndio, com validade máxima de seis meses, conforme item 4.1 da NBR 12779/09 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.072", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Deverá ser apresentado o certificado de manutenção da mangueira de incêndio, com validade máxima de doze meses, conforme item 4.1 da NBR 12779/09 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.073", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "Os abrigos dos hidrantes não podem ser fechados por chaves ou cadeados, de acordo com a NT04/2000-CBMDF, exceto quando empregados em locais sujeitos a vandalismo, eles podem ser fechados a chave, desde que existam meios que permitam o rápido acesso aos equipamentos no interior do abrigo em situação de emergência, conforme item 4.2.6 da NBR 16870/20 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.074", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As bombas de incêndio devem ser protegidas contra danos mecânicos, intempéries, agentes químicos, fogo ou umidade, de acordo com o anexo B, item 1.4 da ABNT NBR 13.714/2000 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "06.075", title: "SISTEMAS DE PROTEÇÃO POR HIDRANTES", text: "As chaves elétricas de alimentação das bombas de incêndio devem ser sinalizadas com a inscrição 'ALIMENTAÇÃO DA BOMBA DE INCÊNDIO - NÃO DESLIGUE', de acordo com o item B.2.2 da ABNT NBR 13.714/2000. (Art. 6º, do Dec. 23.154/2002)"},
+
+    { id: "07.001", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O Sistema de Proteção contra Descargas Atmosféricas (SPDA) deve ser instalado em conformidade com a NBR 5419-3:2015 da ABNT. (Arts. 3º, II, h, e 6º, do Dec. 23.154/2002)"},
+    { id: "07.002", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O sistema de proteção contra descargas atmosféricas (SPDA) deve ser instalado em conformidade o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.003", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução do sistema de Proteção contra Descargas Atmosféricas instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.004", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Apresentar o laudo de continuidade e aterramento elétrico do Sistema de Proteção contra Descargas Atmosféricas (SPDA) da edificação (estruturas contendo munição ou explosivos, ou em locais expostos à corrosão atmosféricas severa ou ainda estruturas pertencentes a fornecedores de serviços considerados essenciais (energia, água, sinais, etc), com validade máxima de 01 ano e o documento de responsabilidade técnica de sua execução, visado no respectivo órgão de classe NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.005", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Apresentar o laudo de continuidade e aterramento elétrico do Sistema de Proteção contra Descargas Atmosféricas (SPDA) da edificação, com validade máxima de 03 anos e o documento de responsabilidade técnica de sua execução, visado no respectivo órgão de classe NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.006", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Aterrar todas as massas metálicas da cobertura ao SPDA, conforme a NBR 5419:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.007", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O dimensionamento do módulo da malha de captação deve estar de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.008", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Para coberturas de sapé ou palha onde não sejam utilizadas barras de aço para sustentação do material, a distância entre os condutores do subsistema de captação e o material deve ser maior que 0,15m. Para outros materiais combustíveis, 0,10m, conforme NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.009", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A cobertura metálica de chumbo deve ter espessura mínima de 2,0mm, de acordo com a NBR 5419- 3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.010", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A cobertura metálica de aço (inoxidável, galvanizado a quente) deve ter espessura mínima de 0,5mm, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.011", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A cobertura metálica de titânio deve ter espessura mínima de 0,5mm, de acordo com a NBR 5419- 3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.012", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A cobertura metálica de cobre deve ter espessura mínima de 0,5mm, de acordo com a NBR 5419- 3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.013", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A cobertura metálica de alumínio deve ter espessura mínima de 0,65mm, de acordo com a NBR 5419- 3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.014", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A cobertura metálica de zinco deve ter espessura mínima de 0,7mm, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.015", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Dividir o sistema de captação da edificação, classificada no nível de proteção I, em módulos de malha de 05 x 05m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.016", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Dividir o sistema de captação da edificação, classificada nos níveis de proteção II, em módulos de malha de 10 x 10m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.017", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Dividir o sistema de captação da edificação, classificada nos níveis de proteção III, em módulos de malha de 15 x 15m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.018", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Dividir o sistema de captação da edificação, classificada no nível de proteção IV, em módulos de malha de 20 x 20m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.019", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Para SPDA não isolado, o número de condutores de descida não pode ser inferior a dois, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.020", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O espaçamento máximo entre os condutores de descidas da edificação, classificada nos níveis de proteção I e II, deve ser de 12m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.021", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O espaçamento máximo entre os condutores de descidas da edificação, classificada no nível de proteção III, deve ser de 18m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.022", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O espaçamento máximo entre os condutores de descidas da edificação, classificada no nível de proteção III, deve ser de 20m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.023", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O espaçamento máximo entre os condutores de descidas da edificação, classificada no nível de proteção IV, deve ser de 24m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.024", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O espaçamento máximo entre os anéis condutores horizontais da edificação, classificada nos níveis de proteção I e II, deve ser de 10m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.025", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O espaçamento máximo entre os anéis condutores horizontais da edificação, classificada no nível de proteção III, deve ser de 15m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.026", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "O espaçamento máximo entre os anéis condutores horizontais da edificação, classificada no nível de proteção IV, deve ser de 20m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.027", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Manter os condutores de descida a uma distância mínima de 10 cm de paredes formadas por material combustível, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.028", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Uma conexão de ensaio deve ser fixada em cada condutor de descida, exceto no caso de condutores de descidas naturais combinados com os eletrodos de aterramento natural (pela fundação), de acordo com a NBR 5419-3:2015. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.029", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Os eletrodos de aterramento em anel devem ser instalados a uma profundidade mínima de 0,50m, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.030", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Os eletrodos de aterramento devem ser instalados externamente ao volume a proteger a uma distância mínima de 1,0m das paredes externas, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.031", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Não pode ser utilizado como eletrodos de aterramento materiais em alumínio, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.032", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Fixar os condutores flexíveis (cabos e cordoalhas) do SPDA a uma distância máxima de 1,0m, de acordo com a NBR 5419-3:2015. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.033", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Fixar os condutores rígidos (fitas e barras) do SPDA a uma distância máxima de 1,5m, de acordo com a NBR 5419-3:2015. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.034", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Não são permitidas emendas em cabos de descida, exceto o conector para ensaios, o qual é obrigatório, a ser instalado próximo do solo (a altura sugerida é 1,5m a partir do piso) de modo a proporcionar fácil acesso para realização de ensaios."},
+    { id: "07.035", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos materiais de cobre destinados à captação e condutores de descida deve ser de 35mm², de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.036", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos materiais de alumínio destinados à captação e condutores de descida deve ser de 70mm², de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.037", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos materiais de aço cobreado IACS 30% destinados à captação e condutores de descida deve ser de 50mm², de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.038", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos materiais de alumínio cobreado IACS 64% destinados à captação e condutores de descida deve ser de 50mm², de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.039", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos materiais de aço galvanizado a quente destinados à captação e condutores de descida deve ser de 50mm², de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.040", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos materiais de aço inoxidável destinados à captação e condutores de descida deve ser de 50mm², de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.041", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos eletrodos de aterramento de cobre deve ser de 50mm² para eletrodos não cravados e de 15mm para eletrodos cravados, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.042", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos eletrodos de aterramento de aço galvanizado à quente deve ser de 70mm² para eletrodos não cravados e de 16mm para eletrodos cravados, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.043", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos eletrodos de aterramento de aço cobreado deve ser de 70mm² para eletrodos não cravados e de 12,7mm para eletrodos cravados, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.044", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos eletrodos de aterramento de aço inoxidável deve ser de 100mm² para eletrodos não cravados e de 15mm para eletrodos cravados, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.045", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A área de seção reta mínima dos condutores que interligam diferentes barramentos de equipotencialização (BEP ou BEL) ou que ligam essas barras ao sistema de aterramento deve ser de 16mm² para cobre não enterrado e de 50mm² para cobre enterrado, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.046", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A área de seção reta mínima dos condutores que interligam diferentes barramentos de equipotencialização (BEP ou BEL) ou que ligam essas barras ao sistema de aterramento deve ser de 25mm² para alumínio não enterrado, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.047", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A área de seção reta mínima dos condutores que interligam diferentes barramentos de equipotencialização (BEP ou BEL) ou que ligam essas barras ao sistema de aterramento deve ser de 50mm² para aço galvanizado a fogo não enterrado e de 80mm² para aço galvanizado a fogo enterrado, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.048", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Dimensionar a distância mínima entre os condutores descida e quaisquer portas e janelas, conforme a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.049", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A(s) caixa(s) de inspeção do SPDA - Sistema de Proteção contra Descargas Atmosféricas deve ser instalada em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.050", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A(s) caixa(s) de inspeção do SPDA - Sistema de Proteção contra Descargas Atmosféricas devem ser instaladas conforme a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.051", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "A secção mínima dos materiais deve estar de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.052", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Deve ser garantida a continuidade elétrica entre as diversas partes que compõem as estruturas, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.053", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "As conexões devem ser feitas de forma segura e por meio de solda elétrica ou exotérmica e conexões mecânicas de pressão (se embutidas, em caixa de inspeção) ou compressão, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)"},
+    { id: "07.054", title: "SISTEMAS DE PROTEÇÃO POR DESCARGAS ATMOSFÉRICAS(SPDA)", text: "Remover o captor radioativo do Sistema de Proteção Contra Descargas Atmosféricas, conforme a Resolução nº 04, de 19 de abril de 1989 da Comissão Nacional de Energia Nuclear (CNEN). (Para obter informações sobre os procedimentos para retirada e destinação adequada a serem dados ao captor entrar em contato com CNEN – 3433-6300"},
 ];
 // 1. Função para extrair os títulos únicos e popular o filtro
 function populateFilter() {
@@ -500,26 +631,60 @@ function copySelectedItems() {
         return;
     }
 
+    // 1. Filtrar e Agrupar os itens selecionados por Título
     // Filtra os dados originais usando os IDs selecionados
-    const selectedTexts = checklistData
-        .filter(item => selectedItemIds.includes(item.id))
-        .map(item => `${item.id} - ${item.text}`);
+    const selectedItems = checklistData
+        .filter(item => selectedItemIds.includes(item.id));
     
-    // 1. TEXTO SIMPLES: Usa uma única quebra de linha
-    const plainTextToCopy = selectedTexts.join('\r\n');
-    
-    // 2. TEXTO HTML: Inclui a formatação de parágrafo completa
-    // ESTILO DESEJADO: font-size:12pt;font-family:Calibri;text-indent:25mm;text-align:justify;word-wrap:normal;margin:6pt;
+    // Agrupar por título
+    const groupedItems = selectedItems.reduce((acc, item) => {
+        if (!acc[item.title]) {
+            acc[item.title] = [];
+        }
+        acc[item.title].push(item);
+        return acc;
+    }, {});
+
+    // Estilo de parágrafo unificado
     const paragraphStyle = 'font-size:12pt;font-family:Calibri;text-indent:25mm;text-align:justify;word-wrap:normal;margin:6pt;';
     
-    const htmlToCopy = selectedTexts
-        // Envolve cada linha em uma tag <p> com o estilo definido
-        .map(text => `<p style="${paragraphStyle}">${text}</p>`)
-        .join(''); // Junta sem separador extra, pois as tags <p> criam os parágrafos
-
-    const successMessage = `✅ ${selectedTexts.length} item(ns) copiado(s) para a área de transferência!`;
+    let plainText = '';
+    let htmlText = '';
     
-    // Chama a função de cópia que lida com texto e HTML
+    // 2. Iterar sobre os grupos para construir os textos
+    for (const title in groupedItems) {
+        const titleText = `- ${title}:`;
+        
+        // Formato: 00.000 - Texto do item
+        const itemTexts = groupedItems[title].map(item => `${item.id} - ${item.text}`);
+
+        // CONSTRUÇÃO DO TEXTO SIMPLES
+        plainText += titleText + '\r\n';
+//        plainText += itemTexts.join('\r\n') + '\r\n\r\n'; // Dupla quebra após o grupo para separar
+
+        // CONSTRUÇÃO DO TEXTO HTML
+        
+        // Título em negrito, com o mesmo estilo de parágrafo
+        const titleHtml = `<p style="${paragraphStyle}font-weight:bold;">${titleText}</p>`;
+        htmlText += titleHtml;
+        
+        // Itens (formato: 00.000 - Texto)
+        const itemsHtml = itemTexts
+            .map(text => `<p style="${paragraphStyle}">${text}</p>`)
+            .join('');
+        htmlText += itemsHtml;
+        
+        // Adicionar um parágrafo de separação (margem)
+//        htmlText += `<p style="margin: 12pt 6pt;"></p>`; 
+    }
+    
+    // 3. Finalizar e chamar a função de cópia
+    // Remove as quebras/parágrafos extras no final
+    const plainTextToCopy = plainText.trim();
+    const htmlToCopy = htmlText.replace(/<p style="margin: 12pt 6pt;"><\/p>$/, '');
+    
+    const successMessage = `✅ ${selectedItems.length} item(ns) copiado(s) para a área de transferência!`;
+    
     copyToClipboard(plainTextToCopy, htmlToCopy, successMessage);
 }
 
