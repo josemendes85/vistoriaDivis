@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coordenadas Geográficas</title>
+
+  <!-- PWA: Manifesto e ícones -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="icons/icon-192.png">
+
+  <!-- iOS suporte -->
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #coords {
+      margin-top: 20px;
+      font-size: 1.2em;
+      color: #333;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Obter Coordenadas Geográficas</h1>
+  <button onclick="getLocation()">Obter Localização</button>
+  <div id="coords"></div>
+
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, showError);
+      } else {
+        alert("Geolocalização não é suportada por este navegador.");
+      }
+    }
+
+    function showPosition(position) {
+      const lat = position.coords.latitude.toFixed(4);
+      const lon = position.coords.longitude.toFixed(4);
+      const coord = `${lat}, ${lon}`;
+
+      document.getElementById("coords").innerText = "Coordenadas: " + coord;
+
+      navigator.clipboard.writeText(coord)
+        .then(() => {
+          alert("Coordenadas copiadas para a área de transferência!");
+        })
+        .catch(err => {
+          console.error("Erro ao copiar para a área de transferência: ", err);
+        });
+    }
+
+    function showError(error) {
+      switch(error.code) {
+        case error.PERMISSION_DENIED:
+          alert("Permissão para geolocalização foi negada.");
+          break;
+        case error.POSITION_UNAVAILABLE:
+          alert("Informação de localização indisponível.");
+          break;
+        case error.TIMEOUT:
+          alert("Tempo de requisição de localização esgotado.");
+          break;
+        default:
+          alert("Ocorreu um erro desconhecido.");
+          break;
+      }
+    }
+
+    // Registrar o Service Worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker registrado com sucesso'))
+        .catch(error => console.log('Falha ao registrar Service Worker:', error));
+    }
+  </script>
+
+</body>
+</html>
