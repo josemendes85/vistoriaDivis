@@ -647,7 +647,7 @@ function copySelectedItems() {
 
     // Estilo de parágrafo unificado
     const paragraphStyle = 'font-size:12pt;font-family:Calibri;text-indent:25mm;text-align:justify;word-wrap:normal;margin:6pt;';
-    
+    const textClass= 'I01_Justificado_Recuo_Primeira_Linha';
     let plainText = '';
     let htmlText = '';
     
@@ -665,12 +665,14 @@ function copySelectedItems() {
         // CONSTRUÇÃO DO TEXTO HTML
         
         // Título em negrito, com o mesmo estilo de parágrafo
-        const titleHtml = `<p style="${paragraphStyle}font-weight:bold;">${titleText}</p>`;
+//        const titleHtml = `<p style="${paragraphStyle}font-weight:bold;">${titleText}</p>`;
+        const titleHtml = `<p class="${textClass}" style="font-weight:bold;">${titleText}</p>`;
         htmlText += titleHtml;
         
         // Itens (formato: 00.000 - Texto)
         const itemsHtml = itemTexts
-            .map(text => `<p style="${paragraphStyle}">${text}</p>`)
+//            .map(text => `<p style="${paragraphStyle}">${text}</p>`)
+            .map(text => `<p class="${textClass}">${text}</p>`)
             .join('');
         htmlText += itemsHtml;
         

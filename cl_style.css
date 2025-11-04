@@ -4,25 +4,48 @@ body {
     color: #333;
     margin: 0;
     padding: 0;
+    /* Novo: Padding para dar espaço ao menu fixo (altura mobile) */
+    padding-top: 180px; 
 }
 
-header {
-    background-color: #d32f2f; /* Vermelho escuro para tema de incêndio */
-    color: white;
-    padding: 20px;
-    text-align: center;
-    margin-bottom: 20px;
-}
-
+/* Container principal dos controles - AGORA É FIXO */
 .controls {
-    max-width: 900px;
-    margin: 0 auto 20px auto;
+    /* Novo: Torna o menu fixo no topo da tela, ocupando 100% da largura */
+    position: fixed; 
+    top: 0; 
+    left: 0;
+    right: 0;
+    z-index: 100; /* Garante que fique acima de outros elementos */
+    /* Removendo estilos de largura/margem que seriam desnecessários ou conflitantes */
+    margin: 0;
+    padding: 0;
+    max-width: initial;
+}
+
+/* Novo: Container interno para centralizar o conteúdo e aplicar o fundo */
+.controls-inner {
+    max-width: 100%; /* Limita a largura do conteúdo interno */
+    margin: 0 auto; /* Centraliza o conteúdo interno */
     padding: 15px;
     background-color: #fff;
-    border-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
+/* Novo: Container para alinhar os elementos em linha no desktop */
+.control-row {
+    display: flex;
+    flex-direction: column; /* Padrão Mobile: elementos empilhados */
+    gap: 10px; 
+}
+
+.control-group {
+    flex-grow: 1; 
+}
+
+/* Estilos de input e select */
+#search-input,
 #filter-select {
     padding: 10px;
     font-size: 16px;
@@ -30,7 +53,7 @@ header {
     border-radius: 4px;
     width: 100%;
     box-sizing: border-box;
-    margin-top: 5px;
+    margin-top: 5px; /* Novo: Espaçamento entre o label e o input */
 }
 
 #checklist-container {
@@ -42,14 +65,16 @@ header {
 #copy-selected-btn {
     padding: 10px 20px;
     font-size: 16px;
-    /* Um verde para indicar ação de sucesso */
     background-color: #2e7d32; 
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    margin-bottom: 10px;
     transition: background-color 0.3s;
+    /* Novo: Ajustes de alinhamento para o layout flex */
+    margin-top: 0;
+    min-height: 44px; /* Altura mínima para alinhar com os campos */
+    flex-shrink: 0;
 }
 
 #copy-selected-btn:hover {
@@ -58,20 +83,12 @@ header {
 
 /* Estilo para o item quando estiver selecionado (clicado) */
 .checklist-item.selected {
-    background-color: #e8f5e9; /* Fundo verde claro */
-    border-left: 5px solid #2e7d32; /* Borda verde */
-    font-weight: bold; /* Opcional: para dar mais destaque ao texto */
+    background-color: #e8f5e9; 
+    border-left: 5px solid #2e7d32; 
+    font-weight: bold; 
 }
 
-#search-input {
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    width: 100%;
-    box-sizing: border-box;
-}
-
+/* Elementos restantes */
 .item-group {
     margin-bottom: 30px;
     border: 1px solid #ddd;
@@ -82,7 +99,7 @@ header {
 }
 
 .group-title {
-    background-color: #ef5350; /* Vermelho claro */
+    background-color: #ef5350; 
     color: white;
     padding: 15px;
     margin: 0;
@@ -99,7 +116,7 @@ header {
 
 /* Requisito: Mouse por cima do item ficará em evidência */
 .checklist-item:hover {
-    background-color: #ffe0e0; /* Cor mais clara para destaque */
+    background-color: #ffe0e0; 
     border-left: 5px solid #d32f2f;
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -124,7 +141,7 @@ header {
     bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
-    background-color: #4caf50; /* Verde */
+    background-color: #4caf50; 
     color: white;
     padding: 10px 20px;
     border-radius: 5px;
@@ -135,4 +152,38 @@ header {
 
 .copy-success.show {
     opacity: 1;
+}
+
+/* ************************************************* */
+/* MEDIA QUERY: Layout em linha para Desktop (> 768px) */
+/* ************************************************* */
+@media (min-width: 768px) {
+    /* Ajusta o padding do body para a altura da barra fixa no desktop (menor) */
+    body {
+        padding-top: 80px; 
+    }
+
+    .control-row {
+        flex-direction: row; /* Desktop: Itens em linha */
+        align-items: flex-end; /* Alinha todos os itens pela base */
+    }
+
+    .control-group {
+        flex-basis: 0; 
+        padding-bottom: 0; 
+    }
+
+    /* Distribuição da largura dos elementos na linha */
+    .control-row .control-group:nth-child(1) {
+        flex-grow: 3; /* Busca: 30% */
+    }
+    
+    .control-row .control-group:nth-child(2) {
+        flex-grow: 4; /* Filtro: 40% */
+    }
+    
+    #copy-selected-btn {
+        flex-grow: 1.5; /* Botão: 15% */
+        /* A altura do botão garante o alinhamento visual com os campos de input */
+    }
 }
