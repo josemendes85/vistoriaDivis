@@ -36,7 +36,7 @@ const exigencias = {
         "01.014 - Apresentar Alvará de Construção, Atestado de Habilitação de Regularização ou documento similar de regularização fundiária emitido por órgão competente.",
         "01.015 - Apresentar Parecer de Aprovação do Projeto de Segurança Contra Incêndio e Pânico emitido pelo Corpo de Bombeiros Militar do Distrito Federal.",
         "01.016 - Apresentar Parecer de Aprovação do Projeto de Segurança Contra Incêndio e Alvará de Construção (ou documento similar) com áreas equivalentes.",
-        "01.017 - Para acompanhamento da vistoria, deverá estar presente o interessado ou representante por ele indicado, portando o(s) Projeto(s) de Incêndio aprovado(s) e impresso(s) para a conferência dos sistemas de segurança contra incêndio e pânico, bem como as chaves para acesso a todas as dependências da edificação, incluindo as áreas técnicas, áreas de risco e assemelhados."",
+        "01.017 - Para acompanhamento da vistoria, deverá estar presente o interessado ou representante por ele indicado, portando o(s) Projeto(s) de Incêndio aprovado(s) e impresso(s) para a conferência dos sistemas de segurança contra incêndio e pânico, bem como as chaves para acesso a todas as dependências da edificação, incluindo as áreas técnicas, áreas de risco e assemelhados.",
     ],
     "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO": [
         "02.001 - A sinalização de segurança contra incêndio e pânico deve ser instalada em conformidade com a NT 22/2020-CBMDF. A sinalização de segurança contra incêndio e pânico deve ser adquirida junto às empresas credenciadas pelo CBMDF, com escopo para comercialização da referida medida de segurança contra incêndio e pânico. (Art. 6º, do Dec. 23.154/2002)",
