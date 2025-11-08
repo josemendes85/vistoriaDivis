@@ -71,10 +71,12 @@ body {
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.3s;
+    width: 0px;
     /* Novo: Ajustes de alinhamento para o layout flex */
     margin-top: 0;
     min-height: 44px; /* Altura mínima para alinhar com os campos */
     flex-shrink: 0;
+    flex-grow: 1.5;
 }
 
 #copy-selected-btn:hover {
@@ -180,10 +182,5 @@ body {
     
     .control-row .control-group:nth-child(2) {
         flex-grow: 4; /* Filtro: 40% */
-    }
-    
-    #copy-selected-btn {
-        flex-grow: 1.5; /* Botão: 15% */
-        /* A altura do botão garante o alinhamento visual com os campos de input */
     }
 }
