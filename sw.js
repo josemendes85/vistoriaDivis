@@ -1,6 +1,6 @@
 // 1. ATUALIZE A VERSÃO DO CACHE A CADA ALTERAÇÃO DE ARQUIVO
 // Mude esta string a cada vez que você fizer uma alteração nos arquivos cacheados.
-const CACHE_NAME = 'v2'; // MUDADO DE 'v1' PARA 'v2'
+const CACHE_NAME = 'v3';
 
 // Lista completa de arquivos para pré-cache, incluindo suas dependências
 const urlsToCache = [
