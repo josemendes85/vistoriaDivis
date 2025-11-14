@@ -102,17 +102,30 @@ let anotacoesDoProcesso = {};
 // processo.js (Trecho CORRIGIDO da função abrirModalAnotacao)
 function abrirModalAnotacao(exigenciaId, descricao) {
 	const modalElement = document.getElementById('anotacaoModal');
-    const campoAnotacao = document.getElementById('campoAnotacao');
-	
-    // 1. Define o ID e o Título do Modal (Correto)
-    document.getElementById('anotacaoExigenciaId').value = exigenciaId;
-
-    // 2. 💡 CORREÇÃO: Colocar a descrição no <p> correto
-    document.getElementById('anotacaoExigenciaDescricao').textContent = descricao; // Antiga linha problemática
     
-    // 3. Carregar a anotação salva no campo <textarea> (Correto)
+    // 1. Obter e verificar os elementos DOM
+    // Se um destes for 'null', o erro ocorre na tentativa de usar '.value' ou '.textContent'
+    const campoId = document.getElementById('anotacaoExigenciaId');
+    const campoAnotacao = document.getElementById('campoAnotacao');
+    const labelModal = document.getElementById('anotacaoModalLabel');
+    const campoDescricao = document.getElementById('anotacaoExigenciaDescricao');
+
+    // 🚨 VERIFICAÇÃO CRÍTICA (A linha 'Erro: Um ou mais...' é gerada aqui)
+    if (!campoId || !campoAnotacao || !labelModal || !campoDescricao) {
+        console.error("Erro: Um ou mais elementos do modal de anotação não foram encontrados.");
+        return; 
+    }
+	
+    // 2. Define o ID, o Título e a Descrição
+    campoId.value = exigenciaId;
+  //  labelModal.textContent = `Anotação: ${descricao}`; 
+    campoDescricao.textContent = descricao;
+    
+    // 3. Carregar a anotação salva no campo <textarea>
     const anotacaoExistente = anotacoesDoProcesso[exigenciaId] || ''; 
-    campoAnotacao.value = anotacaoExistente; 
+    campoAnotacao.value = anotacaoExistente; // Linha agora protegida
+    
+    // 4. Exibir o Modal
     const anotacaoModal = new bootstrap.Modal(modalElement);
     anotacaoModal.show();
 }
