@@ -175,3 +175,30 @@
 #observacao{
 	overflow-y: scroll;
 }
+
+/* Estilo para o ícone de anotação */
+.anotacao-icon {
+	/* Define a cor padrão como cinza claro, para indicar que está vazio */
+	color: var(--secondary-color); 
+	cursor: pointer;
+	font-size: 1.2rem;
+	margin-left: 10px;
+	transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.anotacao-icon:hover {
+	/* Pequeno efeito ao passar o mouse */
+	transform: scale(1.1);
+	color: var(--primary-color) !important; /* Força cor no hover */
+}
+
+/* Garante que o ícone de anotação colorida fique azul para indicar que tem conteúdo */
+.anotacao-icon.text-primary {
+	color: var(--primary-color) !important;
+}
+
+/* Estilo para alinhar o item de exigência */
+.exigencia-item {
+    padding-right: 1rem; /* Adiciona um pouco de espaço à direita */
+    width: 100%; /* Garante que o item ocupe toda a largura */
+}
