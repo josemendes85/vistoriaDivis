@@ -1420,7 +1420,7 @@ document.addEventListener('DOMContentLoaded', () => {
 						throw new Error(data.message || 'CNPJ não encontrado ou inválido pela API.');
 					}
 
-					const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf} - ${data.cep}`;
+					const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf} - CEP: ${data.cep}`;
 					if (enderecoInput.value.trim() === '') {
 						enderecoInput.value = enderecoCompleto.toUpperCase();
 					}
