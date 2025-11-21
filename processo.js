@@ -5,6 +5,16 @@ const CONFIG = {
 	TOAST_DURATION: 3000
 };
 
+// Gatilhos de eventos: Chama a função sempre que um dos campos-chave for alterado (evento 'change') 
+// ou o usuário digitar/modificar o conteúdo (evento 'input').
+$(document).ready(function () {
+	// 1. Adiciona o listener para cada campo
+	$('#ocupacao, #area, #altura, #pavimentos').on('change input', dispararVerificacaoDeExigencias);
+
+	// 2. Opcional: Chama a função no carregamento, caso os campos já venham preenchidos (ex: com dados salvos)
+	dispararVerificacaoDeExigencias();
+});
+
 // Utilitários
 const Utils = {
 	// Mostra toast de notificação
@@ -102,81 +112,204 @@ let anotacoesDoProcesso = {};
 // processo.js (Trecho CORRIGIDO da função abrirModalAnotacao)
 function abrirModalAnotacao(exigenciaId, descricao) {
 	const modalElement = document.getElementById('anotacaoModal');
-    
-    // 1. Obter e verificar os elementos DOM
-    // Se um destes for 'null', o erro ocorre na tentativa de usar '.value' ou '.textContent'
-    const campoId = document.getElementById('anotacaoExigenciaId');
-    const campoAnotacao = document.getElementById('campoAnotacao');
-    const labelModal = document.getElementById('anotacaoModalLabel');
-    const campoDescricao = document.getElementById('anotacaoExigenciaDescricao');
 
-    // 🚨 VERIFICAÇÃO CRÍTICA (A linha 'Erro: Um ou mais...' é gerada aqui)
-    if (!campoId || !campoAnotacao || !labelModal || !campoDescricao) {
-        console.error("Erro: Um ou mais elementos do modal de anotação não foram encontrados.");
-        return; 
-    }
-	
-    // 2. Define o ID, o Título e a Descrição
-    campoId.value = exigenciaId;
-  //  labelModal.textContent = `Anotação: ${descricao}`; 
-    campoDescricao.textContent = descricao;
-    
-    // 3. Carregar a anotação salva no campo <textarea>
-    const anotacaoExistente = anotacoesDoProcesso[exigenciaId] || ''; 
-    campoAnotacao.value = anotacaoExistente; // Linha agora protegida
-    
-    // 4. Exibir o Modal
-    const anotacaoModal = new bootstrap.Modal(modalElement);
-    anotacaoModal.show();
+	// 1. Obter e verificar os elementos DOM
+	// Se um destes for 'null', o erro ocorre na tentativa de usar '.value' ou '.textContent'
+	const campoId = document.getElementById('anotacaoExigenciaId');
+	const campoAnotacao = document.getElementById('campoAnotacao');
+	const labelModal = document.getElementById('anotacaoModalLabel');
+	const campoDescricao = document.getElementById('anotacaoExigenciaDescricao');
+
+	// 🚨 VERIFICAÇÃO CRÍTICA (A linha 'Erro: Um ou mais...' é gerada aqui)
+	if (!campoId || !campoAnotacao || !labelModal || !campoDescricao) {
+		console.error("Erro: Um ou mais elementos do modal de anotação não foram encontrados.");
+		return;
+	}
+
+	// 2. Define o ID, o Título e a Descrição
+	campoId.value = exigenciaId;
+	//  labelModal.textContent = `Anotação: ${descricao}`; 
+	campoDescricao.textContent = descricao;
+
+	// 3. Carregar a anotação salva no campo <textarea>
+	const anotacaoExistente = anotacoesDoProcesso[exigenciaId] || '';
+	campoAnotacao.value = anotacaoExistente; // Linha agora protegida
+
+	// 4. Exibir o Modal
+	const anotacaoModal = new bootstrap.Modal(modalElement);
+	anotacaoModal.show();
+}
+
+// --- FUNÇÕES DE LÓGICA E RENDERIZAÇÃO DE EXIGÊNCIAS ---
+
+/**
+ * Função auxiliar para converter valores formatados (ex: '1.200,00') em float.
+ * @param {string} value - O valor da área ou altura.
+ * @returns {number} O valor numérico (float).
+ */
+const parseNumber = (value) => {
+	if (!value) return 0;
+	// Remove separador de milhar (ponto) e substitui separador decimal (vírgula) por ponto
+	const cleaned = String(value).replace(/\./g, '').replace(',', '.');
+	return parseFloat(cleaned) || 0;
+};
+
+// --- FUNÇÃO DE LÓGICA (SELEÇÃO) ---
+/**
+ * Determina as categorias de exigências que devem ser pré-selecionadas.
+ * @param {string} ocupacaoStr - O código da ocupação (ex: "03").
+ * @param {string} areaStr - A área da edificação (ex: "750,00").
+ * @param {string} alturaStr - A altura da edificação (ex: "9,0").
+ * @returns {string[]} Lista dos códigos de categorias ('001', '002', etc.) a serem selecionados.
+ */
+function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
+	// Categorias 2, 3, 4, 5 são SEMPRE selecionadas:
+	let categoriasParaSelecionar = ['002', '003', '004', '005'];
+
+	const ocupacao = parseInt(ocupacaoStr, 10) || 0;
+	const area = parseNumber(areaStr);
+	const altura = parseNumber(alturaStr);
+
+	let selecionarDocumentacao = true; // DOCUMENTAÇÃO ('001'): Por padrão, SEMPRE selecionado
+
+	// Lógica das EXCEÇÕES para DOCUMENTAÇÃO ('001')
+	if (ocupacao > 0) {
+		// 1.a) Grupos 03, 04, 05, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38 e 39 (Área <= 750.00 OU Altura <= 9.0)
+		const gruposA = [3, 4, 5, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38, 39];
+		if (gruposA.includes(ocupacao) && (area <= 750.00 || altura <= 9.0)) {
+			selecionarDocumentacao = false;
+		}
+
+		// 1.b) Grupo 25 (Área <= 750.00 OU Altura <= 6.0)
+		const gruposB = [25];
+		if (gruposB.includes(ocupacao) && (area <= 750.00 || altura <= 6.0)) {
+			selecionarDocumentacao = false;
+		}
+
+		// 1.c) Grupos 26, 27, 28 (Área <= 1200.00)
+		const gruposC = [26, 27, 28];
+		if (gruposC.includes(ocupacao) && area <= 1200.00) {
+			selecionarDocumentacao = false;
+		}
+
+		// 1.d) Grupos 02, 06, 07, 08, 09, 10, 11, 12, 15 e 36 (Área <= 1200.00)
+		const gruposD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
+		if (gruposD.includes(ocupacao) && area <= 1200.00) {
+			selecionarDocumentacao = false;
+		}
+	}
+
+	if (selecionarDocumentacao) {
+		categoriasParaSelecionar.unshift('001'); // Adiciona '001' no início para manter a ordem
+	}
+	return categoriasParaSelecionar;
+}
+
+// --- FUNÇÃO DE RENDERIZAÇÃO (EXIBIÇÃO NA TELA) ---
+/**
+ * Renderiza as exigências selecionadas como 'badges' no container 'badgesCategorias'.
+ * @param {string[]} codigos - Lista dos códigos das exigências a serem renderizadas (ex: ['001', '002']).
+ * @param {object} categoriasMap - O mapa DADOS_SISTEMA.categorias.
+ */
+function renderizarExigencias(codigos, categoriasMap) {
+	let html = '';
+	const container = document.getElementById('badgesCategorias');
+	if (!container) return; // Sai se o container não for encontrado
+
+	// Gera o HTML para cada categoria selecionada
+	codigos.forEach(codigo => {
+		const descricao = categoriasMap[codigo];
+		if (descricao) {
+			html += `<span class="badge bg-primary text-white p-2 me-1">${codigo} - ${descricao}</span>`;
+		}
+	});
+
+	// Limpa o conteúdo anterior e insere os novos badges
+	container.innerHTML = html;
+}
+
+
+// --- FUNÇÃO CONTROLADORA (DISPARADA POR EVENTOS) ---
+function dispararVerificacaoDeExigencias() {
+	// 1. Coleta os valores dos campos
+	const ocupacaoStr = $('#ocupacao').val();
+	const areaStr = $('#area').val();
+	const alturaStr = $('#altura').val();
+
+	// Se os campos essenciais estiverem vazios, NÃO FAZ NADA com as exigências já ativas.
+	// Apenas impede que o cálculo continue se faltarem dados cruciais.
+	if (!ocupacaoStr || !areaStr || !alturaStr) {
+		return;
+	}
+
+	// 2. Chama a função de cálculo para obter a lista padrão
+	const exigenciasPadrao = getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr);
+
+	// 3. Filtra a lista padrão: Mantém apenas as exigências que AINDA NÃO estão ativas na tela.
+	const novasExigenciasParaAdicionar = exigenciasPadrao.filter(codigo =>
+		// Verifica se o código da exigência NÃO existe no objeto de controle
+		!camposDeExigenciasAtivos.hasOwnProperty(codigo)
+	);
+
+	// 4. Adiciona SOMENTE as novas exigências usando a função flexível
+	if (novasExigenciasParaAdicionar.length > 0) {
+		// Se houver novas exigências padrão que ainda não foram adicionadas, adicione-as
+		adicionarCategoria(novasExigenciasParaAdicionar);
+	}
+
+	// Nota: Se você precisa remover categorias padrão que não se aplicam mais, 
+	// será necessário implementar uma lógica de remoção (e.g., uma função 'removerCategoriaPadrao'
+	// que verifica se a categoria foi adicionada automaticamente).
+	// Por enquanto, o foco é NÃO EXCLUIR o que já foi preenchido.
 }
 
 // Função para salvar a anotação
 function salvarAnotacao() {
-    // 1. Coleta dados e elementos
-    const exigenciaId = document.getElementById('anotacaoExigenciaId').value;
-    const anotacao = document.getElementById('campoAnotacao').value.trim();
-    
-    // O elemento HTML do modal (necessário para fechar)
-    const modalElement = document.getElementById('anotacaoModal'); 
-    
-    // Lógica para encontrar o ícone e a tag (mantida como estava)
-    const tagElement = document.querySelector(`.tag:has(button[onclick*="'${exigenciaId}'"])`);
-    const iconElement = tagElement ? tagElement.querySelector('.anotacao-icon') : null;
-    
-    if (exigenciaId) {
-        if (anotacao) {
-            // Salva e colore o ícone
-            anotacoesDoProcesso[exigenciaId] = anotacao;
-            if (iconElement) {
-                iconElement.classList.remove('text-secondary');
-                iconElement.classList.add('text-primary'); 
-            }
-            Utils.showToast("Anotação salva!", "success");
-        } else {
-            // Remove a anotação e descolore o ícone
-            delete anotacoesDoProcesso[exigenciaId];
-            if (iconElement) {
-                iconElement.classList.remove('text-primary');
-                iconElement.classList.add('text-secondary'); 
-            }
-            Utils.showToast("Anotação removida.", "info");
-        }
-        
-        // 2. 🚨 NOVO BLOCO: Fechamento Robusto do Modal 🚨
-        let anotacaoModal = bootstrap.Modal.getInstance(modalElement);
-        
-        // Se a instância não foi encontrada (o que causa o travamento), criamos uma nova
-        // para garantir que o método .hide() seja chamado e o backdrop removido.
-        if (!anotacaoModal) {
-             anotacaoModal = new bootstrap.Modal(modalElement);
-        }
-        
-        // Esconde o modal de forma limpa, resolvendo o problema da cor/travamento
-        anotacaoModal.hide(); 
-        
-        // Dispara o salvamento automático
-        // autoSaveProcesso(); // (Assumindo que esta função existe)
-    }
+	// 1. Coleta dados e elementos
+	const exigenciaId = document.getElementById('anotacaoExigenciaId').value;
+	const anotacao = document.getElementById('campoAnotacao').value.trim();
+
+	// O elemento HTML do modal (necessário para fechar)
+	const modalElement = document.getElementById('anotacaoModal');
+
+	// Lógica para encontrar o ícone e a tag (mantida como estava)
+	const tagElement = document.querySelector(`.tag:has(button[onclick*="'${exigenciaId}'"])`);
+	const iconElement = tagElement ? tagElement.querySelector('.anotacao-icon') : null;
+
+	if (exigenciaId) {
+		if (anotacao) {
+			// Salva e colore o ícone
+			anotacoesDoProcesso[exigenciaId] = anotacao;
+			if (iconElement) {
+				iconElement.classList.remove('text-secondary');
+				iconElement.classList.add('text-primary');
+			}
+			Utils.showToast("Anotação salva!", "success");
+		} else {
+			// Remove a anotação e descolore o ícone
+			delete anotacoesDoProcesso[exigenciaId];
+			if (iconElement) {
+				iconElement.classList.remove('text-primary');
+				iconElement.classList.add('text-secondary');
+			}
+			Utils.showToast("Anotação removida.", "info");
+		}
+
+		// 2. 🚨 NOVO BLOCO: Fechamento Robusto do Modal 🚨
+		let anotacaoModal = bootstrap.Modal.getInstance(modalElement);
+
+		// Se a instância não foi encontrada (o que causa o travamento), criamos uma nova
+		// para garantir que o método .hide() seja chamado e o backdrop removido.
+		if (!anotacaoModal) {
+			anotacaoModal = new bootstrap.Modal(modalElement);
+		}
+
+		// Esconde o modal de forma limpa, resolvendo o problema da cor/travamento
+		anotacaoModal.hide();
+
+		// Dispara o salvamento automático
+		// autoSaveProcesso(); // (Assumindo que esta função existe)
+	}
 }
 
 // Dados das exigências
@@ -1238,47 +1371,67 @@ document.addEventListener('DOMContentLoaded', () => {
 						throw new Error(data.message || 'CNPJ não encontrado ou inválido pela API.');
 					}
 
-					const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf}`;
-					enderecoInput.value = enderecoCompleto.toUpperCase();
+					const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf} - ${data.cep}`;
+					if (enderecoInput.value.trim() === '') {
+						enderecoInput.value = enderecoCompleto.toUpperCase();
+					}
 					const nomeParaInput = `${data.nome_fantasia} / ${data.razao_social}`;
-					instituicaoInput.value = nomeParaInput.toUpperCase();
+					if (instituicaoInput.value.trim() === '') {
+						instituicaoInput.value = nomeParaInput.toUpperCase();
+					}
 
 					enderecoInput.classList.remove('is-invalid');
 					instituicaoInput.classList.remove('is-invalid');
 					Utils.showToast("Dados do CNPJ preenchidos!", "success");
-
+					console.log(data);
 					// -------- NOVA LÓGICA PARA BUSCAR COORDENADAS --------
-					/*
-											const enderecoParaGeocodificar = encodeURIComponent(data.razao_social + ' ' + data.logradouro); // Adicione 'Brasil' para melhor precisão
-											Utils.showToast("Buscando coordenadas geográficas...", "info");
-											fetch(`https://nominatim.openstreetmap.org/ui/search.html?q=${enderecoParaGeocodificar}&limit=1`)
-												.then(geoResponse => {
-													if (!geoResponse.ok) {
-														throw new Error('Erro ao buscar coordenadas. Status: ' + geoResponse.status);
-													}
-													return geoResponse.json();
-												})
-												.then(geoData => {
-													if (geoData.length > 0) {
-														const lat = parseFloat(geoData[0].lat).toFixed(6); // Formata para 6 casas decimais
-														const lon = parseFloat(geoData[0].lon).toFixed(6); // Formata para 6 casas decimais
-														localizacaoInput.value = `${lat}, ${lon}`;
-														localizacaoInput.classList.remove('is-invalid');
-														Utils.showToast("Coordenadas geográficas preenchidas!", "success");
-													} else {
-														localizacaoInput.value = '';
-														localizacaoInput.classList.add('is-invalid');
-														Utils.showToast("Coordenadas não encontradas para o endereço.", "warning");
-													}
-												})
-												.catch(geoError => {
-													console.error('Erro na requisição da API de Geocodificação:', geoError);
-													localizacaoInput.value = '';
-													localizacaoInput.classList.add('is-invalid');
-													Utils.showToast('Erro ao buscar coordenadas. Tente novamente mais tarde.', "danger");
-												});
-											// ---------------- FIM DA NOVA LÓGICA ----------------
-					*/
+					if (localizacaoInput.value.trim() === '') {
+
+						// Melhorando a precisão do endereço para a busca
+						const enderecoParaGeocodificar = encodeURIComponent(
+							`${data.logradouro}, ${data.bairro}, ${data.municipio}, ${data.uf}, Brasil`
+						);
+
+						Utils.showToast("Buscando coordenadas geográficas...", "info");
+						console.log(enderecoParaGeocodificar);
+						// CORRIGIDO: Usando o endpoint correto da API Nominatim (/search?format=json)
+						fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${enderecoParaGeocodificar}&limit=1`, {
+							// A Nominatim API exige um cabeçalho User-Agent para requisições
+							headers: {
+								'User-Agent': 'SeuSistema/1.0' // Substitua pelo nome do seu sistema
+							}
+						})
+							.then(geoResponse => {
+								// Verifica se a resposta foi bem-sucedida (status 200)
+								if (!geoResponse.ok) {
+									// Lança um erro para cair no bloco .catch
+									throw new Error(`Erro ao buscar coordenadas. Status: ${geoResponse.status}`);
+								}
+								return geoResponse.json();
+							})
+							.then(geoData => {
+								if (geoData.length > 0) {
+									const lat = parseFloat(geoData[0].lat).toFixed(6); // Formata
+									const lon = parseFloat(geoData[0].lon).toFixed(6); // Formata
+
+									// Atribui o valor APENAS se o campo estiver vazio (garantido pelo 'if' externo)
+									localizacaoInput.value = `${lat}, ${lon}`;
+									localizacaoInput.classList.remove('is-invalid');
+									Utils.showToast("Coordenadas geográficas preenchidas!", "success");
+								} else {
+									localizacaoInput.value = '';
+									localizacaoInput.classList.add('is-invalid');
+									Utils.showToast("Coordenadas não encontradas para o endereço.", "warning");
+								}
+							})
+							.catch(geoError => {
+								console.error('Erro na requisição da API de Geocodificação:', geoError);
+								// Não limpa o campo, apenas mostra o erro se a busca falhou
+								localizacaoInput.classList.add('is-invalid');
+								Utils.showToast('Erro ao buscar coordenadas. Tente novamente mais tarde.', "danger");
+							});
+					}
+					// ---------------- FIM DA NOVA LÓGICA ----------------
 				})
 				.catch(error => {
 					console.error('Erro na requisição da API de CNPJ:', error);
@@ -1293,13 +1446,13 @@ document.addEventListener('DOMContentLoaded', () => {
 		} else {
 			enderecoInput.value = '';
 			instituicaoInput.value = '';
-			localizacaoInput.value = ''; // Limpa se o CNPJ não tiver 14 dígitos
+			localizacaoInput.value = ''; //limpa se não tiver 14 digitos no cnpj
 		}
 	});
 
-	
-    // Event listener para o botão de salvar anotação dentro do modal
-    document.getElementById('btnSalvarAnotacao').addEventListener('click', salvarAnotacao);
+
+	// Event listener para o botão de salvar anotação dentro do modal
+	document.getElementById('btnSalvarAnotacao').addEventListener('click', salvarAnotacao);
 
 
 	// Preenche o formulário automaticamente ao acessar com ?processo=...
@@ -1335,50 +1488,65 @@ document.getElementById('selectCategoriaExigencia').addEventListener('change', f
 	}
 });
 
-function adicionarCategoria(categoria) {
-	if (camposDeExigenciasAtivos[categoria]) return;
+/**
+ * Adiciona uma ou mais categorias de exigência à interface (como cards).
+ * @param {string|string[]} categorias - Um único código de categoria (string) ou uma lista de códigos (array).
+ */
+function adicionarCategoria(categorias) {
+	// 1. Normaliza a entrada: converte string (valor único) em array
+	const categoriasParaAdicionar = Array.isArray(categorias) ? categorias : [categorias];
 
-	// ... dentro da função adicionarCategoria(categoria)
-	const container = document.getElementById('exigenciasContainer');
-	const spinnerElement = document.getElementById('algumIdDoSpinner'); // Obtenha o elemento do spinner
+	// 2. Itera sobre cada categoria e aplica a lógica de adição
+	categoriasParaAdicionar.forEach(categoria => {
+		// Lógica original, agora aplicada a uma única 'categoria' por vez:
+		if (camposDeExigenciasAtivos[categoria]) return;
 
-	// Remove a classe loading-spinner do container, que o tornava invisível
-	container.classList.remove('loading-spinner');
-	// Torna o container visível (caso não estivesse, pode ser redundante se a classe já faz isso)
-	container.style.display = 'block';
+		console.log("Adicionando categoria: ", categoria);
 
-	// Oculta o elemento do spinner
-	if (spinnerElement) {
-		spinnerElement.style.display = 'none'; // Ou adicione uma classe CSS que o oculte (ex: d-none do Bootstrap)
-	}
+		const container = document.getElementById('exigenciasContainer');
+		const spinnerElement = document.getElementById('algumIdDoSpinner');
 
-	const divCategoria = document.createElement('div');
-	divCategoria.id = `exigencias-categoria-${categoria}`;
-	divCategoria.classList.add('card', 'mb-3', 'p-3');
+		// Remove a classe loading-spinner do container, que o tornava invisível
+		container.classList.remove('loading-spinner');
+		// Torna o container visível
+		container.style.display = 'block';
 
-	divCategoria.innerHTML = `
-				<div class="d-flex justify-content-between align-items-center mb-3">
-					<h5 class="mb-0">${DADOS_SISTEMA.categorias[categoria]}</h5>
-					<button type="button" class="btn-close-custom" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')">[X]</button>
-				</div>
-				<div class="mb-3">
-					<div class="autocomplete-container">
-						<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${DADOS_SISTEMA.categorias[categoria]}" data-categoria="${categoria}">
-						<div class="autocomplete-list"></div>
-					</div>
-				</div>
-				<div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
-			`;
-	container.appendChild(divCategoria);
+		// Oculta o elemento do spinner
+		if (spinnerElement) {
+			spinnerElement.style.display = 'none';
+		}
 
-	// Marca categoria como ativa, mesmo sem exigência
-	camposDeExigenciasAtivos[categoria] = [];
+		const divCategoria = document.createElement('div');
+		divCategoria.id = `exigencias-categoria-${categoria}`;
+		divCategoria.classList.add('card', 'mb-3', 'p-3');
 
-	// Mostra como tag também
-	adicionarBadgeCategoria(categoria);
+		divCategoria.innerHTML = `
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">${DADOS_SISTEMA.categorias[categoria]}</h5>
+                <button type="button" class="btn-close-custom" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')">[X]</button>
+            </div>
+            <div class="mb-3">
+                <div class="autocomplete-container">
+                    <input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${DADOS_SISTEMA.categorias[categoria]}" data-categoria="${categoria}">
+                    <div class="autocomplete-list"></div>
+                </div>
+            </div>
+            <div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
+        `;
+		container.appendChild(divCategoria);
 
-	const autocompleteInput = divCategoria.querySelector('.exigencia-autocomplete');
-	setupAutocomplete(autocompleteInput, categoria);
+		// Marca categoria como ativa, mesmo sem exigência
+		camposDeExigenciasAtivos[categoria] = [];
+
+		// Mostra como tag também
+		// Assumindo que 'adicionarBadgeCategoria' também pode estar disponível
+		if (typeof adicionarBadgeCategoria === 'function') {
+			adicionarBadgeCategoria(categoria);
+		}
+
+		const autocompleteInput = divCategoria.querySelector('.exigencia-autocomplete');
+		setupAutocomplete(autocompleteInput, categoria);
+	});
 }
 
 function adicionarBadgeCategoria(categoria) {
@@ -1405,25 +1573,25 @@ function removerCategoria(categoria) {
 }
 
 function adicionarExigencia(categoria, exigencia) {
-    if (!camposDeExigenciasAtivos[categoria]) {
-        adicionarCategoria(categoria);
-    }
-    if (!camposDeExigenciasAtivos[categoria].includes(exigencia)) {
-        camposDeExigenciasAtivos[categoria].push(exigencia);
+	if (!camposDeExigenciasAtivos[categoria]) {
+		adicionarCategoria(categoria);
+	}
+	if (!camposDeExigenciasAtivos[categoria].includes(exigencia)) {
+		camposDeExigenciasAtivos[categoria].push(exigencia);
 
-        const badgesContainer = document.getElementById(`exigencias-inputs-${categoria}`);
-        // Encode exigency string for use in ID to prevent issues with special characters
-        const encodedExigency = btoa(exigencia).replace(/=/g, ''); // Remove padding for cleaner ID
+		const badgesContainer = document.getElementById(`exigencias-inputs-${categoria}`);
+		// Encode exigency string for use in ID to prevent issues with special characters
+		const encodedExigency = btoa(exigencia).replace(/=/g, ''); // Remove padding for cleaner ID
 
-        // 🚨 NOVO: 1. Verifica se já existe anotação para definir a cor inicial do ícone
-        const anotacaoExistente = anotacoesDoProcesso[exigencia] || ''; // Usa a string de exigencia como chave
-        const iconColorClass = anotacaoExistente ? 'text-primary' : 'text-secondary';
-        
-        // Cria o elemento <span> para a tag visível
-        const tagSpan = document.createElement('span');
-        tagSpan.className = "tag";
-        tagSpan.id = `tag-${categoria}-${encodedExigency}`;
-        tagSpan.innerHTML = `
+		// 🚨 NOVO: 1. Verifica se já existe anotação para definir a cor inicial do ícone
+		const anotacaoExistente = anotacoesDoProcesso[exigencia] || ''; // Usa a string de exigencia como chave
+		const iconColorClass = anotacaoExistente ? 'text-primary' : 'text-secondary';
+
+		// Cria o elemento <span> para a tag visível
+		const tagSpan = document.createElement('span');
+		tagSpan.className = "tag";
+		tagSpan.id = `tag-${categoria}-${encodedExigency}`;
+		tagSpan.innerHTML = `
             ${exigencia}
             
             <i class="bi bi-info-circle-fill anotacao-icon ${iconColorClass}"
@@ -1432,24 +1600,24 @@ function adicionarExigencia(categoria, exigencia) {
             <button type="button" class="btn-close-custom" onclick="removerExigencia('${categoria}', '${encodedExigency}', '${exigencia}')" aria-label="Remover">[X]</button>
         `;
 
-        // Cria o elemento <input type="hidden"> para coletar o dado
-        // ... (o restante da sua função continua igual) ...
+		// Cria o elemento <input type="hidden"> para coletar o dado
+		// ... (o restante da sua função continua igual) ...
 
-        const hiddenInput = document.createElement('input');
-        hiddenInput.type = 'hidden';
-        hiddenInput.name = 'exigencias[]'; // Importante para coletar com querySelectorAll
-        hiddenInput.value = exigencia;
+		const hiddenInput = document.createElement('input');
+		hiddenInput.type = 'hidden';
+		hiddenInput.name = 'exigencias[]'; // Importante para coletar com querySelectorAll
+		hiddenInput.value = exigencia;
 
-        badgesContainer.appendChild(tagSpan);
-        badgesContainer.appendChild(hiddenInput); // Adiciona o input oculto
+		badgesContainer.appendChild(tagSpan);
+		badgesContainer.appendChild(hiddenInput); // Adiciona o input oculto
 
-        // Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
-        const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
-        if (autocompleteInput) {
-            const event = new Event('input', { bubbles: true, cancelable: true });
-            autocompleteInput.dispatchEvent(event);
-        }
-    }
+		// Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
+		const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
+		if (autocompleteInput) {
+			const event = new Event('input', { bubbles: true, cancelable: true });
+			autocompleteInput.dispatchEvent(event);
+		}
+	}
 }
 
 function removerExigencia(categoria, encodedExigenciaId, exigenciaValue) {
@@ -1827,14 +1995,14 @@ function preencherFormulario(data) {
 	}
 
 	// Itere pelas exigências geradas e aplique a cor do ícone
-    // (Esta parte dependerá da sua função de geração de exigências e preenchimento)
-    Object.keys(anotacoesDoProcesso).forEach(id => {
-        const iconElement = document.querySelector(`.anotacao-icon[data-exigencia-id="${id}"]`);
-        if (iconElement) {
-            iconElement.classList.remove('text-secondary');
-            iconElement.classList.add('text-primary');
-        }
-    });
+	// (Esta parte dependerá da sua função de geração de exigências e preenchimento)
+	Object.keys(anotacoesDoProcesso).forEach(id => {
+		const iconElement = document.querySelector(`.anotacao-icon[data-exigencia-id="${id}"]`);
+		if (iconElement) {
+			iconElement.classList.remove('text-secondary');
+			iconElement.classList.add('text-primary');
+		}
+	});
 
 	// --- Nova lógica para os links de Mapa (Google Maps e Waze) ---
 
