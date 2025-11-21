@@ -154,96 +154,120 @@ const parseNumber = (value) => {
 	return parseFloat(cleaned) || 0;
 };
 
-// --- Configuração para controle de regras ---
-const regrasInclusao = {
-    '006': [ // 006: SISTEMA DE PROTEÇÃO POR HIDRANTES
-        { grupos: [22], check: (h, a) => a > 500 },
-        { grupos: [23], check: (h, a) => h > 3 && a > 500 },
-        { grupos: [25, 30, 31], check: (h, a) => h > 6 && a > 750 },
-        { grupos: [3, 4, 5, 35, 39], check: (h, a) => h > 9 && a > 750 },
-        { grupos: [2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 && a > 1200 },
-        { grupos: [33, 37], check: (h, a) => h > 12 && a > 1200 },
-        { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
-    ],
-    '009': [ // 009: SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO
-        { grupos: [13, 14, 16, 17], check: () => true }, // Always
-        { grupos: [22], check: (h, a) => a > 500 },
-        { grupos: [23], check: (h, a) => h > 3 && a > 500 },
-        { grupos: [25, 30, 31], check: (h, a) => h > 6 && a > 750 },
-        { grupos: [2, 3, 4, 5, 35, 39], check: (h, a) => h > 9 && a > 750 },
-        { grupos: [6, 7, 8, 9, 10, 11, 12, 15, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 && a > 1200 },
-        { grupos: [33, 37], check: (h, a) => h > 12 && a > 1200 },
-        { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
-        { grupos: [18], check: (h, a) => h > 12 && a > 5000 },
-    ],
-    '010': [ // 010: SISTEMA DE CHUVEIROS AUTOMÁTICOS
-        { grupos: [2], check: (h, a) => h > 60 },
-        { grupos: [], check: (h, a) => h > 3 && a > 500 },
-        { grupos: [22, 23, 30, 31], check: (h, a) => h > 3 && a > 3000 },
-        { grupos: [17], check: (h, a) => h > 6 && a > 3000 },
-        { grupos: [35, 39], check: (h, a) => h > 12 && a > 3000 },
-        { grupos: [3, 4, 5, 6, 7, 8, 9, 10 , 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 25, 26, 27, 28, 29, 32, 38], check: (h, a) => h > 12 && a > 5000 },
-        { grupos: [34], check: (h, a) => h > 15 && a > 5000 },
-        { grupos: [37], check: (h, a) => h > 15 && a > 7000 },
-        { grupos: [36], check: (h, a) => h > 15 && a > 10000 },
-    ],
-    '007': [ // 010: SISTEMA DE CHUVEIROS AUTOMÁTICOS
-        { grupos: [3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39], check: (h, a) => h > 9 && a > 750 },
-        { grupos: [2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 26, 27, 28], check: (h, a) => h > 9 && a > 1200 },
-        { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
-    ]
-};
-
+// --- FUNÇÃO DE LÓGICA (SELEÇÃO) ---
 /**
- * Determines the categories of requirements that should be pre-selected.
+ * Determina as categorias de exigências que devem ser pré-selecionadas.
+ * @param {string} ocupacaoStr - O código da ocupação (ex: "03").
+ * @param {string} areaStr - A área da edificação (ex: "750,00").
+ * @param {string} alturaStr - A altura da edificação (ex: "9,0").
+ * @returns {string[]} Lista dos códigos de categorias ('001', '002', etc.) a serem selecionados.
+ */
+/**
+ * Determina as categorias de exigências que devem ser pré-selecionadas.
  */
 function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
-    // Fixed Default Categories: 002, 003, 004, 005, 008
-    let categoriasParaSelecionar = ['002', '003', '004', '005', '008'];
+    // Categorias Padrão Fixas: 002, 003, 004, 005
+    let categoriasParaSelecionar = ['002', '003', '004', '005'];
 
     const ocupacao = parseInt(ocupacaoStr, 10) || 0;
     const area = parseNumber(areaStr);
     const altura = parseNumber(alturaStr);
 
-    // --- 1. DOCUMENTATION Logic ('001') ---
-    // Rule: ALWAYS selected, except for the exceptions below.
-    let selecionarDocumentacao = true;
+    // --- 1. Lógica da DOCUMENTAÇÃO (001) ---
+    // Regra: SEMPRE selecionado, exceto nas exceções abaixo.
+    let selecionarDocumentacao = true; 
 
     if (ocupacao > 0) {
-        // 1.a) Listed groups with Area <= 750 OR Height <= 9
+        // 1.a) Grupos listados com Área <= 750 ou Altura <= 9
         const gruposDocA = [3, 4, 5, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38, 39];
         if (gruposDocA.includes(ocupacao) && (area <= 750.00 || altura <= 9.0)) selecionarDocumentacao = false;
 
-        // 1.b) Group 25 with Area <= 750 OR Height <= 6
-        if ([25].includes(ocupacao) && (area <= 750.00 || altura <= 6.0)) selecionarDocumentacao = false;
+        // 1.b) Grupo 25 com Área <= 750 ou Altura <= 6
+        const gruposDocB = [25];
+        if (gruposDocB.includes(ocupacao) && (area <= 750.00 || altura <= 6.0)) selecionarDocumentacao = false;
 
-        // 1.c) Groups 26, 27, 28 with Area <= 1200
-        if ([26, 27, 28].includes(ocupacao) && area <= 1200.00) selecionarDocumentacao = false;
+        // 1.c) Grupos 26, 27, 28 com Área <= 1200
+        const gruposDocC = [26, 27, 28];
+        if (gruposDocC.includes(ocupacao) && area <= 1200.00) selecionarDocumentacao = false;
 
-        // 1.d) Diverse groups with Area <= 1200
+        // 1.d) Grupos diversos com Área <= 1200
         const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
         if (gruposDocD.includes(ocupacao) && area <= 1200.00) selecionarDocumentacao = false;
     }
-
     if (selecionarDocumentacao) {
         categoriasParaSelecionar.unshift('001');
     }
 
-    // --- 2. Dynamic Logic (Hydrants and Alarms) ---
-    // Loops through the rules defined in 'regrasInclusao'
-    if (ocupacao > 0) {
-        // Iterate through the requirement codes (e.g., '006', '009')
-        for (const [codigoExigencia, regras] of Object.entries(regrasInclusao)) {
-            
-            // .some() checks if AT LEAST ONE rule is true. If yes, it selects and stops checking.
-            const deveSelecionar = regras.some(regra => {
-                return regra.grupos.includes(ocupacao) && regra.check(altura, area);
-            });
+    // --- 2. Lógica do SISTEMA DE HIDRANTES (006) ---
+    // Regra: Selecionado APENAS se atender às condições.
+    let selecionarHidrantes = false;
 
-            if (deveSelecionar) {
-                categoriasParaSelecionar.push(codigoExigencia);
-            }
-        }
+    if (ocupacao > 0) {
+        // Regra A: Altura > 9 E Área > 1200
+        const gruposHidA = [2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38];
+        if ((gruposHidA.includes(ocupacao) && altura > 9.0 && area > 1200.00)) selecionarHidrantes = true;
+
+        // Regra B: Altura > 9 E Área > 750
+        const gruposHidB = [3, 4, 5, 35, 39];
+        if (gruposHidB.includes(ocupacao) && altura > 9.0 && area > 750.00) selecionarHidrantes = true;
+
+        // Regra C: Grupo 22 (Área > 500)
+        if (ocupacao === 22 && area > 500.00) selecionarHidrantes = true;
+
+        // Regra D: Grupo 23 (Altura > 3 E Área > 500)
+        if (ocupacao === 23 && altura > 3.0 && area > 500.00) selecionarHidrantes = true;
+
+        // Regra E: Grupos 25, 30, 31 (Altura > 6 E Área > 750)
+        const gruposHidE = [25, 30, 31];
+        if (gruposHidE.includes(ocupacao) && altura > 6.0 && area > 750.00) selecionarHidrantes = true;
+
+        // Regra F: Grupos 33, 37 (Altura > 12 E Área > 1200)
+        const gruposHidF = [33, 37];
+        if (gruposHidF.includes(ocupacao) && altura > 12.0 && area > 1200.00) selecionarHidrantes = true;
+    }
+
+    if (selecionarHidrantes) {
+        categoriasParaSelecionar.push('006');
+    }
+
+    // --- 3. Lógica do SISTEMA DE ALARME (007) ---
+    // Regra: Selecionado APENAS se atender às condições.
+    let selecionarAlarmes = false;
+
+    if (ocupacao > 0) {
+        // Regra A: Altura > 9 E Área > 1200
+        const gruposAlarmA = [6, 7, 8, 9, 10, 11, 12, 15, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38];
+        if ((gruposAlarmA.includes(ocupacao) && altura > 9.0 && area > 1200.00)) selecionarHidrantes = true;
+		
+        // Regra B: Altura > 9 E Área > 750
+        const gruposAlarmB = [2, 3, 4, 5, 35, 39];
+        if (gruposAlarmB.includes(ocupacao) && altura > 9.0 && area > 750.00) selecionarHidrantes = true;
+
+        // Regra C: Grupo 22 Área > 500
+        if (ocupacao === 22 && area > 500.00) selecionarHidrantes = true;
+
+        // Regra D: Grupo 23 Altura > 3 E Área > 500
+        if (ocupacao === 23 && altura > 3.0 && area > 500.00) selecionarHidrantes = true;
+
+        // Regra E: Altura > 6 E Área > 750
+        const gruposAlarmE = [25, 30, 31];
+        if (gruposAlarmE.includes(ocupacao) && altura > 6.0 && area > 750.00) selecionarHidrantes = true;
+
+        // Regra F: Altura > 12 E Área > 1200
+        const gruposAlarmF = [33, 37];
+        if (gruposAlarmF.includes(ocupacao) && altura > 12.0 && area > 1200.00) selecionarHidrantes = true;
+		
+        // Regra G: SEMPRE
+        const gruposAlarmG = [13, 14, 16, 17];
+        if (gruposAlarmG.includes(ocupacao)) selecionarHidrantes = true;
+		
+        // Regra H: Altura > 12 E Área > 1200
+        const gruposAlarmH = [33, 37];
+        if (gruposAlarmH.includes(ocupacao) && altura > 12.0 && area > 1200.00) selecionarHidrantes = true;
+    }
+
+    if (selecionarAlarmes) {
+        categoriasParaSelecionar.push('007');
     }
 
     return categoriasParaSelecionar;
@@ -297,9 +321,9 @@ function dispararVerificacaoDeExigencias() {
     });
 
     // 4. REMOVER: Remove categorias 'Automáticas' (001 e 006) que estão na tela mas NÃO deveriam estar mais.
-    // OBS: Não removemos 002, 003, 004, 005, 008 porque elas são fixas (sempre true),
+    // OBS: Não removemos 002, 003, 004, 005 porque elas são fixas (sempre true),
     // e não removemos outras categorias (ex: 018) para preservar adições manuais.
-    const categoriasGerenciaveis = ['001', '006', '007', '009', '010']; 
+    const categoriasGerenciaveis = ['001', '006']; 
 
     categoriasGerenciaveis.forEach(codigo => {
         // Se a categoria está ativa na tela...
