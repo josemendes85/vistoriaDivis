@@ -1910,41 +1910,68 @@ if (processoBuscaElement) {
 }
 
 
-// Botão BUSCAR
-document.getElementById("buscarProcesso").addEventListener("click", function () {
-	const processoInput = document.getElementById("processoBusca");
-	if (!processoInput) {
-		console.error("Element with ID 'processoBusca' not found when attempting to search.");
-		Utils.showToast("Erro interno: campo de processo não encontrado.", "danger");
-		return;
-	}
-	const processoBuscaValue = processoInput.value; // Store the exact value from the input
+// --- FUNÇÃO DE BUSCA UNIFICADA ---
+/**
+ * Tenta buscar e carregar um processo salvo no LocalStorage
+ * usando o valor atual do campo de input 'processoBusca'.
+ */
+function buscarProcessoPorInput() {
+    const processoInput = document.getElementById("processoBusca");
+    if (!processoInput) {
+        console.error("Element with ID 'processoBusca' not found.");
+        Utils.showToast("Erro interno: campo de processo não encontrado.", "danger");
+        return;
+    }
+    const processoBuscaValue = processoInput.value.trim(); // Use trim() to remove excess spaces
 
-	if (!processoBuscaValue || processoBuscaValue.length !== 22) {
-		Utils.showToast("Informe o número do processo completo para buscar.", "warning");
-		return;
-	}
+    if (!processoBuscaValue || processoBuscaValue.length !== 22) {
+        // Se o campo está vazio ou o tamanho incorreto, apenas limpa se já não estiver limpo, 
+        // mas não dispara toast de erro no blur se estiver apenas vazio.
+        if (processoBuscaValue) {
+            Utils.showToast("Informe o número do processo completo para buscar.", "warning");
+        }
+        
+        // Sempre limpa o formulário se a busca for inválida (previne dados incorretos na tela)
+        document.querySelector('form').reset();
+        document.getElementById('tituloLaudo').className = 'display-6';
+        document.getElementById('exigenciasContainer').innerHTML = '';
+        document.getElementById('badgesCategorias').innerHTML = '';
+        camposDeExigenciasAtivos = {};
+        document.getElementById("retornoNao").checked = true;
+        // Re-preenche o campo de busca com o valor inválido que estava lá
+        processoInput.value = processoBuscaValue; 
+        return;
+    }
 
-	const dados = localStorage.getItem(`processo-${processoBuscaValue}`);
-	if (!dados) {
-		Utils.showToast("Processo não encontrado.", "danger");
-		// Clear the form if not found
-		document.querySelector('form').reset();
-		document.getElementById('tituloLaudo').className = 'display-6'; // Reset title style
-		document.getElementById('exigenciasContainer').innerHTML = '';
-		document.getElementById('badgesCategorias').innerHTML = '';
-		camposDeExigenciasAtivos = {};
-		document.getElementById("retornoNao").checked = true; // Set default radio
-		return;
-	}
+    const dados = localStorage.getItem(`processo-${processoBuscaValue}`);
+    if (!dados) {
+        Utils.showToast("Processo não encontrado.", "danger");
+        // Limpa o formulário, mantendo o valor de busca
+        document.querySelector('form').reset();
+        document.getElementById('tituloLaudo').className = 'display-6';
+        document.getElementById('exigenciasContainer').innerHTML = '';
+        document.getElementById('badgesCategorias').innerHTML = '';
+        camposDeExigenciasAtivos = {};
+        document.getElementById("retornoNao").checked = true;
+        processoInput.value = processoBuscaValue;
+        return;
+    }
 
-	const parsedData = JSON.parse(dados);
-	// ADICIONE ESTA LINHA: Garante que o campo de processo seja preenchido com o valor que foi buscado
-	parsedData.processoBusca = processoBuscaValue;
+    const parsedData = JSON.parse(dados);
+    // Garante que o campo de processo seja preenchido com o valor que foi buscado
+    parsedData.processoBusca = processoBuscaValue;
 
-	preencherFormulario(parsedData);
-	Utils.showToast("Processo carregado com sucesso!", "success");
-});
+    preencherFormulario(parsedData);
+    Utils.showToast("Processo carregado com sucesso!", "success");
+}
+
+// --- GATILHOS DE EVENTOS ---
+
+// Botão BUSCAR: Dispara ao clicar
+document.getElementById("buscarProcesso").addEventListener("click", buscarProcessoPorInput);
+
+// Input 'processoBusca': Dispara ao perder o foco (onblur)
+document.getElementById("processoBusca").addEventListener("blur", buscarProcessoPorInput);
 
 // Botão SALVAR MANUALMENTE
 document.getElementById("btnSalvar").addEventListener("click", () => {
