@@ -166,7 +166,7 @@ const regrasInclusao = {
         { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
     ],
     '009': [ // 009: SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO
-        { grupos: [13, 14, 16, 17], check: () => true }, // Always
+        { grupos: [13, 14, 16, 17], check: () => true },
         { grupos: [22], check: (h, a) => a > 500 },
         { grupos: [23], check: (h, a) => h > 3 && a > 500 },
         { grupos: [25, 30, 31], check: (h, a) => h > 6 && a > 750 },
@@ -187,7 +187,7 @@ const regrasInclusao = {
         { grupos: [37], check: (h, a) => h > 15 && a > 7000 },
         { grupos: [36], check: (h, a) => h > 15 && a > 10000 },
     ],
-    '007': [ // 010: SISTEMA DE CHUVEIROS AUTOMÁTICOS
+    '007': [ // 007: SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)
         { grupos: [3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39], check: (h, a) => h > 9 && a > 750 },
         { grupos: [2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 26, 27, 28], check: (h, a) => h > 9 && a > 1200 },
         { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
