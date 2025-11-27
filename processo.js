@@ -195,34 +195,34 @@ const regrasInclusao = {
 };
 
 /**
- * Determines the categories of requirements that should be pre-selected.
+ * Determinar as categorias que serão selecionadas
  */
 function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
-    // Fixed Default Categories: 002, 003, 004, 005, 008
+    // categorias fixas: 002, 003, 004, 005, 008
     let categoriasParaSelecionar = ['002', '003', '004', '005', '008'];
 
     const ocupacao = parseInt(ocupacaoStr, 10) || 0;
     const area = parseNumber(areaStr);
     const altura = parseNumber(alturaStr);
 
-    // --- 1. DOCUMENTATION Logic ('001') ---
-    // Rule: ALWAYS selected, except for the exceptions below.
+    // --- 1. DOCUMENTAÇÃO ('001') ---
+    // Regra: Sempre será selecionada, exceto alguns casos.
     let selecionarDocumentacao = true;
 
     if (ocupacao > 0) {
-        // 1.a) Listed groups with Area <= 750 OR Height <= 9
+        // 1.a) Grupos com Area <= 750 ou Altura <= 9
         const gruposDocA = [3, 4, 5, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38, 39];
         if (gruposDocA.includes(ocupacao) && (area <= 750.00 || altura <= 9.0)) selecionarDocumentacao = false;
 
-        // 1.b) Group 25 with Area <= 750 OR Height <= 6
+        // 1.b) Grupo 25 com Area <= 750 OR Height <= 6
         if ([25].includes(ocupacao) && (area <= 750.00 || altura <= 6.0)) selecionarDocumentacao = false;
 
-        // 1.c) Groups 26, 27, 28 with Area <= 1200
-        if ([26, 27, 28].includes(ocupacao) && area <= 1200.00) selecionarDocumentacao = false;
+        // 1.c) Grupos 26, 27, 28 com Area <= 1200 ou Altura > 3.0
+        if ([26, 27, 28].includes(ocupacao) && (area <= 1200.00 || altura <= 3.0)) selecionarDocumentacao = false;
 
-        // 1.d) Diverse groups with Area <= 1200
+        // 1.d) Grupos diversos com Area <= 1200 ou Altura <= 9
         const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
-        if (gruposDocD.includes(ocupacao) && area <= 1200.00) selecionarDocumentacao = false;
+        if (gruposDocD.includes(ocupacao) && (area <= 1200.00 || altura <= 9.0)) selecionarDocumentacao = false;
     }
 
     if (selecionarDocumentacao) {
@@ -322,8 +322,7 @@ function salvarAnotacao() {
 	const modalElement = document.getElementById('anotacaoModal');
 
 	// Lógica para encontrar o ícone e a tag (mantida como estava)
-	const tagElement = document.querySelector(`.tag:has(button[onclick*="'${exigenciaId}'"])`);
-	const iconElement = tagElement ? tagElement.querySelector('.anotacao-icon') : null;
+	const iconElement = document.querySelector(`.anotacao-icon[data-exigencia-id="${exigenciaId}"]`);
 
 	if (exigenciaId) {
 		if (anotacao) {
@@ -1643,8 +1642,7 @@ function adicionarExigencia(categoria, exigencia) {
 		tagSpan.innerHTML = `
             ${exigencia}
             
-            <i class="bi bi-info-circle-fill anotacao-icon ${iconColorClass}"
-               onclick="abrirModalAnotacao('${exigencia}', '${exigencia}')"></i>
+            <i class="bi bi-info-circle-fill anotacao-icon ${iconColorClass}" data-exigencia-id="${exigencia}" onclick="abrirModalAnotacao('${exigencia}', '${exigencia}')"></i>
 
             <button type="button" class="btn-close-custom" onclick="removerExigencia('${categoria}', '${encodedExigency}', '${exigencia}')" aria-label="Remover">[X]</button>
         `;
@@ -2100,7 +2098,7 @@ function preencherFormulario(data) {
 
 		// --- Lógica para o Google Maps ---
 		// Usando o formato de URL exato que você forneceu: http://maps.google.com/maps?q=${coordenadas}
-		const googleMapsUrl = `http://maps.google.com/maps?q=${coordsFormatted}`;
+		const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${coordsFormatted}`;
 		googleMapsLink.href = googleMapsUrl;
 		googleMapsLink.title = `Abrir no Google Maps: ${coordsFormatted}`; // Atualiza o título (tooltip)
 		googleMapsLink.style.cursor = 'pointer'; // Torna o cursor indicativo de clicável
