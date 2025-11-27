@@ -194,7 +194,7 @@
 
 /* Garante que o ícone de anotação colorida fique azul para indicar que tem conteúdo */
 .anotacao-icon.text-primary {
-	color: var(--info-color) !important;
+	color: var(--warning-color) !important;
 }
 
 /* Estilo para alinhar o item de exigência */
