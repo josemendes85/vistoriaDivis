@@ -156,97 +156,97 @@ const parseNumber = (value) => {
 
 // --- Configuração para controle de regras ---
 const regrasInclusao = {
-	'006': [ // 006: SISTEMA DE PROTEÇÃO POR HIDRANTES
-		{ grupos: [22], check: (h, a) => a > 500 },
-		{ grupos: [23], check: (h, a) => h > 3 && a > 500 },
-		{ grupos: [25, 30, 31], check: (h, a) => h > 6 && a > 750 },
-		{ grupos: [3, 4, 5, 35, 39], check: (h, a) => h > 9 && a > 750 },
-		{ grupos: [2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 && a > 1200 },
-		{ grupos: [33, 37], check: (h, a) => h > 12 && a > 1200 },
-		{ grupos: [36], check: (h, a) => h > 12 && a > 2000 },
-	],
-	'009': [ // 009: SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO
-		{ grupos: [13, 14, 16, 17], check: () => true },
-		{ grupos: [22], check: (h, a) => a > 500 },
-		{ grupos: [23], check: (h, a) => h > 3 && a > 500 },
-		{ grupos: [25, 30, 31], check: (h, a) => h > 6 && a > 750 },
-		{ grupos: [2, 3, 4, 5, 35, 39], check: (h, a) => h > 9 && a > 750 },
-		{ grupos: [6, 7, 8, 9, 10, 11, 12, 15, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 && a > 1200 },
-		{ grupos: [33, 37], check: (h, a) => h > 12 && a > 1200 },
-		{ grupos: [36], check: (h, a) => h > 12 && a > 2000 },
-		{ grupos: [18], check: (h, a) => h > 12 && a > 5000 },
-	],
-	'010': [ // 010: SISTEMA DE CHUVEIROS AUTOMÁTICOS
-		{ grupos: [2], check: (h, a) => h > 60 },
-		{ grupos: [], check: (h, a) => h > 3 && a > 500 },
-		{ grupos: [22, 23, 30, 31], check: (h, a) => h > 3 && a > 3000 },
-		{ grupos: [17], check: (h, a) => h > 6 && a > 3000 },
-		{ grupos: [35, 39], check: (h, a) => h > 12 && a > 3000 },
-		{ grupos: [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 25, 26, 27, 28, 29, 32, 38], check: (h, a) => h > 12 && a > 5000 },
-		{ grupos: [34], check: (h, a) => h > 15 && a > 5000 },
-		{ grupos: [37], check: (h, a) => h > 15 && a > 7000 },
-		{ grupos: [36], check: (h, a) => h > 15 && a > 10000 },
-	],
-	'007': [ // 007: SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)
-		{ grupos: [3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39], check: (h, a) => h > 9 && a > 750 },
-		{ grupos: [2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 26, 27, 28], check: (h, a) => h > 9 && a > 1200 },
-		{ grupos: [36], check: (h, a) => h > 12 && a > 2000 },
-	]
+    '006': [ // 006: SISTEMA DE PROTEÇÃO POR HIDRANTES
+        { grupos: [22], check: (h, a) => a > 500 },
+        { grupos: [23], check: (h, a) => h > 3 && a > 500 },
+        { grupos: [25, 30, 31], check: (h, a) => h > 6 && a > 750 },
+        { grupos: [3, 4, 5, 35, 39], check: (h, a) => h > 9 && a > 750 },
+        { grupos: [2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 && a > 1200 },
+        { grupos: [33, 37], check: (h, a) => h > 12 && a > 1200 },
+        { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
+    ],
+    '009': [ // 009: SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO
+        { grupos: [13, 14, 16, 17], check: () => true },
+        { grupos: [22], check: (h, a) => a > 500 },
+        { grupos: [23], check: (h, a) => h > 3 && a > 500 },
+        { grupos: [25, 30, 31], check: (h, a) => h > 6 && a > 750 },
+        { grupos: [2, 3, 4, 5, 35, 39], check: (h, a) => h > 9 && a > 750 },
+        { grupos: [6, 7, 8, 9, 10, 11, 12, 15, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 && a > 1200 },
+        { grupos: [33, 37], check: (h, a) => h > 12 && a > 1200 },
+        { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
+        { grupos: [18], check: (h, a) => h > 12 && a > 5000 },
+    ],
+    '010': [ // 010: SISTEMA DE CHUVEIROS AUTOMÁTICOS
+        { grupos: [2], check: (h, a) => h > 60 },
+        { grupos: [], check: (h, a) => h > 3 && a > 500 },
+        { grupos: [22, 23, 30, 31], check: (h, a) => h > 3 && a > 3000 },
+        { grupos: [17], check: (h, a) => h > 6 && a > 3000 },
+        { grupos: [35, 39], check: (h, a) => h > 12 && a > 3000 },
+        { grupos: [3, 4, 5, 6, 7, 8, 9, 10 , 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 25, 26, 27, 28, 29, 32, 38], check: (h, a) => h > 12 && a > 5000 },
+        { grupos: [34], check: (h, a) => h > 15 && a > 5000 },
+        { grupos: [37], check: (h, a) => h > 15 && a > 7000 },
+        { grupos: [36], check: (h, a) => h > 15 && a > 10000 },
+    ],
+    '007': [ // 007: SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)
+        { grupos: [3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39], check: (h, a) => h > 9 && a > 750 },
+        { grupos: [2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 26, 27, 28], check: (h, a) => h > 9 && a > 1200 },
+        { grupos: [36], check: (h, a) => h > 12 && a > 2000 },
+    ]
 };
 
 /**
  * Determinar as categorias que serão selecionadas
  */
 function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
-	// categorias fixas: 002, 003, 004, 005, 008
-	let categoriasParaSelecionar = ['002', '003', '004', '005', '008'];
+    // categorias fixas: 002, 003, 004, 005, 008
+    let categoriasParaSelecionar = ['002', '003', '004', '005', '008'];
 
-	const ocupacao = parseInt(ocupacaoStr, 10) || 0;
-	const area = parseNumber(areaStr);
-	const altura = parseNumber(alturaStr);
+    const ocupacao = parseInt(ocupacaoStr, 10) || 0;
+    const area = parseNumber(areaStr);
+    const altura = parseNumber(alturaStr);
 
-	// --- 1. DOCUMENTAÇÃO ('001') ---
-	// Regra: Sempre será selecionada, exceto alguns casos.
-	let selecionarDocumentacao = true;
+    // --- 1. DOCUMENTAÇÃO ('001') ---
+    // Regra: Sempre será selecionada, exceto alguns casos.
+    let selecionarDocumentacao = true;
 
-	if (ocupacao > 0) {
-		// 1.a) Grupos com Area <= 750 ou Altura <= 9
-		const gruposDocA = [3, 4, 5, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38, 39];
-		if (gruposDocA.includes(ocupacao) && (area <= 750.00 && altura <= 9.0)) selecionarDocumentacao = false;
+    if (ocupacao > 0) {
+        // 1.a) Grupos com Area <= 750 ou Altura <= 9
+        const gruposDocA = [3, 4, 5, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38, 39];
+        if (gruposDocA.includes(ocupacao) && (area <= 750.00 && altura <= 9.0)) selecionarDocumentacao = false;
 
-		// 1.b) Grupo 25 com Area <= 750 OR Height <= 6
-		if ([25].includes(ocupacao) && (area <= 750.00 && altura <= 6.0)) selecionarDocumentacao = false;
+        // 1.b) Grupo 25 com Area <= 750 OR Height <= 6
+        if ([25].includes(ocupacao) && (area <= 750.00 && altura <= 6.0)) selecionarDocumentacao = false;
 
-		// 1.c) Grupos 26, 27, 28 com Area <= 1200 ou Altura > 3.0
-		if ([26, 27, 28].includes(ocupacao) && (area <= 1200.00 && altura <= 3.0)) selecionarDocumentacao = false;
+        // 1.c) Grupos 26, 27, 28 com Area <= 1200 ou Altura > 3.0
+        if ([26, 27, 28].includes(ocupacao) && (area <= 1200.00 && altura <= 3.0)) selecionarDocumentacao = false;
 
-		// 1.d) Grupos diversos com Area <= 1200 ou Altura <= 9
-		const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
-		if (gruposDocD.includes(ocupacao) && (area <= 1200.00 && altura <= 9.0)) selecionarDocumentacao = false;
-	}
+        // 1.d) Grupos diversos com Area <= 1200 ou Altura <= 9
+        const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
+        if (gruposDocD.includes(ocupacao) && (area <= 1200.00 && altura <= 9.0)) selecionarDocumentacao = false;
+    }
 
-	if (selecionarDocumentacao) {
-		categoriasParaSelecionar.unshift('001');
-	}
+    if (selecionarDocumentacao) {
+        categoriasParaSelecionar.unshift('001');
+    }
 
-	// --- 2. Dynamic Logic (Hydrants and Alarms) ---
-	// Loops through the rules defined in 'regrasInclusao'
-	if (ocupacao > 0) {
-		// Iterate through the requirement codes (e.g., '006', '009')
-		for (const [codigoExigencia, regras] of Object.entries(regrasInclusao)) {
+    // --- 2. Dynamic Logic (Hydrants and Alarms) ---
+    // Loops through the rules defined in 'regrasInclusao'
+    if (ocupacao > 0) {
+        // Iterate through the requirement codes (e.g., '006', '009')
+        for (const [codigoExigencia, regras] of Object.entries(regrasInclusao)) {
+            
+            // .some() checks if AT LEAST ONE rule is true. If yes, it selects and stops checking.
+            const deveSelecionar = regras.some(regra => {
+                return regra.grupos.includes(ocupacao) && regra.check(altura, area);
+            });
 
-			// .some() checks if AT LEAST ONE rule is true. If yes, it selects and stops checking.
-			const deveSelecionar = regras.some(regra => {
-				return regra.grupos.includes(ocupacao) && regra.check(altura, area);
-			});
+            if (deveSelecionar) {
+                categoriasParaSelecionar.push(codigoExigencia);
+            }
+        }
+    }
 
-			if (deveSelecionar) {
-				categoriasParaSelecionar.push(codigoExigencia);
-			}
-		}
-	}
-
-	return categoriasParaSelecionar;
+    return categoriasParaSelecionar;
 }
 
 // --- FUNÇÃO DE RENDERIZAÇÃO (EXIBIÇÃO NA TELA) ---
@@ -276,40 +276,40 @@ function renderizarExigencias(codigos, categoriasMap) {
 // --- FUNÇÃO CONTROLADORA (DISPARADA POR EVENTOS) ---
 // --- FUNÇÃO CONTROLADORA (DISPARADA POR EVENTOS) ---
 function dispararVerificacaoDeExigencias() {
-	// 1. Coleta os valores dos campos
-	const ocupacaoStr = $('#ocupacao').val();
-	const areaStr = $('#area').val();
-	const alturaStr = $('#altura').val();
+    // 1. Coleta os valores dos campos
+    const ocupacaoStr = $('#ocupacao').val();
+    const areaStr = $('#area').val();
+    const alturaStr = $('#altura').val();
 
-	// Se faltar dados essenciais, não faz nada
-	if (!ocupacaoStr || !areaStr || !alturaStr) {
-		return;
-	}
+    // Se faltar dados essenciais, não faz nada
+    if (!ocupacaoStr || !areaStr || !alturaStr) {
+        return;
+    }
 
-	// 2. Calcula quais exigências deveriam estar lá AGORA
-	const exigenciasPadraoCalculadas = getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr);
+    // 2. Calcula quais exigências deveriam estar lá AGORA
+    const exigenciasPadraoCalculadas = getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr);
 
-	// 3. ADICIONAR: Adiciona categorias que deveriam estar lá, mas não estão
-	exigenciasPadraoCalculadas.forEach(codigo => {
-		if (!camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
-			adicionarCategoria(codigo);
-		}
-	});
+    // 3. ADICIONAR: Adiciona categorias que deveriam estar lá, mas não estão
+    exigenciasPadraoCalculadas.forEach(codigo => {
+        if (!camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
+            adicionarCategoria(codigo);
+        }
+    });
 
-	// 4. REMOVER: Remove categorias 'Automáticas' (001 e 006) que estão na tela mas NÃO deveriam estar mais.
-	// OBS: Não removemos 002, 003, 004, 005, 008 porque elas são fixas (sempre true),
-	// e não removemos outras categorias (ex: 018) para preservar adições manuais.
-	const categoriasGerenciaveis = ['001', '006', '007', '009', '010'];
+    // 4. REMOVER: Remove categorias 'Automáticas' (001 e 006) que estão na tela mas NÃO deveriam estar mais.
+    // OBS: Não removemos 002, 003, 004, 005, 008 porque elas são fixas (sempre true),
+    // e não removemos outras categorias (ex: 018) para preservar adições manuais.
+    const categoriasGerenciaveis = ['001', '006', '007', '009', '010']; 
 
-	categoriasGerenciaveis.forEach(codigo => {
-		// Se a categoria está ativa na tela...
-		if (camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
-			// ...mas o novo cálculo diz que ela NÃO deveria existir...
-			if (!exigenciasPadraoCalculadas.includes(codigo)) {
-				removerCategoria(codigo); // Removemos ela.
-			}
-		}
-	});
+    categoriasGerenciaveis.forEach(codigo => {
+        // Se a categoria está ativa na tela...
+        if (camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
+            // ...mas o novo cálculo diz que ela NÃO deveria existir...
+            if (!exigenciasPadraoCalculadas.includes(codigo)) {
+                removerCategoria(codigo); // Removemos ela.
+            }
+        }
+    });
 }
 
 // Função para salvar a anotação
@@ -1396,124 +1396,108 @@ document.addEventListener('DOMContentLoaded', () => {
 	$('#areaConstruida').mask('000.000.000.000.000,00', { reverse: true });
 
 	// CNPJ Lookup Functionality
+	const cnpjInput = document.getElementById('cnpj');
 	const enderecoInput = document.getElementById('endereco');
 	const instituicaoInput = document.getElementById('instituicao');
 	const localizacaoInput = document.getElementById('localizacao');
-	const responsavelInput = document.getElementById('responsavel');
 
-	// 🚨 CORREÇÃO: Usar a função de proxy correta (buscarDadosCNPJ) 🚨
-	cnpjInput.addEventListener('blur', async function () {
+	cnpjInput.addEventListener('blur', function () {
 		let cnpj = cnpjInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
 
-		if (cnpj.length === 14) {
+		if (cnpj.length === 14) { // Verifica se o CNPJ tem 14 dígitos
 			Utils.showToast("Buscando dados do CNPJ...", "info");
+			// Usando BrasilAPI (resolvendo o problema de CORS)
+			fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`)
+				.then(response => {
+					if (!response.ok) {
+						return response.json().then(err => { throw new Error(err.message || 'Erro ao buscar CNPJ.'); });
+					}
+					return response.json();
+				})
+				.then(data => {
+					if (data.type === 'invalid_parameter' || data.type === 'service_error') {
+						throw new Error(data.message || 'CNPJ não encontrado ou inválido pela API.');
+					}
 
-			try {
-				// 🚨 CHAMA O SEU PROXY NODE.JS (via a função buscarDadosCNPJ)
-				const data = await buscarDadosCNPJ(cnpj);
-
-				if (data) {
-					// A ReceitaWS gratuita pode retornar 'nome' e não 'razao_social', 
-					// mas vamos manter o código original para preencher.
-					const razaoSocial = data.razao_social || data.nome || '';
-					const nomeFantasia = data.nome_fantasia || '';
-
-					const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento || ''}, ${data.bairro}, ${data.municipio} - ${data.uf} - CEP: ${data.cep}`;
-
+					const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf} - CEP: ${data.cep}`;
 					if (enderecoInput.value.trim() === '') {
 						enderecoInput.value = enderecoCompleto.toUpperCase();
 					}
-
-					const nomeParaInput = `${nomeFantasia} / ${razaoSocial}`;
-
+					const nomeParaInput = `${data.nome_fantasia} / ${data.razao_social}`;
 					if (instituicaoInput.value.trim() === '') {
 						instituicaoInput.value = nomeParaInput.toUpperCase();
 					}
 
-					responsavelInput.value = `${data.telefone}, ${data.email}`;
 					enderecoInput.classList.remove('is-invalid');
 					instituicaoInput.classList.remove('is-invalid');
 					Utils.showToast("Dados do CNPJ preenchidos!", "success");
 					console.log(data);
-
-					// -------- LÓGICA PARA BUSCAR COORDENADAS (MANTIDA) --------
+					// -------- NOVA LÓGICA PARA BUSCAR COORDENADAS --------
 					if (localizacaoInput.value.trim() === '') {
+
 						// Melhorando a precisão do endereço para a busca
 						const enderecoParaGeocodificar = encodeURIComponent(
 							`${data.logradouro}, ${data.bairro}, ${data.municipio}, ${data.uf}, Brasil`
 						);
 
-						// A geocodificação é outra API, se estiver dando erro de CORS, 
-						// você deve criar um proxy para ela também. 
-						// Por agora, vamos manter a URL do Google, assumindo que ela não dá CORS.
-						fetch(`https://nominatim.openstreetmap.org/search?q=${enderecoParaGeocodificar}&format=json&limit=1`)
-							.then(response => response.json())
+						Utils.showToast("Buscando coordenadas geográficas...", "info");
+						console.log(enderecoParaGeocodificar);
+						// CORRIGIDO: Usando o endpoint correto da API Nominatim (/search?format=json)
+						fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${enderecoParaGeocodificar}&limit=1`, {
+							// A Nominatim API exige um cabeçalho User-Agent para requisições
+							headers: {
+								'User-Agent': 'SeuSistema/1.0' // Substitua pelo nome do seu sistema
+							}
+						})
+							.then(geoResponse => {
+								// Verifica se a resposta foi bem-sucedida (status 200)
+								if (!geoResponse.ok) {
+									// Lança um erro para cair no bloco .catch
+									throw new Error(`Erro ao buscar coordenadas. Status: ${geoResponse.status}`);
+								}
+								return geoResponse.json();
+							})
 							.then(geoData => {
 								if (geoData.length > 0) {
-									const lat = parseFloat(geoData[0].lat).toFixed(6);
-									const lon = parseFloat(geoData[0].lon).toFixed(6);
+									const lat = parseFloat(geoData[0].lat).toFixed(6); // Formata
+									const lon = parseFloat(geoData[0].lon).toFixed(6); // Formata
+
+									// Atribui o valor APENAS se o campo estiver vazio (garantido pelo 'if' externo)
 									localizacaoInput.value = `${lat}, ${lon}`;
 									localizacaoInput.classList.remove('is-invalid');
-									Utils.showToast("Coordenadas preenchidas!", "info");
+									Utils.showToast("Coordenadas geográficas preenchidas!", "success");
 								} else {
+									localizacaoInput.value = '';
 									localizacaoInput.classList.add('is-invalid');
-									Utils.showToast('Coordenadas não encontradas. Preencha manualmente.', "warning");
+									Utils.showToast("Coordenadas não encontradas para o endereço.", "warning");
 								}
 							})
-							.catch(() => {
+							.catch(geoError => {
+								console.error('Erro na requisição da API de Geocodificação:', geoError);
+								// Não limpa o campo, apenas mostra o erro se a busca falhou
 								localizacaoInput.classList.add('is-invalid');
 								Utils.showToast('Erro ao buscar coordenadas. Tente novamente mais tarde.', "danger");
 							});
 					}
-					// ---------------- FIM DA LÓGICA DE COORDENADAS ----------------
-				}
-			} catch (error) {
-				// Este catch pega erros do Proxy (seu servidor) OU erros da ReceitaWS retornados pelo Proxy.
-				console.error('Erro na requisição da API de CNPJ:', error);
-				enderecoInput.value = '';
-				instituicaoInput.value = '';
-				localizacaoInput.value = '';
-				enderecoInput.classList.add('is-invalid');
-				instituicaoInput.classList.add('is-invalid');
-				localizacaoInput.classList.add('is-invalid');
-				Utils.showToast(`Ocorreu um erro ao buscar os dados: ${error.message || 'Verifique o CNPJ ou sua conexão.'}`, "danger");
-			}
+					// ---------------- FIM DA NOVA LÓGICA ----------------
+				})
+				.catch(error => {
+					console.error('Erro na requisição da API de CNPJ:', error);
+					enderecoInput.value = '';
+					instituicaoInput.value = '';
+					localizacaoInput.value = ''; // Limpa também a localização em caso de erro no CNPJ
+					enderecoInput.classList.add('is-invalid');
+					instituicaoInput.classList.add('is-invalid');
+					localizacaoInput.classList.add('is-invalid');
+					Utils.showToast(`Ocorreu um erro ao buscar os dados: ${error.message || 'Verifique o CNPJ ou sua conexão.'}`, "danger");
+				});
 		} else {
 			enderecoInput.value = '';
 			instituicaoInput.value = '';
-			localizacaoInput.value = ''; //limpa se não tiver 14 digitos no cnpj 
+			localizacaoInput.value = ''; //limpa se não tiver 14 digitos no cnpj
 		}
 	});
 
-	async function buscarDadosCNPJ(cnpj) {
-		const cnpjLimpo = cnpj.replace(/\D/g, '');
-
-		// ATENÇÃO: A URL deve ser a do seu Proxy Server
-		const urlDoSeuProxy = `http://localhost:3000/cnpj/${cnpjLimpo}`;
-
-		try {
-			// O navegador chama seu Proxy na porta 3000
-			const response = await fetch(urlDoSeuProxy);
-
-			if (!response.ok) {
-				// Lidar com erros retornados pelo seu próprio Proxy
-				const erroData = await response.json();
-				throw new Error(erroData.message || `Erro HTTP: ${response.status}`);
-			}
-
-			const dados = await response.json();
-
-			// Tratar o status 'ERROR' da ReceitaWS, se necessário
-			if (dados.status === 'ERROR') {
-				throw new Error(dados.message || 'Erro na consulta do CNPJ.');
-			}
-
-			return dados;
-
-		} catch (error) {
-			console.error("Falha na consulta via Proxy:", error.message);
-		}
-	}
 
 	// Event listener para o botão de salvar anotação dentro do modal
 	document.getElementById('btnSalvarAnotacao').addEventListener('click', salvarAnotacao);
@@ -1930,53 +1914,53 @@ if (processoBuscaElement) {
  * usando o valor atual do campo de input 'processoBusca'.
  */
 function buscarProcessoPorInput() {
-	const processoInput = document.getElementById("processoBusca");
-	if (!processoInput) {
-		console.error("Element with ID 'processoBusca' not found.");
-		Utils.showToast("Erro interno: campo de processo não encontrado.", "danger");
-		return;
-	}
-	const processoBuscaValue = processoInput.value.trim(); // Use trim() to remove excess spaces
+    const processoInput = document.getElementById("processoBusca");
+    if (!processoInput) {
+        console.error("Element with ID 'processoBusca' not found.");
+        Utils.showToast("Erro interno: campo de processo não encontrado.", "danger");
+        return;
+    }
+    const processoBuscaValue = processoInput.value.trim(); // Use trim() to remove excess spaces
 
-	if (!processoBuscaValue || processoBuscaValue.length !== 22) {
-		// Se o campo está vazio ou o tamanho incorreto, apenas limpa se já não estiver limpo, 
-		// mas não dispara toast de erro no blur se estiver apenas vazio.
-		if (processoBuscaValue) {
-			Utils.showToast("Informe o número do processo completo para buscar.", "warning");
-		}
+    if (!processoBuscaValue || processoBuscaValue.length !== 22) {
+        // Se o campo está vazio ou o tamanho incorreto, apenas limpa se já não estiver limpo, 
+        // mas não dispara toast de erro no blur se estiver apenas vazio.
+        if (processoBuscaValue) {
+            Utils.showToast("Informe o número do processo completo para buscar.", "warning");
+        }
+        
+        // Sempre limpa o formulário se a busca for inválida (previne dados incorretos na tela)
+        document.querySelector('form').reset();
+        document.getElementById('tituloLaudo').className = 'display-6';
+        document.getElementById('exigenciasContainer').innerHTML = '';
+        document.getElementById('badgesCategorias').innerHTML = '';
+        camposDeExigenciasAtivos = {};
+        document.getElementById("retornoNao").checked = true;
+        // Re-preenche o campo de busca com o valor inválido que estava lá
+        processoInput.value = processoBuscaValue; 
+        return;
+    }
 
-		// Sempre limpa o formulário se a busca for inválida (previne dados incorretos na tela)
-		document.querySelector('form').reset();
-		document.getElementById('tituloLaudo').className = 'display-6';
-		document.getElementById('exigenciasContainer').innerHTML = '';
-		document.getElementById('badgesCategorias').innerHTML = '';
-		camposDeExigenciasAtivos = {};
-		document.getElementById("retornoNao").checked = true;
-		// Re-preenche o campo de busca com o valor inválido que estava lá
-		processoInput.value = processoBuscaValue;
-		return;
-	}
+    const dados = localStorage.getItem(`processo-${processoBuscaValue}`);
+    if (!dados) {
+        Utils.showToast("Processo não encontrado.", "danger");
+        // Limpa o formulário, mantendo o valor de busca
+        document.querySelector('form').reset();
+        document.getElementById('tituloLaudo').className = 'display-6';
+        document.getElementById('exigenciasContainer').innerHTML = '';
+        document.getElementById('badgesCategorias').innerHTML = '';
+        camposDeExigenciasAtivos = {};
+        document.getElementById("retornoNao").checked = true;
+        processoInput.value = processoBuscaValue;
+        return;
+    }
 
-	const dados = localStorage.getItem(`processo-${processoBuscaValue}`);
-	if (!dados) {
-		Utils.showToast("Processo não encontrado.", "danger");
-		// Limpa o formulário, mantendo o valor de busca
-		document.querySelector('form').reset();
-		document.getElementById('tituloLaudo').className = 'display-6';
-		document.getElementById('exigenciasContainer').innerHTML = '';
-		document.getElementById('badgesCategorias').innerHTML = '';
-		camposDeExigenciasAtivos = {};
-		document.getElementById("retornoNao").checked = true;
-		processoInput.value = processoBuscaValue;
-		return;
-	}
+    const parsedData = JSON.parse(dados);
+    // Garante que o campo de processo seja preenchido com o valor que foi buscado
+    parsedData.processoBusca = processoBuscaValue;
 
-	const parsedData = JSON.parse(dados);
-	// Garante que o campo de processo seja preenchido com o valor que foi buscado
-	parsedData.processoBusca = processoBuscaValue;
-
-	preencherFormulario(parsedData);
-	Utils.showToast("Processo carregado com sucesso!", "success");
+    preencherFormulario(parsedData);
+    Utils.showToast("Processo carregado com sucesso!", "success");
 }
 
 // --- GATILHOS DE EVENTOS ---
