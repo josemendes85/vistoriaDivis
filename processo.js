@@ -360,6 +360,64 @@ function salvarAnotacao() {
 	}
 }
 
+/**
+ * Função auxiliar de fallback para copiar o texto usando um campo temporário.
+ */
+function copiaFallback(texto) {
+    const tempInput = document.createElement("input");
+    tempInput.value = texto;
+    document.body.appendChild(tempInput);
+    
+    tempInput.select();
+    tempInput.setSelectionRange(0, 99999); // Para mobile
+
+    try {
+        // document.execCommand é obsoleto, mas é um bom fallback
+        const success = document.execCommand('copy');
+        if (success) {
+            Utils.showToast(`Número do Processo copiado (Fallback): ${texto}`, "success");
+        } else {
+            Utils.showToast("Erro ao copiar. A cópia automática falhou.", "danger");
+        }
+    } catch (err) {
+        Utils.showToast("Erro ao copiar. Tente selecionar e copiar manualmente.", "danger");
+    } finally {
+        tempInput.remove(); // Remove o elemento temporário
+    }
+}
+
+/**
+ * Copia o valor do campo 'processoBusca' para a área de transferência.
+ */
+function copiarProcessoBusca() {
+    // Busca o input do processo
+    const processoInput = document.getElementById("processoBusca");
+    
+    // Verifica se o campo está vazio
+    if (!processoInput || !processoInput.value.trim()) {
+        Utils.showToast("O campo de processo está vazio.", "warning");
+        return;
+    }
+    
+    const textoParaCopiar = processoInput.value.trim();
+
+    // Tenta usar a API moderna navigator.clipboard (mais recomendada)
+    if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(textoParaCopiar)
+            .then(() => {
+                 Utils.showToast(`Número do Processo copiado: ${textoParaCopiar}`, "success");
+            })
+            .catch(err => {
+                console.error('Erro ao usar navigator.clipboard:', err);
+                // Chama o fallback em caso de falha da API moderna
+                copiaFallback(textoParaCopiar);
+            });
+    } else {
+        // Se a API moderna não estiver disponível (ex: em HTTP), usa o fallback
+        copiaFallback(textoParaCopiar);
+    }
+}
+
 // Dados das exigências
 const DADOS_SISTEMA = {
 	categorias: {
@@ -1967,6 +2025,9 @@ function buscarProcessoPorInput() {
 
 // Botão BUSCAR: Dispara ao clicar
 document.getElementById("buscarProcesso").addEventListener("click", buscarProcessoPorInput);
+
+// Botão Copiar: Event listener para o botão de copiar
+document.getElementById("copiarProcesso")?.addEventListener("click", copiarProcessoBusca);
 
 // Input 'processoBusca': Dispara ao perder o foco (onblur)
 document.getElementById("processoBusca").addEventListener("blur", buscarProcessoPorInput);
