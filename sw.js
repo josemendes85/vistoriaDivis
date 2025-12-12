@@ -7,8 +7,9 @@ const urlsToCache = [
   './',
   './index.html',
   './processo.html',
-  './cl_index.html',           // Novo link do menu
-  './coordenada_index.html',   // Novo link do menu
+  './cl_index.html',
+  './coordenada_index.html',
+  './sobre.html',
   './manifest.json',
   './sw.js',
   './style.css',               // Arquivo CSS local (se existir)
