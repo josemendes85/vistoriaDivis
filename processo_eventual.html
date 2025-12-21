@@ -153,6 +153,7 @@
                         <div class="col-md-3">
                             <label class="form-label">Terá brigada?</label>
                             <select class="form-select" id="tem_brigada">
+                                <option value="" selected disabled>Selecione...</option>
                                 <option>Sim</option>
                                 <option>Não</option>
                             </select>
@@ -325,6 +326,7 @@
                         <div class="col-md-3">
                             <label class="form-label">Cert. dos Brig. Válidos?</label>
                             <select class="form-select" id="cert_brigadista">
+                                <option value="" selected disabled>Selecione...</option>
                                 <option>Sim</option>
                                 <option>Não</option>
                             </select>
@@ -346,6 +348,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Possui estrutura?</label>
                             <select class="form-select" id="possui_estrutura">
+                                <option value="" selected disabled>Selecione...</option>
                                 <option>Sim</option>
                                 <option>Não</option>
                             </select>
@@ -353,6 +356,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Evento cercado?</label>
                             <select class="form-select" id="cercamento">
+                                <option value="" selected disabled>Selecione...</option>
                                 <option>Sim</option>
                                 <option>Não</option>
                             </select>
@@ -423,8 +427,16 @@
                         <div class="col-md-3">
                             <label class="form-label">Extintores</label>
                             <input type="number" class="form-control" id="q_extintores" />
+                        </div>extintores_validos
+                        <div class="col-md-4">
+                            <label class="form-label">Extintores no prazo de validade e conforme o croqui?</label>
+                            <select class="form-select" id="extintores_validos">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
                         </div>
-
                         <div class="col-md-4">
                             <label class="form-label">Quadros com DR isolados?</label>
                             <select class="form-select" id="qd_dr">
@@ -446,6 +458,7 @@
                         <div class="col-md-4">
                             <label class="form-label">Estrut. Aterradas?</label>
                             <select class="form-select" id="estruturas_aterradas">
+                                <option value="" selected disabled>Selecione...</option>
                                 <option>Sim</option>
                                 <option>Não</option>
                             </select>
@@ -504,6 +517,24 @@
                         <div class="col-md-4">
                             <label class="form-label">Saídas Iluminadas?</label>
                             <select class="form-select" id="saidas_iluminadas">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Saídas Desobstruídas?</label>
+                            <select class="form-select" id="saidas_desobstruidas">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Distância Máxima a percorrer de 120m?</label>
+                            <select class="form-select" id="distancias_cumpridas">
                                 <option value="" selected disabled>Selecione...</option>
                                 <option>Não se aplica</option>
                                 <option>Sim</option>
