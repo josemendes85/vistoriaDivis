@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vistorias DIVIS - Cadastro de Eventual</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+
+    <style>
+        body {
+            padding-top: 70px;
+            padding-bottom: 40px;
+            background-color: #f8f9fa;
+        }
+
+        .section-title {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-left: 5px solid #0d6efd;
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .card {
+            border-radius: 12px;
+            border: none;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .btn-geo {
+            margin-top: 32px;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-white fixed-top shadow-sm">
+        <div class="container-fluid">
+            <a class="btn btn-outline-secondary btn-sm" href="eventuais.html">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+            <span class="navbar-brand mb-0 h1 mx-auto">Vistoria de Evento</span>
+        </div>
+    </nav>
+
+    <div class="container">
+        <form id="formEventual" class="needs-validation" novalidate autocomplete="off">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-geo-alt me-2"></i>Identificação e Localização
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Número do Processo</label>
+                            <input type="text" class="form-control" id="processo" placeholder="00000-00000000/0000-00"
+                                required />
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Nome do Evento</label>
+                            <input type="text" class="form-control" id="evento" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Região Administrativa</label>
+                            <select class="form-select" id="ra" required>
+                                <option value="">Selecione...</option>
+                                <option>RA 1 - Plano Piloto</option>
+                                <option>RA 2 - Gama</option>
+                                <option>RA 3 - Taguatinga</option>
+                                <option>Outras RAs...</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Endereço do Evento</label>
+                            <input type="text" class="form-control" id="endereco" />
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Georreferenciamento</label>
+                            <input type="text" class="form-control" id="geo" placeholder="-00.0000, -00.0000" />
+                        </div>
+                        <div class="col-md-4 d-grid">
+                            <button type="button" class="btn btn-outline-primary btn-geo" onclick="getLoaction()">
+                                <i class="bi bi-pin-map-fill"></i> Localização Atual
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-calendar-event me-2"></i>Período e Capacidade
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Data Início</label>
+                            <input type="date" class="form-control" id="data_inicio" required />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Data Final</label>
+                            <input type="date" class="form-control" id="data_fim" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label">Observações quanto ao período</label>
+                            <input type="text" class="form-control" id="obs_periodo" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Público do Evento</label>
+                            <input type="number" class="form-control" id="publico" placeholder="0000" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Área total (m²)</label>
+                            <input type="number" class="form-control" id="area" placeholder="0000" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Realizou a vistoria?</label>
+                            <select class="form-select" id="vistoria_realizada">
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-person-check me-2"></i>Responsáveis
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-12">
+                            <label class="form-label">Responsável pelo evento</label>
+                            <select class="form-select" id="responsavel">
+                                <option value="">Selecione o responsável...</option>
+                                <option>
+                                    Caio Dutra Salomão Dias - CPF: 037.340.781-56 / TEL. 61 99976-7393
+                                </option>
+                                <option>
+                                    Maria Souza - CPF: 444.555.666-77 / TEL. 61 99999-0000
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Terá brigada?</label>
+                            <select class="form-select" id="tem_brigada">
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Empresa de brigada</label>
+                            <select class="form-select" id="empresa_brigada">
+                                <option value="">Selecione a empresa...</option>
+                                <option value="5 ESTRELAS SISTEMA DE SEGURANÇA LTDA - EMP-B/072-07">5 ESTRELAS SISTEMA DE SEGURANÇA LTDA - EMP-B/072-07</option>
+                                <option value="A&R EVENTOS ESPECIAIS LTDA (FIEL SERVICOS ESPECIALIZADOS EM GERAL) - EMP-B/688-24">A&R EVENTOS ESPECIAIS LTDA (FIEL SERVICOS ESPECIALIZADOS EM GERAL) - EMP-B/688-24</option>
+                                <option value="ADFORT SERVIÇOS GERAIS LTDA - EMP-B/503-23">ADFORT SERVIÇOS GERAIS LTDA - EMP-B/503-23</option>
+                                <option value="ÁGIL EMPRESA DE VIGILÂNCIA LTDA - EMP-B/768-18">ÁGIL EMPRESA DE VIGILÂNCIA LTDA - EMP-B/768-18</option>
+                                <option value="AGIL SERVIÇOS ESPECIAIS LTDA - EMP-B/195-06">AGIL SERVIÇOS ESPECIAIS LTDA - EMP-B/195-06</option>
+                                <option value="AGUIA DOURADA 6 ESTRELAS PREVENCAO E VIGILANCIA - EMP-B/369-22">AGUIA DOURADA 6 ESTRELAS PREVENCAO E VIGILANCIA - EMP-B/369-22</option>
+                                <option value="ALEO LIMPEZA E CONSERVACAO LTDA - EMP-B/561-24">ALEO LIMPEZA E CONSERVACAO LTDA - EMP-B/561-24</option>
+                                <option value="ALICERZ VIGILANCIA E MONITORAMENTO LTDA - EMP-B/315-22">ALICERZ VIGILANCIA E MONITORAMENTO LTDA - EMP-B/315-22</option>
+                                <option value="ALLIANCE FACILITIES SOLUÇÃO EM SERVIÇOS - EMP-B/405-23">ALLIANCE FACILITIES SOLUÇÃO EM SERVIÇOS - EMP-B/405-23</option>
+                                <option value="AMPLOS ENGENHARIA LTDA - EMP-B/583-24">AMPLOS ENGENHARIA LTDA - EMP-B/583-24</option>
+                                <option value="AMPLOS PROTEÇÃO CONTRA INCÊNDIO LTDA - EMP-B/636-15">AMPLOS PROTEÇÃO CONTRA INCÊNDIO LTDA - EMP-B/636-15</option>
+                                <option value="ANDRÔMEDA EVENTOSE SERVIÇOS EIRELI - EMP-B/835-20">ANDRÔMEDA EVENTOSE SERVIÇOS EIRELI - EMP-B/835-20</option>
+                                <option value="ANJOS DA GUARDA EIRELI - EMP-B/297-07">ANJOS DA GUARDA EIRELI - EMP-B/297-07</option>
+                                <option value="APECE - SERVIÇOS GERAIS LTDA - EMP-B/404-23">APECE - SERVIÇOS GERAIS LTDA - EMP-B/404-23</option>
+                                <option value="APL SERVICE LTDA - ME - EMP-B/586-22">APL SERVICE LTDA - ME - EMP-B/586-22</option>
+                                <option value="ARCANJOS LIFE SOLUÇÕES EM EMERGÊNCIAS MÉDICAS E BRIGADAS DE INCÊNDIO - EMP-B/773-19">ARCANJOS LIFE SOLUÇÕES EM EMERGÊNCIAS MÉDICAS E BRIGADAS DE INCÊNDIO - EMP-B/773-19</option>
+                                <option value="ARJ SISTEMAS DE AR CONDICIONADO E INCENDIO LTDA - EMP-B/377-22">ARJ SISTEMAS DE AR CONDICIONADO E INCENDIO LTDA - EMP-B/377-22</option>
+                                <option value="ATAC - ACADEMIA TÁTICA DE CURSOS E SERVIÇOS LTDA - EMP-B/844-23">ATAC - ACADEMIA TÁTICA DE CURSOS E SERVIÇOS LTDA - EMP-B/844-23</option>
+                                <option value="ATIVA BRIGADISTA LTDA - EMP-B/403-09">ATIVA BRIGADISTA LTDA - EMP-B/403-09</option>
+                                <option value="AX SERVIÇOS ESPECIALIZADOS DE BRIGADISTA EIRELI - EMP-B/024-20">AX SERVIÇOS ESPECIALIZADOS DE BRIGADISTA EIRELI - EMP-B/024-20</option>
+                                <option value="B2B FACILITIES E ADMINISTRACAO LTDA - EMP-B/634-24">B2B FACILITIES E ADMINISTRACAO LTDA - EMP-B/634-24</option>
+                                <option value="BALUARTE VIGILÂNCIA PATRIMONIAL LTDA - EMP-B/593-24">BALUARTE VIGILÂNCIA PATRIMONIAL LTDA - EMP-B/593-24</option>
+                                <option value="BELO ORIENTE SERVICOS TERCEIRIZADOS LTDA - EMP-B/290-22">BELO ORIENTE SERVICOS TERCEIRIZADOS LTDA - EMP-B/290-22</option>
+                                <option value="BRASFORT ADMINISTRACAO E SERVICOS LTDA - EMP-B/487-23">BRASFORT ADMINISTRACAO E SERVICOS LTDA - EMP-B/487-23</option>
+                                <option value="BRASFORT ADMINISTRAÇÃO E SERVIÇOS LTDA - EMP-B/430-06">BRASFORT ADMINISTRAÇÃO E SERVIÇOS LTDA - EMP-B/430-06</option>
+                                <option value="BRASFORT EMPRESA DE SEGURANÇA LTDA - EMP-B/648-16">BRASFORT EMPRESA DE SEGURANÇA LTDA - EMP-B/648-16</option>
+                                <option value="BRASILIA CONSTRUTORA E INSTALADORA INDUSTRIAL LTDA - EMP-B/518-23">BRASILIA CONSTRUTORA E INSTALADORA INDUSTRIAL LTDA - EMP-B/518-23</option>
+                                <option value="BRASTEC - SERVIÇOS E TREINAMENTOS LTDA - EMP-B/647-16">BRASTEC - SERVIÇOS E TREINAMENTOS LTDA - EMP-B/647-16</option>
+                                <option value="BRAVO FIRE SAFETY LTDA - EMP-B/616-24">BRAVO FIRE SAFETY LTDA - EMP-B/616-24</option>
+                                <option value="BRIGADA 2 IRMÃOS – BRIGADA DE INCÊNDIO - EMP-B/643-16">BRIGADA 2 IRMÃOS – BRIGADA DE INCÊNDIO - EMP-B/643-16</option>
+                                <option value="BRIGADA CAPITAL – TREINAMENTOS LTDA ME - EMP-B/193-14">BRIGADA CAPITAL – TREINAMENTOS LTDA ME - EMP-B/193-14</option>
+                                <option value="BRIGADA DE INCENDIO BH LTDA - EMP-B/217-21">BRIGADA DE INCENDIO BH LTDA - EMP-B/217-21</option>
+                                <option value="BSB FIRE LTDA - EMP-B/182-21">BSB FIRE LTDA - EMP-B/182-21</option>
+                                <option value="BURITI SERVICOS EMPRESARIAIS SA - EMP-B/082-20">BURITI SERVICOS EMPRESARIAIS SA - EMP-B/082-20</option>
+                                <option value="CARLOS ROBERTO PEREIRA ALVES ME (C.R BRIGADISTA) - EMP-B/408-09">CARLOS ROBERTO PEREIRA ALVES ME (C.R BRIGADISTA) - EMP-B/408-09</option>
+                                <option value="CATEDRAL SERVICOS LTDA - EMP-B/450-23">CATEDRAL SERVICOS LTDA - EMP-B/450-23</option>
+                                <option value="CENTRO DE FORMACAO TECNICA BRIGADA FIRE SERVICE LTDA - EMP-B/104-20">CENTRO DE FORMACAO TECNICA BRIGADA FIRE SERVICE LTDA - EMP-B/104-20</option>
+                                <option value="CITY SERVICE SEGURANÇA LTDA - EMP-B/023-06">CITY SERVICE SEGURANÇA LTDA - EMP-B/023-06</option>
+                                <option value="CLINIMED SAUDE SERVICOS E TREINAMENTOS LTDA - EMP-B/471-23">CLINIMED SAUDE SERVICOS E TREINAMENTOS LTDA - EMP-B/471-23</option>
+                                <option value="COLT SERVIÇOS DE BRIGADISTA PARTICULAR LTDA - EMP-B/658-16">COLT SERVIÇOS DE BRIGADISTA PARTICULAR LTDA - EMP-B/658-16</option>
+                                <option value="COMBAT SEGURANÇA CONTRA INCÊNDIO LTDA - EMP-B/228-21">COMBAT SEGURANÇA CONTRA INCÊNDIO LTDA - EMP-B/228-21</option>
+                                <option value="CON CRET CONSTRUÇÕES LTDA - EMP-B/562-23">CON CRET CONSTRUÇÕES LTDA - EMP-B/562-23</option>
+                                <option value="CONCEPT TERCEIRIZACAO DE SERVICOS E CONSERVACAO LTDA - EMP-B/626-24">CONCEPT TERCEIRIZACAO DE SERVICOS E CONSERVACAO LTDA - EMP-B/626-24</option>
+                                <option value="CONFEDERAL - VIGILÂNCIA E TRANSPORTE DE VALORES LTDA - EMP-B/303-07">CONFEDERAL - VIGILÂNCIA E TRANSPORTE DE VALORES LTDA - EMP-B/303-07</option>
+                                <option value="CRIATIVA BRIGADA CONTRA INCENDIO LTDA - EMP-B/507-12">CRIATIVA BRIGADA CONTRA INCENDIO LTDA - EMP-B/507-12</option>
+                                <option value="CRIATIVA SERVIÇOS AGP LTDA - EMP-B/476-23">CRIATIVA SERVIÇOS AGP LTDA - EMP-B/476-23</option>
+                                <option value="CRIATIVA SERVIÇOS LTDA - EMP-B/651-16">CRIATIVA SERVIÇOS LTDA - EMP-B/651-16</option>
+                                <option value="CRISTAL TERCEIRIZACAO DE SERVICOS LTDA - EMP-B/067-20">CRISTAL TERCEIRIZACAO DE SERVICOS LTDA - EMP-B/067-20</option>
+                                <option value="DAGMA PRESTAÇÃO DE SERVIÇOS LTDA - EMP-B/428-23">DAGMA PRESTAÇÃO DE SERVIÇOS LTDA - EMP-B/428-23</option>
+                                <option value="DCON GERENCIAMENTO E FISCALIZAÇÃO DE CONDOMÍNIOS LTDA - EMP-B/343-22">DCON GERENCIAMENTO E FISCALIZAÇÃO DE CONDOMÍNIOS LTDA - EMP-B/343-22</option>
+                                <option value="DEFENDER CONSERVAÇÃO E LIMPEZA LTDA - EMP-B/173-15">DEFENDER CONSERVAÇÃO E LIMPEZA LTDA - EMP-B/173-15</option>
+                                <option value="DINAMICA FACILITY ADMINISTRAÇÃO PREDIAL LTDA - EMP-B/528-14">DINAMICA FACILITY ADMINISTRAÇÃO PREDIAL LTDA - EMP-B/528-14</option>
+                                <option value="DLF ENGENHARIA COMERCIO E REPRESENTAÇAO LTDA (ENGEMAFER) - EMP-B/350-08">DLF ENGENHARIA COMERCIO E REPRESENTAÇAO LTDA (ENGEMAFER) - EMP-B/350-08</option>
+                                <option value="DMC SERVIÇOS EDUCACIONAIS LTDA ME (CFL CURSOS E SERVIÇOS) - EMP-B/301-06 ">DMC SERVIÇOS EDUCACIONAIS LTDA ME (CFL CURSOS E SERVIÇOS) - EMP-B/301-06 </option>
+                                <option value="DNA SERVICOS LTDA - EMP-B/760-18">DNA SERVICOS LTDA - EMP-B/760-18</option>
+                                <option value="E. S DE ALMEIDA - ME (FIRE SOLUÇOES INTELIGENTES) - EMP-B/664-16">E. S DE ALMEIDA - ME (FIRE SOLUÇOES INTELIGENTES) - EMP-B/664-16</option>
+                                <option value="ECO LIMPEZA LTDA - EMP-B/638-24">ECO LIMPEZA LTDA - EMP-B/638-24</option>
+                                <option value="ELETRODATA ENGENHARIA LTDA - EMP-B/732-17">ELETRODATA ENGENHARIA LTDA - EMP-B/732-17</option>
+                                <option value="ELITE CONSULTORIA EMPRESARIAL E SERVIÇOS GERAIS LTDA - EMP-B/677-16">ELITE CONSULTORIA EMPRESARIAL E SERVIÇOS GERAIS LTDA - EMP-B/677-16</option>
+                                <option value="ELITE TREINAMENTOS E SERVICOS LTDA - EMP-B/504-23">ELITE TREINAMENTOS E SERVICOS LTDA - EMP-B/504-23</option>
+                                <option value="ELO ENGENHARIA E PARTICIPAÇÕES LTDA - EMP-B/792-18">ELO ENGENHARIA E PARTICIPAÇÕES LTDA - EMP-B/792-18</option>
+                                <option value="ENGEMIL ENGENHARIA, EMPREENDIMENTOS, MANUTENÇÃO E INSTALAÇÕES LTDA - EMP-B/603-14">ENGEMIL ENGENHARIA, EMPREENDIMENTOS, MANUTENÇÃO E INSTALAÇÕES LTDA - EMP-B/603-14</option>
+                                <option value="EPS ENGENHARIA, PROJETOS E SERVIÇOS - EMP-B/243-08">EPS ENGENHARIA, PROJETOS E SERVIÇOS - EMP-B/243-08</option>
+                                <option value="EQUIPE BORGES BRIGADA LTDA - EMP-B/564-24">EQUIPE BORGES BRIGADA LTDA - EMP-B/564-24</option>
+                                <option value="ESCOLA DE FORMACAO E PRESTACAO DE SERVICOS OFICIAL LIFE CURSOS LTDA - EMP-B/025-20">ESCOLA DE FORMACAO E PRESTACAO DE SERVICOS OFICIAL LIFE CURSOS LTDA - EMP-B/025-20</option>
+                                <option value="ESPARTA SEGURANÇA LTDA - EMP-B/733-18">ESPARTA SEGURANÇA LTDA - EMP-B/733-18</option>
+                                <option value="ESPARTA SEGURANÇA LTDA - EMP-B/215-21">ESPARTA SEGURANÇA LTDA - EMP-B/215-21</option>
+                                <option value="ESPLANADA SERVIÇOS TERCEIRIZADOS EIRELI - EMP-B/078-20">ESPLANADA SERVIÇOS TERCEIRIZADOS EIRELI - EMP-B/078-20</option>
+                                <option value="EURO SERVIÇOS E LIMPEZA LTDA (EUROSEG) - EMP-B/730-18">EURO SERVIÇOS E LIMPEZA LTDA (EUROSEG) - EMP-B/730-18</option>
+                                <option value="EVLB LIMPEZA CONSERVAÇÃO E PORTARIA LTDA - EMP-B/250-21">EVLB LIMPEZA CONSERVAÇÃO E PORTARIA LTDA - EMP-B/250-21</option>
+                                <option value="FL ADMINISTRACAO DE SERVICOS EM GERAL LTDA - EMP-B/378-22">FL ADMINISTRACAO DE SERVICOS EM GERAL LTDA - EMP-B/378-22</option>
+                                <option value="FORTE DF SERVIÇOS EIRELI ME - EMP-B/538-13">FORTE DF SERVIÇOS EIRELI ME - EMP-B/538-13</option>
+                                <option value="FORTIUM INDUSTRIA COMERCIO SERVICOS E TECNOLOGIA LTDA - EMP-B/580-24">FORTIUM INDUSTRIA COMERCIO SERVICOS E TECNOLOGIA LTDA - EMP-B/580-24</option>
+                                <option value="G I EMPRESA DE SEGURANCA LTDA - EMP-B/806-19">G I EMPRESA DE SEGURANCA LTDA - EMP-B/806-19</option>
+                                <option value="G. DA SILVA AZEVEDO ( POTENCIAL SEGURANÇA E SERVIÇOS ) - EMP-B/575-23">G. DA SILVA AZEVEDO ( POTENCIAL SEGURANÇA E SERVIÇOS ) - EMP-B/575-23</option>
+                                <option value="G. F. MOTA LTDA - EMP-B/628-24">G. F. MOTA LTDA - EMP-B/628-24</option>
+                                <option value="G.S.I - SERVIÇOS ESPECIALIZADOS LTDA - EMP-B/813-19">G.S.I - SERVIÇOS ESPECIALIZADOS LTDA - EMP-B/813-19</option>
+                                <option value="G.S.I GESTÃO DE SEGURANÇA INTEGRADA - VIGILÂNCIA E SEGURANÇA EIRELI - EMP-B/161-21">G.S.I GESTÃO DE SEGURANÇA INTEGRADA - VIGILÂNCIA E SEGURANÇA EIRELI - EMP-B/161-21</option>
+                                <option value="G&E SERVICOS TERCEIRIZADOS LTDA - EMP-B/438-23">G&E SERVICOS TERCEIRIZADOS LTDA - EMP-B/438-23</option>
+                                <option value="G2 SERVICOS GERAIS LTDA - EMP-B/532-23">G2 SERVICOS GERAIS LTDA - EMP-B/532-23</option>
+                                <option value="G9 FACILITIES LTDA - EMP-B/581-24">G9 FACILITIES LTDA - EMP-B/581-24</option>
+                                <option value="GÊNESIS CENTRO DE FORMAÇÃO E SERVIÇOS LTDA-ME - EMP-B/517-13">GÊNESIS CENTRO DE FORMAÇÃO E SERVIÇOS LTDA-ME - EMP-B/517-13</option>
+                                <option value="GLOBAL FIRE CURSOS E SERVIÇOS LTDA - EMP-B/551-23">GLOBAL FIRE CURSOS E SERVIÇOS LTDA - EMP-B/551-23</option>
+                                <option value="GOCIL SERVIÇOS DE VIGILÂNCIA E SEGURANÇA LTDA - EMP-B/335-22">GOCIL SERVIÇOS DE VIGILÂNCIA E SEGURANÇA LTDA - EMP-B/335-22</option>
+                                <option value="GRATIDÃO LIFE EMERGENCIAS MEDICAS LTDA - EMP-B/702-24">GRATIDÃO LIFE EMERGENCIAS MEDICAS LTDA - EMP-B/702-24</option>
+                                <option value="GREEN HOUSE SERVICOS DE LOCACAO DE MAO DE OBRA LTDA - EMP-B/520-13">GREEN HOUSE SERVICOS DE LOCACAO DE MAO DE OBRA LTDA - EMP-B/520-13</option>
+                                <option value="GRIFFO SERVIÇOS DE SEGURANÇA E VIGILÂNCIA LTDA - EMP-B/359-08">GRIFFO SERVIÇOS DE SEGURANÇA E VIGILÂNCIA LTDA - EMP-B/359-08</option>
+                                <option value="GRIFFO SERVIÇOS GERAIS LTDA - EMP-B/747-18">GRIFFO SERVIÇOS GERAIS LTDA - EMP-B/747-18</option>
+                                <option value="GRIFO QAP SERVICOS ESPECIALIZADOS LTDA - EMP-B/542-23">GRIFO QAP SERVICOS ESPECIALIZADOS LTDA - EMP-B/542-23</option>
+                                <option value="GRUPO MAS OUTSOURCING LTDA - EMP-B/549-23">GRUPO MAS OUTSOURCING LTDA - EMP-B/549-23</option>
+                                <option value="GUARDIÕES DA VIDA SEGURANÇA EM SAÚDE CONDOMINAL EIRELI - ME - EMP-B/666-16">GUARDIÕES DA VIDA SEGURANÇA EM SAÚDE CONDOMINAL EIRELI - ME - EMP-B/666-16</option>
+                                <option value="HOUSE ADMINISTRAÇÃO CONDOMINAL LTDA - EMP-B/336-08">HOUSE ADMINISTRAÇÃO CONDOMINAL LTDA - EMP-B/336-08</option>
+                                <option value="HOUSE CLEAN ADMINISTRACAO CONDOMINIAL EIRELI - EMP-B/830-19">HOUSE CLEAN ADMINISTRACAO CONDOMINIAL EIRELI - EMP-B/830-19</option>
+                                <option value="HOUSE TOTAL ADMINISTRACAO CONDOMINIAL EIRELI - EMP-B/324-22">HOUSE TOTAL ADMINISTRACAO CONDOMINIAL EIRELI - EMP-B/324-22</option>
+                                <option value="I5 SEGURANÇA PATRIMONIAL LTDA - EMP-B/539-23">I5 SEGURANÇA PATRIMONIAL LTDA - EMP-B/539-23</option>
+                                <option value="IPANEMA EMPRESA DE SERVIÇOS GERAIS E TRANSPORTE LTDA - EMP-B/117-06">IPANEMA EMPRESA DE SERVIÇOS GERAIS E TRANSPORTE LTDA - EMP-B/117-06</option>
+                                <option value="IPANEMA SEGURANÇA LTDA - EMP-B/316-08">IPANEMA SEGURANÇA LTDA - EMP-B/316-08</option>
+                                <option value="ISLIFE REMOCAO DE PACIENTES LTDA - EMP-B/633-24">ISLIFE REMOCAO DE PACIENTES LTDA - EMP-B/633-24</option>
+                                <option value="JC VIDA REMOÇÕES E SERVIÇOS LTDA - EMP-B/558-13">JC VIDA REMOÇÕES E SERVIÇOS LTDA - EMP-B/558-13</option>
+                                <option value="JGS ADMINISTRAÇÃO DE CONDOMÍNIOS EIRELI - EMP-B/761-18">JGS ADMINISTRAÇÃO DE CONDOMÍNIOS EIRELI - EMP-B/761-18</option>
+                                <option value="JR CONSULTORIA TREINAMENTOS E SERVIÇOS LTDA - EMP-B/674-16">JR CONSULTORIA TREINAMENTOS E SERVIÇOS LTDA - EMP-B/674-16</option>
+                                <option value="JR SEGURANÇA E VIGILANCIA PATRIMONIAL LTDA - EMP-B/611-24">JR SEGURANÇA E VIGILANCIA PATRIMONIAL LTDA - EMP-B/611-24</option>
+                                <option value="JRAIO SEGURANÇA LTDA-ME - EMP-B/624-15">JRAIO SEGURANÇA LTDA-ME - EMP-B/624-15</option>
+                                <option value="JRF SERVIÇOS LTDA - EMP-B/739-18">JRF SERVIÇOS LTDA - EMP-B/739-18</option>
+                                <option value="K2 CONSERVAÇÃO E SERVIÇOS GERAIS EIRELI EPP - EMP-B/460-10">K2 CONSERVAÇÃO E SERVIÇOS GERAIS EIRELI EPP - EMP-B/460-10</option>
+                                <option value="KRATOS PROTECTION LTDA - EMP-B/122-20">KRATOS PROTECTION LTDA - EMP-B/122-20</option>
+                                <option value="LIDERA BSB PRESTAÇÃO DE SERVIÇOS LTDA - EMP-B/406-23">LIDERA BSB PRESTAÇÃO DE SERVIÇOS LTDA - EMP-B/406-23</option>
+                                <option value="LIDERA PRESTAÇÃO DE SERVIÇOS DE BRIGADISTA EIRELI - ME - EMP-B/709-17">LIDERA PRESTAÇÃO DE SERVIÇOS DE BRIGADISTA EIRELI - ME - EMP-B/709-17</option>
+                                <option value="LIFE SUPPORT SEGURANÇA EM SAÚDE CONDOMINAL - EMP-B/550-23">LIFE SUPPORT SEGURANÇA EM SAÚDE CONDOMINAL - EMP-B/550-23</option>
+                                <option value="LIONS SERVIÇOS INTELIGENTES LTDA - EMP-B/496-21">LIONS SERVIÇOS INTELIGENTES LTDA - EMP-B/496-21</option>
+                                <option value="LK SERVICOS LTDA - EMP-B/500-23">LK SERVICOS LTDA - EMP-B/500-23</option>
+                                <option value="LOGISTEC TERCEIRIZAÇÃO DE SERVIÇOS LTDA (DIARIS) - EMP-B/570-14">LOGISTEC TERCEIRIZAÇÃO DE SERVIÇOS LTDA (DIARIS) - EMP-B/570-14</option>
+                                <option value="MASTER ENGENHARIA E SEGURANÇA PATRIMONIAL LTDA - EMP-B/829-19">MASTER ENGENHARIA E SEGURANÇA PATRIMONIAL LTDA - EMP-B/829-19</option>
+                                <option value="MASTROS EMPRESA DE SERVIÇOS GERAIS LTDA - EMP-B/349-08">MASTROS EMPRESA DE SERVIÇOS GERAIS LTDA - EMP-B/349-08</option>
+                                <option value="MÁXIMA REFEIÇÕES E SEGURANÇA ELETRÔNICA LTDA - EMP-B/263-21">MÁXIMA REFEIÇÕES E SEGURANÇA ELETRÔNICA LTDA - EMP-B/263-21</option>
+                                <option value="MED MAIS SOLUÇÕES EM SERVIÇOS ESPECIAIS LTDA - EMP-B/214-21">MED MAIS SOLUÇÕES EM SERVIÇOS ESPECIAIS LTDA - EMP-B/214-21</option>
+                                <option value="MF&L CONSTRUTORA LTDA - EMP-B/105-20">MF&L CONSTRUTORA LTDA - EMP-B/105-20</option>
+                                <option value="MISTER ENGENHARIA LTDA - EMP-B/472-23">MISTER ENGENHARIA LTDA - EMP-B/472-23</option>
+                                <option value="MORIA ACADEMIA DE FORMAÇÃO DE BRIGADISTA - EMP-B/382-08">MORIA ACADEMIA DE FORMAÇÃO DE BRIGADISTA - EMP-B/382-08</option>
+                                <option value="MRSEI EMPRESA DE SERVICOS GERAIS E TECNOLOGIA LTDA - EMP-B/495-23">MRSEI EMPRESA DE SERVICOS GERAIS E TECNOLOGIA LTDA - EMP-B/495-23</option>
+                                <option value="MSC LIMPEZA CONSERVAÇÃO E SERVIÇOS DE BRIGADA DE INCÊNDIO EIRELI - EMP-B/032-20">MSC LIMPEZA CONSERVAÇÃO E SERVIÇOS DE BRIGADA DE INCÊNDIO EIRELI - EMP-B/032-20</option>
+                                <option value="NBI EVENTOS E SERVICOS LTDA - EMP-B/610-24">NBI EVENTOS E SERVICOS LTDA - EMP-B/610-24</option>
+                                <option value="OFICIAL ALPHA RESGATE LTDA - EMP-B/533-23">OFICIAL ALPHA RESGATE LTDA - EMP-B/533-23</option>
+                                <option value="PREV FOGO LTDA - EMP-B/368-08">PREV FOGO LTDA - EMP-B/368-08</option>
+                                <option value="PREVENTION SERVICE SERVIÇOS ESPECIALIZADOS LTDA - EMP-B/599-24">PREVENTION SERVICE SERVIÇOS ESPECIALIZADOS LTDA - EMP-B/599-24</option>
+                                <option value="PRIME CONSULTORIA E SERVIÇOS ESPECIALIZADOS LTDA - EMP-B/270-21">PRIME CONSULTORIA E SERVIÇOS ESPECIALIZADOS LTDA - EMP-B/270-21</option>
+                                <option value="PROCEDE SERVIÇOS DE LIMPEZA E CONSERVAÇÃO LTDA - EMP-B/750-18">PROCEDE SERVIÇOS DE LIMPEZA E CONSERVAÇÃO LTDA - EMP-B/750-18</option>
+                                <option value="PROCLIMA ENGENHARIA LTDA - EMP-B/278-21">PROCLIMA ENGENHARIA LTDA - EMP-B/278-21</option>
+                                <option value="PRODUTIVA SERVIÇOS E TECNOLOGIA - EMP-B/196-21">PRODUTIVA SERVIÇOS E TECNOLOGIA - EMP-B/196-21</option>
+                                <option value="QUALIFOCO BRIGADA DE INCÊNDIO LTDA - EMP-B/691-22">QUALIFOCO BRIGADA DE INCÊNDIO LTDA - EMP-B/691-22</option>
+                                <option value="QUALITY MAX SERVIÇOS EM GESTÃO E ADMINISTRAÇÃO DE LOCAÇÃO DE MÃO DE OBRA ESPECIALIZADA LTDA - EMP-B/637-15">QUALITY MAX SERVIÇOS EM GESTÃO E ADMINISTRAÇÃO DE LOCAÇÃO DE MÃO DE OBRA ESPECIALIZADA LTDA - EMP-B/637-15</option>
+                                <option value="R7 FACILITIES SERVIÇOS DE ENGENHARIA - EMP-B/756-18">R7 FACILITIES SERVIÇOS DE ENGENHARIA - EMP-B/756-18</option>
+                                <option value="REAL JG FACILITIES S/A - EMP-B/081-20">REAL JG FACILITIES S/A - EMP-B/081-20</option>
+                                <option value="RENOVAR SERVICOS GERAIS, ADMINISTRATIVO, GESTAO E CONTABILIDADE EIRELI - EMP-B/143-20">RENOVAR SERVICOS GERAIS, ADMINISTRATIVO, GESTAO E CONTABILIDADE EIRELI - EMP-B/143-20</option>
+                                <option value="S.P.C. DE SOUZA BARROS (UNIVERSO CURSOS) - EMP-B/462-10">S.P.C. DE SOUZA BARROS (UNIVERSO CURSOS) - EMP-B/462-10</option>
+                                <option value="SAFETY SERVICOS LTDA - EMP-B/795-19">SAFETY SERVICOS LTDA - EMP-B/795-19</option>
+                                <option value="SAVI LIFE SERVIÇOS DE BRIGADA LTDA - EMP-B/397-23">SAVI LIFE SERVIÇOS DE BRIGADA LTDA - EMP-B/397-23</option>
+                                <option value="SEAL FIRE CURSOS E SERVIÇOS - EMP-B/282-22">SEAL FIRE CURSOS E SERVIÇOS - EMP-B/282-22</option>
+                                <option value="SEFIX - GESTÃO DE PROFISSIONAIS EIRELI - EMP-B/050-20">SEFIX - GESTÃO DE PROFISSIONAIS EIRELI - EMP-B/050-20</option>
+                                <option value="SEFIX – EVENTOS E SERVIÇOS EIRELI - EMP-B/497-12">SEFIX – EVENTOS E SERVIÇOS EIRELI - EMP-B/497-12</option>
+                                <option value="SEFIX EMPRESA DE SEGURANÇA LTDA - EPP - EMP-B/667-16">SEFIX EMPRESA DE SEGURANÇA LTDA - EPP - EMP-B/667-16</option>
+                                <option value="SEFIX GESTAO E SUPORTE DE SISTEMAS DE SEGURANCA EIRELI - EMP-B/339-22">SEFIX GESTAO E SUPORTE DE SISTEMAS DE SEGURANCA EIRELI - EMP-B/339-22</option>
+                                <option value="SISTIN – SISTEMAS TÉCNICOS CONTRA INCÊNDIO EIRELI - EMP-B/787-19">SISTIN – SISTEMAS TÉCNICOS CONTRA INCÊNDIO EIRELI - EMP-B/787-19</option>
+                                <option value="SMART SERVICE SERVIÇOS ESPECIALIZADOS - EMP-B/654-16">SMART SERVICE SERVIÇOS ESPECIALIZADOS - EMP-B/654-16</option>
+                                <option value="SOLLO CONSTRUÇÕES E SERVIÇOS LTDA - EMP-B/807-19">SOLLO CONSTRUÇÕES E SERVIÇOS LTDA - EMP-B/807-19</option>
+                                <option value="SOLUÇÃO SERVIÇO DE LOCAÇÃO DE MÃO DE OBRA LTDA - EMP-B/799-19">SOLUÇÃO SERVIÇO DE LOCAÇÃO DE MÃO DE OBRA LTDA - EMP-B/799-19</option>
+                                <option value="SOSAPH CAPACITAÇÕES LTDA - EMP-B/718-17">SOSAPH CAPACITAÇÕES LTDA - EMP-B/718-17</option>
+                                <option value="SUPREMA PROTEÇÃO CONTRA INCÊNDIO LTDA - EMP-B/776-19">SUPREMA PROTEÇÃO CONTRA INCÊNDIO LTDA - EMP-B/776-19</option>
+                                <option value="TOP SERVICE SERVIÇOS E SISTEMAS S/A - EMP-B/811-19">TOP SERVICE SERVIÇOS E SISTEMAS S/A - EMP-B/811-19</option>
+                                <option value="TRAJANO SERVIÇO DE BRIGADISTA EIRELI - EMP-B/056-20">TRAJANO SERVIÇO DE BRIGADISTA EIRELI - EMP-B/056-20</option>
+                                <option value="TRIADLIFE BRIGADA CONTRA INCÊNDIO, SEGURANÇA E SAÚDE LTDA - EMP-B/429-23">TRIADLIFE BRIGADA CONTRA INCÊNDIO, SEGURANÇA E SAÚDE LTDA - EMP-B/429-23</option>
+                                <option value="VERTICAL EMPRESA DE VIGILÂNCIA EIRELI - EMP-B/383-22">VERTICAL EMPRESA DE VIGILÂNCIA EIRELI - EMP-B/383-22</option>
+                                <option value="VIPPIM SEGURANÇA E VIGILANCIA LTDA - EMP-B/809-19">VIPPIM SEGURANÇA E VIGILANCIA LTDA - EMP-B/809-19</option>
+                                <option value="VISAN SEGURANÇA PRIVADA - EMP-B/110-20">VISAN SEGURANÇA PRIVADA - EMP-B/110-20</option>
+                                <option value="WGA QUALIXX SEGURANÇA ARMADA E VIGILÂNCIA LTDA - EMP-B/767-19">WGA QUALIXX SEGURANÇA ARMADA E VIGILÂNCIA LTDA - EMP-B/767-19</option>
+                                <option value="WK SERVICOS E EVENTOS LTDA - EMP-B/413-23">WK SERVICOS E EVENTOS LTDA - EMP-B/413-23</option>
+                                <option value="WMED UTI - MÓVEL SERVIÇOS DE SAÚDE LTDA - EMP-B/068-06">WMED UTI - MÓVEL SERVIÇOS DE SAÚDE LTDA - EMP-B/068-06</option>
+                                <option value="WR PROTEÇÃO CONTRA INCENDIO - EMP-B/552-23">WR PROTEÇÃO CONTRA INCENDIO - EMP-B/552-23</option>
+                                <option value="ZP CONSERVAÇÃO E LIMPEZA EIRELI - EMP-B/265-07">ZP CONSERVAÇÃO E LIMPEZA EIRELI - EMP-B/265-07</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Cert. dos Brig. Válidos?</label>
+                            <select class="form-select" id="cert_brigadista">
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <label class="form-label">Qtd. Brigadistas</label>
+                            <input type="number" class="form-control" id="qtd_brigadistas" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-building me-2"></i>Estruturas Provisórias
+                    </h5>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Possui estrutura?</label>
+                            <select class="form-select" id="possui_estrutura">
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Evento cercado?</label>
+                            <select class="form-select" id="cercamento">
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Laudo Inflamabilidade?</label>
+                            <select class="form-select" id="laudo_inflamabilidade">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label>Tendas/Barracas</label>
+                            <input type="number" class="form-control form-control-sm" id="q_tendas" />
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label>Palcos</label>
+                            <input type="number" class="form-control form-control-sm" id="q_palcos" />
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label>Arquibancadas</label>
+                            <input type="number" class="form-control form-control-sm" id="q_arqui" />
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label>Pórticos/Cenogr.</label>
+                            <input type="number" class="form-control form-control-sm" id="q_porticos" />
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label>Briquedos Eletro.</label>
+                            <input type="number" class="form-control form-control-sm" id="q_eletro" />
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label>Camarotes</label>
+                            <input type="number" class="form-control form-control-sm" id="q_camarotes" />
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <label>Infláveis</label>
+                            <input type="number" class="form-control form-control-sm" id="q_inflaveis" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-lightning-charge me-2"></i>Segurança e Riscos
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Elétrica provisória?</label>
+                            <select class="form-select" id="eletrica_provisoria">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Quadros Energia</label>
+                            <input type="number" class="form-control" id="q_quadros" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Geradores</label>
+                            <input type="number" class="form-control" id="q_geradores" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Extintores</label>
+                            <input type="number" class="form-control" id="q_extintores" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Quadros com DR isolados?</label>
+                            <select class="form-select" id="qd_dr">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Itens Gerador OK?</label>
+                            <select class="form-select" id="itens_gerador_ok">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Estrut. Aterradas?</label>
+                            <select class="form-select" id="estruturas_aterradas">
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Uso de GLP?</label>
+                            <select class="form-select" id="glp">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Central GLP?</label>
+                            <select class="form-select" id="central_glp">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Qtd P13</label>
+                            <input type="number" class="form-control" id="q_p13" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Parâmetros P-13 estão OK?</label>
+                            <select class="form-select" id="parametros_p13">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Food Trucks</label>
+                            <input type="number" class="form-control" id="q_food_trucks" />
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Fogos de Artifício?</label>
+                            <select class="form-select" id="fogos_artificio">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Líquido Inflamável?</label>
+                            <select class="form-select" id="liquido_inflamavel">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Saídas Iluminadas?</label>
+                            <select class="form-select" id="saidas_iluminadas">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-file-earmark-text me-2"></i>Checklist de
+                        Documentos
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">ART Estruturas</label>
+                            <select class="form-select" id="art_estruturas">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">ART Elétrica/Gerador</label>
+                            <select class="form-select" id="art_eletrica">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Croqui do Evento</label>
+                            <select class="form-select" id="croqui_evento">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Certificação Food Truck</label>
+                            <select class="form-select" id="cert_foodtruck">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Contrato Brigada</label>
+                            <select class="form-select" id="contrato_brigada">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Declaração Gerador</label>
+                            <select class="form-select" id="declaracao_gerador">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option>Não se aplica</option>
+                                <option>Sim</option>
+                                <option>Não</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-2 mt-4">
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
+                        <i class="bi bi-save me-2"></i>SALVAR
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-danger btn-lg w-100 shadow-sm" onclick="confirmExclusao()">
+                        <i class="bi bi-trash me-2"></i>EXCLUIR
+                    </button>
+                </div>
+                <div class="col-md-4">
+                    <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm"
+                        onclick="enviarParaGoogleForms()">
+                        <i class="bi bi-send me-2"></i>ENVIAR
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            // Máscara para o processo
+            $("#processo").inputmask("99999-99999999/9999-99");
+
+            // --- 1. LÓGICA DE CARREGAMENTO (EDITAR) ---
+            const urlParams = new URLSearchParams(window.location.search);
+            const editId = urlParams.get("id");
+
+            if (editId) {
+                const dadosSalvos = JSON.parse(localStorage.getItem(editId));
+                if (dadosSalvos) {
+                    // Preenche todos os campos automaticamente
+                    Object.keys(dadosSalvos).forEach(key => {
+                        const field = $(`#${key}`);
+                        if (field.length) {
+                            field.val(decodeURIComponent(dadosSalvos[key]));
+                        }
+                    });
+                    // Caso especial para o responsável que é um select
+                    //   if (dadosSalvos.responsavel_full) $("#responsavel").val(dadosSalvos.responsavel_full);
+                }
+            }
+
+            // --- 2. FUNÇÃO CORE DE SALVAMENTO ---
+            function processarFormulario(novoStatus) {
+                const numProcesso = $("#processo").val();
+
+                if (!numProcesso || numProcesso.includes('_')) {
+                    alert("Por favor, preencha o número do processo corretamente.");
+                    return;
+                }
+
+                // Gera o ID baseado no processo (apenas números)
+                const idProcesso = 'eventual-' + numProcesso.replace(/\D/g, '');
+
+                // Se mudou o número do processo na edição, remove o antigo para não duplicar
+                if (editId && editId !== idProcesso) {
+                    localStorage.removeItem(editId);
+                }
+
+                const responsavelRaw = $("#responsavel").val() || "";
+
+                // Coleta todos os dados do formulário
+                const dadosParaSalvar = {
+                    id: idProcesso,
+                    status: novoStatus,
+                    processo: numProcesso,
+                    evento: $("#evento").val(),
+                    ra: $("#ra").val(),
+                    endereco: $("#endereco").val(),
+                    geo: $("#geo").val(),
+
+                    // 2. Período e Público
+                    data_inicio: $("#data_inicio").val(),
+                    data_fim: $("#data_fim").val(),
+                    data: $("#data_inicio").val(), // duplicado para a tabela
+                    obs_periodo: $("#obs_periodo").val(),
+                    publico: $("#publico").val(),
+                    area: $("#area").val(),
+                    vistoria_realizada: $("#vistoria_realizada").val(),
+
+                    // 3. Responsáveis e Brigada
+                    responsavel: $("#responsavel").val(),
+                    tem_brigada: $("#tem_brigada").val(),
+                    qtd_brigadistas: $("#qtd_brigadistas").val(),
+                    cert_brigadista: $("#cert_brigadista").val(), // ajuste se necessário
+                    empresa_brigada: $("#empresa_brigada").val(),
+
+                    // 4. Estruturas (Quantidades)
+                    possui_estrutura: $("#possui_estrutura").val(),
+                    q_tendas: $("#q_tendas").val(),
+                    q_palcos: $("#q_palcos").val(),
+                    q_arqui: $("#q_arqui").val(),
+                    q_porticos: $("#q_porticos").val(),
+                    q_eletro: $("#q_eletro").val(),
+                    q_camarotes: $("#q_camarotes").val(),
+                    q_inflaveis: $("#q_inflaveis").val(),
+                    cercamento: $("#cercamento").val(),
+                    laudo_inflamabilidade: $("#laudo_inflamabilidade").val(),
+
+                    // 5. Elétrica e Riscos
+                    eletrica_provisoria: $("#eletrica_provisoria").val(),
+                    q_quadros: $("#q_quadros").val(),
+                    qd_dr: $("#qd_dr").val(),
+                    q_geradores: $("#q_geradores").val(),
+                    itens_gerador_ok: $("#itens_gerador_ok").val(),
+                    estruturas_aterradas: $("#estruturas_aterradas").val(),
+                    saidas_iluminadas: $("#saidas_iluminadas").val(),
+                    liquido_inflamavel: $("#liquido_inflamavel").val(),
+                    fogos_artificio: $("#fogos_artificio").val(),
+                    glp: $("#glp").val(),
+                    central_glp: $("#central_glp").val(),
+                    q_p13: $("#q_p13").val(),
+                    parametros_p13: $("#parametros_p13").val(),
+                    q_food_trucks: $("#q_food_trucks").val(),
+                    saidas_desobstruidas: $("#saidas_desobstruidas").val(),
+                    distancias_cumpridas: $("#distancias_cumpridas").val(),
+                    q_extintores: $("#q_extintores").val(),
+                    extintores_validos: $("#extintores_validos").val(),
+
+                    // 6. Documentação (Checklist)
+                    art_estruturas: $("#art_estruturas").val(),
+                    art_eletrica: $("#art_eletrica").val(),
+                    croqui_evento: $("#croqui_evento").val(),
+                    cert_foodtruck: $("#cert_foodtruck").val(),
+                    contrato_brigada: $("#contrato_brigada").val(),
+                    declaracao_gerador: $("#declaracao_gerador").val()
+                };
+
+                try {
+                    localStorage.setItem(idProcesso, JSON.stringify(dadosParaSalvar));
+                    alert(novoStatus === "Enviado" ? "✅ Vistoria ENVIADA com sucesso!" : "💾 Progresso SALVO!");
+                } catch (e) {
+                    console.error(e);
+                    alert("Erro ao salvar no navegador. O espaço pode estar cheio.");
+                }
+            }
+
+            // --- 3. EVENTOS DOS BOTÕES ---
+
+            // Botão Salvar (Submit padrão do formulário)
+            $("#formEventual").on("submit", function (e) {
+                e.preventDefault();
+                processarFormulario("A Fazer");
+            });
+
+            // Botão Enviar (ID btnEnviar)
+            $("#btnEnviar").on("click", function (e) {
+                e.preventDefault();
+                if (confirm("Deseja marcar esta vistoria como CONCLUÍDA/ENVIADA?")) {
+                    processarFormulario("Enviado");
+                }
+            });
+        });
+
+        // Função para Geolocalização
+        function getLoaction() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function (position) {
+                        const lat = position.coords.latitude.toFixed(4);
+                        const lon = position.coords.longitude.toFixed(4);
+                        $("#geo").val(`${lat}, ${lon}`);
+                    },
+                    function (error) {
+                        alert("Erro ao obter localização.");
+                    }
+                );
+            }
+        }
+
+        function confirmExclusao() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const editId = urlParams.get("id");
+            if (editId && confirm("Apagar este registo permanentemente?")) {
+                localStorage.removeItem(editId);
+                window.location.href = "eventuais.html";
+            }
+        }
+
+
+        function enviarParaGoogleForms() {
+            const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScFdrzloQDqpN1nwU6M4K8n9UYbf4UhyAAVXo7IWYUdfRNa1g/viewform";
+
+            // Função auxiliar
+            const v = (id) => document.getElementById(id)?.value || "";
+            console.log("Enviando dados para Google Forms...");
+            // Datas no formato AAAA-MM-DD
+            const dataInicio = document.getElementById("data_inicio").value.split("-");
+            const dataFim = document.getElementById("data_fim").value.split("-");
+
+            const params = new URLSearchParams({
+
+                // Dados gerais
+                "entry.191765537": v("processo"),
+                "entry.1200371070": v("evento"),
+                "entry.2101176802": v("ra"),
+                "entry.278707089": v("endereco"),
+
+                // Datas (ANO / MÊS / DIA)
+                "entry.1788638115_year": dataInicio[0],
+                "entry.1788638115_month": dataInicio[1],
+                "entry.1788638115_day": dataInicio[2],
+
+                "entry.635703155_year": dataFim[0],
+                "entry.635703155_month": dataFim[1],
+                "entry.635703155_day": dataFim[2],
+
+                // Evento
+                "entry.209142364": v("obs_periodo"),
+                "entry.2103689319": v("publico"),
+                "entry.129765383": v("area"),
+                "entry.647891186": v("geo"),
+                "entry.1749955179": v("responsavel"),
+
+                // Estruturas
+                "entry.1810871816": v("cercamento"),
+                "entry.536781947": v("vistoria_realizada"),
+                "entry.1275216650": v("possui_estrutura"),
+                "entry.281654281": v("q_tendas"),
+                "entry.506772746": v("q_palcos"),
+                "entry.1153969985": v("q_arqui"),
+                "entry.992128061": v("q_porticos"),
+                "entry.1850464249": v("q_eletro"),
+                "entry.2145745699": v("q_camarotes"),
+                "entry.101557401": v("q_inflaveis"),
+
+                // Segurança
+                "entry.2041242057": v("laudo_inflamabilidade"),
+                "entry.1938619790": v("eletrica_provisoria"),
+                "entry.1289290526": v("q_quadros"),
+                "entry.1403662037": v("qd_dr"),
+                "entry.1769025717": v("q_geradores"),
+                "entry.1569675871": v("itens_gerador_ok"),
+                "entry.1663636913": v("declaracao_gerador"),
+                "entry.1068839709": v("estruturas_aterradas"),
+
+                // Brigada
+                "entry.1292591391": v("saidas_iluminadas"),
+                "entry.709435141": v("tem_brigada"),
+                "entry.697486886": v("cert_brigadista"),
+                "entry.230273607": v("qtd_brigadistas"),
+                "entry.269907922": v("empresa_brigada"),
+
+                // Riscos
+                "entry.854155456": v("liquido_inflamavel"),
+                "entry.407142634": v("fogos_artificio"),
+                "entry.452062403": v("glp"),
+                "entry.875704157": v("central_glp"),
+                "entry.1005818584": v("q_p13"),
+                "entry.1355347284": v("parametros_p13"),
+                "entry.1013043090": v("q_food_trucks"),
+                "entry.959214189": v("saidas_desobstruidas"),
+                "entry.1999225105": v("distancias_cumpridas"),
+
+                // Extintores
+                "entry.299718848": v("q_extintores"), //20
+                "entry.15816431": v("extintores_validos"), //nao se aplica
+
+                // Documentos
+                "entry.698760525": v("art_estruturas"),
+                "entry.1171952603": v("art_eletrica"),
+                "entry.2125304373": v("croqui_evento"),
+                "entry.2002719496": v("cert_foodtruck"),
+                "entry.928440077": v("contrato_brigada")
+            });
+
+            // Redireciona
+            console.log("URL de envio:", FORM_URL + "?" + params.toString());
+            window.location.href = FORM_URL + "?" + params.toString();
+        }
+    </script>
+</body>
+
+</html>

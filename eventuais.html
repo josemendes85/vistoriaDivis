@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vistorias DIVIS - Eventuais</title>
+
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="icon" href="icons/icon_128x128.png">
+
+    <link rel="apple-touch-icon" href="icons/icon_128x128.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+        body {
+            padding-top: 56px;
+        }
+
+        .drag-process {
+            cursor: pointer;
+        }
+
+        /* Mudado para pointer para indicar que é clicável */
+        .drag-process:hover {
+            background-color: #f1f1f1;
+        }
+
+        .drag-handle-cell {
+            width: 30px;
+            text-align: center;
+            cursor: grab;
+        }
+
+        /* Cores customizadas para os novos status */
+        .badge-a-fazer {
+            background-color: #ffc107;
+            color: #000;
+        }
+
+        .badge-enviado {
+            background-color: #198754;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-light bg-light fixed-top shadow-sm">
+        <div class="container-fluid">
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
+                data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand me-auto ms-2" href="index.html">Vistorias DIVIS</a>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarMenuLabel">Navegação Principal</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i
+                            class="bi bi-list-check me-2"></i>Processos</a></li>
+                <li class="nav-item"><a class="nav-link active" href="eventuais.html"><i
+                            class="bi bi-ticket-perforated me-2"></i>Eventuais</a></li>
+                <li class="nav-item"><a class="nav-link" href="co_index.html"><i
+                            class="bi bi-geo-alt-fill me-2"></i>Coordenadas</a></li>
+                <li class="nav-item">
+                    <hr class="dropdown-divider">
+                </li>
+                <li class="nav-item"><a class="nav-link" href="processo_eventual.html"><i
+                            class="bi bi-plus-circle me-2"></i>Novo Eventual</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-0">
+        <div class="text-center mb-4">
+            <h2 class="display-6">Lista de Eventuais</h2>
+        </div>
+        <div class="form-section">
+            <h4 class="section-title"><i class="bi bi-funnel me-2"></i>Filtragem</h4>
+            <div class="row g-3 align-items-end">
+                <div class="col-md-4">
+                    <label for="filtroStatus" class="form-label">Status:</label>
+                    <select class="form-select" id="filtroStatus">
+                        <option value="">Todos</option>
+                        <option value="A Fazer">A Fazer</option>
+                        <option value="Enviado">Enviado</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="filtroPesquisa" class="form-label">Pesquisar (Evento/Responsável):</label>
+                    <input type="text" class="form-control" id="filtroPesquisa" placeholder="Buscar...">
+                </div>
+                <div class="col-md-4 d-flex justify-content-end">
+                    <a href="processo_eventual.html" class="btn btn-success">
+                        <i class="bi bi-plus-circle me-2"></i>Novo Eventual
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="listaContainer" class="row"></div>
+
+        <div class="col-12 text-center text-muted p-5" id="noProcessesMessage" style="display: none;">
+            <i class="bi bi-info-circle display-4 mb-3"></i>
+            <h3>Nenhum registro encontrado.</h3>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const STORAGE_PREFIX = 'eventual-';
+
+        function formatarClasseStatus(status) {
+            return 'status-' + status.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+        }
+
+        function abrirEvento(id) {
+            window.location.href = `processo_eventual.html?id=${id}`;
+        }
+
+        function renderizarEventuais(agrupados) {
+            const container = document.getElementById('listaContainer');
+            container.innerHTML = '';
+            const statusOrdem = ["A Fazer", "Enviado"];
+
+            statusOrdem.forEach(status => {
+                if (!agrupados[status] || agrupados[status].length === 0) return;
+
+                const grupo = agrupados[status];
+                const card = document.createElement('div');
+                card.className = 'col-md-12 mb-4';
+
+                const tbodyContent = grupo.map(item => {
+                    const badgeClass = item.status === "Enviado" ? "bg-success" : "bg-warning text-dark";
+                    return `
+            <tr class="drag-process" onclick="abrirEvento('${item.id}')"> 
+                <td class="drag-handle-cell" onclick="event.stopPropagation()"><i class="bi bi-grip-vertical"></i></td>
+                <td><strong>${item.processo || '---'}</strong></td>
+                <td>${item.evento || '---'}</td>
+                <td>${item.responsavel || '---'}</td>
+                <td>${item.data || '---'}</td>
+                <td><span class="badge ${badgeClass}">${item.status}</span></td>
+            </tr>
+        `}).join("");
+
+                card.innerHTML = `
+            <div class="card shadow-sm">
+                <div class="card-header ${status === 'Enviado' ? 'bg-success' : 'bg-dark'} text-white">
+                    <h5 class="mb-0">${status} (${grupo.length})</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover m-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th style="width: 40px"></th>
+                                    <th>Processo</th>
+                                    <th>Evento</th>
+                                    <th>Responsável</th>
+                                    <th>Data</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="list-${formatarClasseStatus(status)}">${tbodyContent}</tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>`;
+                container.appendChild(card);
+            });
+        }
+
+        function carregarDados() {
+            const dados = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith(STORAGE_PREFIX)) {
+                    try {
+                        const item = JSON.parse(localStorage.getItem(key));
+                        // Normalização obrigatória
+                        if (!item.status || item.status === "Pendente") item.status = "A Fazer";
+                        if (item.status === "Concluído") item.status = "Enviado";
+                        dados.push(item);
+                    } catch (e) { console.error("Erro no item:", key); }
+                }
+            }
+
+            const busca = (document.getElementById('filtroPesquisa').value || "").toLowerCase();
+            const statusFiltro = document.getElementById('filtroStatus').value;
+
+            const filtrados = dados.filter(d => {
+                const matchBusca = (d.evento || "").toLowerCase().includes(busca) ||
+                    (d.responsavel || "").toLowerCase().includes(busca) ||
+                    (d.processo || "").toLowerCase().includes(busca);
+                const matchStatus = statusFiltro === "" || d.status === statusFiltro;
+                return matchBusca && matchStatus;
+            });
+
+            const agrupados = {};
+            filtrados.forEach(d => {
+                if (!agrupados[d.status]) agrupados[d.status] = [];
+                agrupados[d.status].push(d);
+            });
+
+            const noMessage = document.getElementById('noProcessesMessage');
+            if (noMessage) noMessage.style.display = filtrados.length === 0 ? 'block' : 'none';
+
+            renderizarEventuais(agrupados);
+        }
+
+        document.getElementById('filtroPesquisa').addEventListener('input', carregarDados);
+        document.getElementById('filtroStatus').addEventListener('change', carregarDados);
+        document.addEventListener('DOMContentLoaded', carregarDados);
+    </script>
