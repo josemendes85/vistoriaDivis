@@ -55,35 +55,13 @@
 
     <nav class="navbar navbar-light bg-light fixed-top shadow-sm">
         <div class="container-fluid">
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="offcanvas"
-                data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <a class="navbar-brand me-auto ms-2" href="index.html">Vistorias DIVIS</a>
+            <a class="btn btn-outline-secondary btn-sm" href="javascript:history.back()">
+                <i class="bi bi-arrow-left me-1"></i> Voltar
+            </a>
+            <a class="navbar-brand mx-auto" href="index.html">Vistorias DIVIS</a>
+            <div style="width: 75px;"></div>
         </div>
     </nav>
-
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarMenu" aria-labelledby="sidebarMenuLabel">
-        <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="sidebarMenuLabel">Navegação Principal</h5>
-            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-                <li class="nav-item"><a class="nav-link" href="index.html"><i
-                            class="bi bi-list-check me-2"></i>Processos</a></li>
-                <li class="nav-item"><a class="nav-link active" href="eventuais.html"><i
-                            class="bi bi-ticket-perforated me-2"></i>Eventuais</a></li>
-                <li class="nav-item"><a class="nav-link" href="co_index.html"><i
-                            class="bi bi-geo-alt-fill me-2"></i>Coordenadas</a></li>
-                <li class="nav-item">
-                    <hr class="dropdown-divider">
-                </li>
-                <li class="nav-item"><a class="nav-link" href="processo_eventual.html"><i
-                            class="bi bi-plus-circle me-2"></i>Novo Eventual</a></li>
-            </ul>
-        </div>
-    </div>
 
     <div class="container-fluid mt-0">
         <div class="text-center mb-4">
@@ -105,7 +83,7 @@
                     <input type="text" class="form-control" id="filtroPesquisa" placeholder="Buscar...">
                 </div>
                 <div class="col-md-4 d-flex justify-content-end">
-                    <a href="processo_eventual.html" class="btn btn-success">
+                    <a href="eventual.html" class="btn btn-success">
                         <i class="bi bi-plus-circle me-2"></i>Novo Eventual
                     </a>
                 </div>
@@ -129,7 +107,7 @@
         }
 
         function abrirEvento(id) {
-            window.location.href = `processo_eventual.html?id=${id}`;
+            window.location.href = `eventual.html?id=${id}`;
         }
 
         function renderizarEventuais(agrupados) {

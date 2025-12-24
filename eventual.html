@@ -4,98 +4,94 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vistorias DIVIS - Cadastro de Eventual</title>
-
+    <title>Formulário de Medidas de Segurança</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-    <style>
-        body {
-            padding-top: 70px;
-            padding-bottom: 40px;
-            background-color: #f8f9fa;
-        }
-
-        .section-title {
-            background-color: #e9ecef;
-            padding: 10px;
-            border-left: 5px solid #0d6efd;
-            margin-bottom: 20px;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .card {
-            border-radius: 12px;
-            border: none;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: #495057;
-        }
-
-        .btn-geo {
-            margin-top: 32px;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <nav class="navbar navbar-light bg-white fixed-top shadow-sm">
-        <div class="container-fluid">
-            <a class="btn btn-outline-secondary btn-sm" href="eventuais.html">
-                <i class="bi bi-arrow-left"></i> Voltar
-            </a>
-            <span class="navbar-brand mb-0 h1 mx-auto">Vistoria de Evento</span>
+    <div class="container-fluid mt-3">
+        <div class="text-center mb-4">
+            <h5 id="tituloLaudo" class="display-6 status-sem-status">Laudo de Vistoria</h2>
         </div>
-    </nav>
 
-    <div class="container">
         <form id="formEventual" class="needs-validation" novalidate autocomplete="off">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="section-title">
-                        <i class="bi bi-geo-alt me-2"></i>Identificação e Localização
-                    </h5>
-                    <div class="row g-3">
-                        <div class="col-md-4">
-                            <label class="form-label">Número do Processo</label>
-                            <input type="text" class="form-control" id="processo" placeholder="00000-00000000/0000-00"
-                                required />
-                        </div>
-                        <div class="col-md-8">
-                            <label class="form-label">Nome do Evento</label>
-                            <input type="text" class="form-control" id="evento" required />
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Região Administrativa</label>
-                            <select class="form-select" id="ra" required>
-                                <option value="">Selecione...</option>
-                                <option>RA 1 - Plano Piloto</option>
-                                <option>RA 2 - Gama</option>
-                                <option>RA 3 - Taguatinga</option>
-                                <option>Outras RAs...</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6">
-                            <label class="form-label">Endereço do Evento</label>
-                            <input type="text" class="form-control" id="endereco" />
-                        </div>
-                        <div class="col-md-8">
-                            <label class="form-label">Georreferenciamento</label>
-                            <input type="text" class="form-control" id="geo" placeholder="-00.0000, -00.0000" />
-                        </div>
-                        <div class="col-md-4 d-grid">
-                            <button type="button" class="btn btn-outline-primary btn-geo" onclick="getLoaction()">
-                                <i class="bi bi-pin-map-fill"></i> Localização Atual
-                            </button>
-                        </div>
+            <div class="form-section">
+                <h4 class="section-title">
+                    <i class="bi bi-file-text me-2"></i>Identificação do Processo
+                </h4>
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label class="form-label">Número do Processo</label>
+                        <input type="text" class="form-control" id="processo" placeholder="00000-00000000/0000-00"
+                            required />
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Nome do Evento</label>
+                        <input type="text" class="form-control" id="evento" required />
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Região Administrativa</label>
+                        <select class="form-select" id="ra" required>
+                            <option value="">Selecione...</option>
+                            <option>RA 1 - Plano Piloto</option>
+                            <option>RA 2 - Gama</option>
+                            <option>RA 3 - Taguatinga</option>
+                            <option>RA 4 - Brazlândia</option>
+                            <option>RA 5 - Sobradinho</option>
+                            <option>RA 6 - Planaltina</option>
+                            <option>RA 7 - Paranoá</option>
+                            <option>RA 8 - Núcleo Bandeirante</option>
+                            <option>RA 9 - Ceilândia</option>
+                            <option>RA 10 - Guará</option>
+                            <option>RA 11 - Cruzeiro</option>
+                            <option>RA 12 - Samambaia</option>
+                            <option>RA 13 - Santa Maria</option>
+                            <option>RA 14 - São Sebastião</option>
+                            <option>RA 15 - Recanto das Emas</option>
+                            <option>RA 16 - Lago Sul</option>
+                            <option>RA 17 - Riacho Fundo</option>
+                            <option>RA 18 - Lago Norte</option>
+                            <option>RA 19 - Candangolândia</option>
+                            <option>RA 20 - Águas Claras</option>
+                            <option>RA 21 - Riacho Fundo II</option>
+                            <option>RA 22 - Sudoeste/Octogonal</option>
+                            <option>RA 23 - Varjão</option>
+                            <option>RA 24 - Park Way</option>
+                            <option>RA 25 - SCIA</option>
+                            <option>RA 26 - Sobradinho II</option>
+                            <option>RA 27 - Jardim Botânico</option>
+                            <option>RA 28 - Itapoã</option>
+                            <option>RA 29 - SIA</option>
+                            <option>RA 30 - Vicente Pires</option>
+                            <option>RA 31 - Fercal</option>
+                            <option>RA 32 - Sol Nascente/Pôr do Sol</option>
+                            <option>RA 33 - Arniqueira</option>
+                            <option>RA 34 - Arapoanga</option>
+                            <option>RA 35 - Água Quente</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Endereço do Evento</label>
+                        <input type="text" class="form-control" id="endereco" />
+                    </div>
+                    <div class="col-md-8">
+                        <label class="form-label">Georreferenciamento</label>
+                        <input type="text" class="form-control" id="geo" placeholder="-00.0000, -00.0000" />
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button type="button" class="btn btn-outline-primary btn-geo" onclick="getLoaction()">
+                            <i class="bi bi-pin-map-fill"></i> Localização Atual
+                        </button>
                     </div>
                 </div>
             </div>
 
-            <div class="card shadow-sm mb-4">
+            <div class="form-section">
                 <div class="card-body">
                     <h5 class="section-title">
                         <i class="bi bi-calendar-event me-2"></i>Período e Capacidade
@@ -131,7 +127,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card shadow-sm mb-4">
+            <div class="form-section">
                 <div class="card-body">
                     <h5 class="section-title">
                         <i class="bi bi-person-check me-2"></i>Responsáveis
@@ -157,7 +153,8 @@
                                     DE SEGURANÇA LTDA - EMP-B/072-07</option>
                                 <option
                                     value="A&R EVENTOS ESPECIAIS LTDA (FIEL SERVICOS ESPECIALIZADOS EM GERAL) -  EMP-B/688-24">
-                                    A&R EVENTOS ESPECIAIS LTDA (FIEL SERVICOS ESPECIALIZADOS EM GERAL) - EMP-B/688-24</option>
+                                    A&R EVENTOS ESPECIAIS LTDA (FIEL SERVICOS ESPECIALIZADOS EM GERAL) - EMP-B/688-24
+                                </option>
                                 <option value="ADFORT SERVIÇOS GERAIS LTDA -  EMP-B/503-23">ADFORT SERVIÇOS GERAIS LTDA
                                     - EMP-B/503-23</option>
                                 <option value="ÁGIL EMPRESA DE VIGILÂNCIA LTDA -  EMP-B/768-18">ÁGIL EMPRESA DE
@@ -186,7 +183,8 @@
                                     EMP-B/586-22</option>
                                 <option
                                     value="ARCANJOS LIFE SOLUÇÕES EM EMERGÊNCIAS MÉDICAS E BRIGADAS DE INCÊNDIO -  EMP-B/773-19">
-                                    ARCANJOS LIFE SOLUÇÕES EM EMERGÊNCIAS MÉDICAS E BRIGADAS DE INCÊNDIO - EMP-B/773-19</option>
+                                    ARCANJOS LIFE SOLUÇÕES EM EMERGÊNCIAS MÉDICAS E BRIGADAS DE INCÊNDIO - EMP-B/773-19
+                                </option>
                                 <option value="ARJ SISTEMAS DE AR CONDICIONADO E INCENDIO LTDA -  EMP-B/377-22">ARJ
                                     SISTEMAS DE AR CONDICIONADO E INCENDIO LTDA - EMP-B/377-22</option>
                                 <option value="ATAC - ACADEMIA TÁTICA DE CURSOS E SERVIÇOS LTDA -  EMP-B/844-23">ATAC -
@@ -264,10 +262,12 @@
                                 <option
                                     value="DMC SERVIÇOS EDUCACIONAIS LTDA ME (CFL CURSOS E SERVIÇOS) -  EMP-B/301-06 ">
                                     DMC SERVIÇOS EDUCACIONAIS LTDA ME (CFL CURSOS E SERVIÇOS) - EMP-B/301-06 </option>
-                                <option value="DNA SERVICOS LTDA -  EMP-B/760-18">DNA SERVICOS LTDA - EMP-B/760-18</option>
+                                <option value="DNA SERVICOS LTDA -  EMP-B/760-18">DNA SERVICOS LTDA - EMP-B/760-18
+                                </option>
                                 <option value="E. S DE ALMEIDA - ME (FIRE SOLUÇOES INTELIGENTES) -  EMP-B/664-16">E. S
                                     DE ALMEIDA - ME (FIRE SOLUÇOES INTELIGENTES) - EMP-B/664-16</option>
-                                <option value="ECO LIMPEZA LTDA -  EMP-B/638-24">ECO LIMPEZA LTDA - EMP-B/638-24</option>
+                                <option value="ECO LIMPEZA LTDA -  EMP-B/638-24">ECO LIMPEZA LTDA - EMP-B/638-24
+                                </option>
                                 <option value="ELETRODATA ENGENHARIA LTDA -  EMP-B/732-17">ELETRODATA ENGENHARIA LTDA -
                                     EMP-B/732-17</option>
                                 <option value="ELITE CONSULTORIA EMPRESARIAL E SERVIÇOS GERAIS LTDA -  EMP-B/677-16">
@@ -278,14 +278,16 @@
                                     PARTICIPAÇÕES LTDA - EMP-B/792-18</option>
                                 <option
                                     value="ENGEMIL ENGENHARIA, EMPREENDIMENTOS, MANUTENÇÃO E INSTALAÇÕES LTDA -  EMP-B/603-14">
-                                    ENGEMIL ENGENHARIA, EMPREENDIMENTOS, MANUTENÇÃO E INSTALAÇÕES LTDA - EMP-B/603-14</option>
+                                    ENGEMIL ENGENHARIA, EMPREENDIMENTOS, MANUTENÇÃO E INSTALAÇÕES LTDA - EMP-B/603-14
+                                </option>
                                 <option value="EPS ENGENHARIA, PROJETOS E SERVIÇOS -  EMP-B/243-08">EPS ENGENHARIA,
                                     PROJETOS E SERVIÇOS - EMP-B/243-08</option>
                                 <option value="EQUIPE BORGES BRIGADA LTDA -  EMP-B/564-24">EQUIPE BORGES BRIGADA LTDA -
                                     EMP-B/564-24</option>
                                 <option
                                     value="ESCOLA DE FORMACAO E PRESTACAO DE SERVICOS OFICIAL LIFE CURSOS LTDA -  EMP-B/025-20">
-                                    ESCOLA DE FORMACAO E PRESTACAO DE SERVICOS OFICIAL LIFE CURSOS LTDA - EMP-B/025-20</option>
+                                    ESCOLA DE FORMACAO E PRESTACAO DE SERVICOS OFICIAL LIFE CURSOS LTDA - EMP-B/025-20
+                                </option>
                                 <option value="ESPARTA SEGURANÇA LTDA -  EMP-B/733-18">ESPARTA SEGURANÇA LTDA -
                                     EMP-B/733-18</option>
                                 <option value="ESPARTA SEGURANÇA LTDA -  EMP-B/215-21">ESPARTA SEGURANÇA LTDA -
@@ -311,12 +313,14 @@
                                     ESPECIALIZADOS LTDA - EMP-B/813-19</option>
                                 <option
                                     value="G.S.I GESTÃO DE SEGURANÇA INTEGRADA - VIGILÂNCIA E SEGURANÇA EIRELI -  EMP-B/161-21">
-                                    G.S.I GESTÃO DE SEGURANÇA INTEGRADA - VIGILÂNCIA E SEGURANÇA EIRELI - EMP-B/161-21</option>
+                                    G.S.I GESTÃO DE SEGURANÇA INTEGRADA - VIGILÂNCIA E SEGURANÇA EIRELI - EMP-B/161-21
+                                </option>
                                 <option value="G&E SERVICOS TERCEIRIZADOS LTDA -  EMP-B/438-23">G&E SERVICOS
                                     TERCEIRIZADOS LTDA - EMP-B/438-23</option>
                                 <option value="G2 SERVICOS GERAIS LTDA -  EMP-B/532-23">G2 SERVICOS GERAIS LTDA -
                                     EMP-B/532-23</option>
-                                <option value="G9 FACILITIES LTDA -  EMP-B/581-24">G9 FACILITIES LTDA - EMP-B/581-24</option>
+                                <option value="G9 FACILITIES LTDA -  EMP-B/581-24">G9 FACILITIES LTDA - EMP-B/581-24
+                                </option>
                                 <option value="GÊNESIS CENTRO DE FORMAÇÃO E SERVIÇOS LTDA-ME -  EMP-B/517-13">GÊNESIS
                                     CENTRO DE FORMAÇÃO E SERVIÇOS LTDA-ME - EMP-B/517-13</option>
                                 <option value="GLOBAL FIRE CURSOS E SERVIÇOS LTDA -  EMP-B/551-23">GLOBAL FIRE CURSOS E
@@ -362,7 +366,8 @@
                                     E VIGILANCIA PATRIMONIAL LTDA - EMP-B/611-24</option>
                                 <option value="JRAIO SEGURANÇA LTDA-ME -  EMP-B/624-15">JRAIO SEGURANÇA LTDA-ME -
                                     EMP-B/624-15</option>
-                                <option value="JRF SERVIÇOS LTDA -  EMP-B/739-18">JRF SERVIÇOS LTDA - EMP-B/739-18</option>
+                                <option value="JRF SERVIÇOS LTDA -  EMP-B/739-18">JRF SERVIÇOS LTDA - EMP-B/739-18
+                                </option>
                                 <option value="K2 CONSERVAÇÃO E SERVIÇOS GERAIS EIRELI EPP -  EMP-B/460-10">K2
                                     CONSERVAÇÃO E SERVIÇOS GERAIS EIRELI EPP - EMP-B/460-10</option>
                                 <option value="KRATOS PROTECTION LTDA -  EMP-B/122-20">KRATOS PROTECTION LTDA -
@@ -375,7 +380,8 @@
                                     SEGURANÇA EM SAÚDE CONDOMINAL - EMP-B/550-23</option>
                                 <option value="LIONS SERVIÇOS INTELIGENTES LTDA -  EMP-B/496-21">LIONS SERVIÇOS
                                     INTELIGENTES LTDA - EMP-B/496-21</option>
-                                <option value="LK SERVICOS LTDA -  EMP-B/500-23">LK SERVICOS LTDA - EMP-B/500-23</option>
+                                <option value="LK SERVICOS LTDA -  EMP-B/500-23">LK SERVICOS LTDA - EMP-B/500-23
+                                </option>
                                 <option value="LOGISTEC TERCEIRIZAÇÃO DE SERVIÇOS LTDA (DIARIS) -  EMP-B/570-14">
                                     LOGISTEC TERCEIRIZAÇÃO DE SERVIÇOS LTDA (DIARIS) - EMP-B/570-14</option>
                                 <option value="MASTER ENGENHARIA E SEGURANÇA PATRIMONIAL LTDA -  EMP-B/829-19">MASTER
@@ -396,7 +402,8 @@
                                     EMPRESA DE SERVICOS GERAIS E TECNOLOGIA LTDA - EMP-B/495-23</option>
                                 <option
                                     value="MSC LIMPEZA CONSERVAÇÃO E SERVIÇOS DE BRIGADA DE INCÊNDIO EIRELI -  EMP-B/032-20">
-                                    MSC LIMPEZA CONSERVAÇÃO E SERVIÇOS DE BRIGADA DE INCÊNDIO EIRELI - EMP-B/032-20</option>
+                                    MSC LIMPEZA CONSERVAÇÃO E SERVIÇOS DE BRIGADA DE INCÊNDIO EIRELI - EMP-B/032-20
+                                </option>
                                 <option value="NBI EVENTOS E SERVICOS LTDA -  EMP-B/610-24">NBI EVENTOS E SERVICOS LTDA
                                     - EMP-B/610-24</option>
                                 <option value="OFICIAL ALPHA RESGATE LTDA -  EMP-B/533-23">OFICIAL ALPHA RESGATE LTDA -
@@ -428,7 +435,8 @@
                                     EMP-B/143-20</option>
                                 <option value="S.P.C. DE SOUZA BARROS (UNIVERSO CURSOS) -  EMP-B/462-10">S.P.C. DE SOUZA
                                     BARROS (UNIVERSO CURSOS) - EMP-B/462-10</option>
-                                <option value="SAFETY SERVICOS LTDA -  EMP-B/795-19">SAFETY SERVICOS LTDA - EMP-B/795-19</option>
+                                <option value="SAFETY SERVICOS LTDA -  EMP-B/795-19">SAFETY SERVICOS LTDA - EMP-B/795-19
+                                </option>
                                 <option value="SAVI LIFE SERVIÇOS DE BRIGADA LTDA -  EMP-B/397-23">SAVI LIFE SERVIÇOS DE
                                     BRIGADA LTDA - EMP-B/397-23</option>
                                 <option value="SEAL FIRE CURSOS E SERVIÇOS -  EMP-B/282-22">SEAL FIRE CURSOS E SERVIÇOS
@@ -494,7 +502,7 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm mb-4">
+            <div class="form-section">
                 <div class="card-body">
                     <h5 class="section-title">
                         <i class="bi bi-building me-2"></i>Estruturas Provisórias
@@ -557,7 +565,7 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm mb-4">
+            <div class="form-section">
                 <div class="card-body">
                     <h5 class="section-title">
                         <i class="bi bi-lightning-charge me-2"></i>Segurança e Riscos
@@ -700,7 +708,7 @@
                 </div>
             </div>
 
-            <div class="card shadow-sm mb-4">
+            <div class="form-section">
                 <div class="card-body">
                     <h5 class="section-title">
                         <i class="bi bi-file-earmark-text me-2"></i>Checklist de
@@ -763,28 +771,24 @@
                     </div>
                 </div>
             </div>
-
-            <div class="row g-2 mt-4">
-                <div class="col-md-4">
-                    <button type="submit" class="btn btn-success btn-lg w-100 shadow-sm">
-                        <i class="bi bi-save me-2"></i>SALVAR
+            <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="index.html" class="btn btn-outline-secondary">
+                        <i class="bi bi-house me-1"></i>Início
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="bi bi-file-earmark-pdf me-1"></i>SALVAR
                     </button>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-danger btn-lg w-100 shadow-sm" onclick="confirmExclusao()">
-                        <i class="bi bi-trash me-2"></i>EXCLUIR
+                    <button type="button" class="btn btn-danger" id="btnExcluir" onclick="confirmExclusao()">
+                        <i class="bi bi-trash me-1"></i>Excluir
                     </button>
-                </div>
-                <div class="col-md-4">
-                    <button type="button" class="btn btn-primary btn-lg w-100 shadow-sm"
-                        onclick="enviarParaGoogleForms()">
-                        <i class="bi bi-send me-2"></i>ENVIAR
+                    <button type="button" class="btn btn-primary" id="btnEnviar">
+                        <i class="bi bi-send me-1"></i>Enviar
                     </button>
                 </div>
             </div>
         </form>
     </div>
-
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -813,6 +817,20 @@
                     //   if (dadosSalvos.responsavel_full) $("#responsavel").val(dadosSalvos.responsavel_full);
                 }
             }
+
+            // Apply status color to title
+        function aplicarCorDoStatus(status) {
+            const titulo = document.getElementById("tituloLaudo");
+            // Remove existing status classes (e.g., status-pendente, status-aprovado)
+            titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
+
+            const classe = Utils.formatarClasseStatus(status);
+            if (status) {
+                titulo.classList.add('text-light', classe);
+            } else {
+                titulo.classList.add('text-dark', 'status-sem-status'); // Default for no status
+            }
+        }
 
             // --- 2. FUNÇÃO CORE DE SALVAMENTO ---
             function processarFormulario(novoStatus) {
@@ -922,6 +940,7 @@
                 e.preventDefault();
                 if (confirm("Deseja marcar esta vistoria como CONCLUÍDA/ENVIADA?")) {
                     processarFormulario("Enviado");
+                    enviarParaGoogleForms();
                 }
             });
         });
@@ -947,10 +966,9 @@
             const editId = urlParams.get("id");
             if (editId && confirm("Apagar este registo permanentemente?")) {
                 localStorage.removeItem(editId);
-                window.location.href = "eventuais.html";
+                window.location.href = "lista_eventual.html";
             }
         }
-
 
         function enviarParaGoogleForms() {
             const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScFdrzloQDqpN1nwU6M4K8n9UYbf4UhyAAVXo7IWYUdfRNa1g/viewform";
@@ -1041,6 +1059,19 @@
             // Redireciona
             console.log("URL de envio:", FORM_URL + "?" + params.toString());
             window.location.href = FORM_URL + "?" + params.toString();
+        }
+        // Apply status color to title
+        function aplicarCorDoStatus(status) {
+            const titulo = document.getElementById("tituloLaudo");
+            // Remove existing status classes (e.g., status-pendente, status-aprovado)
+            titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
+
+            const classe = Utils.formatarClasseStatus(status);
+            if (status) {
+                titulo.classList.add('text-light', classe);
+            } else {
+                titulo.classList.add('text-dark', 'status-sem-status'); // Default for no status
+            }
         }
     </script>
 </body>

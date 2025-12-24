@@ -1,217 +1,143 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formulário de Medidas de Segurança</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css"
-      rel="stylesheet"
-    />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Formulário de Medidas de Segurança</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-  <body>
-    <div class="toast-container"></div>
+	<link rel="stylesheet" href="style.css" />
+</head>
 
-    <div class="container-fluid mt-3">
-      <div class="text-center mb-4">
-        <h2 id="tituloLaudo" class="display-6">Laudo de Vistoria</h2>
-      </div>
+<body>
+	<div class="container-fluid mt-3">
+		<div class="text-center mb-4">
+			<h2 id="tituloLaudo" class="display-6">Laudo de Vistoria</h2>
+		</div>
 
-      <form class="needs-validation" novalidate autocomplete="off">
-        <div class="form-section">
-          <h4 class="section-title">
-            <i class="bi bi-file-text me-2"></i>Identificação do Processo
-          </h4>
+		<form class="needs-validation" novalidate autocomplete="off">
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-file-text me-2"></i>Identificação do Processo
+				</h4>
 
-          <div class="row g-3">
-            <div class="col-md-7">
-              <div class="row">
-                <div class="col-md-12">
-                  <label for="processoBusca" class="form-label">
-                    Número do Processo <span class="text-danger">*</span>
-                  </label>
-                  <div class="input-group">
-                    <input
-                      type="tel"
-                      class="form-control"
-                      id="processoBusca"
-                      placeholder="00000-00000000/0000-00"
-                      maxlength="25"
-                      required
-                    />
+				<div class="row g-3">
+					<div class="col-md-7">
+						<div class="row">
+							<div class="col-md-12">
+								<label for="processoBusca" class="form-label">
+									Número do Processo <span class="text-danger">*</span>
+								</label>
+								<div class="input-group">
+									<input type="tel" class="form-control" id="processoBusca"
+										placeholder="00000-00000000/0000-00" maxlength="25" required />
 
-                    <button
-                      class="btn btn-outline-secondary"
-                      type="button"
-                      id="buscarProcesso"
-                      title="Buscar Processo"
-                    >
-                      <i class="bi bi-search"></i>
-                    </button>
+									<button class="btn btn-outline-secondary" type="button" id="buscarProcesso"
+										title="Buscar Processo">
+										<i class="bi bi-search"></i>
+									</button>
 
-                    <button
-                      class="btn btn-outline-secondary"
-                      type="button"
-                      id="copiarProcesso"
-                      title="Copiar Número do Processo"
-                    >
-                      <i class="bi bi-clipboard"></i>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3">
-              <label for="status" class="form-label">Status</label>
-              <select class="form-select" id="status">
-                <option value="">Selecione</option>
-                <option value="Pendente">Pendente</option>
-                <option value="Análise">Em Análise</option>
-                <option value="Vistoria">Em Vistoria</option>
-                <option value="Aprovado">Aprovado</option>
-                <option value="Reprovado">Reprovado</option>
-                <option value="Cancelado">Cancelado</option>
-                <option value="Não Realizada">Não Realizada</option>
-              </select>
-            </div>
-            <div
-              class="col-md-1 d-flex justify-content-center align-items-center text-light rounded"
-              id="googleMapsContainer"
-            >
-              <a
-                id="googleMapsLink"
-                href="#"
-                target="_blank"
-                title="Localização Google Maps"
-                class="location-link-full"
-              >
-                <img
-                  src="icons/google-brands-solid.svg"
-                  alt="Waze Icon"
-                  style="width: 60px; height: 60px"
-                />
-              </a>
-            </div>
-            <div
-              class="col-md-1 d-flex justify-content-center align-items-center text-light rounded"
-              id="wazeContainer"
-            >
-              <a
-                id="wazeLink"
-                href="#"
-                target="_blank"
-                title="Localização Waze"
-                class="location-link-full"
-              >
-                <img
-                  src="icons/waze-brands-solid.svg"
-                  alt="Waze Icon"
-                  style="width: 60px; height: 60px"
-                />
-              </a>
-            </div>
-          </div>
-        </div>
+									<button class="btn btn-outline-secondary" type="button" id="copiarProcesso"
+										title="Copiar Número do Processo">
+										<i class="bi bi-clipboard"></i>
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<label for="status" class="form-label">Status</label>
+						<select class="form-select" id="status">
+							<option value="">Selecione</option>
+							<option value="Pendente">Pendente</option>
+							<option value="Análise">Em Análise</option>
+							<option value="Vistoria">Em Vistoria</option>
+							<option value="Aprovado">Aprovado</option>
+							<option value="Reprovado">Reprovado</option>
+							<option value="Cancelado">Cancelado</option>
+							<option value="Não Realizada">Não Realizada</option>
+						</select>
+					</div>
+					<div class="col-md-1 d-flex justify-content-center align-items-center text-light rounded"
+						id="googleMapsContainer">
+						<a id="googleMapsLink" href="#" target="_blank" title="Localização Google Maps"
+							class="location-link-full">
+							<img src="icons/google-brands-solid.svg" alt="Waze Icon"
+								style="width: 60px; height: 60px" />
+						</a>
+					</div>
+					<div class="col-md-1 d-flex justify-content-center align-items-center text-light rounded"
+						id="wazeContainer">
+						<a id="wazeLink" href="#" target="_blank" title="Localização Waze" class="location-link-full">
+							<img src="icons/waze-brands-solid.svg" alt="Waze Icon" style="width: 60px; height: 60px" />
+						</a>
+					</div>
+				</div>
+			</div>
 
-        <div class="form-section">
-          <h4 class="section-title">
-            <i class="bi bi-building me-2"></i>Dados da Instituição
-          </h4>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-building me-2"></i>Dados da Instituição
+				</h4>
 
-          <div class="row g-3">
-            <div class="col-md-4">
-              <label for="cnpj" class="form-label"
-                >CNPJ <span class="text-danger">*</span></label
-              >
-              <input
-                type="tel"
-                class="form-control"
-                id="cnpj"
-                placeholder="00.000.000/0000-00"
-                maxlength="18"
-                required
-              />
-              <div class="invalid-feedback">
-                CNPJ inválido ou não informado.
-              </div>
-            </div>
+				<div class="row g-3">
+					<div class="col-md-4">
+						<label for="cnpj" class="form-label">CNPJ <span class="text-danger">*</span></label>
+						<input type="tel" class="form-control" id="cnpj" placeholder="00.000.000/0000-00" maxlength="18"
+							required />
+						<div class="invalid-feedback">
+							CNPJ inválido ou não informado.
+						</div>
+					</div>
 
-            <div class="col-md-8">
-              <label for="instituicao" class="form-label"
-                >Nome Fantasia/Razão Social
-                <span class="text-danger">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control text-uppercase"
-                id="instituicao"
-                placeholder="Nome da Instituição"
-                required
-              />
-              <div class="invalid-feedback">
-                Por favor, informe o nome ou razão social.
-              </div>
-            </div>
+					<div class="col-md-8">
+						<label for="instituicao" class="form-label">Nome Fantasia/Razão Social
+							<span class="text-danger">*</span></label>
+						<input type="text" class="form-control text-uppercase" id="instituicao"
+							placeholder="Nome da Instituição" required />
+						<div class="invalid-feedback">
+							Por favor, informe o nome ou razão social.
+						</div>
+					</div>
 
-            <div class="col-md-8">
-              <label for="endereco" class="form-label"
-                >Endereço Completo <span class="text-danger">*</span></label
-              >
-              <input
-                type="text"
-                class="form-control text-uppercase"
-                id="endereco"
-                placeholder="Rua, número, bairro, cidade - UF"
-                required
-              />
-              <div class="invalid-feedback">
-                Por favor, informe o endereço completo.
-              </div>
-            </div>
+					<div class="col-md-8">
+						<label for="endereco" class="form-label">Endereço Completo <span
+								class="text-danger">*</span></label>
+						<input type="text" class="form-control text-uppercase" id="endereco"
+							placeholder="Rua, número, bairro, cidade - UF" required />
+						<div class="invalid-feedback">
+							Por favor, informe o endereço completo.
+						</div>
+					</div>
 
-            <div class="col-md-4">
-              <label for="localizacao" class="form-label"
-                >Coordenadas GPS</label
-              >
-              <div class="input-group">
-                <input
-                  type="tel"
-                  class="form-control"
-                  id="localizacao"
-                  placeholder="-00.00000, -00.00000"
-                />
-                <button
-                  class="btn btn-outline-success"
-                  type="button"
-                  id="buscarLocalizacao"
-                  title="Obter localização atual"
-                >
-                  <i class="bi bi-geo-alt-fill"></i>
-                </button>
-              </div>
-              <div class="form-text">
-                Clique no botão para obter sua localização atual
-              </div>
-            </div>
-          </div>
-        </div>
+					<div class="col-md-4">
+						<label for="localizacao" class="form-label">Coordenadas GPS</label>
+						<div class="input-group">
+							<input type="tel" class="form-control" id="localizacao"
+								placeholder="-00.00000, -00.00000" />
+							<button class="btn btn-outline-success" type="button" id="buscarLocalizacao"
+								title="Obter localização atual">
+								<i class="bi bi-geo-alt-fill"></i>
+							</button>
+						</div>
+						<div class="form-text">
+							Clique no botão para obter sua localização atual
+						</div>
+					</div>
+				</div>
+			</div>
 
-        <div class="form-section">
-          <h4 class="section-title">
-            <i class="bi bi-diagram-3 me-2"></i>Classificação da Edificação
-          </h4>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-diagram-3 me-2"></i>Classificação da Edificação
+				</h4>
 
-          <div class="row g-3">
-            <!--
+				<div class="row g-3">
+					<!--
 					<div class="col-md-3">
 						<label for="ocupacao" class="form-label">Ocupação <span class="text-danger">*</span></label>
 						<select class="form-select" id="ocupacao" required>
@@ -293,420 +219,319 @@
 					</div>
 					-->
 
-            <div class="col-md-6">
-              <label for="ocupacao" class="form-label"
-                >Ocupação <span class="text-danger">*</span></label
-              >
-              <select class="form-select" id="ocupacao" required>
-                <option value="">Selecione a ocupação</option>
-                <optgroup label="Residenciais">
-                  <option value="01">01 - Residenciais unifamiliares</option>
-                  <option value="02">02 - Residenciais multifamiliares</option>
-                </optgroup>
-                <optgroup label="Transitórias">
-                  <option value="03">03 - Habitações coletivas</option>
-                  <option value="04">04 - Hotéis</option>
-                  <option value="05">05 - Hotéis residenciais</option>
-                </optgroup>
-                <optgroup label="Comerciais">
-                  <option value="06">06 - Comércio de pequeno porte</option>
-                  <option value="07">07 - Comércio de médio porte</option>
-                  <option value="08">08 - Comércio de grande porte</option>
-                </optgroup>
-                <optgroup label="Serviços Profissionais">
-                  <option value="09">09 - Escritórios</option>
-                  <option value="10">10 - Agências bancárias</option>
-                  <option value="11">11 - Laboratórios e estúdios</option>
-                  <option value="12">12 - Serviços de reparação</option>
-                </optgroup>
-                <optgroup label="Escolares">
-                  <option value="13">13 - Escolas em geral</option>
-                  <option value="14">14 - Escolas especiais</option>
-                  <option value="15">15 - Locais para cultura física</option>
-                  <option value="16">16 - Pré-escolas</option>
-                  <option value="17">
-                    17 - Escolas para portadores de deficiências
-                  </option>
-                </optgroup>
-                <optgroup label="Concentração de Público">
-                  <option value="18">18 - Museus e bibliotecas</option>
-                  <option value="19">19 - Templos religiosos</option>
-                  <option value="20">
-                    20 - Centros esportivos e de exibição
-                  </option>
-                  <option value="21">21 - Terminais de passageiros</option>
-                  <option value="22">22 - Artes cênicas e auditórios</option>
-                  <option value="23">23 - Clubes sociais</option>
-                  <option value="24">24 - Construções provisórias</option>
-                  <option value="25">25 - Restaurantes</option>
-                </optgroup>
-                <optgroup label="Garagens">
-                  <option value="26">26 - Garagens em geral</option>
-                  <option value="27">27 - Oficinas</option>
-                  <option value="28">28 - Hangares</option>
-                </optgroup>
-                <optgroup label="Hospitalares">
-                  <option value="29">29 - Hospitais veterinários</option>
-                  <option value="30">30 - Hospitais em geral</option>
-                  <option value="31">
-                    31 - Locais para pessoas com limitações físicas ou mentais
-                  </option>
-                  <option value="32">32 - Clínicas</option>
-                </optgroup>
-                <optgroup label="Industriais">
-                  <option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
-                  <option value="34">
-                    34 - Indústrias > 300 MJ/m² e < 1200 MJ/m²
-                  </option>
-                  <option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
-                </optgroup>
-                <optgroup label="Depósitos">
-                  <option value="36">
-                    36 - Depósitos de material incombustível
-                  </option>
-                  <option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
-                  <option value="38">
-                    38 - Depósitos > 300 MJ/m² e < 1200 MJ/m²
-                  </option>
-                  <option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
-                </optgroup>
-                <optgroup label="Armazenamento e Instalações de alto risco">
-                  <option value="40">
-                    40 - Líquidos ou gases inflamáveis e combustíveis
-                  </option>
-                  <option value="41">41 - Explosivos</option>
-                  <option value="42">42 - Produtos perigosos</option>
-                </optgroup>
-                <optgroup label="Especiais">
-                  <option value="43">43 - Vegetações</option>
-                  <option value="44">44 - Canteiros de obras</option>
-                  <option value="45">
-                    45 - Centros esportivos (> 2500 pessoas)
-                  </option>
-                  <option value="46">46 - Parques de diversões</option>
-                  <option value="47">
-                    47 - Centrais de comunicação e energia
-                  </option>
-                  <option value="48">48 - Túneis</option>
-                  <option value="49">49 - Silos</option>
-                  <option value="50">
-                    50 - Locais com restrição de liberdade
-                  </option>
-                </optgroup>
-                <optgroup label="Mistas">
-                  <option value="51">51 - Destinações variáveis</option>
-                </optgroup>
-              </select>
-            </div>
-            <div class="col-md-2">
-              <label for="area" class="form-label"
-                >Área(m²)<span class="text-danger">*</span></label
-              >
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                class="form-control"
-                id="area"
-                placeholder="0.00"
-                required
-              />
-              <div class="invalid-feedback">Por favor, informe a área.</div>
-            </div>
+					<div class="col-md-6">
+						<label for="ocupacao" class="form-label">Ocupação <span class="text-danger">*</span></label>
+						<select class="form-select" id="ocupacao" required>
+							<option value="">Selecione a ocupação</option>
+							<optgroup label="Residenciais">
+								<option value="01">01 - Residenciais unifamiliares</option>
+								<option value="02">02 - Residenciais multifamiliares</option>
+							</optgroup>
+							<optgroup label="Transitórias">
+								<option value="03">03 - Habitações coletivas</option>
+								<option value="04">04 - Hotéis</option>
+								<option value="05">05 - Hotéis residenciais</option>
+							</optgroup>
+							<optgroup label="Comerciais">
+								<option value="06">06 - Comércio de pequeno porte</option>
+								<option value="07">07 - Comércio de médio porte</option>
+								<option value="08">08 - Comércio de grande porte</option>
+							</optgroup>
+							<optgroup label="Serviços Profissionais">
+								<option value="09">09 - Escritórios</option>
+								<option value="10">10 - Agências bancárias</option>
+								<option value="11">11 - Laboratórios e estúdios</option>
+								<option value="12">12 - Serviços de reparação</option>
+							</optgroup>
+							<optgroup label="Escolares">
+								<option value="13">13 - Escolas em geral</option>
+								<option value="14">14 - Escolas especiais</option>
+								<option value="15">15 - Locais para cultura física</option>
+								<option value="16">16 - Pré-escolas</option>
+								<option value="17">
+									17 - Escolas para portadores de deficiências
+								</option>
+							</optgroup>
+							<optgroup label="Concentração de Público">
+								<option value="18">18 - Museus e bibliotecas</option>
+								<option value="19">19 - Templos religiosos</option>
+								<option value="20">
+									20 - Centros esportivos e de exibição
+								</option>
+								<option value="21">21 - Terminais de passageiros</option>
+								<option value="22">22 - Artes cênicas e auditórios</option>
+								<option value="23">23 - Clubes sociais</option>
+								<option value="24">24 - Construções provisórias</option>
+								<option value="25">25 - Restaurantes</option>
+							</optgroup>
+							<optgroup label="Garagens">
+								<option value="26">26 - Garagens em geral</option>
+								<option value="27">27 - Oficinas</option>
+								<option value="28">28 - Hangares</option>
+							</optgroup>
+							<optgroup label="Hospitalares">
+								<option value="29">29 - Hospitais veterinários</option>
+								<option value="30">30 - Hospitais em geral</option>
+								<option value="31">
+									31 - Locais para pessoas com limitações físicas ou mentais
+								</option>
+								<option value="32">32 - Clínicas</option>
+							</optgroup>
+							<optgroup label="Industriais">
+								<option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
+								<option value="34">
+									34 - Indústrias > 300 MJ/m² e < 1200 MJ/m² </option>
+								<option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
+							</optgroup>
+							<optgroup label="Depósitos">
+								<option value="36">
+									36 - Depósitos de material incombustível
+								</option>
+								<option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
+								<option value="38">
+									38 - Depósitos > 300 MJ/m² e < 1200 MJ/m² </option>
+								<option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
+							</optgroup>
+							<optgroup label="Armazenamento e Instalações de alto risco">
+								<option value="40">
+									40 - Líquidos ou gases inflamáveis e combustíveis
+								</option>
+								<option value="41">41 - Explosivos</option>
+								<option value="42">42 - Produtos perigosos</option>
+							</optgroup>
+							<optgroup label="Especiais">
+								<option value="43">43 - Vegetações</option>
+								<option value="44">44 - Canteiros de obras</option>
+								<option value="45">
+									45 - Centros esportivos (> 2500 pessoas)
+								</option>
+								<option value="46">46 - Parques de diversões</option>
+								<option value="47">
+									47 - Centrais de comunicação e energia
+								</option>
+								<option value="48">48 - Túneis</option>
+								<option value="49">49 - Silos</option>
+								<option value="50">
+									50 - Locais com restrição de liberdade
+								</option>
+							</optgroup>
+							<optgroup label="Mistas">
+								<option value="51">51 - Destinações variáveis</option>
+							</optgroup>
+						</select>
+					</div>
+					<div class="col-md-2">
+						<label for="area" class="form-label">Área(m²)<span class="text-danger">*</span></label>
+						<input type="number" step="0.01" min="0" class="form-control" id="area" placeholder="0.00"
+							required />
+						<div class="invalid-feedback">Por favor, informe a área.</div>
+					</div>
 
-            <div class="col-md-2">
-              <label for="altura" class="form-label"
-                >Altura(m)<span class="text-danger">*</span></label
-              >
-              <input
-                type="number"
-                step="0.01"
-                min="0"
-                class="form-control"
-                id="altura"
-                placeholder="0.00"
-                required
-              />
-              <div class="invalid-feedback">Por favor, informe a altura.</div>
-            </div>
+					<div class="col-md-2">
+						<label for="altura" class="form-label">Altura(m)<span class="text-danger">*</span></label>
+						<input type="number" step="0.01" min="0" class="form-control" id="altura" placeholder="0.00"
+							required />
+						<div class="invalid-feedback">Por favor, informe a altura.</div>
+					</div>
 
-            <div class="col-md-2">
-              <label for="pavimentos" class="form-label"
-                >Pavimentos<span class="text-danger">*</span></label
-              >
-              <input
-                type="number"
-                step="1"
-                min="0"
-                class="form-control"
-                id="pavimentos"
-                placeholder="0"
-                required
-              />
-              <div class="invalid-feedback">
-                Por favor, informe a pavimentos.
-              </div>
-            </div>
-          </div>
-        </div>
+					<div class="col-md-2">
+						<label for="pavimentos" class="form-label">Pavimentos<span class="text-danger">*</span></label>
+						<input type="number" step="1" min="0" class="form-control" id="pavimentos" placeholder="0"
+							required />
+						<div class="invalid-feedback">
+							Por favor, informe a pavimentos.
+						</div>
+					</div>
+				</div>
+			</div>
 
-        <div class="form-section">
-          <h4 class="section-title">
-            <i class="bi bi-clipboard-check me-2"></i>Dados da Vistoria
-          </h4>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-clipboard-check me-2"></i>Dados da Vistoria
+				</h4>
 
-          <div class="row g-3">
-            <div class="col-md-8">
-              <label for="responsavel" class="form-label"
-                >Responsável pela Edificação</label
-              >
-              <input
-                type="text"
-                class="form-control text-uppercase"
-                id="responsavel"
-                placeholder="Nome completo, telefone e email"
-              />
-            </div>
+				<div class="row g-3">
+					<div class="col-md-8">
+						<label for="responsavel" class="form-label">Responsável pela Edificação</label>
+						<input type="text" class="form-control text-uppercase" id="responsavel"
+							placeholder="Nome completo, telefone e email" />
+					</div>
 
-            <div class="col-md-4">
-              <label for="tipo" class="form-label"
-                >Tipo de Vistoria <span class="text-danger">*</span></label
-              >
-              <select class="form-select" id="tipo" required>
-                <option value="">Selecione o tipo</option>
-                <option value="RLE">
-                  RLE - Registro de Licenciamento de Empresas
-                </option>
-                <option value="Relatório Técnico">Relatório Técnico</option>
-                <option value="Denúncia">Denúncia</option>
-                <option value="Inopinada">Vistoria Inopinada</option>
-                <option value="ADP">Análise de Dilação de Prazo</option>
-                <option value="DPV">Dilação de Prazo Vencida</option>
-                <option value="PPCI">PPCI - Plano de Prevenção</option>
-                <option value="Outros">Outros</option>
-              </select>
-              <div class="invalid-feedback">
-                Por favor, selecione o tipo de vistoria.
-              </div>
-            </div>
+					<div class="col-md-4">
+						<label for="tipo" class="form-label">Tipo de Vistoria <span class="text-danger">*</span></label>
+						<select class="form-select" id="tipo" required>
+							<option value="">Selecione o tipo</option>
+							<option value="RLE">
+								RLE - Registro de Licenciamento de Empresas
+							</option>
+							<option value="Relatório Técnico">Relatório Técnico</option>
+							<option value="Denúncia">Denúncia</option>
+							<option value="Inopinada">Vistoria Inopinada</option>
+							<option value="ADP">Análise de Dilação de Prazo</option>
+							<option value="DPV">Dilação de Prazo Vencida</option>
+							<option value="PPCI">PPCI - Plano de Prevenção</option>
+							<option value="Outros">Outros</option>
+						</select>
+						<div class="invalid-feedback">
+							Por favor, selecione o tipo de vistoria.
+						</div>
+					</div>
 
-            <div class="col-md-4">
-              <label for="inicio" class="form-label">Data/Hora de Início</label>
-              <input type="datetime-local" class="form-control" id="inicio" />
-            </div>
+					<div class="col-md-4">
+						<label for="inicio" class="form-label">Data/Hora de Início</label>
+						<input type="datetime-local" class="form-control" id="inicio" />
+					</div>
 
-            <div class="col-md-4">
-              <label for="fim" class="form-label">Data/Hora de Término</label>
-              <input type="datetime-local" class="form-control" id="fim" />
-            </div>
+					<div class="col-md-4">
+						<label for="fim" class="form-label">Data/Hora de Término</label>
+						<input type="datetime-local" class="form-control" id="fim" />
+					</div>
 
-            <div class="col-md-4">
-              <label class="form-label">É retorno de vistoria?</label>
-              <div class="d-flex gap-3 mt-2">
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="retorno"
-                    id="retornoSim"
-                    value="sim"
-                  />
-                  <label class="form-check-label" for="retornoSim">Sim</label>
-                </div>
-                <div class="form-check">
-                  <input
-                    class="form-check-input"
-                    type="radio"
-                    name="retorno"
-                    id="retornoNao"
-                    value="nao"
-                    checked
-                  />
-                  <label class="form-check-label" for="retornoNao">Não</label>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+					<div class="col-md-4">
+						<label class="form-label">É retorno de vistoria?</label>
+						<div class="d-flex gap-3 mt-2">
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="retorno" id="retornoSim"
+									value="sim" />
+								<label class="form-check-label" for="retornoSim">Sim</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="retorno" id="retornoNao" value="nao"
+									checked />
+								<label class="form-check-label" for="retornoNao">Não</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 
-        <div class="form-section">
-          <h4 class="section-title">
-            <i class="bi bi-person me-2"></i>Dados do Acompanhante
-          </h4>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-person me-2"></i>Dados do Acompanhante
+				</h4>
 
-          <div class="row g-3">
-            <div class="col-md-7">
-              <label for="acompanhante" class="form-label">Nome Completo</label>
-              <input
-                type="text"
-                class="form-control text-uppercase"
-                id="acompanhante"
-                placeholder="Nome do acompanhante"
-              />
-            </div>
-            <!--
+				<div class="row g-3">
+					<div class="col-md-7">
+						<label for="acompanhante" class="form-label">Nome Completo</label>
+						<input type="text" class="form-control text-uppercase" id="acompanhante"
+							placeholder="Nome do acompanhante" />
+					</div>
+					<!--
 					<div class="col-md-3">
 						<label for="cpf" class="form-label">CPF</label>
 						<input type="tel" class="form-control" id="cpf" placeholder="000.000.000-00">
 						<div class="invalid-feedback">CPF inválido</div>
 					</div>
 -->
-            <div class="col-md-5">
-              <label for="funcao" class="form-label">Função/Cargo</label>
-              <input
-                type="text"
-                class="form-control text-uppercase"
-                id="funcao"
-                placeholder="Função na empresa"
-              />
-            </div>
-          </div>
-        </div>
+					<div class="col-md-5">
+						<label for="funcao" class="form-label">Função/Cargo</label>
+						<input type="text" class="form-control text-uppercase" id="funcao"
+							placeholder="Função na empresa" />
+					</div>
+				</div>
+			</div>
 
-        <div class="form-section">
-          <h4 class="section-title">
-            <i class="bi bi-shield-check me-2"></i>Exigências de Segurança
-            Contra Incêndio
-          </h4>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-shield-check me-2"></i>Exigências de Segurança
+					Contra Incêndio
+				</h4>
 
-          <div id="categoriasSelecionadas" class="mb-3">
-            <div class="d-flex flex-wrap gap-2" id="badgesCategorias"></div>
-          </div>
+				<div id="categoriasSelecionadas" class="mb-3">
+					<div class="d-flex flex-wrap gap-2" id="badgesCategorias"></div>
+				</div>
 
-          <div id="exigenciasContainer" class="loading-spinner">
-            <div
-              id="algumIdDoSpinner"
-              class="spinner-border text-primary"
-              role="status"
-            >
-              <span class="visually-hidden">Loading...</span>
-            </div>
-          </div>
+				<div id="exigenciasContainer" class="loading-spinner">
+					<div id="algumIdDoSpinner" class="spinner-border text-primary" role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
+				</div>
 
-          <div class="mb-3">
-            <label for="selectCategoriaExigencia" class="form-label"
-              >Adicionar Categoria de Exigência:</label
-            >
-            <select class="form-select" id="selectCategoriaExigencia">
-              <option value="">Selecione uma categoria para adicionar</option>
-            </select>
-          </div>
-        </div>
+				<div class="mb-3">
+					<label for="selectCategoriaExigencia" class="form-label">Adicionar Categoria de Exigência:</label>
+					<select class="form-select" id="selectCategoriaExigencia">
+						<option value="">Selecione uma categoria para adicionar</option>
+					</select>
+				</div>
+			</div>
 
-        <div class="form-section">
-          <h4 class="section-title">
-            <i class="bi bi-journal-text me-2"></i>Observações Gerais
-          </h4>
+			<div class="form-section">
+				<h4 class="section-title">
+					<i class="bi bi-journal-text me-2"></i>Observações Gerais
+				</h4>
 
-          <div class="mb-3">
-            <label for="observacao" class="form-label"
-              >Observações da Vistoria</label
-            >
-            <textarea
-              rows="6"
-              class="form-control"
-              id="observacao"
-              placeholder="Descreva observações relevantes sobre a vistoria, condições encontradas, recomendações, etc."
-            ></textarea>
-            <div class="form-text">
-              Utilize este campo para registrar informações importantes sobre a
-              vistoria.
-            </div>
-          </div>
-        </div>
+				<div class="mb-3">
+					<label for="observacao" class="form-label">Observações da Vistoria</label>
+					<textarea rows="6" class="form-control" id="observacao"
+						placeholder="Descreva observações relevantes sobre a vistoria, condições encontradas, recomendações, etc."></textarea>
+					<div class="form-text">
+						Utilize este campo para registrar informações importantes sobre a
+						vistoria.
+					</div>
+				</div>
+			</div>
 
-        <div
-          class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2"
-        >
-          <!-- Botões à esquerda -->
-          <div class="d-flex gap-2 flex-wrap">
-            <a href="index.html" class="btn btn-outline-secondary">
-              <i class="bi bi-house me-1"></i>Início
-            </a>
-            <button type="button" class="btn btn-success" id="btnSalvar">
-              <i class="bi bi-save me-1"></i>Salvar
-            </button>
-            <button type="button" class="btn btn-primary" id="btnGerar">
-              <i class="bi bi-file-earmark-pdf me-1"></i>Gerar Relatório
-            </button>
-            <button type="button" class="btn btn-danger" id="btnExcluir">
-              <i class="bi bi-trash me-1"></i>Excluir
-            </button>
-          </div>
+			<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+				<!-- Botões à esquerda -->
+				<div class="d-flex gap-2 flex-wrap">
+					<a href="index.html" class="btn btn-outline-secondary">
+						<i class="bi bi-house me-1"></i>Início
+					</a>
+					<button type="button" class="btn btn-success" id="btnSalvar">
+						<i class="bi bi-save me-1"></i>Salvar
+					</button>
+					<button type="button" class="btn btn-primary" id="btnGerar">
+						<i class="bi bi-file-earmark-pdf me-1"></i>Gerar Relatório
+					</button>
+					<button type="button" class="btn btn-danger" id="btnExcluir">
+						<i class="bi bi-trash me-1"></i>Excluir
+					</button>
+				</div>
 
-          <!-- Checkbox de Concluído à direita -->
-          <div class="form-check form-switch d-flex align-items-center">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              id="checkConcluido"
-            />
-            <label
-              class="form-check-label ms-2 fw-medium text-success"
-              for="checkConcluido"
-            >
-              <i class="bi bi-check-circle me-1"></i>Concluído?
-            </label>
-          </div>
-        </div>
-      </form>
-    </div>
+				<!-- Checkbox de Concluído à direita -->
+				<div class="form-check form-switch d-flex align-items-center">
+					<input class="form-check-input" type="checkbox" id="checkConcluido" />
+					<label class="form-check-label ms-2 fw-medium text-success" for="checkConcluido">
+						<i class="bi bi-check-circle me-1"></i>Concluído?
+					</label>
+				</div>
+			</div>
+		</form>
+	</div>
 
-    <div
-      class="modal fade"
-      id="anotacaoModal"
-      tabindex="-1"
-      aria-labelledby="anotacaoModalLabel"
-      aria-hidden="true"
-    >
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="anotacaoModalLabel">
-              Anotação da Exigência
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <input type="hidden" id="anotacaoExigenciaId" />
+	<div class="modal fade" id="anotacaoModal" tabindex="-1" aria-labelledby="anotacaoModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="anotacaoModalLabel">
+						Anotação da Exigência
+					</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<input type="hidden" id="anotacaoExigenciaId" />
 
-            <p id="anotacaoExigenciaDescricao" class="text-muted"></p>
+					<p id="anotacaoExigenciaDescricao" class="text-muted"></p>
 
-            <div class="mb-3">
-              <textarea
-                class="form-control"
-                id="campoAnotacao"
-                rows="6"
-                placeholder="Insira suas observações, pendências, ou qualquer nota relevante sobre esta exigência."
-              ></textarea>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button
-              type="button"
-              class="btn btn-secondary"
-              data-bs-dismiss="modal"
-            >
-              Fechar
-            </button>
-            <button
-              type="button"
-              class="btn btn-primary"
-              id="btnSalvarAnotacao"
-            >
-              Salvar Anotação
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+					<div class="mb-3">
+						<textarea class="form-control" id="campoAnotacao" rows="6"
+							placeholder="Insira suas observações, pendências, ou qualquer nota relevante sobre esta exigência."></textarea>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+						Fechar
+					</button>
+					<button type="button" class="btn btn-primary" id="btnSalvarAnotacao">
+						Salvar Anotação
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="processo.js"></script>
-  </body>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="processo.js"></script>
+</body>
+
 </html>
