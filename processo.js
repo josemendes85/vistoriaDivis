@@ -2,14 +2,17 @@
 const CONFIG = {
 	AUTO_SAVE_DELAY: 1000,
 	GEOLOCATION_TIMEOUT: 10000,
-	TOAST_DURATION: 3000
+	TOAST_DURATION: 3000,
 };
 
-// Gatilhos de eventos: Chama a função sempre que um dos campos-chave for alterado (evento 'change') 
+// Gatilhos de eventos: Chama a função sempre que um dos campos-chave for alterado (evento 'change')
 // ou o usuário digitar/modificar o conteúdo (evento 'input').
 $(document).ready(function () {
 	// 1. Adiciona o listener para cada campo
-	$('#ocupacao, #area, #altura, #pavimentos').on('blur', dispararVerificacaoDeExigencias);
+	$("#ocupacao, #area, #altura, #pavimentos").on(
+		"blur",
+		dispararVerificacaoDeExigencias
+	);
 
 	// 2. Opcional: Chama a função no carregamento, caso os campos já venham preenchidos (ex: com dados salvos)
 	setTimeout(dispararVerificacaoDeExigencias, 500);
@@ -18,9 +21,9 @@ $(document).ready(function () {
 // Utilitários
 const Utils = {
 	// Mostra toast de notificação
-	showToast(message, type = 'info') {
-		const toastContainer = document.querySelector('.toast-container');
-		const toastId = 'toast-' + Date.now();
+	showToast(message, type = "info") {
+		const toastContainer = document.querySelector(".toast-container");
+		const toastId = "toast-" + Date.now();
 
 		const toastHTML = `
 					<div class="toast" id="${toastId}" role="alert" aria-live="assertive" aria-atomic="true">
@@ -33,7 +36,7 @@ const Utils = {
 					</div>
 				`;
 
-		toastContainer.insertAdjacentHTML('beforeend', toastHTML);
+		toastContainer.insertAdjacentHTML("beforeend", toastHTML);
 		const toastElement = new bootstrap.Toast(document.getElementById(toastId));
 		toastElement.show();
 
@@ -44,12 +47,12 @@ const Utils = {
 
 	getToastIcon(type) {
 		const icons = {
-			success: 'check-circle',
-			danger: 'exclamation-triangle',
-			warning: 'exclamation-triangle',
-			info: 'info-circle'
+			success: "check-circle",
+			danger: "exclamation-triangle",
+			warning: "exclamation-triangle",
+			info: "info-circle",
 		};
-		return icons[type] || 'info-circle';
+		return icons[type] || "info-circle";
 	},
 
 	// Debounce para evitar múltiplas execuções
@@ -67,40 +70,45 @@ const Utils = {
 
 	// Formatar classe CSS do status
 	formatarClasseStatus(status) {
-		return 'status-' + status.toLowerCase()
-			.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-			.replace(/\s+/g, '-')
-			.replace(/[^a-z0-9\-]/g, '');
+		return (
+			"status-" +
+			status
+				.toLowerCase()
+				.normalize("NFD")
+				.replace(/[\u0300-\u036f]/g, "")
+				.replace(/\s+/g, "-")
+				.replace(/[^a-z0-9\-]/g, "")
+		);
 	},
 
 	// Validar CPF
 	/*
-	validarCPF(cpf) {
-		cpf = cpf.replace(/[^\d]+/g, '');
-
-		if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
-
-		let soma = 0;
-		for (let i = 0; i < 9; i++) {
-			soma += parseInt(cpf.charAt(i)) * (10 - i);
-		}
-
-		let resto = 11 - (soma % 11);
-		if (resto === 10 || resto === 11) resto = 0;
-		if (resto !== parseInt(cpf.charAt(9))) return false;
-
-		soma = 0;
-		for (let i = 0; i < 10; i++) {
-			soma += parseInt(cpf.charAt(i)) * (11 - i);
-		}
-
-		resto = 11 - (soma % 11);
-		if (resto === 10 || resto === 11) resto = 0;
-		if (resto !== parseInt(cpf.charAt(10))) return false;
-
-		return true;
-	}
-	*/
+	  validarCPF(cpf) {
+		  cpf = cpf.replace(/[^\d]+/g, '');
+  
+		  if (cpf.length !== 11 || /^(\d)\1+$/.test(cpf)) return false;
+  
+		  let soma = 0;
+		  for (let i = 0; i < 9; i++) {
+			  soma += parseInt(cpf.charAt(i)) * (10 - i);
+		  }
+  
+		  let resto = 11 - (soma % 11);
+		  if (resto === 10 || resto === 11) resto = 0;
+		  if (resto !== parseInt(cpf.charAt(9))) return false;
+  
+		  soma = 0;
+		  for (let i = 0; i < 10; i++) {
+			  soma += parseInt(cpf.charAt(i)) * (11 - i);
+		  }
+  
+		  resto = 11 - (soma % 11);
+		  if (resto === 10 || resto === 11) resto = 0;
+		  if (resto !== parseInt(cpf.charAt(10))) return false;
+  
+		  return true;
+	  }
+	  */
 };
 
 let anotacoesDoProcesso = {};
@@ -111,28 +119,30 @@ let anotacoesDoProcesso = {};
 // Função para abrir o modal de anotação
 // processo.js (Trecho CORRIGIDO da função abrirModalAnotacao)
 function abrirModalAnotacao(exigenciaId, descricao) {
-	const modalElement = document.getElementById('anotacaoModal');
+	const modalElement = document.getElementById("anotacaoModal");
 
 	// 1. Obter e verificar os elementos DOM
 	// Se um destes for 'null', o erro ocorre na tentativa de usar '.value' ou '.textContent'
-	const campoId = document.getElementById('anotacaoExigenciaId');
-	const campoAnotacao = document.getElementById('campoAnotacao');
-	const labelModal = document.getElementById('anotacaoModalLabel');
-	const campoDescricao = document.getElementById('anotacaoExigenciaDescricao');
+	const campoId = document.getElementById("anotacaoExigenciaId");
+	const campoAnotacao = document.getElementById("campoAnotacao");
+	const labelModal = document.getElementById("anotacaoModalLabel");
+	const campoDescricao = document.getElementById("anotacaoExigenciaDescricao");
 
 	// 🚨 VERIFICAÇÃO CRÍTICA (A linha 'Erro: Um ou mais...' é gerada aqui)
 	if (!campoId || !campoAnotacao || !labelModal || !campoDescricao) {
-		console.error("Erro: Um ou mais elementos do modal de anotação não foram encontrados.");
+		console.error(
+			"Erro: Um ou mais elementos do modal de anotação não foram encontrados."
+		);
 		return;
 	}
 
 	// 2. Define o ID, o Título e a Descrição
 	campoId.value = exigenciaId;
-	//  labelModal.textContent = `Anotação: ${descricao}`; 
+	//  labelModal.textContent = `Anotação: ${descricao}`;
 	campoDescricao.textContent = descricao;
 
 	// 3. Carregar a anotação salva no campo <textarea>
-	const anotacaoExistente = anotacoesDoProcesso[exigenciaId] || '';
+	const anotacaoExistente = anotacoesDoProcesso[exigenciaId] || "";
 	campoAnotacao.value = anotacaoExistente; // Linha agora protegida
 
 	// 4. Exibir o Modal
@@ -150,103 +160,138 @@ function abrirModalAnotacao(exigenciaId, descricao) {
 const parseNumber = (value) => {
 	if (!value) return 0;
 	// Remove separador de milhar (ponto) e substitui separador decimal (vírgula) por ponto
-	const cleaned = String(value).replace(/\./g, '').replace(',', '.');
+	const cleaned = String(value).replace(/\./g, "").replace(",", ".");
 	return parseFloat(cleaned) || 0;
 };
 
 // --- Configuração para controle de regras ---
 const regrasInclusao = {
-    '006': [ // 006: SISTEMA DE PROTEÇÃO POR HIDRANTES
-        { grupos: [22], check: (h, a) => a > 500 },
-        { grupos: [23], check: (h, a) => h > 3 || a > 500 },
-        { grupos: [25, 30, 31], check: (h, a) => h > 6 || a > 750 },
-        { grupos: [3, 4, 5, 35, 39], check: (h, a) => h > 9 || a > 750 },
-        { grupos: [2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 || a > 1200 },
-        { grupos: [33, 37], check: (h, a) => h > 12 || a > 1200 },
-        { grupos: [36], check: (h, a) => h > 12 || a > 2000 },
-    ],
-    '009': [ // 009: SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO
-        { grupos: [13, 14, 16, 17], check: () => true },
-        { grupos: [22], check: (h, a) => a > 500 },
-        { grupos: [23], check: (h, a) => h > 3 || a > 500 },
-        { grupos: [25, 30, 31], check: (h, a) => h > 6 || a > 750 },
-        { grupos: [2, 3, 4, 5, 35, 39], check: (h, a) => h > 9 || a > 750 },
-        { grupos: [6, 7, 8, 9, 10, 11, 12, 15, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38], check: (h, a) => h > 9 || a > 1200 },
-        { grupos: [33, 37], check: (h, a) => h > 12 || a > 1200 },
-        { grupos: [36], check: (h, a) => h > 12 || a > 2000 },
-        { grupos: [18], check: (h, a) => h > 12 || a > 5000 },
-    ],
-    '010': [ // 010: SISTEMA DE CHUVEIROS AUTOMÁTICOS
-        { grupos: [2], check: (h, a) => h > 60 },
-        { grupos: [], check: (h, a) => h > 3 || a > 500 },
-        { grupos: [22, 23, 30, 31], check: (h, a) => h > 3 || a > 3000 },
-        { grupos: [17], check: (h, a) => h > 6 || a > 3000 },
-        { grupos: [35, 39], check: (h, a) => h > 12 || a > 3000 },
-        { grupos: [3, 4, 5, 6, 7, 8, 9, 10 , 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 25, 26, 27, 28, 29, 32, 38], check: (h, a) => h > 12 || a > 5000 },
-        { grupos: [34], check: (h, a) => h > 15 || a > 5000 },
-        { grupos: [37], check: (h, a) => h > 15 || a > 7000 },
-        { grupos: [36], check: (h, a) => h > 15 || a > 10000 },
-    ],
-    '007': [ // 007: SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)
-        { grupos: [3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 37, 38, 39], check: (h, a) => h > 9 || a > 750 },
-        { grupos: [2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 26, 27, 28], check: (h, a) => h > 9 || a > 1200 },
-        { grupos: [36], check: (h, a) => h > 12 || a > 2000 },
-    ]
+	"006": [
+		// 006: SISTEMA DE PROTEÇÃO POR HIDRANTES
+		{ grupos: [22], check: (h, a) => a > 500 },
+		{ grupos: [23], check: (h, a) => h > 3 || a > 500 },
+		{ grupos: [25, 30, 31], check: (h, a) => h > 6 || a > 750 },
+		{ grupos: [3, 4, 5, 35, 39], check: (h, a) => h > 9 || a > 750 },
+		{
+			grupos: [
+				2, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 26, 27,
+				28, 29, 32, 34, 38,
+			],
+			check: (h, a) => h > 9 || a > 1200,
+		},
+		{ grupos: [33, 37], check: (h, a) => h > 12 || a > 1200 },
+		{ grupos: [36], check: (h, a) => h > 12 || a > 2000 },
+	],
+	"009": [
+		// 009: SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO
+		{ grupos: [13, 14, 16, 17], check: () => true },
+		{ grupos: [22], check: (h, a) => a > 500 },
+		{ grupos: [23], check: (h, a) => h > 3 || a > 500 },
+		{ grupos: [25, 30, 31], check: (h, a) => h > 6 || a > 750 },
+		{ grupos: [2, 3, 4, 5, 35, 39], check: (h, a) => h > 9 || a > 750 },
+		{
+			grupos: [
+				6, 7, 8, 9, 10, 11, 12, 15, 19, 20, 21, 26, 27, 28, 29, 32, 34, 38,
+			],
+			check: (h, a) => h > 9 || a > 1200,
+		},
+		{ grupos: [33, 37], check: (h, a) => h > 12 || a > 1200 },
+		{ grupos: [36], check: (h, a) => h > 12 || a > 2000 },
+		{ grupos: [18], check: (h, a) => h > 12 || a > 5000 },
+	],
+	"010": [
+		// 010: SISTEMA DE CHUVEIROS AUTOMÁTICOS
+		{ grupos: [2], check: (h, a) => h > 60 },
+		{ grupos: [], check: (h, a) => h > 3 || a > 500 },
+		{ grupos: [22, 23, 30, 31], check: (h, a) => h > 3 || a > 3000 },
+		{ grupos: [17], check: (h, a) => h > 6 || a > 3000 },
+		{ grupos: [35, 39], check: (h, a) => h > 12 || a > 3000 },
+		{
+			grupos: [
+				3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 25, 26,
+				27, 28, 29, 32, 38,
+			],
+			check: (h, a) => h > 12 || a > 5000,
+		},
+		{ grupos: [34], check: (h, a) => h > 15 || a > 5000 },
+		{ grupos: [37], check: (h, a) => h > 15 || a > 7000 },
+		{ grupos: [36], check: (h, a) => h > 15 || a > 10000 },
+	],
+	"007": [
+		// 007: SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)
+		{
+			grupos: [
+				3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33, 34, 35, 37,
+				38, 39,
+			],
+			check: (h, a) => h > 9 || a > 750,
+		},
+		{
+			grupos: [2, 9, 10, 11, 12, 13, 14, 15, 16, 17, 26, 27, 28],
+			check: (h, a) => h > 9 || a > 1200,
+		},
+		{ grupos: [36], check: (h, a) => h > 12 || a > 2000 },
+	],
 };
 
 /**
  * Determinar as categorias que serão selecionadas
  */
 function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
-    // categorias fixas: 002, 003, 004, 005, 008
-    let categoriasParaSelecionar = ['002', '003', '004', '005', '008'];
+	// categorias fixas: 002, 003, 004, 005, 008
+	let categoriasParaSelecionar = ["002", "003", "004", "005", "008"];
 
-    const ocupacao = parseInt(ocupacaoStr, 10) || 0;
-    const area = parseNumber(areaStr);
-    const altura = parseNumber(alturaStr);
+	const ocupacao = parseInt(ocupacaoStr, 10) || 0;
+	const area = parseNumber(areaStr);
+	const altura = parseNumber(alturaStr);
 
-    // --- 1. DOCUMENTAÇÃO ('001') ---
-    // Regra: Sempre será selecionada, exceto alguns casos.
-    let selecionarDocumentacao = true;
+	// --- 1. DOCUMENTAÇÃO ('001') ---
+	// Regra: Sempre será selecionada, exceto alguns casos.
+	let selecionarDocumentacao = true;
 
-    if (ocupacao > 0) {
-        // 1.a) Grupos com Area <= 750 ou Altura <= 9
-        const gruposDocA = [3, 4, 5, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38, 39];
-        if (gruposDocA.includes(ocupacao) && (area <= 750.00 && altura <= 9.0)) selecionarDocumentacao = false;
+	if (ocupacao > 0) {
+		// 1.a) Grupos com Area <= 750 ou Altura <= 9
+		const gruposDocA = [
+			3, 4, 5, 18, 19, 20, 21, 24, 29, 32, 33, 34, 35, 37, 38, 39,
+		];
+		if (gruposDocA.includes(ocupacao) && area <= 750.0 && altura <= 9.0)
+			selecionarDocumentacao = false;
 
-        // 1.b) Grupo 25 com Area <= 750 OR Height <= 6
-        if ([25].includes(ocupacao) && (area <= 750.00 && altura <= 6.0)) selecionarDocumentacao = false;
+		// 1.b) Grupo 25 com Area <= 750 OR Height <= 6
+		if ([25].includes(ocupacao) && area <= 750.0 && altura <= 6.0)
+			selecionarDocumentacao = false;
 
-        // 1.c) Grupos 26, 27, 28 com Area <= 1200 ou Altura > 3.0
-        if ([26, 27, 28].includes(ocupacao) && (area <= 1200.00 && altura <= 3.0)) selecionarDocumentacao = false;
+		// 1.c) Grupos 26, 27, 28 com Area <= 1200 ou Altura > 3.0
+		if ([26, 27, 28].includes(ocupacao) && area <= 1200.0 && altura <= 3.0)
+			selecionarDocumentacao = false;
 
-        // 1.d) Grupos diversos com Area <= 1200 ou Altura <= 9
-        const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
-        if (gruposDocD.includes(ocupacao) && (area <= 1200.00 && altura <= 9.0)) selecionarDocumentacao = false;
-    }
+		// 1.d) Grupos diversos com Area <= 1200 ou Altura <= 9
+		const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
+		if (gruposDocD.includes(ocupacao) && area <= 1200.0 && altura <= 9.0)
+			selecionarDocumentacao = false;
+	}
 
-    if (selecionarDocumentacao) {
-        categoriasParaSelecionar.unshift('001');
-    }
+	if (selecionarDocumentacao) {
+		categoriasParaSelecionar.unshift("001");
+	}
 
-    // --- 2. Dynamic Logic (Hydrants and Alarms) ---
-    // Loops through the rules defined in 'regrasInclusao'
-    if (ocupacao > 0) {
-        // Iterate through the requirement codes (e.g., '006', '009')
-        for (const [codigoExigencia, regras] of Object.entries(regrasInclusao)) {
-            
-            // .some() checks if AT LEAST ONE rule is true. If yes, it selects and stops checking.
-            const deveSelecionar = regras.some(regra => {
-                return regra.grupos.includes(ocupacao) && regra.check(altura, area);
-            });
+	// --- 2. Dynamic Logic (Hydrants and Alarms) ---
+	// Loops through the rules defined in 'regrasInclusao'
+	if (ocupacao > 0) {
+		// Iterate through the requirement codes (e.g., '006', '009')
+		for (const [codigoExigencia, regras] of Object.entries(regrasInclusao)) {
+			// .some() checks if AT LEAST ONE rule is true. If yes, it selects and stops checking.
+			const deveSelecionar = regras.some((regra) => {
+				return regra.grupos.includes(ocupacao) && regra.check(altura, area);
+			});
 
-            if (deveSelecionar) {
-                categoriasParaSelecionar.push(codigoExigencia);
-            }
-        }
-    }
+			if (deveSelecionar) {
+				categoriasParaSelecionar.push(codigoExigencia);
+			}
+		}
+	}
 
-    return categoriasParaSelecionar;
+	return categoriasParaSelecionar;
 }
 
 // --- FUNÇÃO DE RENDERIZAÇÃO (EXIBIÇÃO NA TELA) ---
@@ -256,12 +301,12 @@ function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
  * @param {object} categoriasMap - O mapa DADOS_SISTEMA.categorias.
  */
 function renderizarExigencias(codigos, categoriasMap) {
-	let html = '';
-	const container = document.getElementById('badgesCategorias');
+	let html = "";
+	const container = document.getElementById("badgesCategorias");
 	if (!container) return; // Sai se o container não for encontrado
 
 	// Gera o HTML para cada categoria selecionada
-	codigos.forEach(codigo => {
+	codigos.forEach((codigo) => {
 		const descricao = categoriasMap[codigo];
 		if (descricao) {
 			html += `<span class="badge bg-primary text-white p-2 me-1">${codigo} - ${descricao}</span>`;
@@ -272,73 +317,78 @@ function renderizarExigencias(codigos, categoriasMap) {
 	container.innerHTML = html;
 }
 
-
 // --- FUNÇÃO CONTROLADORA (DISPARADA POR EVENTOS) ---
 // --- FUNÇÃO CONTROLADORA (DISPARADA POR EVENTOS) ---
 function dispararVerificacaoDeExigencias() {
-    // 1. Coleta os valores dos campos
-    const ocupacaoStr = $('#ocupacao').val();
-    const areaStr = $('#area').val();
-    const alturaStr = $('#altura').val();
+	// 1. Coleta os valores dos campos
+	const ocupacaoStr = $("#ocupacao").val();
+	const areaStr = $("#area").val();
+	const alturaStr = $("#altura").val();
 
-    // Se faltar dados essenciais, não faz nada
-    if (!ocupacaoStr || !areaStr || !alturaStr) {
-        return;
-    }
+	// Se faltar dados essenciais, não faz nada
+	if (!ocupacaoStr || !areaStr || !alturaStr) {
+		return;
+	}
 
-    // 2. Calcula quais exigências deveriam estar lá AGORA
-    const exigenciasPadraoCalculadas = getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr);
+	// 2. Calcula quais exigências deveriam estar lá AGORA
+	const exigenciasPadraoCalculadas = getExigenciasPadrao(
+		ocupacaoStr,
+		areaStr,
+		alturaStr
+	);
 
-    // 3. ADICIONAR: Adiciona categorias que deveriam estar lá, mas não estão
-    exigenciasPadraoCalculadas.forEach(codigo => {
-        if (!camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
-            adicionarCategoria(codigo);
-        }
-    });
+	// 3. ADICIONAR: Adiciona categorias que deveriam estar lá, mas não estão
+	exigenciasPadraoCalculadas.forEach((codigo) => {
+		if (!camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
+			adicionarCategoria(codigo);
+		}
+	});
 
-    // 4. REMOVER: Remove categorias 'Automáticas' (001 e 006) que estão na tela mas NÃO deveriam estar mais.
-    // OBS: Não removemos 002, 003, 004, 005, 008 porque elas são fixas (sempre true),
-    // e não removemos outras categorias (ex: 018) para preservar adições manuais.
-    const categoriasGerenciaveis = ['001', '006', '007', '009', '010']; 
+	// 4. REMOVER: Remove categorias 'Automáticas' (001 e 006) que estão na tela mas NÃO deveriam estar mais.
+	// OBS: Não removemos 002, 003, 004, 005, 008 porque elas são fixas (sempre true),
+	// e não removemos outras categorias (ex: 018) para preservar adições manuais.
+	const categoriasGerenciaveis = ["001", "006", "007", "009", "010"];
 
-    categoriasGerenciaveis.forEach(codigo => {
-        // Se a categoria está ativa na tela...
-        if (camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
-            // ...mas o novo cálculo diz que ela NÃO deveria existir...
-            if (!exigenciasPadraoCalculadas.includes(codigo)) {
-                removerCategoria(codigo); // Removemos ela.
-            }
-        }
-    });
+	categoriasGerenciaveis.forEach((codigo) => {
+		// Se a categoria está ativa na tela...
+		if (camposDeExigenciasAtivos.hasOwnProperty(codigo)) {
+			// ...mas o novo cálculo diz que ela NÃO deveria existir...
+			if (!exigenciasPadraoCalculadas.includes(codigo)) {
+				removerCategoria(codigo); // Removemos ela.
+			}
+		}
+	});
 }
 
 // Função para salvar a anotação
 function salvarAnotacao() {
 	// 1. Coleta dados e elementos
-	const exigenciaId = document.getElementById('anotacaoExigenciaId').value;
-	const anotacao = document.getElementById('campoAnotacao').value.trim();
+	const exigenciaId = document.getElementById("anotacaoExigenciaId").value;
+	const anotacao = document.getElementById("campoAnotacao").value.trim();
 
 	// O elemento HTML do modal (necessário para fechar)
-	const modalElement = document.getElementById('anotacaoModal');
+	const modalElement = document.getElementById("anotacaoModal");
 
 	// Lógica para encontrar o ícone e a tag (mantida como estava)
-	const iconElement = document.querySelector(`.anotacao-icon[data-exigencia-id="${exigenciaId}"]`);
+	const iconElement = document.querySelector(
+		`.anotacao-icon[data-exigencia-id="${exigenciaId}"]`
+	);
 
 	if (exigenciaId) {
 		if (anotacao) {
 			// Salva e colore o ícone
 			anotacoesDoProcesso[exigenciaId] = anotacao;
 			if (iconElement) {
-				iconElement.classList.remove('text-secondary');
-				iconElement.classList.add('text-primary');
+				iconElement.classList.remove("text-secondary");
+				iconElement.classList.add("text-primary");
 			}
 			Utils.showToast("Anotação salva!", "success");
 		} else {
 			// Remove a anotação e descolore o ícone
 			delete anotacoesDoProcesso[exigenciaId];
 			if (iconElement) {
-				iconElement.classList.remove('text-primary');
-				iconElement.classList.add('text-secondary');
+				iconElement.classList.remove("text-primary");
+				iconElement.classList.add("text-secondary");
 			}
 			Utils.showToast("Anotação removida.", "info");
 		}
@@ -364,85 +414,96 @@ function salvarAnotacao() {
  * Função auxiliar de fallback para copiar o texto usando um campo temporário.
  */
 function copiaFallback(texto) {
-    const tempInput = document.createElement("input");
-    tempInput.value = texto;
-    document.body.appendChild(tempInput);
-    
-    tempInput.select();
-    tempInput.setSelectionRange(0, 99999); // Para mobile
+	const tempInput = document.createElement("input");
+	tempInput.value = texto;
+	document.body.appendChild(tempInput);
 
-    try {
-        // document.execCommand é obsoleto, mas é um bom fallback
-        const success = document.execCommand('copy');
-        if (success) {
-            Utils.showToast(`Número do Processo copiado (Fallback): ${texto}`, "success");
-        } else {
-            Utils.showToast("Erro ao copiar. A cópia automática falhou.", "danger");
-        }
-    } catch (err) {
-        Utils.showToast("Erro ao copiar. Tente selecionar e copiar manualmente.", "danger");
-    } finally {
-        tempInput.remove(); // Remove o elemento temporário
-    }
+	tempInput.select();
+	tempInput.setSelectionRange(0, 99999); // Para mobile
+
+	try {
+		// document.execCommand é obsoleto, mas é um bom fallback
+		const success = document.execCommand("copy");
+		if (success) {
+			Utils.showToast(
+				`Número do Processo copiado (Fallback): ${texto}`,
+				"success"
+			);
+		} else {
+			Utils.showToast("Erro ao copiar. A cópia automática falhou.", "danger");
+		}
+	} catch (err) {
+		Utils.showToast(
+			"Erro ao copiar. Tente selecionar e copiar manualmente.",
+			"danger"
+		);
+	} finally {
+		tempInput.remove(); // Remove o elemento temporário
+	}
 }
 
 /**
  * Copia o valor do campo 'processoBusca' para a área de transferência.
  */
 function copiarProcessoBusca() {
-    // Busca o input do processo
-    const processoInput = document.getElementById("processoBusca");
-    
-    // Verifica se o campo está vazio
-    if (!processoInput || !processoInput.value.trim()) {
-        Utils.showToast("O campo de processo está vazio.", "warning");
-        return;
-    }
-    
-    const textoParaCopiar = processoInput.value.trim();
+	// Busca o input do processo
+	const processoInput = document.getElementById("processoBusca");
 
-    // Tenta usar a API moderna navigator.clipboard (mais recomendada)
-    if (navigator.clipboard && window.isSecureContext) {
-        navigator.clipboard.writeText(textoParaCopiar)
-            .then(() => {
-                 Utils.showToast(`Número do Processo copiado: ${textoParaCopiar}`, "success");
-            })
-            .catch(err => {
-                console.error('Erro ao usar navigator.clipboard:', err);
-                // Chama o fallback em caso de falha da API moderna
-                copiaFallback(textoParaCopiar);
-            });
-    } else {
-        // Se a API moderna não estiver disponível (ex: em HTTP), usa o fallback
-        copiaFallback(textoParaCopiar);
-    }
+	// Verifica se o campo está vazio
+	if (!processoInput || !processoInput.value.trim()) {
+		Utils.showToast("O campo de processo está vazio.", "warning");
+		return;
+	}
+
+	const textoParaCopiar = processoInput.value.trim();
+
+	// Tenta usar a API moderna navigator.clipboard (mais recomendada)
+	if (navigator.clipboard && window.isSecureContext) {
+		navigator.clipboard
+			.writeText(textoParaCopiar)
+			.then(() => {
+				Utils.showToast(
+					`Número do Processo copiado: ${textoParaCopiar}`,
+					"success"
+				);
+			})
+			.catch((err) => {
+				console.error("Erro ao usar navigator.clipboard:", err);
+				// Chama o fallback em caso de falha da API moderna
+				copiaFallback(textoParaCopiar);
+			});
+	} else {
+		// Se a API moderna não estiver disponível (ex: em HTTP), usa o fallback
+		copiaFallback(textoParaCopiar);
+	}
 }
 
 // Dados das exigências
 const DADOS_SISTEMA = {
 	categorias: {
-		'001': "DOCUMENTAÇÃO",
-		'002': "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
-		'003': "ILUMINAÇÃO DE EMERGÊNCIA",
-		'004': "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
-		'005': "SAÍDAS DE EMERGÊNCIA",
-		'006': "SISTEMA DE PROTEÇÃO POR HIDRANTES",
-		'007': "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
-		'008': "SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
-		'009': "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
-		'010': "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
-		'011': "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
-		'012': "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
-		'013': "BRIGADA DE INCÊNDIO",
-		'014': "ACESSO DE VIATURAS DE SOCORRO",
-		'015': "POSTOS DE COMBUSTÍVEIS",
-		'016': "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
-		'017': "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
-		'018': "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO"
+		"001": "DOCUMENTAÇÃO",
+		"002": "SINALIZAÇÃO DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO",
+		"003": "ILUMINAÇÃO DE EMERGÊNCIA",
+		"004": "SISTEMA DE PROTEÇÃO POR EXTINTORES DE INCÊNDIO",
+		"005": "SAÍDAS DE EMERGÊNCIA",
+		"006": "SISTEMA DE PROTEÇÃO POR HIDRANTES",
+		"007": "SISTEMA DE PROTEÇÃO CONTRA DESCARGAS ATMOSFÉRICAS (SPDA)",
+		"008":
+			"SEGURANÇA CONTRA INCÊNDIO NAS INSTALAÇÕES PREDIAIS PARA CONSUMO DE GLP CANALIZADO E RECIPIENTES P-13",
+		"009": "SISTEMAS DE DETECÇÃO E ALARME DE INCÊNDIO",
+		"010": "SISTEMA DE CHUVEIROS AUTOMÁTICOS",
+		"011": "INSPEÇÃO VISUAL EM INSTALAÇÕES ELÉTRICAS DE BAIXA TENSÃO",
+		"012": "PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)",
+		"013": "BRIGADA DE INCÊNDIO",
+		"014": "ACESSO DE VIATURAS DE SOCORRO",
+		"015": "POSTOS DE COMBUSTÍVEIS",
+		"016": "ÁREA DE ARMAZENAMENTO E/OU COMERCIALIZAÇÃO DE RECIPIENTES DE GLP",
+		"017": "SEGURANÇA CONTRA INCÊNDIO EM FOOD TRUCK",
+		"018": "COMERCIALIZAÇÃO DE FOGOS DE ARTIFÍCIO",
 	},
 
 	exigencias: {
-		'001': [
+		"001": [
 			"01.001 - Apresentar o Projeto de Segurança Contra Incêndio e Pânico (Projeto de Incêndio original) impresso, devidamente aprovado pelo Corpo de Bombeiros Militar do Distrito Federal (CBMDF), de acordo com o Decreto nº 21.361/2000. (Arts. 3º, § 1º e 6º, do Dec. 23.154/2002)",
 			"01.002 - Apresentar o Projeto de Segurança Contra Incêndio e Pânico de Modificação (Projeto de Incêndio de Alteração), devidamente aprovado pelo CBMDF, com o redimensionamento das medidas de segurança contra incêndio e pânico, em função da ampliação de área, aumento da altura, mudança de ocupação ou layout, aumento da população ou do risco da edificação, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"01.003 - Apresentar a Anotação de Responsabilidade Técnica (ART), Registro de Responsabilidade Técnica (RRT) ou Termo de Responsabilidade Técnica (TRT), de execução ou manutenção das medidas de segurança contra incêndio e pânico instaladas, emitida por responsável técnico e visada junto ao respectivo órgão de classe do Distrito Federal, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -460,9 +521,8 @@ const DADOS_SISTEMA = {
 			"01.015 - Apresentar Parecer de Aprovação do Projeto de Segurança Contra Incêndio e Pânico emitido pelo Corpo de Bombeiros Militar do Distrito Federal.",
 			"01.016 - Apresentar Parecer de Aprovação do Projeto de Segurança Contra Incêndio e Alvará de Construção (ou documento similar) com áreas equivalentes.",
 			"01.017 - Para acompanhamento da vistoria, deverá estar presente o interessado ou representante por ele indicado, portando o(s) Projeto(s) de Incêndio aprovado(s) e impresso(s) para a conferência dos sistemas de segurança contra incêndio e pânico, bem como as chaves para acesso a todas as dependências da edificação, incluindo as áreas técnicas, áreas de risco e assemelhados.",
-
 		],
-		'002': [
+		"002": [
 			"02.001 - A sinalização de segurança contra incêndio e pânico deve ser instalada em conformidade com a NT  22/2020-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"02.002 - O sistema de sinalização de segurança contra incêndio e pânico deve ser instalado em conformidade  com o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec.  23.154/2002)",
 			"02.003 - Apresentar documento de responsabilidade técnica de execução ou manutenção do sistema de  sinalização de segurança contra incêndio e pânico instalado, emitido por profissional responsável de acordo  com o conselho de classe a que pertence, de acordo com o item 5.4 da NT22/2020-CBMDF. (Art. 6º, do Dec.  23.154/2002)",
@@ -483,7 +543,7 @@ const DADOS_SISTEMA = {
 			"02.018 - A mensagem 'SAÍDA' deve estar sempre grafada no idioma português. Caso exista a necessidade de  utilização de outras línguas estrangeiras, devem ser aplicados como textos adicionais, conforme alínea `e` do  item 6.1.3 da NT22/2020-CBMDF.  (Arts. 3º, III, b, e 6º, do Dec. 23.154/2002)",
 			"02.019 - A sinalização de indicação da direção e do sentido da saída em rampa, código 15 da tabela `c` do  anexo 2, deve ser instalada nas paredes e elementos de fixação de rampas e patamares, a uma altura de 1,8m  medida do piso acabado à base da placa de sinalização, conforme alínea `c` do item 6.1.3 da NT22/2020 CBMDF.  (Arts. 3º, III, b, e 6º, do Dec. 23.154/2002)",
 			"02.02- - Por alterar ou modificar o Sistema de Sinalização de Emergência sem submeter previamente o projeto  de incêndio à análise, apresentar para análise e aprovação junto ao CBMDF, o respectivo projeto de alteração.  (Art. 6 letra c do Decreto 23.154/2002) (AIA10)",
-			"02.021 - A sinalização de indicação da direção e do sentido da saída em escada, código 16 da tabela `c` do  anexo 2, deve ser instalada nas paredes e elementos de fixação dos lanços e patamares, a uma altura de 1,8m  medida do piso acabado à base da placa de sinalização, conforme alínea `d` do item 6.1.3 da NT22/2020 CBMDF.  (Arts. 3º, III, b, e 6º, do Dec. 23.154/2002)",
+			"02.020 - A sinalização de indicação da direção e do sentido da saída em escada, código 16 da tabela `c` do  anexo 2, deve ser instalada nas paredes e elementos de fixação dos lanços e patamares, a uma altura de 1,8m  medida do piso acabado à base da placa de sinalização, conforme alínea `d` do item 6.1.3 da NT22/2020 CBMDF.  (Arts. 3º, III, b, e 6º, do Dec. 23.154/2002)",
 			"02.021 - Instalar a sinalização de indicação do sentido de saída das rotas horizontais, códigos 12 e 13 da tabela  `c` do anexo 2, de modo que a distância de percurso de qualquer ponto da rota de saída até a sinalização seja  de no máximo 7,5m. Adicionalmente, esta sinalização também deve ser instalada, de forma que no sentido de  saída de qualquer ponto seja possível visualizar o ponto seguinte distanciadas entre si em no máximo 15,0m,  de acordo com a alínea `a` do item 6.1.3 da NT22/2020-CBMDF.  (Arts. 3º, III, b, e 6º, do Dec. 23.154/2002)",
 			"02.022 - Em ambientes destinados à concentração de público, a sinalização de orientação e salvamento deverá  ser instalada em altura superior a 1,8m, caso não seja possível sua visualização no plano horizontal. As  dimensões das placas de sinalização deverão estar de acordo com o previsto na tabela 1.1 do anexo 1, de  acordo com a alínea `h` do item 6.1.3 da NT22/2020-CBMDF.  (Arts. 3º, III, b, e 6º, do Dec. 23.154/2002)",
 			"02.023 - A sinalização de orientação e salvamento deve possuir forma quadrada ou retangular, cor do fundo  (cor de segurança) verde, cor do símbolo (cor de contraste) branca ou amarela fotoluminescente, margem  (opcional) fotoluminescente e proporcionalidades paramétricas, de acordo com a Tabela 1.1, do Anexo 1, da  NT22/2020-CBMDF.  (Arts. 3º, III, b, e 6º, do Dec. 23.154/2002)",
@@ -543,7 +603,7 @@ const DADOS_SISTEMA = {
 			"02.076 - Nas instalações do gerador deve ser adotada sinalização adequada de segurança, destinada à  advertência e à identificação de riscos de choque elétrico, de acordo com a NR - 26 do Ministério do Trabalho.",
 			"02.077 - A sinalização de orientação e salvamento para Elevador de Emergência deve ser instalada de acordo  com a figura S-23 da NBR 16.820/2022. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'003': [
+		"003": [
 			"03.001 - A iluminação de emergência deve ser instalada em conformidade com a NT21/2020-CBMDF. (Art. 6º,  do Dec. 23.154/2002)",
 			"03.002 - O sistema de iluminação de emergência deve ser instalado em conformidade com o Projeto de  Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"03.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de  Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de iluminação de  emergência instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo  com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -588,7 +648,7 @@ const DADOS_SISTEMA = {
 			"03.042 - Os blocos autônomos de iluminação de emergência não podem conter qualquer tipo de interruptor  manual, do tipo liga/desliga, desativando a bateria do bloco autônomo de emergência, de acordo com a alínea  `i` do item 6.1.2.1 da ABNT NBR 10898/2023. (Art. 6º, do Dec. 23.154/2002)",
 			"03.043 - Instalar iluminação de emergência em ambientes de risco, tais como subestações, galerias  subterrâneas, sala de geradores, casa de bombas de incêndio etc., de acordo com o Anexo E, item E.2 da ABNT  NBR 10898/2023. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'004': [
+		"004": [
 			"04.001 - Os aparelhos extintores de incêndio devem ser instalados em conformidade com a NT03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"04.002 - O sistema de proteção por extintores de incêndio deve ser instalado em conformidade com o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"04.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de proteção por extintores de incêndio instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -674,7 +734,7 @@ const DADOS_SISTEMA = {
 			"04.081 - Quando instalados em locais sujeitos ao vandalismo, os abrigos podem estar fechados a chave, desde que existam meios que permitam o rápido acesso ao equipamento em situação de emergência, de acordo com o item 5.3.3 da ABNT NBR 12.693/2021. (Art. 6º, do Dec. 23.154/2002)",
 			"04.082 - Em estádios, hospitais psiquiátricos, reformatórios e locais onde a liberdade das pessoas sofre restrições, os extintores devem ser instalados em locais com acesso privativo, de acordo com o item 5.3.13 da ABNT NBR 12.693/2021. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'005': [
+		"005": [
 			"05.001 - Adequar para a edificação as saídas de emergência necessárias para garantir o abandono seguro de toda a população em conformidade com a NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"05.002 - Adequar para a edificação as saídas de emergência necessárias para garantir o abandono seguro de toda a população, em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"05.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de saídas de emergência instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -796,7 +856,7 @@ const DADOS_SISTEMA = {
 			"05.119 - As portas devem ter condições de serem abertas com um único movimento e suas maçanetas devem ser do tipo alavanca, instaladas a uma altura entre 0,90 m e 1,10 m, de acordo com o item 4.2.2.11.2 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"05.120 - Quando as portas forem providas de dispositivos de acionamento pelo usuário, estes devem estar instalados à altura entre 0,90 m e 1,10 m do piso acabado. Quando instalados no sentido de varredura da porta, os dispositivos devem distar entre 0,80 m e 1,00 m da área de abertura, de acordo com o item 4.2.2.11.4 da NT10/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'006': [
+		"006": [
 			"06.001 - O sistema de hidrantes de parede deve ser instalado em conformidade com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.002 - O sistema de proteção por hidrantes de parede deve ser instalado em conformidade com o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"06.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de hidrante de parede instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -873,7 +933,7 @@ const DADOS_SISTEMA = {
 			"06.074 - As bombas de incêndio devem ser protegidas contra danos mecânicos, intempéries, agentes químicos, fogo ou umidade, de acordo com o anexo B, item 1.4 da ABNT NBR 13.714/2000 da ABNT. (Art. 6º, do Dec. 23.154/2002)",
 			"06.075 - As chaves elétricas de alimentação das bombas de incêndio devem ser sinalizadas com a inscrição 'ALIMENTAÇÃO DA BOMBA DE INCÊNDIO - NÃO DESLIGUE', de acordo com o item B.2.2 da ABNT NBR 13.714/2000. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'007': [
+		"007": [
 			"07.001 - O Sistema de Proteção contra Descargas Atmosféricas (SPDA) deve ser instalado em conformidade com a NBR 5419-3:2015 da ABNT. (Arts. 3º, II, h, e 6º, do Dec. 23.154/2002)",
 			"07.002 - O sistema de proteção contra descargas atmosféricas (SPDA) deve ser instalado em conformidade o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"07.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução do sistema de Proteção contra Descargas Atmosféricas instalado, emitido por responsável técnico e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -927,9 +987,9 @@ const DADOS_SISTEMA = {
 			"07.051 - A secção mínima dos materiais deve estar de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)",
 			"07.052 - Deve ser garantida a continuidade elétrica entre as diversas partes que compõem as estruturas, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)",
 			"07.053 - As conexões devem ser feitas de forma segura e por meio de solda elétrica ou exotérmica e conexões mecânicas de pressão (se embutidas, em caixa de inspeção) ou compressão, de acordo com a NBR 5419-3:2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)",
-			"07.054 - Remover o captor radioativo do Sistema de Proteção Contra Descargas Atmosféricas, conforme a Resolução nº 04, de 19 de abril de 1989 da Comissão Nacional de Energia Nuclear (CNEN). (Para obter informações sobre os procedimentos para retirada e destinação adequada a serem dados ao captor entrar em contato com CNEN - 3433-6300)"
+			"07.054 - Remover o captor radioativo do Sistema de Proteção Contra Descargas Atmosféricas, conforme a Resolução nº 04, de 19 de abril de 1989 da Comissão Nacional de Energia Nuclear (CNEN). (Para obter informações sobre os procedimentos para retirada e destinação adequada a serem dados ao captor entrar em contato com CNEN - 3433-6300)",
 		],
-		'008': [
+		"008": [
 			"08.001 - A central de GLP da edificação/estabelecimento deve ser instalada em conformidade com a NT05/2021-PARTE I-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"08.002 - A central de GLP da edificação/estabelecimento deve ser instalada em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o item 5.2.4 da NT05/2021-PARTE I-CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"08.003 - Apresentar ao Agente Fiscalizador o laudo do teste de estanqueidade do sistema de alimentação, distribuição e armazenamento de Gás Liquefeito de Petróleo (GLP) da edificação/estabelecimento, juntamente com documento de responsabilidade técnica de sua realização, visado no seu respectivo órgão de classe, de acordo com a NT05/2021-PARTE I-CBMDF. O referido laudo poderá possuir validade máxima de 05 anos, podendo variar para menos em função de riscos decorrentes das situações construtivas, das condições ambientais e de uso. No caso de troca da empresa fornecedora de gás, troca de componentes, alteração da rede de alimentação ou constatação de desgastes críticos deve ser realizado teste de estanqueidade pneumático com 0,7 MPa mínimo, de acordo com os itens 5.23.1 e 5.23.2 da NBR 13523/2019 da ABNT e itens 1.1, 2.3 e 5.1.3 da NT05/2021-PARTE I-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1021,7 +1081,7 @@ const DADOS_SISTEMA = {
 			"08.089 - Retirar da edificação/estabelecimento os recipientes de GLP que estão sendo utilizados, uma vez que a mesma possui central de GLP. Todos os pontos de consumo de edificações dotadas de instalação predial para consumo de GLP deverão ser abastecidos por esta, independentemente de quaisquer outras características construtivas ou destinação, de acordo com o item 5.3.1 da NT05/2021-PARTE I-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"08.090 - Retirar da edificação/estabelecimento os recipientes de GLP que estão sendo utilizados, uma vez que a mesma não foi projetada para o uso de GLP, de acordo com o item 5.1.6 da NT05/2021-PARTE I-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'009': [
+		"009": [
 			"09.001 - O sistema de detecção automática e alarme manual de incêndio deve ser instalado em conformidade com a NT23/2022-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"09.002 - O sistema de detecção automática e alarme manual de incêndio deve ser instalado em conformidade com o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"09.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de detecção automática e alarme manual de incêndio instalado, emitido por profissional e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Art. 16, § 5º, doDecreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -1091,7 +1151,7 @@ const DADOS_SISTEMA = {
 			"09.067 - Os detectores pontuais de fumaça devem estar localizados no teto, distantes no mínimo 0,15m da parede lateral ou vigas. Em casos justificados, os detectores podem ser instalados na parede lateral, a uma distância entre 0,15m à 0,30m do teto, desde que garantido o tempo de resposta do sistema, de acordo com o item 5.4.1.2 da NBR 17.240/2010. (Art. 6º, do Dec. 23.154/2002)",
 			"09.068 - Os detectores pontuais de temperatura devem estar localizados no teto, distantes no mínimo 0,15m da parede lateral ou vigas. Em casos justificados, os detectores podem ser instalados na parede lateral, a uma distância entre 0,15m à 0,30m do teto, desde que garantido o tempo de resposta do sistema, de acordo com o item 5.4.2.2 da NBR 17.240/2010. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'010': [
+		"010": [
 			"10.001 - O sistema de chuveiros automaticos deve ser instalado em conformidade com a NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.002 - O sistema de chuveiros automáticos deve ser instalado em conformidade com o Projeto de Incêndio aprovado pelo CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"10.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de chuveiros automáticos instalado, emitido por profissional e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
@@ -1167,7 +1227,7 @@ const DADOS_SISTEMA = {
 			"10.073 - Deverá ser afixada junto à tomada de recalque uma placa indicando de forma legível e indelével a pressão exigida nas entradas para atender a maior demanda do sistema, de acordo com o item 6.4.6 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.074 - Quando a edificação de ocupação e uso garagens (Grupos 26) possuir subsolos, a partir do 3º pavimento subsolo serão obrigatórios os sistemas de detecção e chuveiros automáticos, de acordo com a Decisão Técnica 12/2021-CSESCIP/DESEG/CBMDF",
 		],
-		'011': [
+		"011": [
 			"11.001 - A instalação elétrica de baixa tensão deve atender às prescrições da norma NBR 5410 e aos regulamentos das autoridades e das distribuidoras de energia elétrica, de acordo com o item 2.2 da NT 41/2024-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"11.002 - As instalações elétricas prediais de baixa tensão devem estar de acordo com a NT 41/2024-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"11.003 - Apresentar Anotação de Responsabilidade Técnica (ART), Registro de Responsabilidade Técnica (RRT) ou Termo de Responsabilidade Técnica (TRT), da instalação elétrica predial, emitida por profissional e visada no seu respectivo órgão de classe, de acordo com a NT 41/2024-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1207,7 +1267,7 @@ const DADOS_SISTEMA = {
 			"11.037 - Os locais de posicionamento do grupo gerador de energia e seus respectivos tanques deverão estar protegidos com barreiras que impeçam o acesso de pessoas não autorizadas, de acordo com o item 6.2.4.3 da NT09/2022-CBMDF. (Art. 6º, do Decreto 23.154/2002)",
 			"11.038 - As fiações elétricas devem estar isoladas das estruturas, protegidas por meio de calhas, canaletas, eletrodutos ou em cabo duplamente protegido, conforme nível de isolamento previsto por meio da ABNT NBR 5410, de acordo com a letra `c` do item 6.1.8.1 da NT09/2022-CBMDF. (Art. 6º, do Decreto 23.154/2002)",
 		],
-		'012': [
+		"012": [
 			"12.001 - Toda a edificação ou complexo de edificações que tenha obrigatoriedade de instalar brigada de incêndio deverá possuir Plano de Prevenção Contra Incêndio e Pânico(PPCI) atualizado e aprovado no CBMDF, conforme o modelo de PPCI do anexo H e previsto no item 4.8.2.1 da NT07/2011-CBMDF. (Arts. 3º, § 2º, e 6º, do Dec. 23.154/2002)",
 			"12.002 - O PPCI deve estar sempre disponível para eventuais consultas e/ou ações inopinadas do CBMDF, com a equipe de Brigadistas Particulares e/ou Brigadistas Voluntários que estiverem se serviço, de acordo com o item 4.8.3.1 da NT07/2011-CBMDF. (Arts. 3º, § 2º, e 6º, do Dec. 23.154/2002)",
 			"12.003 - O PPCI deve ser apresentado em material impresso e de acordo com NBR 14.100/1998 Proteção Contra Incêndio símbolos gráficos para projeto, de acordo com o item 4.8.5 da NT07/2011-CBMDF. (Arts. 3º, § 2º, e 6º, do Dec. 23.154/2002)",
@@ -1218,7 +1278,7 @@ const DADOS_SISTEMA = {
 			"12.008 - O Ponto de Encontro e Triagem - PET, ser indicado no PPCI e estar localizado em local seguro e propício para a execução das atividades, de acordo com a NT07/2011-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"12.009 - O Supervisor da Brigada de Incêndio após submeter o PPCI a avaliação do Departamento de Segurança Contra Incêndio deve encaminhar cópia deste ao quartel do Corpo de Bombeiros da área para conhecimento e atuação conjunta em simulados, de acordo com o item 4.8.2.2 NT07/2011-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'013': [
+		"013": [
 			"13.001 - A Brigada de Incêndio da edificação deve ser dimensionada conforme o previsto no Anexo A da NT07/2011-CBMDF, levando-se em conta a população fixa e o risco de incêndio, de acordo com o item 4.3.1 da NT07/2011-CBMDF. (Arts. 6º, e 10, b, do Dec. 23.154/2002)",
 			"13.002 - Fora do horário de funcionamento das atividades desenvolvidas na edificação é permitida a permanência mínima de 02(dois) Brigadistas Particulares no local, de acordo com o item 4.6.3.1 da NT07/2011-CBMDF. (Arts. 6º, e 10, b, do Dec. 23.154/2002)",
 			"13.003 - A edificação deverá dispor de brigada de incêndio própria ou contratar prestadora de serviço de brigada de incêndio, conforme item 4.1 e anexo A da NT07/2011-CBMDF. (Arts. 6º, e 10, b, do Dec. 23.154/2002)",
@@ -1240,7 +1300,7 @@ const DADOS_SISTEMA = {
 			"13.019 - Não será permitida a fixação de quaisquer brevês, insígnias, medalhas ou congêneres no uniforme do brigadista particular, conforme o item 4.10.7 da NT07/2011-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"13.020 - O uniforme do Brigadista Particular deve ser aprovado e registrado na Seção de Credenciamento da Diretoria de Vistorias(SECRE/DIVIS) antes de sua utilização, de acordo com o item 4.10.8 da NT07/2011-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'014': [
+		"014": [
 			"14.001 - Adequar o acesso às vias internas e locais para estabelecimento de viaturas de emergência do CBMDF em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000.(Art. 6º, do Dec. 23.154/2002)",
 			"14.002 - Adequar o acesso às vias internas e locais para estabelecimento de viaturas de emergência do CBMDF, em logradouros e áreas de risco que em função de sua classificação e edificações demandem a disponibilização de área exclusiva para viaturas de socorro, conforme requisitos técnicos previstos, de acordo com o item 1.1 e 2.1 da NT11/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"14.003 - As vias internas para acesso às edificações e áreas de risco devem possuir largura mínima igual à largura da faixa de rolamento da via do sistema viário urbano que se comunica com a entrada do logradouro, não podendo ser inferior a 3 m, de acordo com o item 5.1.1 e 5.1.1.1 da NT11/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1263,7 +1323,7 @@ const DADOS_SISTEMA = {
 			"14.020 - As lajes, pontes, túneis e viadutos localizados em vias internas para acesso às áreas exclusivas para viaturas de socorro do CBMDF deverão atender aos requisitos técnicos da NT11/2021-CBMDF, conforme item 6.1.1 e 6.2.1 da referida norma. (Art. 6º, do Dec. 23.154/2002)",
 			"14.021 - Havendo a necessidade de mudança de direção(curva) no percurso das vias internas, aquela deverá ser dimensionada calculando-se sua largura e o raio da curva com base numa viatura com 3 metros de largura, distância entre eixos de 8 metros e 15 metros de comprimento, conforme item 6.3.1 da NT11/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'015': [
+		"015": [
 			"15.001 - Os estabelecimentos que comercializam combustíveis e inflamáveis devem apresentar o Projeto de Incêndio, que conste os sistemas de proteção contra incêndio e pânico e os distanciamentos previstos, devidamente aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000.(Art. 6º, do Dec. 23.154/2002)",
 			"15.002 - O Sistema de Proteção contra Descargas Atmosféricas em Postos de Combustíves(SPDA), deve ser instalado em conformidade com a NBR 5419/2015 da ABNT. (Art. 6º, do Dec. 23.154/2002)",
 			"15.003 - Apresentar Laudo do Teste de Aterramento do SPDA-Sistema de Proteção contra Descargas Atmosféricas, com especificação do equipamento utilizado, método, resistência encontrada e assinado por responsável técnico, emitido por firma credenciada ou visado no CREA, conforme NBR 5419/2015 da ABNT. (Arts. 3º, II, m, e 6º do Dec. 23.154/2002)",
@@ -1288,7 +1348,7 @@ const DADOS_SISTEMA = {
 			"15.022 - Todos os extintores portáteis deverão possuir capacidade extintora mínima de 40B, conforme a NBR 12693/2021 da ABNT e NT03/2015-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"15.023 - Nas coberturas das bombas de postos de combustíveis o distanciamento mínimo entre projeções das edificações será considerado a partir da bomba mais próxima da edificação, conforme Decisão Técnica 08/2021 - CSESCIP/DESEG/CBMDF.",
 		],
-		'016': [
+		"016": [
 			"16.001 - Os sistemas de segurança contra incêndio e pânico, na área de armazenamento e/ou comercialização de GLP, devem ser instalados em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000.(Art. 6º, do Dec. 23.154/2002)",
 			"16.002 - As medidas de proteção contra incêndio e pânico na área de armazenamento e/ou comercialização de GLP, devem ser instalados em conformidade com a NT05/2021 - PARTE II-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"16.003 - A área de armazenamento de GLP de Classe I poderá ter no máximo 520 Kg ou 40 botijões de 13 Kg, conforme item 5.1 e tabela 01 da NT05/2021 - PARTE II-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1400,7 +1460,7 @@ const DADOS_SISTEMA = {
 			"16.109 - O número máximo de recipientes de GLP em palete deverá ser de 42 para cilindros de 20 Kg, conforme item 6.38 e tabela 3 da NT05/2021 - PARTE II-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"16.110 - O número máximo de recipientes de GLP em palete deverá ser de 29 para cilindros de 45 Kg, conforme item 6.38 e tabela 3 da NT05/2021 - PARTE II-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'017': [
+		"017": [
 			"17.001 - Instalar no food truck Dispositivo Residual Diferencial(DR) de alta sensibilidade(30 mA), conforme item 5.1.3 da NT 39/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"17.002 - Isolar e proteger fiação elétrica das estruturas do food truck, por meio de calhas, canaletas, eletrodutos ou cabo duplamente protegido, de acordo com a NBR 5410 /04 da ABNT e conforme item 5.1.4 da NT 39/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"17.003 - Instalar as tomadas do food truck com características técnicas e padronização de acordo com a NBR 14136 da ABNT, em conformidade com o item 5.1.5 da NT 39/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1422,7 +1482,7 @@ const DADOS_SISTEMA = {
 			"17.019 - Instalar sinalização nos estais e suportes de fixação de tendas utilizados pelo food truck, de acordo com o item 6.3 da NT 39/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"17.020 - Os recipientes de GLP, no interior do food truck, quando em funcionamento ou não, devem estar em compartimento com ventilação inferior, interligando o piso ao ambiente externo.A ventilação deve possuir abertura efetiva mínima de 100 cm², podendo apresentar quaisquer desenhos ou formatos e ainda permanecer sempre desobstruída, de acordo com os itens 6.6 e 6.7 da NT 39/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 		],
-		'018': [
+		"018": [
 			"18.001 - Os estabelecimentos que comercializam fogos de artifício devem instalar os sistemas de segurança contra incêndio e pânico em conformidade com o Projeto de Incêndio aprovado no CBMDF, de acordo com o Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"18.002 - Os locais de comércio de fogos de artifício deverão ter a condição de risco isolado de qualquer outra edificação, conforme NT08/2008-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"18.003 - Não é permitido o uso ou manejo de materiais ou produtos que provoquem chama ou faíscas no interior dos locais de comércio de fogos de artifício, conforme NT08/2008-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1440,126 +1500,159 @@ const DADOS_SISTEMA = {
 			"18.015 - Nos locais de comércio de fogos de artifício é permitida à exposição de fogos de artifícios (mostruário) de classe A e B com carga explosiva e bombas para as classes C e D desde que sem a carga explosiva, conforme NT08/2008-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"18.016 - A quantidade máxima de massa explosiva total no mostruário do local de comércio de fogos de artifício deve ser de 1 Kg, conforme NT08/2008-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"18.017 - Os foguetes, rojões e similares, classe C e D podem ser expostos para venda nos locais de comércio de fogos de artifício, desde que contidos em suas embalagens originais, em prateleiras abertas, na quantidade máxima de 1 Kg de massa explosiva total, somada com as classes A e B, conforme NT08/2008-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-		]
-	}
+		],
+	},
 };
 
 let camposDeExigenciasAtivos = {}; // Para controlar quais categorias já estão ativas e suas exigências
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
 	preencherSelectCategorias();
 	// Masking inputs
 	//$('#cpf').mask('000.000.000-00', { reverse: false });
-	$('#cnpj').mask('00.000.000/0000-00', { reverse: true });
-	$('#areaConstruida').mask('000.000.000.000.000,00', { reverse: true });
+	$("#cnpj").mask("00.000.000/0000-00", { reverse: true });
+	$("#areaConstruida").mask("000.000.000.000.000,00", { reverse: true });
 
 	// CNPJ Lookup Functionality
-	const cnpjInput = document.getElementById('cnpj');
-	const enderecoInput = document.getElementById('endereco');
-	const instituicaoInput = document.getElementById('instituicao');
-	const localizacaoInput = document.getElementById('localizacao');
+	const cnpjInput = document.getElementById("cnpj");
+	const enderecoInput = document.getElementById("endereco");
+	const instituicaoInput = document.getElementById("instituicao");
+	const localizacaoInput = document.getElementById("localizacao");
 
-	cnpjInput.addEventListener('blur', function () {
-		let cnpj = cnpjInput.value.replace(/\D/g, ''); // Remove caracteres não numéricos
+	cnpjInput.addEventListener("blur", function () {
+		let cnpj = cnpjInput.value.replace(/\D/g, ""); // Remove caracteres não numéricos
 
-		if (cnpj.length === 14) { // Verifica se o CNPJ tem 14 dígitos
+		if (cnpj.length === 14) {
+			// Verifica se o CNPJ tem 14 dígitos
 			Utils.showToast("Buscando dados do CNPJ...", "info");
 			// Usando BrasilAPI (resolvendo o problema de CORS)
 			fetch(`https://brasilapi.com.br/api/cnpj/v1/${cnpj}`)
-				.then(response => {
+				.then((response) => {
 					if (!response.ok) {
-						return response.json().then(err => { throw new Error(err.message || 'Erro ao buscar CNPJ.'); });
+						return response.json().then((err) => {
+							throw new Error(err.message || "Erro ao buscar CNPJ.");
+						});
 					}
 					return response.json();
 				})
-				.then(data => {
-					if (data.type === 'invalid_parameter' || data.type === 'service_error') {
-						throw new Error(data.message || 'CNPJ não encontrado ou inválido pela API.');
+				.then((data) => {
+					if (
+						data.type === "invalid_parameter" ||
+						data.type === "service_error"
+					) {
+						throw new Error(
+							data.message || "CNPJ não encontrado ou inválido pela API."
+						);
 					}
 
-					const enderecoCompleto = `${data.logradouro}, ${data.numero || 'S/N'}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf} - CEP: ${data.cep}`;
-					if (enderecoInput.value.trim() === '') {
+					const enderecoCompleto = `${data.logradouro}, ${data.numero || "S/N"
+						}, ${data.complemento}, ${data.bairro}, ${data.municipio} - ${data.uf
+						} - CEP: ${data.cep}`;
+					if (enderecoInput.value.trim() === "") {
 						enderecoInput.value = enderecoCompleto.toUpperCase();
 					}
 					const nomeParaInput = `${data.nome_fantasia} / ${data.razao_social}`;
-					if (instituicaoInput.value.trim() === '') {
+					if (instituicaoInput.value.trim() === "") {
 						instituicaoInput.value = nomeParaInput.toUpperCase();
 					}
 
-					enderecoInput.classList.remove('is-invalid');
-					instituicaoInput.classList.remove('is-invalid');
+					enderecoInput.classList.remove("is-invalid");
+					instituicaoInput.classList.remove("is-invalid");
 					Utils.showToast("Dados do CNPJ preenchidos!", "success");
 					console.log(data);
 					// -------- NOVA LÓGICA PARA BUSCAR COORDENADAS --------
-					if (localizacaoInput.value.trim() === '') {
-
-						// Melhorando a precisão do endereço para a busca
+					// -------- NOVA LÓGICA PARA BUSCAR COORDENADAS (ATUALIZADA) --------
+					if (localizacaoInput.value.trim() === "") {
+						// 1. Prepara os termos de busca
 						const enderecoParaGeocodificar = encodeURIComponent(
 							`${data.logradouro}, ${data.bairro}, ${data.municipio}, ${data.uf}, Brasil`
 						);
+						const razaoSocialParaGeocodificar = encodeURIComponent(
+							`${data.nome_fantasia}, ${data.bairro}, ${data.municipio}, ${data.uf}, Brasil`
+						);
 
 						Utils.showToast("Buscando coordenadas geográficas...", "info");
-						console.log(enderecoParaGeocodificar);
-						// CORRIGIDO: Usando o endpoint correto da API Nominatim (/search?format=json)
-						fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${enderecoParaGeocodificar}&limit=1`, {
-							// A Nominatim API exige um cabeçalho User-Agent para requisições
-							headers: {
-								'User-Agent': 'SeuSistema/1.0' // Substitua pelo nome do seu sistema
-							}
-						})
-							.then(geoResponse => {
-								// Verifica se a resposta foi bem-sucedida (status 200)
-								if (!geoResponse.ok) {
-									// Lança um erro para cair no bloco .catch
-									throw new Error(`Erro ao buscar coordenadas. Status: ${geoResponse.status}`);
-								}
-								return geoResponse.json();
-							})
-							.then(geoData => {
-								if (geoData.length > 0) {
-									const lat = parseFloat(geoData[0].lat).toFixed(6); // Formata
-									const lon = parseFloat(geoData[0].lon).toFixed(6); // Formata
 
-									// Atribui o valor APENAS se o campo estiver vazio (garantido pelo 'if' externo)
-									localizacaoInput.value = `${lat}, ${lon}`;
-									localizacaoInput.classList.remove('is-invalid');
-									Utils.showToast("Coordenadas geográficas preenchidas!", "success");
+						// Função interna para processar a busca no Nominatim
+						const buscarNoNominatim = (query) => {
+							return fetch(
+								`https://nominatim.openstreetmap.org/search?format=json&q=${query}&limit=1`,
+								{
+									headers: { "User-Agent": "vistoriaDivis" },
+								}
+							).then((res) => {
+								if (!res.ok) throw new Error(`Erro API: ${res.status}`);
+								return res.json();
+							});
+
+						};
+						// Primeira tentativa: Pelo Endereço
+						buscarNoNominatim(razaoSocialParaGeocodificar)
+							.then((geoData) => {
+								if (geoData.length > 0) {
+									return geoData; // Encontrou pelo endereço
 								} else {
-									localizacaoInput.value = '';
-									localizacaoInput.classList.add('is-invalid');
-									Utils.showToast("Coordenadas não encontradas para o endereço.", "warning");
+									// Segunda tentativa: Pela Razão Social (Fallback)
+									console.log(
+										"Empresa não encontrado, tentando pelo Endereço..."
+									);
+									return buscarNoNominatim(enderecoParaGeocodificar);
 								}
 							})
-							.catch(geoError => {
-								console.error('Erro na requisição da API de Geocodificação:', geoError);
-								// Não limpa o campo, apenas mostra o erro se a busca falhou
-								localizacaoInput.classList.add('is-invalid');
-								Utils.showToast('Erro ao buscar coordenadas. Tente novamente mais tarde.', "danger");
+							.then((finalData) => {
+								if (finalData.length > 0) {
+									const lat = parseFloat(finalData[0].lat).toFixed(6);
+									const lon = parseFloat(finalData[0].lon).toFixed(6);
+
+									localizacaoInput.value = `${lat}, ${lon}`;
+									localizacaoInput.classList.remove("is-invalid");
+									Utils.showToast(
+										"Coordenadas geográficas preenchidas!",
+										"success"
+									);
+								} else {
+									localizacaoInput.value = "";
+									localizacaoInput.classList.add("is-invalid");
+									Utils.showToast(
+										"Coordenadas não encontradas (Endereço/Razão Social).",
+										"warning"
+									);
+								}
+							})
+							.catch((geoError) => {
+								console.error("Erro na geocodificação:", geoError);
+								localizacaoInput.classList.add("is-invalid");
+								Utils.showToast("Erro ao buscar coordenadas.", "danger");
 							});
 					}
 					// ---------------- FIM DA NOVA LÓGICA ----------------
+					// ---------------- FIM DA NOVA LÓGICA ----------------
 				})
-				.catch(error => {
-					console.error('Erro na requisição da API de CNPJ:', error);
-					enderecoInput.value = '';
-					instituicaoInput.value = '';
-					localizacaoInput.value = ''; // Limpa também a localização em caso de erro no CNPJ
-					enderecoInput.classList.add('is-invalid');
-					instituicaoInput.classList.add('is-invalid');
-					localizacaoInput.classList.add('is-invalid');
-					Utils.showToast(`Ocorreu um erro ao buscar os dados: ${error.message || 'Verifique o CNPJ ou sua conexão.'}`, "danger");
+				.catch((error) => {
+					console.error("Erro na requisição da API de CNPJ:", error);
+					enderecoInput.value = "";
+					instituicaoInput.value = "";
+					localizacaoInput.value = ""; // Limpa também a localização em caso de erro no CNPJ
+					enderecoInput.classList.add("is-invalid");
+					instituicaoInput.classList.add("is-invalid");
+					localizacaoInput.classList.add("is-invalid");
+					Utils.showToast(
+						`Ocorreu um erro ao buscar os dados: ${error.message || "Verifique o CNPJ ou sua conexão."
+						}`,
+						"danger"
+					);
 				});
 		} else {
-			enderecoInput.value = '';
-			instituicaoInput.value = '';
-			localizacaoInput.value = ''; //limpa se não tiver 14 digitos no cnpj
+			enderecoInput.value = "";
+			instituicaoInput.value = "";
+			localizacaoInput.value = ""; //limpa se não tiver 14 digitos no cnpj
 		}
 	});
 
-
 	// Event listener para o botão de salvar anotação dentro do modal
-	document.getElementById('btnSalvarAnotacao').addEventListener('click', salvarAnotacao);
-
+	document
+		.getElementById("btnSalvarAnotacao")
+		.addEventListener("click", salvarAnotacao);
 
 	// Preenche o formulário automaticamente ao acessar com ?processo=...
 	const params = new URLSearchParams(window.location.search);
@@ -1577,22 +1670,24 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function preencherSelectCategorias() {
-	const select = document.getElementById('selectCategoriaExigencia');
+	const select = document.getElementById("selectCategoriaExigencia");
 	for (const chave in DADOS_SISTEMA.categorias) {
-		const option = document.createElement('option');
+		const option = document.createElement("option");
 		option.value = chave;
 		option.textContent = DADOS_SISTEMA.categorias[chave];
 		select.appendChild(option);
 	}
 }
 
-document.getElementById('selectCategoriaExigencia').addEventListener('change', function () {
-	const categoria = this.value;
-	if (categoria && !camposDeExigenciasAtivos[categoria]) {
-		adicionarCategoria(categoria);
-		this.value = ""; // Reseta o select
-	}
-});
+document
+	.getElementById("selectCategoriaExigencia")
+	.addEventListener("change", function () {
+		const categoria = this.value;
+		if (categoria && !camposDeExigenciasAtivos[categoria]) {
+			adicionarCategoria(categoria);
+			this.value = ""; // Reseta o select
+		}
+	});
 
 /**
  * Adiciona uma ou mais categorias de exigência à interface (como cards).
@@ -1600,31 +1695,33 @@ document.getElementById('selectCategoriaExigencia').addEventListener('change', f
  */
 function adicionarCategoria(categorias) {
 	// 1. Normaliza a entrada: converte string (valor único) em array
-	const categoriasParaAdicionar = Array.isArray(categorias) ? categorias : [categorias];
+	const categoriasParaAdicionar = Array.isArray(categorias)
+		? categorias
+		: [categorias];
 
 	// 2. Itera sobre cada categoria e aplica a lógica de adição
-	categoriasParaAdicionar.forEach(categoria => {
+	categoriasParaAdicionar.forEach((categoria) => {
 		// Lógica original, agora aplicada a uma única 'categoria' por vez:
 		if (camposDeExigenciasAtivos[categoria]) return;
 
 		console.log("Adicionando categoria: ", categoria);
 
-		const container = document.getElementById('exigenciasContainer');
-		const spinnerElement = document.getElementById('algumIdDoSpinner');
+		const container = document.getElementById("exigenciasContainer");
+		const spinnerElement = document.getElementById("algumIdDoSpinner");
 
 		// Remove a classe loading-spinner do container, que o tornava invisível
-		container.classList.remove('loading-spinner');
+		container.classList.remove("loading-spinner");
 		// Torna o container visível
-		container.style.display = 'block';
+		container.style.display = "block";
 
 		// Oculta o elemento do spinner
 		if (spinnerElement) {
-			spinnerElement.style.display = 'none';
+			spinnerElement.style.display = "none";
 		}
 
-		const divCategoria = document.createElement('div');
+		const divCategoria = document.createElement("div");
 		divCategoria.id = `exigencias-categoria-${categoria}`;
-		divCategoria.classList.add('card', 'mb-3', 'p-3');
+		divCategoria.classList.add("card", "mb-3", "p-3");
 
 		divCategoria.innerHTML = `
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -1646,11 +1743,13 @@ function adicionarCategoria(categorias) {
 
 		// Mostra como tag também
 		// Assumindo que 'adicionarBadgeCategoria' também pode estar disponível
-		if (typeof adicionarBadgeCategoria === 'function') {
+		if (typeof adicionarBadgeCategoria === "function") {
 			adicionarBadgeCategoria(categoria);
 		}
 
-		const autocompleteInput = divCategoria.querySelector('.exigencia-autocomplete');
+		const autocompleteInput = divCategoria.querySelector(
+			".exigencia-autocomplete"
+		);
 		setupAutocomplete(autocompleteInput, categoria);
 	});
 }
@@ -1685,16 +1784,20 @@ function adicionarExigencia(categoria, exigencia) {
 	if (!camposDeExigenciasAtivos[categoria].includes(exigencia)) {
 		camposDeExigenciasAtivos[categoria].push(exigencia);
 
-		const badgesContainer = document.getElementById(`exigencias-inputs-${categoria}`);
+		const badgesContainer = document.getElementById(
+			`exigencias-inputs-${categoria}`
+		);
 		// Encode exigency string for use in ID to prevent issues with special characters
-		const encodedExigency = btoa(exigencia).replace(/=/g, ''); // Remove padding for cleaner ID
+		const encodedExigency = btoa(exigencia).replace(/=/g, ""); // Remove padding for cleaner ID
 
 		// 🚨 NOVO: 1. Verifica se já existe anotação para definir a cor inicial do ícone
-		const anotacaoExistente = anotacoesDoProcesso[exigencia] || ''; // Usa a string de exigencia como chave
-		const iconColorClass = anotacaoExistente ? 'text-primary' : 'text-secondary';
+		const anotacaoExistente = anotacoesDoProcesso[exigencia] || ""; // Usa a string de exigencia como chave
+		const iconColorClass = anotacaoExistente
+			? "text-primary"
+			: "text-secondary";
 
 		// Cria o elemento <span> para a tag visível
-		const tagSpan = document.createElement('span');
+		const tagSpan = document.createElement("span");
 		tagSpan.className = "tag";
 		tagSpan.id = `tag-${categoria}-${encodedExigency}`;
 		tagSpan.innerHTML = `
@@ -1708,18 +1811,20 @@ function adicionarExigencia(categoria, exigencia) {
 		// Cria o elemento <input type="hidden"> para coletar o dado
 		// ... (o restante da sua função continua igual) ...
 
-		const hiddenInput = document.createElement('input');
-		hiddenInput.type = 'hidden';
-		hiddenInput.name = 'exigencias[]'; // Importante para coletar com querySelectorAll
+		const hiddenInput = document.createElement("input");
+		hiddenInput.type = "hidden";
+		hiddenInput.name = "exigencias[]"; // Importante para coletar com querySelectorAll
 		hiddenInput.value = exigencia;
 
 		badgesContainer.appendChild(tagSpan);
 		badgesContainer.appendChild(hiddenInput); // Adiciona o input oculto
 
 		// Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
-		const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
+		const autocompleteInput = document.querySelector(
+			`#exigencias-categoria-${categoria} .exigencia-autocomplete`
+		);
 		if (autocompleteInput) {
-			const event = new Event('input', { bubbles: true, cancelable: true });
+			const event = new Event("input", { bubbles: true, cancelable: true });
 			autocompleteInput.dispatchEvent(event);
 		}
 	}
@@ -1731,15 +1836,23 @@ function removerExigencia(categoria, encodedExigenciaId, exigenciaValue) {
 		if (index > -1) {
 			camposDeExigenciasAtivos[categoria].splice(index, 1);
 			// Remove the tag element by its ID
-			document.getElementById(`tag-${categoria}-${encodedExigenciaId}`)?.remove();
+			document
+				.getElementById(`tag-${categoria}-${encodedExigenciaId}`)
+				?.remove();
 
 			// Remove all hidden inputs with this specific exigency value
-			document.querySelectorAll(`input[name="exigencias[]"][value="${exigenciaValue}"]`).forEach(input => input.remove());
+			document
+				.querySelectorAll(
+					`input[name="exigencias[]"][value="${exigenciaValue}"]`
+				)
+				.forEach((input) => input.remove());
 
 			// Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
-			const autocompleteInput = document.querySelector(`#exigencias-categoria-${categoria} .exigencia-autocomplete`);
+			const autocompleteInput = document.querySelector(
+				`#exigencias-categoria-${categoria} .exigencia-autocomplete`
+			);
 			if (autocompleteInput) {
-				const event = new Event('input', { bubbles: true, cancelable: true });
+				const event = new Event("input", { bubbles: true, cancelable: true });
 				autocompleteInput.dispatchEvent(event);
 			}
 		}
@@ -1749,74 +1862,70 @@ function removerExigencia(categoria, encodedExigenciaId, exigenciaValue) {
 function setupAutocomplete(inputElement, categoria) {
 	const autocompleteList = inputElement.nextElementSibling; // O div.autocomplete-list logo após o input
 
-	inputElement.addEventListener('input', function () {
+	inputElement.addEventListener("input", function () {
 		const searchTerm = this.value.toLowerCase();
-		autocompleteList.innerHTML = ''; // Limpa a lista anterior
+		autocompleteList.innerHTML = ""; // Limpa a lista anterior
 
 		if (searchTerm.length === 0) {
-			autocompleteList.style.display = 'none';
+			autocompleteList.style.display = "none";
 			return;
 		}
 
 		const sugestoes = DADOS_SISTEMA.exigencias[categoria] || [];
 		// Filtra as sugestões, removendo as que já estão ativas para esta categoria
-		const filteredSugestoes = sugestoes.filter(sugestao =>
-			sugestao.toLowerCase().includes(searchTerm) &&
-			!camposDeExigenciasAtivos[categoria].includes(sugestao)
+		const filteredSugestoes = sugestoes.filter(
+			(sugestao) =>
+				sugestao.toLowerCase().includes(searchTerm) &&
+				!camposDeExigenciasAtivos[categoria].includes(sugestao)
 		);
 
 		if (filteredSugestoes.length > 0) {
-			filteredSugestoes.forEach(sugestao => {
-				const item = document.createElement('div');
-				item.classList.add('autocomplete-item');
+			filteredSugestoes.forEach((sugestao) => {
+				const item = document.createElement("div");
+				item.classList.add("autocomplete-item");
 				item.textContent = sugestao;
-				item.addEventListener('click', () => {
+				item.addEventListener("click", () => {
 					adicionarExigencia(categoria, sugestao);
-					inputElement.value = ''; // Limpa o input após adicionar
-					autocompleteList.innerHTML = '';
-					autocompleteList.style.display = 'none';
+					inputElement.value = ""; // Limpa o input após adicionar
+					autocompleteList.innerHTML = "";
+					autocompleteList.style.display = "none";
 				});
 				autocompleteList.appendChild(item);
 			});
-			autocompleteList.style.display = 'block';
+			autocompleteList.style.display = "block";
 		} else {
-			autocompleteList.style.display = 'none';
+			autocompleteList.style.display = "none";
 		}
 	});
 
 	// Oculta a lista de autocomplete quando o input perde o foco
-	inputElement.addEventListener('blur', () => {
+	inputElement.addEventListener("blur", () => {
 		setTimeout(() => {
-			autocompleteList.style.display = 'none';
+			autocompleteList.style.display = "none";
 		}, 100); // Pequeno atraso para permitir o clique no item
 	});
 }
 
-
 // Máscara do processo
-const processoInput = document.getElementById('processoBusca');
-if (processoInput) { // Ensure element exists before adding listener
-	processoInput.addEventListener('input', () => {
+const processoInput = document.getElementById("processoBusca");
+if (processoInput) {
+	// Ensure element exists before adding listener
+	processoInput.addEventListener("input", () => {
 		let value = processoInput.value.replace(/\D/g, "");
 		let formattedValue = "";
 
-		if (value.length > 0)
-			formattedValue += value.substring(0, 5);
-		if (value.length > 5)
-			formattedValue += "-" + value.substring(5, 13);
-		if (value.length > 13)
-			formattedValue += "/" + value.substring(13, 17);
-		if (value.length > 17)
-			formattedValue += "-" + value.substring(17, 19);
+		if (value.length > 0) formattedValue += value.substring(0, 5);
+		if (value.length > 5) formattedValue += "-" + value.substring(5, 13);
+		if (value.length > 13) formattedValue += "/" + value.substring(13, 17);
+		if (value.length > 17) formattedValue += "-" + value.substring(17, 19);
 
 		processoInput.value = formattedValue;
 	});
 }
 
-
 // Máscara do CNPJ //00.000.000/0000-00
-const cnpjInput = document.getElementById('cnpj');
-cnpjInput.addEventListener('input', () => {
+const cnpjInput = document.getElementById("cnpj");
+cnpjInput.addEventListener("input", () => {
 	let value = cnpjInput.value.replace(/\D/g, "");
 	value = value.replace(/^(\d{2})(\d)/, "$1.$2");
 	value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
@@ -1839,8 +1948,8 @@ cnpjInput.addEventListener('input', () => {
 });*/
 
 // Lógica para a máscara de Localização
-const localizacaoInput = document.getElementById('localizacao');
-localizacaoInput.addEventListener('input', () => {
+const localizacaoInput = document.getElementById("localizacao");
+localizacaoInput.addEventListener("input", () => {
 	let value = localizacaoInput.value.replace(/\D/g, ""); // Remove tudo que não é dígito
 
 	// Aplica o primeiro hífen (da latitude)
@@ -1851,25 +1960,29 @@ localizacaoInput.addEventListener('input', () => {
 
 	// Aplica o ponto decimal da latitude
 	// Ex: "-123456" -> "-12.3456"
-	if (value.length > 3) { // Considerando o hífen e 2 dígitos (-XX)
+	if (value.length > 3) {
+		// Considerando o hífen e 2 dígitos (-XX)
 		value = value.replace(/^(-?\d{2})(\d)/, "$1.$2");
 	}
 
 	// Aplica a vírgula e o espaço após a latitude completa
 	// Ex: "-12.345678" -> "-12.34567, 8"
-	if (value.length > 10) { // Considerando: -XX.YYYYY (10 caracteres no total)
+	if (value.length > 10) {
+		// Considerando: -XX.YYYYY (10 caracteres no total)
 		value = value.replace(/^(-?\d{2}\.\d{6})(\d)/, "$1, $2");
 	}
 
 	// Aplica o segundo hífen (da longitude)
 	// Ex: "-12.34567, 890" -> "-12.34567, -890"
-	if (value.length > 16) { // Considerando: -XX.YYYYY,  (14 caracteres)
+	if (value.length > 16) {
+		// Considerando: -XX.YYYYY,  (14 caracteres)
 		value = value.replace(/^(-?\d{2}\.\d{6}, )(\d{1,2})/, "$1-$2");
 	}
 
 	// Aplica o ponto decimal da longitude
 	// Ex: "-12.34567, -89012" -> "-12.34567, -89.012"
-	if (value.length > 18) { // Considerando: -XX.YYYYY, -XX (17 caracteres)
+	if (value.length > 18) {
+		// Considerando: -XX.YYYYY, -XX (17 caracteres)
 		value = value.replace(/^(-?\d{2}\.\d{6}, -\d{2})(\d)/, "$1.$2");
 	}
 
@@ -1877,13 +1990,15 @@ localizacaoInput.addEventListener('input', () => {
 	localizacaoInput.value = value.slice(0, 22);
 });
 // Busca a localização atual
-document.getElementById('buscarLocalizacao').addEventListener('click', () => {
+document.getElementById("buscarLocalizacao").addEventListener("click", () => {
 	if (navigator.geolocation) {
 		navigator.geolocation.getCurrentPosition(
 			(position) => {
 				const latitude = position.coords.latitude.toFixed(6);
 				const longitude = position.coords.longitude.toFixed(6);
-				document.getElementById('localizacao').value = `${latitude}, ${longitude}`;
+				document.getElementById(
+					"localizacao"
+				).value = `${latitude}, ${longitude}`;
 				salvarAutomaticamente();
 				Utils.showToast("Localização obtida com sucesso!", "success");
 			},
@@ -1897,7 +2012,8 @@ document.getElementById('buscarLocalizacao').addEventListener('click', () => {
 						errorMessage = "Informação de localização indisponível.";
 						break;
 					case error.TIMEOUT:
-						errorMessage = "Tempo de resposta excedido ao tentar obter localização.";
+						errorMessage =
+							"Tempo de resposta excedido ao tentar obter localização.";
 						break;
 				}
 				Utils.showToast(errorMessage, "danger");
@@ -1913,13 +2029,15 @@ document.getElementById('buscarLocalizacao').addEventListener('click', () => {
 function aplicarCorDoStatus(status) {
 	const titulo = document.getElementById("tituloLaudo");
 	// Remove existing status classes (e.g., status-pendente, status-aprovado)
-	titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
+	titulo.classList.remove(
+		...Array.from(titulo.classList).filter((c) => c.startsWith("status-"))
+	);
 
 	const classe = Utils.formatarClasseStatus(status);
 	if (status) {
-		titulo.classList.add('text-light', classe);
+		titulo.classList.add("text-light", classe);
 	} else {
-		titulo.classList.add('text-dark', 'status-sem-status'); // Default for no status
+		titulo.classList.add("text-dark", "status-sem-status"); // Default for no status
 	}
 }
 
@@ -1927,18 +2045,23 @@ document.getElementById("status").addEventListener("change", function () {
 	aplicarCorDoStatus(this.value);
 });
 
-
 // Salvar Automaticamente e Carregar
 function salvarAutomaticamente() {
 	const processoInput = document.getElementById("processoBusca");
 	if (!processoInput) {
-		console.error("Element with ID 'processoBusca' not found when attempting to auto-save.");
+		console.error(
+			"Element with ID 'processoBusca' not found when attempting to auto-save."
+		);
 		return; // Exit if the element doesn't exist
 	}
 	const processo = processoInput.value;
 
-	if (!processo || processo.length !== 22) { // Ensure a full process number is entered
-		Utils.showToast("Informe o número do processo completo para salvar.", "warning");
+	if (!processo || processo.length !== 22) {
+		// Ensure a full process number is entered
+		Utils.showToast(
+			"Informe o número do processo completo para salvar.",
+			"warning"
+		);
 		return;
 	}
 	const dados = coletarDadosDoFormulario();
@@ -1947,11 +2070,17 @@ function salvarAutomaticamente() {
 	console.log("Auto-salvo:", processo);
 }
 
-document.querySelectorAll("input, select, textarea").forEach(el => {
+document.querySelectorAll("input, select, textarea").forEach((el) => {
 	// Exclude process search input from immediate auto-save, as it triggers a load
 	if (el.id !== "processoBusca") {
-		el.addEventListener("change", Utils.debounce(salvarAutomaticamente, CONFIG.AUTO_SAVE_DELAY));
-		el.addEventListener("input", Utils.debounce(salvarAutomaticamente, CONFIG.AUTO_SAVE_DELAY));
+		el.addEventListener(
+			"change",
+			Utils.debounce(salvarAutomaticamente, CONFIG.AUTO_SAVE_DELAY)
+		);
+		el.addEventListener(
+			"input",
+			Utils.debounce(salvarAutomaticamente, CONFIG.AUTO_SAVE_DELAY)
+		);
 	}
 });
 
@@ -1965,89 +2094,102 @@ if (processoBuscaElement) {
 	});
 }
 
-
 // --- FUNÇÃO DE BUSCA UNIFICADA ---
 /**
  * Tenta buscar e carregar um processo salvo no LocalStorage
  * usando o valor atual do campo de input 'processoBusca'.
  */
 function buscarProcessoPorInput() {
-    const processoInput = document.getElementById("processoBusca");
-    if (!processoInput) {
-        console.error("Element with ID 'processoBusca' not found.");
-        Utils.showToast("Erro interno: campo de processo não encontrado.", "danger");
-        return;
-    }
-    const processoBuscaValue = processoInput.value.trim(); // Use trim() to remove excess spaces
+	const processoInput = document.getElementById("processoBusca");
+	if (!processoInput) {
+		console.error("Element with ID 'processoBusca' not found.");
+		Utils.showToast(
+			"Erro interno: campo de processo não encontrado.",
+			"danger"
+		);
+		return;
+	}
+	const processoBuscaValue = processoInput.value.trim(); // Use trim() to remove excess spaces
 
-    if (!processoBuscaValue || processoBuscaValue.length !== 22) {
-        // Se o campo está vazio ou o tamanho incorreto, apenas limpa se já não estiver limpo, 
-        // mas não dispara toast de erro no blur se estiver apenas vazio.
-        if (processoBuscaValue) {
-            Utils.showToast("Informe o número do processo completo para buscar.", "warning");
-        }
-        
-        // Sempre limpa o formulário se a busca for inválida (previne dados incorretos na tela)
-        document.querySelector('form').reset();
-        document.getElementById('tituloLaudo').className = 'display-6';
-        document.getElementById('exigenciasContainer').innerHTML = '';
-        document.getElementById('badgesCategorias').innerHTML = '';
-        camposDeExigenciasAtivos = {};
-        document.getElementById("retornoNao").checked = true;
-        // Re-preenche o campo de busca com o valor inválido que estava lá
-        processoInput.value = processoBuscaValue; 
-        return;
-    }
+	if (!processoBuscaValue || processoBuscaValue.length !== 22) {
+		// Se o campo está vazio ou o tamanho incorreto, apenas limpa se já não estiver limpo,
+		// mas não dispara toast de erro no blur se estiver apenas vazio.
+		if (processoBuscaValue) {
+			Utils.showToast(
+				"Informe o número do processo completo para buscar.",
+				"warning"
+			);
+		}
 
-    const dados = localStorage.getItem(`processo-${processoBuscaValue}`);
-    if (!dados) {
-        Utils.showToast("Processo não encontrado.", "danger");
-        // Limpa o formulário, mantendo o valor de busca
-        document.querySelector('form').reset();
-        document.getElementById('tituloLaudo').className = 'display-6';
-        document.getElementById('exigenciasContainer').innerHTML = '';
-        document.getElementById('badgesCategorias').innerHTML = '';
-        camposDeExigenciasAtivos = {};
-        document.getElementById("retornoNao").checked = true;
-        processoInput.value = processoBuscaValue;
-        return;
-    }
+		// Sempre limpa o formulário se a busca for inválida (previne dados incorretos na tela)
+		document.querySelector("form").reset();
+		document.getElementById("tituloLaudo").className = "display-6";
+		document.getElementById("exigenciasContainer").innerHTML = "";
+		document.getElementById("badgesCategorias").innerHTML = "";
+		camposDeExigenciasAtivos = {};
+		document.getElementById("retornoNao").checked = true;
+		// Re-preenche o campo de busca com o valor inválido que estava lá
+		processoInput.value = processoBuscaValue;
+		return;
+	}
 
-    const parsedData = JSON.parse(dados);
-    // Garante que o campo de processo seja preenchido com o valor que foi buscado
-    parsedData.processoBusca = processoBuscaValue;
+	const dados = localStorage.getItem(`processo-${processoBuscaValue}`);
+	if (!dados) {
+		Utils.showToast("Processo não encontrado.", "danger");
+		// Limpa o formulário, mantendo o valor de busca
+		document.querySelector("form").reset();
+		document.getElementById("tituloLaudo").className = "display-6";
+		document.getElementById("exigenciasContainer").innerHTML = "";
+		document.getElementById("badgesCategorias").innerHTML = "";
+		camposDeExigenciasAtivos = {};
+		document.getElementById("retornoNao").checked = true;
+		processoInput.value = processoBuscaValue;
+		return;
+	}
 
-    preencherFormulario(parsedData);
-    Utils.showToast("Processo carregado com sucesso!", "success");
+	const parsedData = JSON.parse(dados);
+	// Garante que o campo de processo seja preenchido com o valor que foi buscado
+	parsedData.processoBusca = processoBuscaValue;
+
+	preencherFormulario(parsedData);
+	Utils.showToast("Processo carregado com sucesso!", "success");
 }
 
 // --- GATILHOS DE EVENTOS ---
 
 // Botão BUSCAR: Dispara ao clicar
-document.getElementById("buscarProcesso").addEventListener("click", buscarProcessoPorInput);
+document
+	.getElementById("buscarProcesso")
+	.addEventListener("click", buscarProcessoPorInput);
 
 // Botão Copiar: Event listener para o botão de copiar
-document.getElementById("copiarProcesso")?.addEventListener("click", copiarProcessoBusca);
+document
+	.getElementById("copiarProcesso")
+	?.addEventListener("click", copiarProcessoBusca);
 
 // Input 'processoBusca': Dispara ao perder o foco (onblur)
-document.getElementById("processoBusca").addEventListener("blur", buscarProcessoPorInput);
+document
+	.getElementById("processoBusca")
+	.addEventListener("blur", buscarProcessoPorInput);
 
 // Botão SALVAR MANUALMENTE
 document.getElementById("btnSalvar").addEventListener("click", () => {
-	const form = document.querySelector('.needs-validation');
+	const form = document.querySelector(".needs-validation");
 	if (!form.checkValidity()) {
-		form.classList.add('was-validated');
-		Utils.showToast("Por favor, preencha todos os campos obrigatórios.", "danger");
+		form.classList.add("was-validated");
+		Utils.showToast(
+			"Por favor, preencha todos os campos obrigatórios.",
+			"danger"
+		);
 		return;
 	}
 	salvarAutomaticamente(); // This will save the current form state
 	Utils.showToast("Dados salvos com sucesso!", "success");
 });
 
-
 function coletarDadosDoFormulario() {
 	const exigencias = [];
-	document.querySelectorAll('input[name="exigencias[]"]').forEach(input => {
+	document.querySelectorAll('input[name="exigencias[]"]').forEach((input) => {
 		exigencias.push(input.value);
 	});
 
@@ -2055,7 +2197,8 @@ function coletarDadosDoFormulario() {
 	return {
 		processoBusca: document.getElementById("processoBusca")?.value || "",
 		cnpj: document.getElementById("cnpj")?.value || "",
-		instituicao: document.getElementById("instituicao")?.value.toUpperCase() || "",
+		instituicao:
+			document.getElementById("instituicao")?.value.toUpperCase() || "",
 		endereco: document.getElementById("endereco")?.value.toUpperCase() || "",
 		localizacao: document.getElementById("localizacao")?.value || "",
 		ocupacao: document.getElementById("ocupacao")?.value || "",
@@ -2063,12 +2206,14 @@ function coletarDadosDoFormulario() {
 		area: document.getElementById("area")?.value || "",
 		altura: document.getElementById("altura")?.value || "",
 		pavimentos: document.getElementById("pavimentos")?.value || "",
-		responsavel: document.getElementById("responsavel")?.value.toUpperCase() || "",
+		responsavel:
+			document.getElementById("responsavel")?.value.toUpperCase() || "",
 		tipo: document.getElementById("tipo")?.value || "",
 		inicio: document.getElementById("inicio")?.value || "",
 		fim: document.getElementById("fim")?.value || "",
 		retorno: document.getElementById("retornoSim")?.checked || false,
-		acompanhante: document.getElementById("acompanhante")?.value.toUpperCase() || "",
+		acompanhante:
+			document.getElementById("acompanhante")?.value.toUpperCase() || "",
 		//cpf: document.getElementById("cpf")?.value || "",
 		funcao: document.getElementById("funcao")?.value.toUpperCase() || "",
 		status: document.getElementById("status")?.value || "",
@@ -2076,7 +2221,7 @@ function coletarDadosDoFormulario() {
 		categoriasSelecionadas: categoriasSelecionadas,
 		exigencias: exigencias,
 		anotacoesDoProcesso: anotacoesDoProcesso,
-		checkConcluido: document.getElementById('checkConcluido').checked,
+		checkConcluido: document.getElementById("checkConcluido").checked,
 	};
 }
 
@@ -2108,18 +2253,19 @@ function preencherFormulario(data) {
 	document.getElementById("funcao").value = data.funcao || "";
 	document.getElementById("status").value = data.status || "";
 	document.getElementById("observacao").value = data.observacao || "";
-	document.getElementById('checkConcluido').checked = data.checkConcluido || false;
+	document.getElementById("checkConcluido").checked =
+		data.checkConcluido || false;
 	aplicarCorDoStatus(data.status || "Sem Status");
 	aplicarCorDoStatus(data.geolocation || "Sem Status");
 	anotacoesDoProcesso = data.anotacoesDoProcesso || {};
 
 	// Clear existing exigencies and categories before re-filling
-	document.getElementById('exigenciasContainer').innerHTML = '';
-	document.getElementById('badgesCategorias').innerHTML = '';
+	document.getElementById("exigenciasContainer").innerHTML = "";
+	document.getElementById("badgesCategorias").innerHTML = "";
 	camposDeExigenciasAtivos = {}; // Reset the control of active categories
 
 	if (data.exigencias && Array.isArray(data.exigencias)) {
-		data.exigencias.forEach(exigencia => {
+		data.exigencias.forEach((exigencia) => {
 			for (const categoriaKey in DADOS_SISTEMA.exigencias) {
 				if (DADOS_SISTEMA.exigencias[categoriaKey].includes(exigencia)) {
 					adicionarExigencia(categoriaKey, exigencia);
@@ -2131,23 +2277,25 @@ function preencherFormulario(data) {
 
 	// Itere pelas exigências geradas e aplique a cor do ícone
 	// (Esta parte dependerá da sua função de geração de exigências e preenchimento)
-	Object.keys(anotacoesDoProcesso).forEach(id => {
-		const iconElement = document.querySelector(`.anotacao-icon[data-exigencia-id="${id}"]`);
+	Object.keys(anotacoesDoProcesso).forEach((id) => {
+		const iconElement = document.querySelector(
+			`.anotacao-icon[data-exigencia-id="${id}"]`
+		);
 		if (iconElement) {
-			iconElement.classList.remove('text-secondary');
-			iconElement.classList.add('text-primary');
+			iconElement.classList.remove("text-secondary");
+			iconElement.classList.add("text-primary");
 		}
 	});
 
 	// --- Nova lógica para os links de Mapa (Google Maps e Waze) ---
 
 	// Obtenha as referências para os elementos HTML
-	const googleMapsContainer = document.getElementById('googleMapsContainer'); // A div do container do Google Maps
-	const googleMapsLink = document.getElementById('googleMapsLink');     // O link <a> para Google Maps
+	const googleMapsContainer = document.getElementById("googleMapsContainer"); // A div do container do Google Maps
+	const googleMapsLink = document.getElementById("googleMapsLink"); // O link <a> para Google Maps
 	// const locationGpsIcon = document.getElementById('locationGpsIcon'); // O <i>, se ainda for usado separadamente
 
-	const wazeContainer = document.getElementById('wazeContainer');       // A div do container do Waze
-	const wazeLink = document.getElementById('wazeLink');                 // O link <a> para Waze
+	const wazeContainer = document.getElementById("wazeContainer"); // A div do container do Waze
+	const wazeLink = document.getElementById("wazeLink"); // O link <a> para Waze
 
 	// A variável 'data' deve ser o objeto que contém a localização, como 'data.localizacao'
 	const coordenadas = data.localizacao; // Pega a localização dos dados passados para a função (ex: "latitude,longitude")
@@ -2155,62 +2303,68 @@ function preencherFormulario(data) {
 	// Verifica se há coordenadas válidas para mostrar os links
 	if (coordenadas) {
 		// Formata as coordenadas (remove espaços em branco)
-		const coordsFormatted = coordenadas.replace(/\s/g, '');
+		const coordsFormatted = coordenadas.replace(/\s/g, "");
 
 		// --- Lógica para o Google Maps ---
 		// Usando o formato de URL exato que você forneceu: http://maps.google.com/maps?q=${coordenadas}
 		const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${coordsFormatted}`;
 		googleMapsLink.href = googleMapsUrl;
 		googleMapsLink.title = `Abrir no Google Maps: ${coordsFormatted}`; // Atualiza o título (tooltip)
-		googleMapsLink.style.cursor = 'pointer'; // Torna o cursor indicativo de clicável
+		googleMapsLink.style.cursor = "pointer"; // Torna o cursor indicativo de clicável
 
 		// Exibe o container do Google Maps
-		googleMapsContainer.classList.add('d-flex');
-		googleMapsContainer.style.display = 'flex'; // Garante que esteja visível
+		googleMapsContainer.classList.add("d-flex");
+		googleMapsContainer.style.display = "flex"; // Garante que esteja visível
 
 		// --- Lógica para o Waze ---
 		// O formato do link Waze é https://waze.com/ul?ll=[latitude],[longitude]&navigate=yes
 		const wazeUrl = `https://waze.com/ul?ll=${coordsFormatted}&navigate=yes`;
 		wazeLink.href = wazeUrl;
 		wazeLink.title = `Abrir no Waze: ${coordsFormatted}`; // Atualiza o título (tooltip)
-		wazeLink.style.cursor = 'pointer'; // Torna o cursor indicativo de clicável
+		wazeLink.style.cursor = "pointer"; // Torna o cursor indicativo de clicável
 
 		// Exibe o container do Waze
-		wazeContainer.classList.add('d-flex');
-		wazeContainer.style.display = 'flex'; // Garante que esteja visível
+		wazeContainer.classList.add("d-flex");
+		wazeContainer.style.display = "flex"; // Garante que esteja visível
 
 		console.log("com localizacao");
 		console.log(coordsFormatted);
-
 	} else {
 		// Se não houver coordenadas, esconde ambos os containers
-		googleMapsContainer.classList.remove('d-flex');
-		googleMapsContainer.style.display = 'none'; // Esconde completamente
-		wazeContainer.classList.remove('d-flex');
-		wazeContainer.style.display = 'none'; // Esconde completamente
+		googleMapsContainer.classList.remove("d-flex");
+		googleMapsContainer.style.display = "none"; // Esconde completamente
+		wazeContainer.classList.remove("d-flex");
+		wazeContainer.style.display = "none"; // Esconde completamente
 
 		// Certifique-se de que os links também resetam seus hrefs para evitar cliques indesejados
-		googleMapsLink.href = '#';
-		wazeLink.href = '#';
+		googleMapsLink.href = "#";
+		wazeLink.href = "#";
 
 		console.log("SEM localizacao");
 	}
 
 	// O restante do seu código JavaScript, como a lógica para categorias selecionadas, deve vir aqui
 	// Also re-add any categories that were selected but had no exigencies
-	if (data.categoriasSelecionadas && Array.isArray(data.categoriasSelecionadas)) {
-		data.categoriasSelecionadas.forEach(cat => {
-			if (!camposDeExigenciasAtivos[cat] && DADOS_SISTEMA.categorias[cat]) { // Only add if not already added by an exigency and category exists
+	if (
+		data.categoriasSelecionadas &&
+		Array.isArray(data.categoriasSelecionadas)
+	) {
+		data.categoriasSelecionadas.forEach((cat) => {
+			if (!camposDeExigenciasAtivos[cat] && DADOS_SISTEMA.categorias[cat]) {
+				// Only add if not already added by an exigency and category exists
 				adicionarCategoria(cat);
 			}
 		});
 	}
 
-
 	// Also re-add any categories that were selected but had no exigencies
-	if (data.categoriasSelecionadas && Array.isArray(data.categoriasSelecionadas)) {
-		data.categoriasSelecionadas.forEach(cat => {
-			if (!camposDeExigenciasAtivos[cat] && DADOS_SISTEMA.categorias[cat]) { // Only add if not already added by an exigency and category exists
+	if (
+		data.categoriasSelecionadas &&
+		Array.isArray(data.categoriasSelecionadas)
+	) {
+		data.categoriasSelecionadas.forEach((cat) => {
+			if (!camposDeExigenciasAtivos[cat] && DADOS_SISTEMA.categorias[cat]) {
+				// Only add if not already added by an exigency and category exists
 				adicionarCategoria(cat);
 			}
 		});
@@ -2221,13 +2375,19 @@ function preencherFormulario(data) {
 document.getElementById("btnExcluir").addEventListener("click", () => {
 	const processoInput = document.getElementById("processoBusca");
 	if (!processoInput) {
-		Utils.showToast("Nenhum processo carregado para excluir (campo de processo não encontrado).", "warning");
+		Utils.showToast(
+			"Nenhum processo carregado para excluir (campo de processo não encontrado).",
+			"warning"
+		);
 		return;
 	}
 	const processo = processoInput.value;
 
 	if (!processo || processo.length !== 22) {
-		Utils.showToast("Nenhum processo completo carregado para excluir.", "warning");
+		Utils.showToast(
+			"Nenhum processo completo carregado para excluir.",
+			"warning"
+		);
 		return;
 	}
 
@@ -2235,10 +2395,10 @@ document.getElementById("btnExcluir").addEventListener("click", () => {
 		localStorage.removeItem(`processo-${processo}`);
 		Utils.showToast("Processo excluído!", "success");
 		// Clear the form after deletion
-		document.querySelector('form').reset();
-		document.getElementById('tituloLaudo').className = 'display-6'; // Reset title style
-		document.getElementById('exigenciasContainer').innerHTML = '';
-		document.getElementById('badgesCategorias').innerHTML = '';
+		document.querySelector("form").reset();
+		document.getElementById("tituloLaudo").className = "display-6"; // Reset title style
+		document.getElementById("exigenciasContainer").innerHTML = "";
+		document.getElementById("badgesCategorias").innerHTML = "";
 		camposDeExigenciasAtivos = {};
 		document.getElementById("retornoNao").checked = true; // Set default radio
 		window.location.href = "index.html";
@@ -2251,12 +2411,15 @@ document.getElementById("btnGerar").addEventListener("click", () => {
 
 	// Salva os dados do formulário no localStorage
 	// 'dadosRelatorio' é a chave que usaremos no relatorio.html para recuperar os dados
-	localStorage.setItem('dadosRelatorio', JSON.stringify(dadosDoFormulario));
+	localStorage.setItem("dadosRelatorio", JSON.stringify(dadosDoFormulario));
 
 	// Redireciona para a página do relatório
-	window.location.href = 'relatorio.html';
+	window.location.href = "relatorio.html";
 
 	// Os consoles e toasts de "dados enviados para o console" não são mais necessários aqui
 	console.log("Dados coletados para o relatório:", dadosDoFormulario);
-	Utils.showToast("Dados do formulário enviados para o console (F12 > Console).", "info");
+	Utils.showToast(
+		"Dados do formulário enviados para o console (F12 > Console).",
+		"info"
+	);
 });
