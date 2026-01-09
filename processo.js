@@ -875,8 +875,8 @@ const DADOS_SISTEMA = {
 			"06.016 - O reservatório de água destinada à RTI - Reserva Técnica de Incêndio, deve ser resistente a 04 horas de fogo e superior, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.017 - O reservatório quando externo metálico ou de polietileno deve ter distanciamento mínimo de 03 m da edificação, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.018 - Apresentar reservatório superior ou apresentar dados que justifiquem a utilização de reservatório inferior, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"06.019 - A saída de consumo do reservatório superior deve sair lateralmente a esta, de forma a manter a RTI - Reserva Técnica de Incêndio, pela diferença do nível da canalização da saída e o fundo da caixa d'água, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"06.020 - A canalização do dreno de limpeza da caixa d'água deve ser metálica no mínimo até o registro.",
+			"06.019 - A saída de consumo do reservatório superior deve sair lateralmente a esta, de forma a manter a RTI - Reserva Técnica de Incêndio, pela diferença do nível da canalização da saída e o fundo da caixa d água, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+			"06.020 - A canalização do dreno de limpeza da caixa d água deve ser metálica no mínimo até o registro.",
 			"06.021 - A altura do reservatório elevado ou a capacidade das bombas deverá suprir a vazão e pressão mínima exigida, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.022 - Deve ser instalado no mínimo 02 bombas de incêndio, sendo uma principal e outra reserva ambas com as mesmas especificações, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.023 - Instalar válvula de retenção e derivação 'by pass' na rede hidráulica de incêndio a fim de garantir o funcionamento do sistema por gravidade, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -894,7 +894,7 @@ const DADOS_SISTEMA = {
 			"06.035 - O conjunto de bombas deve ser instalado de forma que na falha da bomba principal, a bomba reserva entre em funcionamento automaticamente, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.036 - As bombas de incêndio devem possuir dispositivos que possibilitem o acionamento manual, de acordo a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.037 - As bombas de incêndio devem funcionar manualmente, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"06.038 - As bombas de incêndio que não estiverem situadas abaixo do nível de tomada d'água (afogadas) devem ter um dispositivo de escorva automática, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+			"06.038 - As bombas de incêndio que não estiverem situadas abaixo do nível de tomada d água (afogadas) devem ter um dispositivo de escorva automática, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.039 - O material utilizado nas canalizações, conexões e registros utilizados no sistema de hidrante devem ser de ferro fundido, galvanizado, aço galvanizado e cobre resistentes às pressões internas e esforços mecânicos, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.040 - Alterar o diâmetro da canalização (50 mm para A e B-1 e 63 mm para demais riscos), de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.041 - A canalização do barrilete deve ser um diâmetro nominal acima do diâmetro da canalização utilizada no sistema, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -913,7 +913,7 @@ const DADOS_SISTEMA = {
 			"06.054 - Manutenir o hidrante de recalque que se encontra danificado de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.055 - A pressão na saída do requinte nos hidrantes deve ser entre 10 e 40 mca, de acordo com a NT04/2000CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.056 - A vazão mínima no requinte deve estar de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"06.057 - O jato d'água deve atingir a uma distância mínima de 10 m, com o esguicho na posição horizontal a 01 m de altura, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+			"06.057 - O jato d água deve atingir a uma distância mínima de 10 m, com o esguicho na posição horizontal a 01 m de altura, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.058 - Os abrigos dos hidrantes não podem ser fechados por chaves ou cadeados, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.059 - Os esguichos dos hidrantes de parede devem ser do tipo reguláveis de acordo com o a NT04/2000CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"06.060 - Os registros dos hidrantes devem ser do tipo globo com adaptador para junta storz de 38 ou 63 mm, onde serão estabelecidas as linhas de mangueiras, de acordo com a NT04/2000-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1162,7 +1162,7 @@ const DADOS_SISTEMA = {
 			"10.008 - A instalação de chuveiros automáticos em edificações onde não exista obrigatoriedade do dimensionamento do sistema ou quando este for apresentado ou proposto como solução técnica alternativa, deverá atender às demais exigências de dimensionamento previstas nas normas aplicáveis, de acordo com o item 5.10 da NT/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.009 - É obrigatório a instalação de chuveiros automáticos em casa de máquinas, casa de bombas de incêndio, sala de gerador e similares, onde haja exclusivamente equipamentos elétricos energizados, ou substituíção por outros sistemas automáticos de combate a incêndio, de acordo com o item 5.11 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.010 - As áreas destinadas a equipamentos de tecnologia da informação localizadas no interior das edificações e superiores a 40 m2 deverão ser protegidas por chuveiros automáticos. Quando limitada a 40 m2, com compartimentação entre essas áreas e os ambientes adjacentes, o sistema pode ser substituído pela instalação de outros sistemas automáticos de combate a incêndio, de acordo com o item 5.11.1 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"10.011 - Para o correto funcionamento o sistema deve conter no mínimo os seguintes componentes: reservatório d'água, conjunto de bombas, linha com dispositivos de automatização, válvula de governo e alarme, conexão de teste de alarme, tomada de recalque, tubulações e chuveiros automáticos, de acordo com o item 5.12 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+			"10.011 - Para o correto funcionamento o sistema deve conter no mínimo os seguintes componentes: reservatório d água, conjunto de bombas, linha com dispositivos de automatização, válvula de governo e alarme, conexão de teste de alarme, tomada de recalque, tubulações e chuveiros automáticos, de acordo com o item 5.12 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.012 - A área máxima de proteção da coluna principal por pavimento, para o Risco Leve, deve ser de 4.800 m² para pavimento projetado hidraulicamente ou por tabela, de acordo com a tabela 2 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.013 - A área máxima de proteção da coluna principal por pavimento, para os Riscos Ordinário I e II, deve ser de 4.800 m² para pavimento projetado hidraulicamente ou por tabela, de acordo com a tabela 2 da NT13/2021- CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.014 - A área máxima de proteção da coluna principal por pavimento, para os Riscos Extraordinários I e II será de 3.700 m² para pavimento projetado hidraulicamente e 2.300 m² se projetado por tabela, de acordo com a tabela 2 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1188,7 +1188,7 @@ const DADOS_SISTEMA = {
 			"10.034 - O acesso ao interior do ambiente do reservatório deve ser limitado por porta corta fogo com resistência de 2 horas, de acordo com o item 6.2.1.2 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.035 - O sistema de proteção por chuveiros automáticos deve possuir volume de água exclusivo em reservatório de operação automática, podendo ser proporcionado por meio de reservatório elevado, com fundo elevado ou com fundo ao nível do solo, de acordo com o item 6.2.2 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.036 - O sistema de chuveiros automáticos composto por reservas técnicas de incêndio em reservatórios independentes, deverão ser interligados por barrilete com a saída ligada ao conjunto de bombas de incêndio, de acordo com o item 6.2.3 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"10.037 - A canalização de consumo deverá ser instalada na lateral da caixa d'água, a níveis mais elevados, de forma a garantir a capacidade efetiva para a RTI mínima definida para o sistema, quando o reservatório para o sistema de chuveiros automáticos for destinado também o para consumo predial, de acordo com o item 6.2.4, da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+			"10.037 - A canalização de consumo deverá ser instalada na lateral da caixa d água, a níveis mais elevados, de forma a garantir a capacidade efetiva para a RTI mínima definida para o sistema, quando o reservatório para o sistema de chuveiros automáticos for destinado também o para consumo predial, de acordo com o item 6.2.4, da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.038 - A reserva técnica de incêndio (RTI) dos reservatórios deve ser mantida automática e permanentemente, de acordo com o item 6.2.5 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.039 - A RTI deve ser localizada e assistida de maneira a fornecer as vazões e pressões mínimas requeridas nas válvulas de governo e alarme, bem como nos chuveiros automáticos de maior demanda, de acordo com o item 6.2.5 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.040 - O dimensionamento do volume da reserva técnica de incêndio deve ser calculado em função da demanda hidráulica e do tempo de funcionamento para o risco identificados na área de projeto, de acordo com o item 6.2.6 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1831,32 +1831,33 @@ function adicionarExigencia(categoria, exigencia) {
 }
 
 function removerExigencia(categoria, encodedExigenciaId, exigenciaValue) {
-	if (camposDeExigenciasAtivos[categoria]) {
-		const index = camposDeExigenciasAtivos[categoria].indexOf(exigenciaValue);
-		if (index > -1) {
-			camposDeExigenciasAtivos[categoria].splice(index, 1);
-			// Remove the tag element by its ID
-			document
-				.getElementById(`tag-${categoria}-${encodedExigenciaId}`)
-				?.remove();
+    if (camposDeExigenciasAtivos[categoria]) {
+        const index = camposDeExigenciasAtivos[categoria].indexOf(exigenciaValue);
+        if (index > -1) {
+            camposDeExigenciasAtivos[categoria].splice(index, 1);
+            
+            // Remove a tag visual
+            document.getElementById(`tag-${categoria}-${encodedExigenciaId}`)?.remove();
 
-			// Remove all hidden inputs with this specific exigency value
-			document
-				.querySelectorAll(
-					`input[name="exigencias[]"][value="${exigenciaValue}"]`
-				)
-				.forEach((input) => input.remove());
+            // CORREÇÃO AQUI: Remove os inputs escondidos comparando o valor diretamente
+            // em vez de injetar a string no seletor
+            document.querySelectorAll('input[name="exigencias[]"]')
+                .forEach((input) => {
+                    if (input.value === exigenciaValue) {
+                        input.remove();
+                    }
+                });
 
-			// Re-setup do autocomplete para atualizar a lista (adicionar a exigência de volta)
-			const autocompleteInput = document.querySelector(
-				`#exigencias-categoria-${categoria} .exigencia-autocomplete`
-			);
-			if (autocompleteInput) {
-				const event = new Event("input", { bubbles: true, cancelable: true });
-				autocompleteInput.dispatchEvent(event);
-			}
-		}
-	}
+            // Re-setup do autocomplete...
+            const autocompleteInput = document.querySelector(
+                `#exigencias-categoria-${categoria} .exigencia-autocomplete`
+            );
+            if (autocompleteInput) {
+                const event = new Event("input", { bubbles: true, cancelable: true });
+                autocompleteInput.dispatchEvent(event);
+            }
+        }
+    }
 }
 
 function setupAutocomplete(inputElement, categoria) {
