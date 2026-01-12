@@ -2045,7 +2045,7 @@ function salvarAutomaticamente() {
 	}
 	const dados = coletarDadosDoFormulario();
 	localStorage.setItem(`processo-${processo}`, JSON.stringify(dados));
-	// Utils.showToast("Dados salvos automaticamente!", "success");
+
 	console.log("Auto-salvo:", processo);
 }
 
@@ -2167,41 +2167,69 @@ document.getElementById("btnSalvar").addEventListener("click", () => {
 });
 
 function coletarDadosDoFormulario() {
-	const exigencias = [];
-	document.querySelectorAll('input[name="exigencias[]"]').forEach((input) => {
-		exigencias.push(input.value);
-	});
+    // 1. Coleta todas as exigências diretamente da tela para garantir que salva
+    const listaExigenciasOrdenada = [];
+    
+    // Procuramos todos os cards de categoria no container
+    const cardsCategorias = Array.from(document.querySelectorAll('#exigenciasContainer .card'));
 
-	const categoriasSelecionadas = Object.keys(camposDeExigenciasAtivos);
-	return {
-		processoBusca: document.getElementById("processoBusca")?.value || "",
-		cnpj: document.getElementById("cnpj")?.value || "",
-		instituicao:
-			document.getElementById("instituicao")?.value.toUpperCase() || "",
-		endereco: document.getElementById("endereco")?.value.toUpperCase() || "",
-		localizacao: document.getElementById("localizacao")?.value || "",
-		ocupacao: document.getElementById("ocupacao")?.value || "",
-		//grupo: document.getElementById("grupo")?.value || "",
-		area: document.getElementById("area")?.value || "",
-		altura: document.getElementById("altura")?.value || "",
-		pavimentos: document.getElementById("pavimentos")?.value || "",
-		responsavel:
-			document.getElementById("responsavel")?.value.toUpperCase() || "",
-		tipo: document.getElementById("tipo")?.value || "",
-		inicio: document.getElementById("inicio")?.value || "",
-		fim: document.getElementById("fim")?.value || "",
-		retorno: document.getElementById("retornoSim")?.checked || false,
-		acompanhante:
-			document.getElementById("acompanhante")?.value.toUpperCase() || "",
-		//cpf: document.getElementById("cpf")?.value || "",
-		funcao: document.getElementById("funcao")?.value.toUpperCase() || "",
-		status: document.getElementById("status")?.value || "",
-		observacao: document.getElementById("observacao")?.value || "",
-		categoriasSelecionadas: categoriasSelecionadas,
-		exigencias: exigencias,
-		anotacoesDoProcesso: anotacoesDoProcesso,
-		checkConcluido: document.getElementById("checkConcluido").checked,
-	};
+    // Ordenamos os cards pelo código da categoria (data-categoria ou extraindo do título)
+    cardsCategorias.sort((a, b) => {
+        const catA = a.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+        const catB = b.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+        return parseInt(catA) - parseInt(catB);
+    });
+
+    // Percorremos os cards ordenados e pegamos os inputs dentro deles
+    cardsCategorias.forEach(card => {
+        const inputs = Array.from(card.querySelectorAll('input[name="exigencias[]"]'));
+        
+        // Ordenamos os inputs dentro da categoria (ex: 1.001 antes de 1.002)
+        inputs.sort((a, b) => {
+            // Tenta pegar o código do texto (ex: "1.001 A edificação...")
+            const codA = a.value.split(' ')[0].replace(',', '.');
+            const codB = b.value.split(' ')[0].replace(',', '.');
+            return parseFloat(codA) - parseFloat(codB);
+        });
+
+        inputs.forEach(input => {
+            if (input.value) listaExigenciasOrdenada.push(input.value);
+        });
+    });
+
+    // Se a lista acima falhar (container vazio), tentamos o método padrão antigo como último recurso
+    if (listaExigenciasOrdenada.length === 0) {
+        document.querySelectorAll('input[name="exigencias[]"]').forEach(i => listaExigenciasOrdenada.push(i.value));
+    }
+
+    // 2. Montamos o objeto de retorno
+    return {
+        processoBusca: document.getElementById("processoBusca")?.value || "",
+        cnpj: document.getElementById("cnpj")?.value || "",
+        instituicao: document.getElementById("instituicao")?.value.toUpperCase() || "",
+        endereco: document.getElementById("endereco")?.value.toUpperCase() || "",
+        localizacao: document.getElementById("localizacao")?.value || "",
+        ocupacao: document.getElementById("ocupacao")?.value || "",
+        area: document.getElementById("area")?.value || "",
+        altura: document.getElementById("altura")?.value || "",
+        pavimentos: document.getElementById("pavimentos")?.value || "",
+        responsavel: document.getElementById("responsavel")?.value.toUpperCase() || "",
+        tipo: document.getElementById("tipo")?.value || "",
+        inicio: document.getElementById("inicio")?.value || "",
+        fim: document.getElementById("fim")?.value || "",
+        retorno: document.getElementById("retornoSim")?.checked || false,
+        acompanhante: document.getElementById("acompanhante")?.value.toUpperCase() || "",
+        funcao: document.getElementById("funcao")?.value.toUpperCase() || "",
+        status: document.getElementById("status")?.value || "",
+        observacao: document.getElementById("observacao")?.value || "",
+        
+        // Dados fundamentais
+        categoriasSelecionadas: Object.keys(camposDeExigenciasAtivos || {}).sort((a,b) => parseInt(a)-parseInt(b)),
+        exigencias: listaExigenciasOrdenada, // A lista agora está garantida e ordenada
+        
+        anotacoesDoProcesso: typeof anotacoesDoProcesso !== 'undefined' ? anotacoesDoProcesso : {},
+        checkConcluido: document.getElementById("checkConcluido")?.checked || false
+    };
 }
 
 function preencherFormulario(data) {
