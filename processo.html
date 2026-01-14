@@ -108,8 +108,8 @@
 					<div class="col-md-8">
 						<label for="endereco" class="form-label">Endereço Completo <span
 								class="text-danger">*</span></label>
-						<input type="text" class="form-control text-uppercase" id="endereco"
-							placeholder="Rua, número, bairro, cidade - UF" required />
+						<textarea class="form-control text-uppercase" id="endereco"
+							placeholder="Rua, número, bairro, cidade - UF" required></textarea>
 						<div class="invalid-feedback">
 							Por favor, informe o endereço completo.
 						</div>
@@ -125,7 +125,7 @@
 								<i class="bi bi-geo-alt-fill"></i>
 							</button>
 						</div>
-						<div class="form-text">
+						<div id="msgLocalizacao" class="form-text">
 							Clique no botão para obter sua localização atual
 						</div>
 					</div>

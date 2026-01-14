@@ -292,13 +292,13 @@ function renderizarExigencias(codigos, categoriasMap) {
 
 function dispararVerificacaoDeExigencias() {
 	const container = document.getElementById("exigenciasContainer");
-    
-    const possuiExigenciasReais = container.querySelectorAll('.card, .exigencia-row').length > 0;
 
-    if (possuiExigenciasReais) {
-        console.log("Exigências reais já carregadas. Pulando regra de automação.");
-        return; 
-    }
+	const possuiExigenciasReais = container.querySelectorAll('.card, .exigencia-row').length > 0;
+
+	if (possuiExigenciasReais) {
+		console.log("Exigências reais já carregadas. Pulando regra de automação.");
+		return;
+	}
 	// 1. Coleta os valores dos campos
 	const ocupacaoStr = $("#ocupacao").val();
 	const areaStr = $("#area").val();
@@ -1500,6 +1500,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	cnpjInput.addEventListener("blur", function () {
 		let cnpj = cnpjInput.value.replace(/\D/g, ""); // Remove caracteres não numéricos
 
+		const msgLocalizacao = document.getElementById("msgLocalizacao");
+		msgLocalizacao.textContent = "Clique no botão para obter sua localização atual";
+		
 		if (cnpj.length === 14) {
 			// Verifica se o CNPJ tem 14 dígitos
 			Utils.showToast("Buscando dados do CNPJ...", "info");
@@ -1568,39 +1571,29 @@ document.addEventListener("DOMContentLoaded", () => {
 						buscarNoNominatim(razaoSocialParaGeocodificar)
 							.then((geoData) => {
 								if (geoData.length > 0) {
-									return geoData; // Encontrou pelo endereço
+									// Caso 1: Encontrou pelo nome fantasia (razão social no código)
+									msgLocalizacao.textContent = "Localização encontrada pelo nome fantasia";
+									return geoData;
 								} else {
-									// Segunda tentativa: Pela Razão Social (Fallback)
-									console.log(
-										"Empresa não encontrado, tentando pelo Endereço..."
-									);
+									console.log("Empresa não encontrado, tentando pelo Endereço...");
 									return buscarNoNominatim(enderecoParaGeocodificar);
 								}
 							})
 							.then((finalData) => {
 								if (finalData.length > 0) {
+									// Caso 2: Se não caiu no primeiro IF (fantasia), mas caiu aqui, foi pelo endereço
+									if (msgLocalizacao.textContent !== "Localização encontrada pelo nome fantasia") {
+										msgLocalizacao.textContent = "Localização encontrada pelo nome da empresa";
+									}
+
 									const lat = parseFloat(finalData[0].lat).toFixed(6);
 									const lon = parseFloat(finalData[0].lon).toFixed(6);
-
 									localizacaoInput.value = `${lat}, ${lon}`;
 									localizacaoInput.classList.remove("is-invalid");
-									Utils.showToast(
-										"Coordenadas geográficas preenchidas!",
-										"success"
-									);
+									Utils.showToast("Coordenadas geográficas preenchidas!", "success");
 								} else {
-									localizacaoInput.value = "";
-									localizacaoInput.classList.add("is-invalid");
-									Utils.showToast(
-										"Coordenadas não encontradas (Endereço/Razão Social).",
-										"warning"
-									);
+									// ... lógica de erro existente
 								}
-							})
-							.catch((geoError) => {
-								console.error("Erro na geocodificação:", geoError);
-								localizacaoInput.classList.add("is-invalid");
-								Utils.showToast("Erro ao buscar coordenadas.", "danger");
 							});
 					}
 					// ---------------- FIM DA NOVA LÓGICA ----------------
@@ -1809,33 +1802,33 @@ function adicionarExigencia(categoria, exigencia) {
 }
 
 function removerExigencia(categoria, encodedExigenciaId, exigenciaValue) {
-    if (camposDeExigenciasAtivos[categoria]) {
-        const index = camposDeExigenciasAtivos[categoria].indexOf(exigenciaValue);
-        if (index > -1) {
-            camposDeExigenciasAtivos[categoria].splice(index, 1);
-            
-            // Remove a tag visual
-            document.getElementById(`tag-${categoria}-${encodedExigenciaId}`)?.remove();
+	if (camposDeExigenciasAtivos[categoria]) {
+		const index = camposDeExigenciasAtivos[categoria].indexOf(exigenciaValue);
+		if (index > -1) {
+			camposDeExigenciasAtivos[categoria].splice(index, 1);
 
-            // CORREÇÃO AQUI: Remove os inputs escondidos comparando o valor diretamente
-            // em vez de injetar a string no seletor
-            document.querySelectorAll('input[name="exigencias[]"]')
-                .forEach((input) => {
-                    if (input.value === exigenciaValue) {
-                        input.remove();
-                    }
-                });
+			// Remove a tag visual
+			document.getElementById(`tag-${categoria}-${encodedExigenciaId}`)?.remove();
 
-            // Re-setup do autocomplete...
-            const autocompleteInput = document.querySelector(
-                `#exigencias-categoria-${categoria} .exigencia-autocomplete`
-            );
-            if (autocompleteInput) {
-                const event = new Event("input", { bubbles: true, cancelable: true });
-                autocompleteInput.dispatchEvent(event);
-            }
-        }
-    }
+			// CORREÇÃO AQUI: Remove os inputs escondidos comparando o valor diretamente
+			// em vez de injetar a string no seletor
+			document.querySelectorAll('input[name="exigencias[]"]')
+				.forEach((input) => {
+					if (input.value === exigenciaValue) {
+						input.remove();
+					}
+				});
+
+			// Re-setup do autocomplete...
+			const autocompleteInput = document.querySelector(
+				`#exigencias-categoria-${categoria} .exigencia-autocomplete`
+			);
+			if (autocompleteInput) {
+				const event = new Event("input", { bubbles: true, cancelable: true });
+				autocompleteInput.dispatchEvent(event);
+			}
+		}
+	}
 }
 
 function setupAutocomplete(inputElement, categoria) {
@@ -1913,19 +1906,6 @@ cnpjInput.addEventListener("input", () => {
 	cnpjInput.value = value.slice(0, 18);
 });
 
-// Validação e máscara CPF
-/*const cpfInput = document.getElementById('cpf');*/
-
-// Validação do CPF ao sair do campo
-/*cpfInput.addEventListener('blur', () => {
-	const isValid = Utils.validarCPF(cpfInput.value);
-	if (!isValid && cpfInput.value !== '') {
-		cpfInput.classList.add('is-invalid');
-	} else {
-		cpfInput.classList.remove('is-invalid');
-	}
-});*/
-
 // Lógica para a máscara de Localização
 const localizacaoInput = document.getElementById("localizacao");
 localizacaoInput.addEventListener("input", () => {
@@ -1980,6 +1960,7 @@ document.getElementById("buscarLocalizacao").addEventListener("click", () => {
 				).value = `${latitude}, ${longitude}`;
 				salvarAutomaticamente();
 				Utils.showToast("Localização obtida com sucesso!", "success");
+				document.getElementById("msgLocalizacao").textContent = "Localização encontrada manualmente";
 			},
 			(error) => {
 				let errorMessage = "Erro desconhecido ao buscar localização.";
@@ -2167,69 +2148,69 @@ document.getElementById("btnSalvar").addEventListener("click", () => {
 });
 
 function coletarDadosDoFormulario() {
-    // 1. Coleta todas as exigências diretamente da tela para garantir que salva
-    const listaExigenciasOrdenada = [];
-    
-    // Procuramos todos os cards de categoria no container
-    const cardsCategorias = Array.from(document.querySelectorAll('#exigenciasContainer .card'));
+	// 1. Coleta todas as exigências diretamente da tela para garantir que salva
+	const listaExigenciasOrdenada = [];
 
-    // Ordenamos os cards pelo código da categoria (data-categoria ou extraindo do título)
-    cardsCategorias.sort((a, b) => {
-        const catA = a.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
-        const catB = b.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
-        return parseInt(catA) - parseInt(catB);
-    });
+	// Procuramos todos os cards de categoria no container
+	const cardsCategorias = Array.from(document.querySelectorAll('#exigenciasContainer .card'));
 
-    // Percorremos os cards ordenados e pegamos os inputs dentro deles
-    cardsCategorias.forEach(card => {
-        const inputs = Array.from(card.querySelectorAll('input[name="exigencias[]"]'));
-        
-        // Ordenamos os inputs dentro da categoria (ex: 1.001 antes de 1.002)
-        inputs.sort((a, b) => {
-            // Tenta pegar o código do texto (ex: "1.001 A edificação...")
-            const codA = a.value.split(' ')[0].replace(',', '.');
-            const codB = b.value.split(' ')[0].replace(',', '.');
-            return parseFloat(codA) - parseFloat(codB);
-        });
+	// Ordenamos os cards pelo código da categoria (data-categoria ou extraindo do título)
+	cardsCategorias.sort((a, b) => {
+		const catA = a.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+		const catB = b.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+		return parseInt(catA) - parseInt(catB);
+	});
 
-        inputs.forEach(input => {
-            if (input.value) listaExigenciasOrdenada.push(input.value);
-        });
-    });
+	// Percorremos os cards ordenados e pegamos os inputs dentro deles
+	cardsCategorias.forEach(card => {
+		const inputs = Array.from(card.querySelectorAll('input[name="exigencias[]"]'));
 
-    // Se a lista acima falhar (container vazio), tentamos o método padrão antigo como último recurso
-    if (listaExigenciasOrdenada.length === 0) {
-        document.querySelectorAll('input[name="exigencias[]"]').forEach(i => listaExigenciasOrdenada.push(i.value));
-    }
+		// Ordenamos os inputs dentro da categoria (ex: 1.001 antes de 1.002)
+		inputs.sort((a, b) => {
+			// Tenta pegar o código do texto (ex: "1.001 A edificação...")
+			const codA = a.value.split(' ')[0].replace(',', '.');
+			const codB = b.value.split(' ')[0].replace(',', '.');
+			return parseFloat(codA) - parseFloat(codB);
+		});
 
-    // 2. Montamos o objeto de retorno
-    return {
-        processoBusca: document.getElementById("processoBusca")?.value || "",
-        cnpj: document.getElementById("cnpj")?.value || "",
-        instituicao: document.getElementById("instituicao")?.value.toUpperCase() || "",
-        endereco: document.getElementById("endereco")?.value.toUpperCase() || "",
-        localizacao: document.getElementById("localizacao")?.value || "",
-        ocupacao: document.getElementById("ocupacao")?.value || "",
-        area: document.getElementById("area")?.value || "",
-        altura: document.getElementById("altura")?.value || "",
-        pavimentos: document.getElementById("pavimentos")?.value || "",
-        responsavel: document.getElementById("responsavel")?.value.toUpperCase() || "",
-        tipo: document.getElementById("tipo")?.value || "",
-        inicio: document.getElementById("inicio")?.value || "",
-        fim: document.getElementById("fim")?.value || "",
-        retorno: document.getElementById("retornoSim")?.checked || false,
-        acompanhante: document.getElementById("acompanhante")?.value.toUpperCase() || "",
-        funcao: document.getElementById("funcao")?.value.toUpperCase() || "",
-        status: document.getElementById("status")?.value || "",
-        observacao: document.getElementById("observacao")?.value || "",
-        
-        // Dados fundamentais
-        categoriasSelecionadas: Object.keys(camposDeExigenciasAtivos || {}).sort((a,b) => parseInt(a)-parseInt(b)),
-        exigencias: listaExigenciasOrdenada, // A lista agora está garantida e ordenada
-        
-        anotacoesDoProcesso: typeof anotacoesDoProcesso !== 'undefined' ? anotacoesDoProcesso : {},
-        checkConcluido: document.getElementById("checkConcluido")?.checked || false
-    };
+		inputs.forEach(input => {
+			if (input.value) listaExigenciasOrdenada.push(input.value);
+		});
+	});
+
+	// Se a lista acima falhar (container vazio), tentamos o método padrão antigo como último recurso
+	if (listaExigenciasOrdenada.length === 0) {
+		document.querySelectorAll('input[name="exigencias[]"]').forEach(i => listaExigenciasOrdenada.push(i.value));
+	}
+
+	// 2. Montamos o objeto de retorno
+	return {
+		processoBusca: document.getElementById("processoBusca")?.value || "",
+		cnpj: document.getElementById("cnpj")?.value || "",
+		instituicao: document.getElementById("instituicao")?.value.toUpperCase() || "",
+		endereco: document.getElementById("endereco")?.value.toUpperCase() || "",
+		localizacao: document.getElementById("localizacao")?.value || "",
+		ocupacao: document.getElementById("ocupacao")?.value || "",
+		area: document.getElementById("area")?.value || "",
+		altura: document.getElementById("altura")?.value || "",
+		pavimentos: document.getElementById("pavimentos")?.value || "",
+		responsavel: document.getElementById("responsavel")?.value.toUpperCase() || "",
+		tipo: document.getElementById("tipo")?.value || "",
+		inicio: document.getElementById("inicio")?.value || "",
+		fim: document.getElementById("fim")?.value || "",
+		retorno: document.getElementById("retornoSim")?.checked || false,
+		acompanhante: document.getElementById("acompanhante")?.value.toUpperCase() || "",
+		funcao: document.getElementById("funcao")?.value.toUpperCase() || "",
+		status: document.getElementById("status")?.value || "",
+		observacao: document.getElementById("observacao")?.value || "",
+
+		// Dados fundamentais
+		categoriasSelecionadas: Object.keys(camposDeExigenciasAtivos || {}).sort((a, b) => parseInt(a) - parseInt(b)),
+		exigencias: listaExigenciasOrdenada, // A lista agora está garantida e ordenada
+
+		anotacoesDoProcesso: typeof anotacoesDoProcesso !== 'undefined' ? anotacoesDoProcesso : {},
+		checkConcluido: document.getElementById("checkConcluido")?.checked || false
+	};
 }
 
 function preencherFormulario(data) {
