@@ -202,6 +202,7 @@ const regrasInclusao = {
 			check: (h, a) => h > 9 || a > 1200,
 		},
 		{ grupos: [36], check: (h, a) => h > 12 || a > 2000 },
+		{ grupos: [40], check: (h, a) => h > 0 || a > 0 },
 	],
 };
 
