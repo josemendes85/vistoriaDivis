@@ -2191,6 +2191,7 @@ function coletarDadosDoFormulario() {
 		instituicao: document.getElementById("instituicao")?.value.toUpperCase() || "",
 		endereco: document.getElementById("endereco")?.value.toUpperCase() || "",
 		localizacao: document.getElementById("localizacao")?.value || "",
+		msgLocalizacao: document.getElementById("msgLocalizacao")?.textContent || "",
 		ocupacao: document.getElementById("ocupacao")?.value || "",
 		area: document.getElementById("area")?.value || "",
 		altura: document.getElementById("altura")?.value || "",
@@ -2221,6 +2222,9 @@ function preencherFormulario(data) {
 	document.getElementById("instituicao").value = data.instituicao || "";
 	document.getElementById("endereco").value = data.endereco || "";
 	document.getElementById("localizacao").value = data.localizacao || "";
+	if (data.msgLocalizacao) {
+		document.getElementById("msgLocalizacao").textContent = data.msgLocalizacao;
+	}
 	document.getElementById("ocupacao").value = data.ocupacao || "";
 	//document.getElementById("grupo").value = data.grupo || "";
 	document.getElementById("area").value = data.area || "";
