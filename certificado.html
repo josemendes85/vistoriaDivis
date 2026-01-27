@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatório de Vistoria Único - CBMDF</title>
+    <style>
+        :root {
+            --primary-color: #b30000;
+            --secondary-color: #2c3e50;
+            --text-color: #333;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            color: var(--text-color);
+            line-height: 1.2;
+            margin: 0;
+            padding: 0;
+            background-color: #fff;
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        /* Container ajustado para 1 página A4 */
+        .page-container {
+            width: 100%;
+            /* Largura A4 */
+            margin: 0 auto;
+            padding: 15px 30px;
+            border-top: 12px solid var(--primary-color) !important;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Cabeçalho Compacto */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .logo-placeholder {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .header-title {
+            text-align: center;
+        }
+
+        .header-title h1 {
+            margin: 0;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .header-title p {
+            margin: 2px 0;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        /* Grid de Informações Otimizado */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .card {
+            background: #f8f9fa;
+            padding: 8px 12px;
+            border-left: 4px solid var(--primary-color);
+            border-radius: 4px;
+        }
+
+        .col-span-2 {
+            grid-column: span 2;
+        }
+
+        .col-span-3 {
+            grid-column: span 3;
+        }
+
+        .card h3 {
+            margin: 0;
+            font-size: 0.65rem;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .card p {
+            margin: 2px 0 0;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        /* Tabelas Compactas */
+        h4 {
+            margin: 10px 0 5px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            border-bottom: 1px solid #eee;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+        }
+
+        th,
+        td {
+            padding: 6px 10px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #f2f2f2;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+        }
+
+        /* Parecer Final Centralizado e Compacto */
+        .status-box {
+            padding: 15px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .status-box h3 {
+            margin: 0;
+            font-size: 0.8rem;
+        }
+
+        .status-box h2 {
+            margin: 5px 0;
+            font-size: 2.2rem;
+            letter-spacing: 3px;
+        }
+
+        .status-box p {
+            margin: 0;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .aprovado{
+            background: #e8f5e9 !important;
+            border: 2px solid #2e7d32;
+            color: #1b5e20;
+        }
+
+        .aprovado-condicionante{
+            background: #fff3e0 !important;
+            border: 2px solid #fb8c00;
+            color: #ef6c00;
+        }
+
+        .reprovado{
+            background: #ffebee !important;
+            border: 2px solid #c62828;
+            color: #b71c1c;
+        }
+
+        /* Rodapé fixo no fim da página */
+        .footer {
+            margin-top: auto;
+            padding-top: 10px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #777;
+        }
+
+        .signature-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        #clear-btn {
+            margin: 10px;
+            padding: 5px 15px;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+
+        /* Ajustes de Impressão para não cortar nada */
+        @media print {
+            @page {
+                size: A4;
+                margin: 0;
+                /* Controlado pelo padding do container */
+            }
+
+            body {
+                margin: 0;
+            }
+
+            .page-container {
+                height: 297mm;
+                /* Altura exata do A4 */
+                padding: 10mm 15mm;
+                border-top: 15px solid var(--primary-color) !important;
+            }
+
+            .status-box {
+                page-break-inside: avoid;
+            }
+
+            #clear-btn {
+                display: none;
+            }
+
+            /* Esconde o botão de limpar ao imprimir */
+            #signature-pad {
+                border: none !important;
+            }
+
+            /* Remove a borda do desenho na impressão */
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="page-container">
+        <div class="header-title"><h1>Relatório de Vistoria</h1></div>
+        
+        <div class="info-grid">
+            <div class="card col-span-2">
+                <h3>Evento</h3>
+                <p>NOME DO EVENTO</p>
+            </div>
+            <div class="card col-span-2">
+                <h3>Processo SEI</h3>
+                <p>00000-00000000/2026-00 </p>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="card col-span-3">
+                <h3>Endereço</h3>
+                <p style="font-size: 0.75rem;">ENDEREÇO COMPLETO, CIDADE-DF, CEP 70.000-000</p>
+            </div>
+            <div class="card">
+                <h3>Data do Evento</h3>
+                <p>14/01/2026</p>
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="card">
+                <h3>Público</h3>
+                <p>1000 Pessoas</p>
+            </div>
+            <div class="card">
+                <h3>Área Total</h3>
+                <p>4500 m²</p>
+            </div>
+            <div class="card col-span-2">
+                <h3>Responsável</h3>
+                <p>NOME DO RESPONSÁVEL</p>
+            </div>
+        </div>
+
+        <h4>Detalhes da Vistoria:</h4>
+        <table>
+            <thead>
+                <tr>
+                    <th>Descrição do Item</th>
+                    <th>Quantidade / Especificação</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Tendas</td>
+                    <td>04 unidades</td>
+                    <td>OK</td>
+                </tr>
+                <tr>
+                    <td>Extintores de Incêndio</td>
+                    <td>05 unidades (Validade OK)</td>
+                    <td>OK</td>
+                </tr>
+                <tr>
+                    <td>Brigada de Incêndio</td>
+                    <td>10 Brigadistas - NOME DA EMPRESA LTDA - EMP-B 000-00</td>
+                    <td>OK</td>
+                </tr>
+                <tr>
+                    <td>Food Trucks</td>
+                    <td>Não haverá no evento</td>
+                    <td>OK</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="status-box aprovado">
+            <h3>PARECER FINAL DA VISTORIA</h3>
+            <h2>APROVADO</h2>
+        </div>
+        
+        <div class="status-box aprovado-condicionante">
+            <h3>PARECER FINAL DA VISTORIA</h3>
+            <h2>APROVADO COM CONDICIONANTE</h2>
+            <p>Documento oficial emitido com as seguintes observações: </p>
+            <p>&nbsp;</p>
+        </div>
+        
+        <div class="status-box reprovado">
+            <h3>PARECER FINAL DA VISTORIA</h3>
+            <h2>REPROVADO</h2>
+        </div>
+    </div>
+
+</body>
+
+</html>

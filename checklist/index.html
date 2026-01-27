@@ -1,35 +1,41 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checklist de Segurança Contra Incêndio</title>
-    <link rel="stylesheet" href="cl_style.css"> 
+    <link rel="stylesheet" href="cl_style.css">
 </head>
+
 <body>
 
     <div class="controls">
         <div class="controls-inner">
             <div class="control-row">
                 <div class="control-group">
-                    <input type="text" id="search-input" onkeyup="searchChecklist(this.value)" placeholder="Digite para filtrar os itens...">
+                    <input type="text" id="search-input" onkeyup="searchChecklist(this.value)"
+                        placeholder="Digite para filtrar os itens...">
                 </div>
-                
+
                 <div class="control-group">
                     <select id="filter-select" onchange="filterChecklist(this.value)">
                     </select>
                 </div>
-                
-                <button id="copy-selected-btn" onclick="copySelectedItems()">Copiar Itens Selecionados (0)</button>
+
+                <button id="copy-selected-btn" onclick="copySelectedItems()">Copiar para Notificação (0)</button>
+                <button id="copy-table-btn" onclick="copyTableFormat()">Copiar para Retorno de Vistoria (0)</button>
+                <button id="reset-btn" onclick="clearSelection()">Redefinir Seleção</button>
             </div>
         </div>
     </div>
 
     <div id="checklist-container">
-        </div>
+    </div>
 
     <p id="copy-message" class="copy-success"></p>
 
-    <script src="cl_script.js"></script> 
+    <script src="cl_script.js"></script>
 </body>
+
 </html>

@@ -1584,7 +1584,7 @@ document.addEventListener("DOMContentLoaded", () => {
 								if (finalData.length > 0) {
 									// Caso 2: Se não caiu no primeiro IF (fantasia), mas caiu aqui, foi pelo endereço
 									if (msgLocalizacao.textContent !== "Localização encontrada pelo nome fantasia") {
-										msgLocalizacao.textContent = "Localização encontrada pelo nome da empresa";
+										msgLocalizacao.textContent = "Localização encontrada pelo endereço";
 									}
 
 									const lat = parseFloat(finalData[0].lat).toFixed(6);

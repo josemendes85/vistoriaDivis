@@ -36,8 +36,9 @@ body {
 /* Novo: Container para alinhar os elementos em linha no desktop */
 .control-row {
     display: flex;
-    flex-direction: column; /* Padrão Mobile: elementos empilhados */
-    gap: 10px; 
+    flex-wrap: wrap; /* Permite quebrar linha se não couber */
+    gap: 10px;
+    justify-content: center;
 }
 
 .control-group {
@@ -81,6 +82,50 @@ body {
 
 #copy-selected-btn:hover {
     background-color: #1b5e20;
+}
+
+#copy-table-btn:hover {
+    background-color: #1565c0;
+    transform: translateY(-2px);
+}
+
+#copy-table-btn {
+    padding: 10px 20px;
+    background-color: #1976d2; /* Uma cor azul para diferenciar do outro */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+    width: 0px;
+    /* Novo: Ajustes de alinhamento para o layout flex */
+    margin-top: 0;
+    min-height: 44px; /* Altura mínima para alinhar com os campos */
+    flex-shrink: 0;
+    flex-grow: 1.5;
+}
+
+#reset-btn {
+    padding: 10px 20px;
+    background-color: #f57c00; /* Cor laranja para o botão de reset */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s, transform 0.2s;
+    width: 0px;
+    /* Novo: Ajustes de alinhamento para o layout flex */
+    margin-top: 0;
+    min-height: 44px; /* Altura mínima para alinhar com os campos */
+    flex-shrink: 0;
+    flex-grow: 1.5;
+}
+
+#reset-btn:hover {
+    background-color: #ef6c00;
+    transform: translateY(-2px);
 }
 
 /* Estilo para o item quando estiver selecionado (clicado) */
@@ -166,8 +211,8 @@ body {
     }
 
     .control-row {
-        flex-direction: row; /* Desktop: Itens em linha */
-        align-items: flex-end; /* Alinha todos os itens pela base */
+        flex-direction: row;
+        align-items: center;
     }
 
     .control-group {
