@@ -1,15 +1,11 @@
 // 1. ATUALIZE A VERSÃO DO CACHE A CADA ALTERAÇÃO DE ARQUIVO
 // Mude esta string a cada vez que você fizer uma alteração nos arquivos cacheados.
-const CACHE_NAME = 'v8';
+const CACHE_NAME = 'v1.0.1';
 
 // Lista completa de arquivos para pré-cache, incluindo suas dependências
 const urlsToCache = [
   './',
   './index.html',
-  './processo.html',
-  './cl_index.html',
-  './coordenada_index.html',
-  './sobre.html',
   './manifest.json',
   './sw.js',
   './style.css',               // Arquivo CSS local (se existir)
