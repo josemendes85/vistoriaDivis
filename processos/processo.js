@@ -241,6 +241,11 @@ function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
 		const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
 		if (gruposDocD.includes(ocupacao) && area <= 1200.0 && altura <= 9.0)
 			selecionarDocumentacao = false;
+		
+		// 1.e) Grupos diversos com Area <= 1200 ou Altura <= 6
+		const gruposDocE = [13, 14, 15, 16, 17];
+		if (gruposDocE.includes(ocupacao) && area <= 1200.0 && altura <= 6.0)
+			selecionarDocumentacao = false;
 	}
 
 	if (selecionarDocumentacao) {
