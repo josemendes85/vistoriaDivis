@@ -241,7 +241,7 @@ function getExigenciasPadrao(ocupacaoStr, areaStr, alturaStr) {
 		const gruposDocD = [2, 6, 7, 8, 9, 10, 11, 12, 15, 36];
 		if (gruposDocD.includes(ocupacao) && area <= 1200.0 && altura <= 9.0)
 			selecionarDocumentacao = false;
-		
+
 		// 1.e) Grupos diversos com Area <= 1200 ou Altura <= 6
 		const gruposDocE = [13, 14, 15, 16, 17];
 		if (gruposDocE.includes(ocupacao) && area <= 1200.0 && altura <= 6.0)
@@ -299,7 +299,7 @@ function renderizarExigencias(codigos, categoriasMap) {
 function dispararVerificacaoDeExigencias() {
 	const container = document.getElementById("exigenciasContainer");
 
-	const possuiExigenciasReais = container.querySelectorAll('.card, .exigencia-row').length > 0;
+	const possuiExigenciasReais = container.querySelectorAll('input[name="exigencias[]"]').length > 0;
 
 	if (possuiExigenciasReais) {
 		console.log("Exigências reais já carregadas. Pulando regra de automação.");
@@ -1150,7 +1150,7 @@ const DADOS_SISTEMA = {
 			"10.012 - A área máxima de proteção da coluna principal por pavimento, para o Risco Leve, deve ser de 4.800 m² para pavimento projetado hidraulicamente ou por tabela, de acordo com a tabela 2 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.013 - A área máxima de proteção da coluna principal por pavimento, para os Riscos Ordinário I e II, deve ser de 4.800 m² para pavimento projetado hidraulicamente ou por tabela, de acordo com a tabela 2 da NT13/2021- CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.014 - A área máxima de proteção da coluna principal por pavimento, para os Riscos Extraordinários I e II será de 3.700 m² para pavimento projetado hidraulicamente e 2.300 m² se projetado por tabela, de acordo com a tabela 2 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"10.015 - Para as edificações de múltiplos pavimentos, a tubulação geral deve dispor de conexão setorial para dreno, ensaio e alarme em cada pavimento, de acordo com o item 5.15 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+			"10.015 - Para as edificações de múltiplos pavimentos, a tubulação geral deve dispor de conexão setorial para dreno, ensaio e alarme em cada pavimento, de acordo com o item 5.15 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.016 - Nas edificações com apenas um pavimento, a conexão de teste de alarme deve ser instalada nas tubulações gerais, de acordo com o item 5.15.1 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.017 - Deve ser considerado os limites de temperatura ambiente esperados na altura de instalação do chuveiro automático no teto para ocupação, relacionando-os com as temperaturas nominais de operação dos chuveiros automáticos de acordo com os limites de temperatura e cor do líquido do bulbo de vidro previsto na tabela 3, de acordo com o item 5.16 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.018 - A distância máxima permitida entre os chuveiros automáticos tipo spray de cobertura padrão deve estar de acordo com o valor indicado na Tabela 4, considerando o risco e demais características, de acordo com o item 6.1.1 da NT13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -1508,7 +1508,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		const msgLocalizacao = document.getElementById("msgLocalizacao");
 		msgLocalizacao.textContent = "Clique no botão para obter sua localização atual";
-		
+
 		if (cnpj.length === 14) {
 			// Verifica se o CNPJ tem 14 dígitos
 			Utils.showToast("Buscando dados do CNPJ...", "info");
@@ -1670,63 +1670,82 @@ document
  * Adiciona uma ou mais categorias de exigência à interface (como cards).
  * @param {string|string[]} categorias - Um único código de categoria (string) ou uma lista de códigos (array).
  */
+/**
+ * Adiciona uma ou mais categorias de exigência à interface (como cards).
+ * @param {string|string[]} categorias - Um único código de categoria (string) ou uma lista de códigos (array).
+ */
+/**
+ * Adiciona uma ou mais categorias de exigência à interface.
+ * Inclui ícone de alerta para a categoria 009 baseada em regras de área/altura.
+ */
 function adicionarCategoria(categorias) {
-	// 1. Normaliza a entrada: converte string (valor único) em array
-	const categoriasParaAdicionar = Array.isArray(categorias)
-		? categorias
-		: [categorias];
+	const categoriasParaAdicionar = Array.isArray(categorias) ? categorias : [categorias];
 
-	// 2. Itera sobre cada categoria e aplica a lógica de adição
 	categoriasParaAdicionar.forEach((categoria) => {
-		// Lógica original, agora aplicada a uma única 'categoria' por vez:
 		if (camposDeExigenciasAtivos[categoria]) return;
 
-		console.log("Adicionando categoria: ", categoria);
-
 		const container = document.getElementById("exigenciasContainer");
-		const spinnerElement = document.getElementById("algumIdDoSpinner");
 
-		// Remove a classe loading-spinner do container, que o tornava invisível
+		// --- 1. CORREÇÃO DO SPINNER (Para o ícone parar de girar) ---
 		container.classList.remove("loading-spinner");
-		// Torna o container visível
 		container.style.display = "block";
 
-		// Oculta o elemento do spinner
-		if (spinnerElement) {
-			spinnerElement.style.display = "none";
+		// Busca qualquer spinner do Bootstrap (border ou grow) e o remove/esconde
+		const spinners = document.querySelectorAll(".spinner-border, .spinner-grow");
+		spinners.forEach(s => s.style.display = "none");
+		// ------------------------------------------------------------
+
+		// --- 2. LÓGICA DO ÍCONE DE ALERTA PARA CATEGORIA 009 ---
+		let iconeAlerta = "";
+		if (categoria === "009") {
+			const ocupacao = parseInt($("#ocupacao").val(), 10) || 0;
+			const area = parseNumber($("#area").val()); // Usa a função parseNumber já existente
+			const altura = parseNumber($("#altura").val());
+
+			if (
+				[2].includes(ocupacao) && (altura > 60) ||
+				[3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 18, 19, 20, 21, 25, 26, 27, 28, 29, 32, 38].includes(ocupacao) && (altura > 12 || area > 5000) ||
+				[30, 31].includes(ocupacao) && (altura > 3 || area > 3000) ||
+				[17].includes(ocupacao) && (altura > 6 || area > 3000) ||
+				[22].includes(ocupacao) && (area > 500) ||
+				[23].includes(ocupacao) && (altura > 3 || area > 500) ||
+				[33, 37].includes(ocupacao) && (altura > 15 || area > 7000) ||
+				[34].includes(ocupacao) && (altura > 15 || area > 5000) ||
+				[35, 39].includes(ocupacao) && (altura > 12 || area > 3000) ||
+				[36].includes(ocupacao) && (altura > 15 || area > 10000)
+			) {
+				// Ícone de triângulo amarelo (Bootstrap Icons)
+				iconeAlerta = '<i class="bi bi-exclamation-triangle-fill text-warning me-2" title="Obrigatório pelos critérios de Área/Altura"></i>';
+			}
 		}
 
 		const divCategoria = document.createElement("div");
 		divCategoria.id = `exigencias-categoria-${categoria}`;
 		divCategoria.classList.add("card", "mb-3", "p-3");
 
+		// Inserção do iconeAlerta antes do título
 		divCategoria.innerHTML = `
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0">${DADOS_SISTEMA.categorias[categoria]}</h5>
-                <button type="button" class="btn-close-custom" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')">[X]</button>
-            </div>
-            <div class="mb-3">
-                <div class="autocomplete-container">
-                    <input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${DADOS_SISTEMA.categorias[categoria]}" data-categoria="${categoria}">
-                    <div class="autocomplete-list"></div>
-                </div>
-            </div>
-            <div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
-        `;
-		container.appendChild(divCategoria);
+			<div class="d-flex justify-content-between align-items-center mb-3">
+				<h5 class="mb-0">${DADOS_SISTEMA.categorias[categoria]}&nbsp;${iconeAlerta}</h5>
+				<button type="button" class="btn-close-custom" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')">[X]</button>
+			</div>
+			<div class="mb-3">
+				<div class="autocomplete-container">
+					<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${DADOS_SISTEMA.categorias[categoria]}" data-categoria="${categoria}">
+					<div class="autocomplete-list"></div>
+				</div>
+			</div>
+			<div id="exigencias-inputs-${categoria}" class="d-flex flex-wrap"></div>
+		`;
 
-		// Marca categoria como ativa, mesmo sem exigência
+		container.appendChild(divCategoria);
 		camposDeExigenciasAtivos[categoria] = [];
 
-		// Mostra como tag também
-		// Assumindo que 'adicionarBadgeCategoria' também pode estar disponível
 		if (typeof adicionarBadgeCategoria === "function") {
 			adicionarBadgeCategoria(categoria);
 		}
 
-		const autocompleteInput = divCategoria.querySelector(
-			".exigencia-autocomplete"
-		);
+		const autocompleteInput = divCategoria.querySelector(".exigencia-autocomplete");
 		setupAutocomplete(autocompleteInput, categoria);
 	});
 }
