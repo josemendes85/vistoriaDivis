@@ -27,7 +27,7 @@
                 <div class="row g-3">
                     <div class="col-md-4">
                         <label class="form-label">Número do Processo</label>
-                        <input type="text" class="form-control" id="processo" placeholder="00000-00000000/0000-00"
+                        <input type="tel" class="form-control" id="processo" placeholder="00000-00000000/0000-00"
                             required />
                     </div>
                     <div class="col-md-8">
@@ -796,6 +796,17 @@
 
     <script>
         $(document).ready(function () {
+
+            // Converte o valor para maiúsculas enquanto o usuário digita
+            $('input[type="text"]').on('input', function () {
+                this.value = this.value.toUpperCase();
+            });
+
+            // Opcional: Garante que ao sair do campo (blur), tudo esteja em maiúsculas
+            $('input[type="text"]').on('blur', function () {
+                this.value = this.value.toUpperCase();
+            });
+            
             // Máscara para o processo
             $("#processo").inputmask("99999-99999999/9999-99");
 
@@ -819,18 +830,18 @@
             }
 
             // Apply status color to title
-        function aplicarCorDoStatus(status) {
-            const titulo = document.getElementById("tituloLaudo");
-            // Remove existing status classes (e.g., status-pendente, status-aprovado)
-            titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
+            function aplicarCorDoStatus(status) {
+                const titulo = document.getElementById("tituloLaudo");
+                // Remove existing status classes (e.g., status-pendente, status-aprovado)
+                titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
 
-            const classe = Utils.formatarClasseStatus(status);
-            if (status) {
-                titulo.classList.add('text-light', classe);
-            } else {
-                titulo.classList.add('text-dark', 'status-sem-status'); // Default for no status
+                const classe = Utils.formatarClasseStatus(status);
+                if (status) {
+                    titulo.classList.add('text-light', classe);
+                } else {
+                    titulo.classList.add('text-dark', 'status-sem-status'); // Default for no status
+                }
             }
-        }
 
             // --- 2. FUNÇÃO CORE DE SALVAMENTO ---
             function processarFormulario(novoStatus) {
