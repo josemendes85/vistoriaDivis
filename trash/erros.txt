@@ -1,0 +1,77 @@
+
+Revendo com análise mais profunda:
+
+🔴 ERROS CRÍTICOS ENCONTRADOS
+1. ERROS GRAMATICAIS E TYPOS
+Linha	Erro	Correção
+01.005	"corrosão atmosféricas severa"	"corrosão atmosférica severa" (singular)
+01.008	"de acordo como o Item 5.4.3"	"de acordo com o Item 5.4.3"
+01.012	"NT 9/9022-CBMDF"	"NT 09/2022-CBMDF" (numeração estranha)
+02.026	"conforme alínea f do item 6.1.3 NT 22/2020"	precisa "da" antes de "NT"
+02.041	"nopiso onde deve estar localizados"	"no piso onde devem estar localizados"
+02.049	"Arts. 3º, III, b e 6º"	inconsistente com "Arts. 3º, III, b, e 6º" (falta vírgula)
+03.007	"noteto"	"no teto"
+03.008	"noteto"	"no teto"
+04.018	"fiquem familiarizados com a suas localizações"	"com as suas" ou "com sua"
+04.057	"Dever ser instalada"	"Deve ser instalada"
+04.065	"inexistência de algum componente"	redação confusa; esclarecer melhor
+05.087	"0,80 cm a 0,92 cm"	"0,80 m a 0,92 m" (não centímetros!)
+07.022	duplicação: "O espaçamento máximo entre os condutores de descidas da edificação, classificada no nível de proteção III..."	repete 07.021
+2. FALTA DE PONTUAÇÃO FINAL
+Item	Status
+01.013	❌ sem ponto final
+01.014	❌ sem ponto final
+01.015	❌ sem ponto final
+01.016	❌ sem ponto final
+01.017	❌ sem ponto final
+02.076	❌ sem ponto final
+03.041	❌ sem fechamento de parêntese
+04.050	❌ sem ponto final
+04.054	❌ parêntese não fechado
+04.058	❌ sem ponto final
+05.006	❌ sem ponto final
+05.007	❌ sem ponto final
+05.012	❌ sem ponto final
+06.020	❌ sem ponto final
+06.063	❌ sem ponto final
+06.073	❌ parêntese não fechado
+07.034	❌ sem ponto final
+08.018	❌ continua mas sem ponto final
+3. ESPAÇAMENTO INCONSISTENTE EM SIGLAS
+02.029, 02.030, 02.033, 02.035, 02.047: alguns têm "NT 22/2020- CBMDF" (espaço antes), outros "NT 22/2020-CBMDF" (sem espaço) → padronizar
+4. DUPLICIDADES E REDUNDÂNCIAS
+07.021 e 07.022: Ambos tratam "espaçamento máximo entre condutores de descida, nível de proteção III" — segunda está incorreta/duplicada
+01.005 e 01.006: SPDA com validadas diferentes (1 ano vs. 3 anos) — não é erro, mas poderia ser consolidado
+04.017 a 04.023: Repetem excessivamente "Os aparelhos extintores devem ser instalados de maneira que..."
+5. INCONSISTÊNCIAS DE REFERÊNCIA
+02.026 faz referência a "NT 22/2020-CBMDF" sem "da"; comparar com 02.001 que tem "da NT 22/2020-CBMDF"
+🔍 Principais problemas encontrados
+Aspas desnecessárias
+
+Diversos itens terminam com ")" (por exemplo, 01.001, 02.001, …).
+Isso não faz sentido num Markdown de lista e é inconsistente com outras linhas sem aspas.
+O item 02.076 deixa escapar a aspa de fechamento.
+Espaçamento irregular
+
+Há espaços indesejados em siglas:
+NT 22/2020- CBMDF (com espaço antes do traço) em 02.006 e novamente em 02.023.
+A forma correta seria NT 22/2020-CBMDF (sem espaço).
+Erros ortográficos/typos
+
+A palavra “noteto” aparece em 03.007 e 03.008; provavelmente tentativa de escrever “no teto” ou “no teto”.
+Em 02.041: “nopiso” em vez de “no piso”.
+Em 02.004: “simples limpeza” → talvez “simples limpeza” (sem quebra) – apenas observação menor.
+Em 03.014: “tempo máximo de interrupção de 3 segundos para comutação entre baterias alternativas” – a expressão “baterias alternativas” pode gerar ambiguidade; revisar se deveria ser “baterias auxiliares”.
+Concordância e gramática
+
+02.041: “piso onde deve estar localizado os referidos equipamentos” → localizados (plural).
+02.072: frase longa e confusa; vale revisar para clareza (“…podem ser pintadas… contudo, devem ser identificadas…”).
+Duplicidades ou itens muito próximos
+
+02.001 e 02.015 começam idênticos: “A sinalização de segurança contra incêndio e pânico deve ser instalada…” e remetem a normas diferentes. Podem ser consolidados se desejado.
+01.005 e 01.006 tratam ambos do laudo de SPDA com validade diferente; a justificativa pode ser explicitar a diferença em um único item.
+04.017 a 04.023 repetem a mesma estrutura “Os aparelhos extintores devem ser instalados de maneira que…”, cobrindo aspectos distintos. Não são verdadeiras duplicatas, mas a repetição do início pode ser simplificada.
+Pontuação e formatação
+
+Algumas linhas não têm ponto final; outras têm dois pontos ou variáveis no uso de parênteses.
+Ex.: 03.041 não fecha parêntese no final da frase.
