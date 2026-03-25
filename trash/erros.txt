@@ -60,18 +60,11 @@ Erros ortográficos/typos
 
 A palavra “noteto” aparece em 03.007 e 03.008; provavelmente tentativa de escrever “no teto” ou “no teto”.
 Em 02.041: “nopiso” em vez de “no piso”.
-Em 02.004: “simples limpeza” → talvez “simples limpeza” (sem quebra) – apenas observação menor.
 Em 03.014: “tempo máximo de interrupção de 3 segundos para comutação entre baterias alternativas” – a expressão “baterias alternativas” pode gerar ambiguidade; revisar se deveria ser “baterias auxiliares”.
 Concordância e gramática
 
 02.041: “piso onde deve estar localizado os referidos equipamentos” → localizados (plural).
-02.072: frase longa e confusa; vale revisar para clareza (“…podem ser pintadas… contudo, devem ser identificadas…”).
 Duplicidades ou itens muito próximos
-
-02.001 e 02.015 começam idênticos: “A sinalização de segurança contra incêndio e pânico deve ser instalada…” e remetem a normas diferentes. Podem ser consolidados se desejado.
-01.005 e 01.006 tratam ambos do laudo de SPDA com validade diferente; a justificativa pode ser explicitar a diferença em um único item.
-04.017 a 04.023 repetem a mesma estrutura “Os aparelhos extintores devem ser instalados de maneira que…”, cobrindo aspectos distintos. Não são verdadeiras duplicatas, mas a repetição do início pode ser simplificada.
-Pontuação e formatação
 
 Algumas linhas não têm ponto final; outras têm dois pontos ou variáveis no uso de parênteses.
 Ex.: 03.041 não fecha parêntese no final da frase.
