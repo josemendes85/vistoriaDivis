@@ -34,8 +34,8 @@
 									Número do Processo <span class="text-danger">*</span>
 								</label>
 								<div class="input-group">
-									<input type="tel" class="form-control" id="processoBusca"
-										placeholder="00000-00000000/0000-00" maxlength="25" required />
+									<input type="text" class="form-control" id="processoBusca"
+										placeholder="Digite o nome ou 00000-00000000/0000-00" maxlength="25" required />
 
 									<button class="btn btn-outline-secondary" type="button" id="buscarProcesso"
 										title="Buscar Processo">
@@ -74,7 +74,8 @@
 					<div class="col-md-1 d-flex justify-content-center align-items-center text-light rounded"
 						id="wazeContainer">
 						<a id="wazeLink" href="#" target="_blank" title="Localização Waze" class="location-link-full">
-							<img src="../icons/waze-brands-solid.svg" alt="Waze Icon" style="width: 60px; height: 60px" />
+							<img src="../icons/waze-brands-solid.svg" alt="Waze Icon"
+								style="width: 60px; height: 60px" />
 						</a>
 					</div>
 				</div>
@@ -263,7 +264,7 @@
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="form-section">
 				<h4 class="section-title">
 					<i class="bi bi-clipboard-check me-2"></i>Dados da Vistoria
@@ -384,8 +385,7 @@
 					<textarea rows="6" class="form-control" id="observacao"
 						placeholder="Descreva observações relevantes sobre a vistoria, condições encontradas, recomendações, etc."></textarea>
 					<div class="form-text">
-						Utilize este campo para registrar informações importantes sobre a
-						vistoria.
+						Utilize este campo para registrar informações importantes sobre a vistoria.
 					</div>
 				</div>
 			</div>
@@ -404,6 +404,12 @@
 					</button>
 					<button type="button" class="btn btn-danger" id="btnExcluir">
 						<i class="bi bi-trash me-1"></i>Excluir
+					</button>
+					<button type="button" id="btnCopiarAprovado" class="btn btn-success d-none">
+						<i class="bi bi-clipboard-check me-2"></i>Copiar Licença (SEI)
+					</button>
+					<button type="button" id="btnCopiarReprovado" class="btn btn-danger d-none">
+						<i class="bi bi-clipboard-x me-2"></i>Copiar Relatório Reprovado (SEI)
 					</button>
 				</div>
 

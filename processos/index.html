@@ -200,7 +200,6 @@
                     if (ordemSalva) {
                         const mapaProcessos = new Map(grupo.map(p => [p.processo, p]));
                         const grupoOrdenado = [];
-                        
                         // Adiciona processos na ordem salva
                         ordemSalva.forEach(processoNum => {
                             if (mapaProcessos.has(processoNum)) {
@@ -290,6 +289,7 @@
             const processos = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
+                console.log(`Verificando chave no localStorage: ${key}`);
                 if (key.startsWith('processo-')) {
                     try {
                         const data = JSON.parse(localStorage.getItem(key));
