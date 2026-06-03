@@ -102,6 +102,44 @@
         // Prefixo para salvar a ordem dos processos *dentro* de cada status
         const LOCAL_STORAGE_ITEM_ORDER_PREFIX = 'vistorias_process_item_order_'; 
 
+        /**
+         * Gera um identificador único para cada processo.
+         */
+        function generateId() {
+            return (typeof crypto !== 'undefined' && crypto.randomUUID)
+                ? crypto.randomUUID()
+                : 'p_' + Date.now() + '_' + Math.floor(Math.random() * 1000000);
+        }
+
+        /**
+         * Migra processos salvos no formato antigo (chave processo-[numero])
+         * para a estrutura com chave primária (chave processo-[id]).
+         */
+        function migrateProcessKeys() {
+            const keysToMigrate = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key && key.startsWith('processo-')) {
+                    const rawId = key.substring('processo-'.length);
+                    try {
+                        const data = JSON.parse(localStorage.getItem(key));
+                        if (data && !data.id) {
+                            keysToMigrate.push({ key, data, oldId: rawId });
+                        }
+                    } catch (e) {
+                        console.error("Erro ao parsear dados para migração da chave:", key, e);
+                    }
+                }
+            }
+            keysToMigrate.forEach(({ key, data, oldId }) => {
+                const newId = generateId();
+                data.id = newId;
+                localStorage.setItem(`processo-${newId}`, JSON.stringify(data));
+                localStorage.removeItem(key);
+                console.log(`Migrado: ${key} -> processo-${newId}`);
+            });
+        }
+
 
         /**
          * Retorna a ordem de status salva no localStorage ou a ordem padrão se não houver nenhuma.
@@ -198,13 +236,13 @@
                     // 1. Aplicar a ordem salva dos itens
                     const ordemSalva = getItemOrder(status);
                     if (ordemSalva) {
-                        const mapaProcessos = new Map(grupo.map(p => [p.processo, p]));
+                        const mapaProcessos = new Map(grupo.map(p => [p.id, p]));
                         const grupoOrdenado = [];
                         // Adiciona processos na ordem salva
-                        ordemSalva.forEach(processoNum => {
-                            if (mapaProcessos.has(processoNum)) {
-                                grupoOrdenado.push(mapaProcessos.get(processoNum));
-                                mapaProcessos.delete(processoNum); // Remove do mapa
+                        ordemSalva.forEach(processoId => {
+                            if (mapaProcessos.has(processoId)) {
+                                grupoOrdenado.push(mapaProcessos.get(processoId));
+                                mapaProcessos.delete(processoId); // Remove do mapa
                             }
                         });
 
@@ -218,9 +256,9 @@
                     
                     // Renderiza as linhas dos processos
                     const tbodyContent = grupo.map(item => `
-                        <tr class="drag-process" data-id="${item.processo}"> 
+                        <tr class="drag-process" data-id="${item.id}"> 
                             <td class="drag-handle-cell"><i class="bi bi-grip-vertical"></i></td>
-                            <td><a href="processo.html?processo=${encodeURIComponent(item.processo)}">${item.processo}</a></td>
+                            <td><a href="processo.html?id=${encodeURIComponent(item.id)}">${item.processo}</a></td>
                             <td>${item.instituicao || "-"}</td>
                             <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
                             <td>${item.tipo || "-"}</td>
@@ -286,6 +324,7 @@
          * Carrega os processos do localStorage, aplica filtros e os exibe no HTML.
          */
         function carregarEExibirProcessos() {
+            migrateProcessKeys();
             const processos = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
@@ -295,6 +334,7 @@
                         const data = JSON.parse(localStorage.getItem(key));
                         if (data && data.processoBusca && data.instituicao) {
                             processos.push({
+                                id: data.id || key.substring('processo-'.length),
                                 processo: data.processoBusca,
                                 instituicao: data.instituicao,
                                 inicio: data.inicio,
@@ -370,7 +410,7 @@
     <script>
     if ('serviceWorker' in navigator) {
     window.addEventListener('load', function () {
-        navigator.serviceWorker.register('/sw.js').then(function (registration) {
+        navigator.serviceWorker.register('../sw.js').then(function (registration) {
         console.log('Service Worker registrado com sucesso:', registration.scope);
         }, function (err) {
         console.log('Erro ao registrar o Service Worker:', err);
