@@ -52,17 +52,23 @@
 						</div>
 					</div>
 					<div class="col-md-3">
-						<label for="status" class="form-label">Status</label>
-						<select class="form-select" id="status">
-							<option value="">Selecione</option>
-							<option value="Pendente">Pendente</option>
-							<option value="Análise">Em Análise</option>
-							<option value="Vistoria">Em Vistoria</option>
-							<option value="Aprovado">Aprovado</option>
-							<option value="Reprovado">Reprovado</option>
-							<option value="Cancelado">Cancelado</option>
-							<option value="Não Realizada">Não Realizada</option>
+						<label for="tipo" class="form-label">Tipo de Vistoria <span class="text-danger">*</span></label>
+						<select class="form-select" id="tipo" required>
+							<option value="">Selecione o tipo</option>
+							<option value="RLE">
+								RLE - Registro de Licenciamento de Empresas
+							</option>
+							<option value="Relatório Técnico">Relatório Técnico</option>
+							<option value="Denúncia">Denúncia</option>
+							<option value="Inopinada">Vistoria Inopinada</option>
+							<option value="ADP">Análise de Dilação de Prazo</option>
+							<option value="DPV">Dilação de Prazo Vencida</option>
+							<option value="PPCI">PPCI - Plano de Prevenção</option>
+							<option value="Outros">Outros</option>
 						</select>
+						<div class="invalid-feedback">
+							Por favor, selecione o tipo de vistoria.
+						</div>
 					</div>
 					<div class="col-md-1 d-flex justify-content-center align-items-center text-light rounded"
 						id="googleMapsContainer">
@@ -279,23 +285,17 @@
 					</div>
 
 					<div class="col-md-4">
-						<label for="tipo" class="form-label">Tipo de Vistoria <span class="text-danger">*</span></label>
-						<select class="form-select" id="tipo" required>
-							<option value="">Selecione o tipo</option>
-							<option value="RLE">
-								RLE - Registro de Licenciamento de Empresas
-							</option>
-							<option value="Relatório Técnico">Relatório Técnico</option>
-							<option value="Denúncia">Denúncia</option>
-							<option value="Inopinada">Vistoria Inopinada</option>
-							<option value="ADP">Análise de Dilação de Prazo</option>
-							<option value="DPV">Dilação de Prazo Vencida</option>
-							<option value="PPCI">PPCI - Plano de Prevenção</option>
-							<option value="Outros">Outros</option>
+						<label for="status" class="form-label">Status</label>
+						<select class="form-select" id="status">
+							<option value="">Selecione</option>
+							<option value="Pendente">Pendente</option>
+							<option value="Análise">Em Análise</option>
+							<option value="Vistoria">Em Vistoria</option>
+							<option value="Aprovado">Aprovado</option>
+							<option value="Reprovado">Reprovado</option>
+							<option value="Cancelado">Cancelado</option>
+							<option value="Não Realizada">Não Realizada</option>
 						</select>
-						<div class="invalid-feedback">
-							Por favor, selecione o tipo de vistoria.
-						</div>
 					</div>
 
 					<div class="col-md-4">
@@ -309,17 +309,17 @@
 					</div>
 
 					<div class="col-md-4">
-						<label class="form-label">É retorno de vistoria?</label>
+						<label class="form-label" id="labelRetorno">É retorno de vistoria?</label>
 						<div class="d-flex gap-3 mt-2">
 							<div class="form-check">
 								<input class="form-check-input" type="radio" name="retorno" id="retornoSim"
 									value="sim" />
-								<label class="form-check-label" for="retornoSim">Sim</label>
+								<label class="form-check-label" for="retornoSim" id="labelRetornoSim">Sim</label>
 							</div>
 							<div class="form-check">
 								<input class="form-check-input" type="radio" name="retorno" id="retornoNao" value="nao"
 									checked />
-								<label class="form-check-label" for="retornoNao">Não</label>
+								<label class="form-check-label" for="retornoNao" id="labelRetornoNao">Não</label>
 							</div>
 						</div>
 					</div>

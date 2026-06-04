@@ -220,12 +220,24 @@
                         }
                     }
 
-                    // Renderizar outras observações (retornoSim/retornoNao e observacaoRetorno)
-                    if (dados.retornoSim || dados.retornoNao) {
+                    // Renderizar outras observações (retornoSim/retornoNao/retorno e observacaoRetorno)
+                    if (dados.retorno !== undefined || dados.retornoSim !== undefined || dados.retornoNao !== undefined) {
+                        const isRleAprovado = (dados.tipo === "RLE" && dados.status === "Aprovado");
+                        const sectionTitle = isRleAprovado ? "Licença Aprovada" : "Retorno de Visita";
+                        const labelTitle = isRleAprovado ? "Licença aprovada por:" : "Retorno Necessário:";
+                        
+                        let valueText = "-";
+                        const isSimOr1Ano = dados.retorno || dados.retornoSim;
+                        if (isRleAprovado) {
+                            valueText = isSimOr1Ano ? "1 ano" : "3 anos";
+                        } else {
+                            valueText = isSimOr1Ano ? "Sim" : "Não";
+                        }
+
                         reportContent.innerHTML += `
-                    <h4 class="report-section-title">Retorno de Visita</h4>
+                    <h4 class="report-section-title">${sectionTitle}</h4>
                     <div class="report-item">
-                        <strong>Retorno Necessário:</strong> ${dados.retornoSim ? 'Sim' : (dados.retornoNao ? 'Não' : '-')}
+                        <strong>${labelTitle}</strong> ${valueText}
                     </div>
                     ${formatField('Observação do Retorno', dados.observacaoRetorno)}
                 `;

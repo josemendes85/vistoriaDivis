@@ -48,34 +48,62 @@ $(document).ready(function () {
 	// 2. Opcional: Chama a função no carregamento, caso os campos já venham preenchidos (ex: com dados salvos)
 	setTimeout(dispararVerificacaoDeExigencias, 500);
 
-	// exibe botao do SEI caso aprovado
-	// Função para validar se o botão do SEI deve aparecer
-	function atualizarVisibilidadeBotaoSEI() {
-		const status = document.getElementById('status')?.value;
-		const tipo = document.getElementById('tipo')?.value;
-		const btnAprovado = document.getElementById('btnCopiarAprovado');
-		const btnReprovado = document.getElementById('btnCopiarReprovado');
+	// Adiciona os ouvintes de evento (listeners) nos dois campos
+	document.getElementById('status').addEventListener('change', () => {
+		atualizarVisibilidadeBotaoSEI();
+		atualizarLayoutRetorno();
+	});
+	document.getElementById('tipo').addEventListener('change', () => {
+		atualizarVisibilidadeBotaoSEI();
+		atualizarLayoutRetorno();
+	});
+	atualizarVisibilidadeBotaoSEI(); // Chama a função no carregamento para definir o estado inicial do botão
+	atualizarLayoutRetorno();
+});
 
-		if (!btnAprovado || !btnReprovado) return;
+// exibe botao do SEI caso aprovado
+// Função para validar se o botão do SEI deve aparecer
+function atualizarVisibilidadeBotaoSEI() {
+	const status = document.getElementById('status')?.value;
+	const tipo = document.getElementById('tipo')?.value;
+	const btnAprovado = document.getElementById('btnCopiarAprovado');
+	const btnReprovado = document.getElementById('btnCopiarReprovado');
 
-		// Reset: esconde ambos
-		btnAprovado.classList.add('d-none');
-		btnReprovado.classList.add('d-none');
+	if (!btnAprovado || !btnReprovado) return;
 
-		if (tipo === "RLE") {
-			if (status === "Aprovado") {
-				btnAprovado.classList.remove('d-none');
-			} else if (status === "Reprovado") {
-				btnReprovado.classList.remove('d-none');
-			}
+	// Reset: esconde ambos
+	btnAprovado.classList.add('d-none');
+	btnReprovado.classList.add('d-none');
+
+	if (tipo === "RLE") {
+		if (status === "Aprovado") {
+			btnAprovado.classList.remove('d-none');
+		} else if (status === "Reprovado") {
+			btnReprovado.classList.remove('d-none');
 		}
 	}
+}
 
-	// Adiciona os ouvintes de evento (listeners) nos dois campos
-	document.getElementById('status').addEventListener('change', atualizarVisibilidadeBotaoSEI);
-	document.getElementById('tipo').addEventListener('change', atualizarVisibilidadeBotaoSEI);
-	atualizarVisibilidadeBotaoSEI(); // Chama a função no carregamento para definir o estado inicial do botão
-});
+// Atualiza os rótulos do campo retorno com base no tipo e status da vistoria
+function atualizarLayoutRetorno() {
+	const status = document.getElementById('status')?.value;
+	const tipo = document.getElementById('tipo')?.value;
+	const labelRetorno = document.getElementById('labelRetorno');
+	const labelRetornoSim = document.getElementById('labelRetornoSim');
+	const labelRetornoNao = document.getElementById('labelRetornoNao');
+
+	if (!labelRetorno || !labelRetornoSim || !labelRetornoNao) return;
+
+	if (tipo === "RLE" && status === "Aprovado") {
+		labelRetorno.textContent = "Licença aprovada por:";
+		labelRetornoSim.textContent = "1 ano";
+		labelRetornoNao.textContent = "3 anos";
+	} else {
+		labelRetorno.textContent = "É retorno de vistoria?";
+		labelRetornoSim.textContent = "Sim";
+		labelRetornoNao.textContent = "Não";
+	}
+}
 
 // 3. Função principal de cópia formatada
 document.getElementById('btnCopiarAprovado').addEventListener('click', async () => {
@@ -101,10 +129,12 @@ document.getElementById('btnCopiarAprovado').addEventListener('click', async () 
 			funcao: document.getElementById('funcao')?.value.toUpperCase() || "---"
 		};
 
+		const licencaAnosText = document.getElementById("retornoSim")?.checked ? "1 ANO" : "3 ANOS";
+
 		const htmlSEI = `
 <p style="text-align:center"><span style="font-family:verdana, geneva, sans-serif"><strong><span style="font-size:14px">LICENÇA DE FUNCIONAMENTO</span></strong></span></p>
 <p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Vistoria referente ao estabelecimento denominado <strong>${dados.fantasia}</strong>, protocolado&nbsp;sob o número&nbsp;<strong>${dados.protocolo}</strong>.</span></span></p>
-<p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Informo-vos que o Requerimento do&nbsp;Registro de Licença de Funcionamento (RLE) do(a) <strong>${dados.fantasia}</strong>, CNPJ: <strong>${dados.cnpj}</strong>, situado no endereço <strong>${dados.endereco}</strong>, foi&nbsp;<strong><span style="color:#0000cd">APROVADO POR 3 ANOS</span></strong>, para as atividades descritas no Certificado de Licenciamento anexo ao requerimento.</span></span></p>
+<p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Informo-vos que o Requerimento do&nbsp;Registro de Licença de Funcionamento (RLE) do(a) <strong>${dados.fantasia}</strong>, CNPJ: <strong>${dados.cnpj}</strong>, situado no endereço <strong>${dados.endereco}</strong>, foi&nbsp;<strong><span style="color:#0000cd">APROVADO POR ${licencaAnosText}</span></strong>, para as atividades descritas no Certificado de Licenciamento anexo ao requerimento.</span></span></p>
 <p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Destinação Principal: ${dados.destinacao}<br>
 Grupo de Ocupação: ${dados.grupo}</span></span></p>
 <p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Acompanhou a vistoria no dia&nbsp;<strong>${dados.dataVistoria} às ${dados.horaVistoria}H&nbsp;</strong>no local acima,&nbsp; a Sr(a). <strong>${dados.acompanhante}</strong>, que desempenha a função de&nbsp;<strong>${dados.funcao}</strong>.</span></span></p>
@@ -1682,11 +1712,11 @@ const DADOS_SISTEMA = {
 
 let camposDeExigenciasAtivos = {}; // Para controlar quais categorias já estão ativas e suas exigências
 
-document.addEventListener("DOMContentLoaded", () => {
+$(document).ready(function () {
 	preencherSelectCategorias();
 	// Masking inputs
 	//$('#cpf').mask('000.000.000-00', { reverse: false });
-	$("#cnpj").mask("00.000.000/0000-00", { reverse: true });
+	$("#cnpj").mask("00.000.000/0000-00");
 	$("#areaConstruida").mask("000.000.000.000.000,00", { reverse: true });
 
 	// CNPJ Lookup Functionality
@@ -2145,16 +2175,7 @@ if (processoInput) {
 	});
 }
 
-// Máscara do CNPJ //00.000.000/0000-00
-const cnpjInput = document.getElementById("cnpj");
-cnpjInput.addEventListener("input", () => {
-	let value = cnpjInput.value.replace(/\D/g, "");
-	value = value.replace(/^(\d{2})(\d)/, "$1.$2");
-	value = value.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
-	value = value.replace(/\.(\d{3})(\d)/, ".$1/$2");
-	value = value.replace(/(\d{4})(\d)/, "$1-$2");
-	cnpjInput.value = value.slice(0, 18);
-});
+
 
 // Lógica para a máscara de Localização
 const localizacaoInput = document.getElementById("localizacao");
@@ -2415,6 +2436,8 @@ function buscarProcessoPorInput(evt) {
 		document.getElementById("badgesCategorias").innerHTML = "";
 		camposDeExigenciasAtivos = {};
 		document.getElementById("retornoNao").checked = true;
+		atualizarVisibilidadeBotaoSEI();
+		atualizarLayoutRetorno();
 
 		// Reseta o processoId para um novo ID
 		const idInput = document.getElementById("processoId");
@@ -2558,6 +2581,8 @@ function coletarDadosDoFormulario() {
 		inicio: document.getElementById("inicio")?.value || "",
 		fim: document.getElementById("fim")?.value || "",
 		retorno: document.getElementById("retornoSim")?.checked || false,
+		retornoSim: document.getElementById("retornoSim")?.checked || false,
+		retornoNao: document.getElementById("retornoNao")?.checked || false,
 		acompanhante: document.getElementById("acompanhante")?.value.toUpperCase() || "",
 		funcao: document.getElementById("funcao")?.value.toUpperCase() || "",
 		status: document.getElementById("status")?.value || "",
@@ -2725,6 +2750,8 @@ function preencherFormulario(data) {
 			}
 		});
 	}
+	atualizarVisibilidadeBotaoSEI();
+	atualizarLayoutRetorno();
 }
 
 // Botão EXCLUIR
