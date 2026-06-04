@@ -22,16 +22,13 @@
         body {
             padding-top: 56px; /* Altura padrão do navbar no Bootstrap */
         }
-        .drag-process {
-            cursor: grab;
+        .drag-process td:not(.drag-handle-cell) {
+            cursor: pointer;
         }
-        .drag-process:active {
-            cursor: grabbing;
-        }
-        /* Estilo para a célula de handle, se necessário */
         .drag-handle-cell {
             width: 30px; /* Garante que o handle não ocupe muito espaço */
             text-align: center;
+            cursor: grab;
         }
     </style>
 </head>
@@ -72,9 +69,9 @@
                         <option value="Concluído">Concluído</option> </select>
                 </div>
                 <div class="col-md-4">
-                    <label for="filtroPesquisa" class="form-label">Pesquisar (Processo/Instituição):</label>
+                    <label for="filtroPesquisa" class="form-label">Pesquisar (Processo/Instituição/CNPJ):</label>
                     <input type="text" class="form-control" id="filtroPesquisa"
-                        placeholder="Buscar número ou nome da instituição...">
+                        placeholder="Buscar número, instituição ou CNPJ...">
                 </div>
                 <div class="col-md-4 d-flex justify-content-end">
                     <a href="processo.html" class="btn btn-primary">
@@ -256,9 +253,9 @@
                     
                     // Renderiza as linhas dos processos
                     const tbodyContent = grupo.map(item => `
-                        <tr class="drag-process" data-id="${item.id}"> 
+                        <tr class="drag-process" data-id="${item.id}" onclick="if(!event.target.closest('.drag-handle-cell')) window.location.href='processo.html?id=${encodeURIComponent(item.id)}'"> 
                             <td class="drag-handle-cell"><i class="bi bi-grip-vertical"></i></td>
-                            <td><a href="processo.html?id=${encodeURIComponent(item.id)}">${item.processo}</a></td>
+                            <td>${item.processo}</td>
                             <td>${item.instituicao || "-"}</td>
                             <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
                             <td>${item.tipo || "-"}</td>
@@ -332,15 +329,16 @@
                 if (key.startsWith('processo-')) {
                     try {
                         const data = JSON.parse(localStorage.getItem(key));
-                        if (data && data.processoBusca && data.instituicao) {
+                        if (data) {
                             processos.push({
                                 id: data.id || key.substring('processo-'.length),
-                                processo: data.processoBusca,
-                                instituicao: data.instituicao,
-                                inicio: data.inicio,
-                                tipo: data.tipo,
+                                processo: data.processoBusca || "",
+                                instituicao: data.instituicao || "",
+                                cnpj: data.cnpj || "",
+                                inicio: data.inicio || "",
+                                tipo: data.tipo || "",
                                 status: data.status || "Sem Status", 
-                                checkConcluido: data.checkConcluido 
+                                checkConcluido: data.checkConcluido || false
                             });
                         } else {
                             console.warn(`Dados incompletos para a chave ${key}:`, data);
@@ -355,13 +353,17 @@
             // ... (Lógica de filtragem permanece a mesma) ...
 
             const searchTerm = document.getElementById('filtroPesquisa').value.toLowerCase();
+            const cleanSearchTerm = searchTerm.replace(/\D/g, "");
             const filterStatus = document.getElementById('filtroStatus').value;
             const filterTipo = "";
 
             const processosFiltrados = processos.filter(p => {
+                const cleanCnpj = p.cnpj.replace(/\D/g, "");
                 const matchesSearch = searchTerm === "" ||
                     p.processo.toLowerCase().includes(searchTerm) ||
-                    p.instituicao.toLowerCase().includes(searchTerm);
+                    p.instituicao.toLowerCase().includes(searchTerm) ||
+                    p.cnpj.toLowerCase().includes(searchTerm) ||
+                    (cleanSearchTerm !== "" && cleanCnpj.includes(cleanSearchTerm));
 
                 const statusProcesso = p.checkConcluido ? "Concluído" : (p.status || "Sem Status");
                 const matchesStatus = filterStatus === "" || statusProcesso === filterStatus;

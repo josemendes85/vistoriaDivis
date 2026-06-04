@@ -107,6 +107,14 @@
 .status-concluido {
 	background-color: var(--light-green-color);
 }
+.status-a-fazer {
+	background-color: var(--secondary-color);
+	color: #fff;
+}
+.status-enviado {
+	background-color: var(--primary-color);
+	color: #fff;
+}
 .form-section {
 	margin-bottom: 2rem;
 	padding: 1.5rem;

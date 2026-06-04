@@ -5,6 +5,8 @@ const CONFIG = {
 	TOAST_DURATION: 3000,
 };
 
+let statusAtualEventual = "A Fazer";
+
 /**
  * Gera um identificador único para cada processo.
  */
@@ -50,196 +52,87 @@ $(document).ready(function () {
 
 	// Adiciona os ouvintes de evento (listeners) nos dois campos
 	document.getElementById('status').addEventListener('change', () => {
-		atualizarVisibilidadeBotaoSEI();
-		atualizarLayoutRetorno();
+		atualizarVisibilidadeRetorno();
 	});
-	document.getElementById('tipo').addEventListener('change', () => {
-		atualizarVisibilidadeBotaoSEI();
-		atualizarLayoutRetorno();
+	document.getElementById('tipo').addEventListener('change', function () {
+		alternarFormularios(this.value);
+		atualizarVisibilidadeRetorno();
 	});
-	atualizarVisibilidadeBotaoSEI(); // Chama a função no carregamento para definir o estado inicial do botão
-	atualizarLayoutRetorno();
+	alternarFormularios(document.getElementById('tipo').value);
+	atualizarVisibilidadeRetorno();
+
+	// Botão Enviar Eventual
+	$("#btnEnviarEventual").on("click", function (e) {
+		e.preventDefault();
+		const form = document.querySelector(".needs-validation");
+		if (!form.checkValidity()) {
+			form.classList.add("was-validated");
+			Utils.showToast("Por favor, preencha todos os campos obrigatórios.", "danger");
+			return;
+		}
+
+		if (confirm("Deseja marcar esta vistoria como CONCLUÍDA/ENVIADA?")) {
+			statusAtualEventual = "Enviado";
+			salvarAutomaticamente();
+			enviarParaGoogleForms();
+		}
+	});
+
+	// Buscar Localização Eventual
+	$("#buscarLocalizacaoEventual").on("click", function () {
+		if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(
+				(position) => {
+					const latitude = position.coords.latitude.toFixed(6);
+					const longitude = position.coords.longitude.toFixed(6);
+					document.getElementById("ev_geo").value = `${latitude}, ${longitude}`;
+					salvarAutomaticamente();
+					Utils.showToast("Localização obtida com sucesso!", "success");
+				},
+				(error) => {
+					let errorMessage = "Erro desconhecido ao buscar localização.";
+					switch (error.code) {
+						case error.PERMISSION_DENIED:
+							errorMessage = "Permissão negada para acessar a localização.";
+							break;
+						case error.POSITION_UNAVAILABLE:
+							errorMessage = "Informação de localização indisponível.";
+							break;
+						case error.TIMEOUT:
+							errorMessage = "Tempo de resposta excedido ao tentar obter localização.";
+							break;
+					}
+					Utils.showToast(errorMessage, "danger");
+				},
+				{ timeout: CONFIG.GEOLOCATION_TIMEOUT }
+			);
+		} else {
+			Utils.showToast("Seu navegador não suporta geolocalização.", "danger");
+		}
+	});
+
+	// Converte campos do eventual para maiúsculas enquanto o usuário digita
+	$('#containerEventual input[type="text"]').on('input', function () {
+		this.value = this.value.toUpperCase();
+	});
 });
 
-// exibe botao do SEI caso aprovado
-// Função para validar se o botão do SEI deve aparecer
-function atualizarVisibilidadeBotaoSEI() {
+
+
+// Atualiza a visibilidade do campo de retorno (Licença aprovada por) com base no tipo e status da vistoria
+function atualizarVisibilidadeRetorno() {
 	const status = document.getElementById('status')?.value;
 	const tipo = document.getElementById('tipo')?.value;
-	const btnAprovado = document.getElementById('btnCopiarAprovado');
-	const btnReprovado = document.getElementById('btnCopiarReprovado');
+	const divRetorno = document.getElementById('divRetorno');
 
-	if (!btnAprovado || !btnReprovado) return;
-
-	// Reset: esconde ambos
-	btnAprovado.classList.add('d-none');
-	btnReprovado.classList.add('d-none');
-
-	if (tipo === "RLE") {
-		if (status === "Aprovado") {
-			btnAprovado.classList.remove('d-none');
-		} else if (status === "Reprovado") {
-			btnReprovado.classList.remove('d-none');
-		}
-	}
-}
-
-// Atualiza os rótulos do campo retorno com base no tipo e status da vistoria
-function atualizarLayoutRetorno() {
-	const status = document.getElementById('status')?.value;
-	const tipo = document.getElementById('tipo')?.value;
-	const labelRetorno = document.getElementById('labelRetorno');
-	const labelRetornoSim = document.getElementById('labelRetornoSim');
-	const labelRetornoNao = document.getElementById('labelRetornoNao');
-
-	if (!labelRetorno || !labelRetornoSim || !labelRetornoNao) return;
+	if (!divRetorno) return;
 
 	if (tipo === "RLE" && status === "Aprovado") {
-		labelRetorno.textContent = "Licença aprovada por:";
-		labelRetornoSim.textContent = "1 ano";
-		labelRetornoNao.textContent = "3 anos";
+		divRetorno.classList.remove('d-none');
 	} else {
-		labelRetorno.textContent = "É retorno de vistoria?";
-		labelRetornoSim.textContent = "Sim";
-		labelRetornoNao.textContent = "Não";
+		divRetorno.classList.add('d-none');
 	}
 }
-
-// 3. Função principal de cópia formatada
-document.getElementById('btnCopiarAprovado').addEventListener('click', async () => {
-	try {
-		const campoOcupacao = document.getElementById('ocupacao');
-		const opcaoSelecionada = campoOcupacao.options[campoOcupacao.selectedIndex];
-
-		// Captura o label do optgroup (ex: Comerciais, Hospitalares...)
-		const grupoOcupacao = opcaoSelecionada.parentNode.label || "---";
-		// Captura o texto da opção (ex: 06 - Comércio de pequeno porte)
-		const destinacaoTexto = opcaoSelecionada.text || "---";
-
-		const dados = {
-			fantasia: document.getElementById('instituicao')?.value.toUpperCase() || "---",
-			protocolo: document.getElementById('processoBusca')?.value || "---",
-			cnpj: document.getElementById('cnpj')?.value || "---",
-			endereco: document.getElementById('endereco')?.value.toUpperCase() || "---",
-			destinacao: destinacaoTexto,
-			grupo: grupoOcupacao,
-			dataVistoria: new Date().toLocaleDateString('pt-BR'),
-			horaVistoria: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-			acompanhante: document.getElementById('acompanhante')?.value.toUpperCase() || "---",
-			funcao: document.getElementById('funcao')?.value.toUpperCase() || "---"
-		};
-
-		const licencaAnosText = document.getElementById("retornoSim")?.checked ? "1 ANO" : "3 ANOS";
-
-		const htmlSEI = `
-<p style="text-align:center"><span style="font-family:verdana, geneva, sans-serif"><strong><span style="font-size:14px">LICENÇA DE FUNCIONAMENTO</span></strong></span></p>
-<p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Vistoria referente ao estabelecimento denominado <strong>${dados.fantasia}</strong>, protocolado&nbsp;sob o número&nbsp;<strong>${dados.protocolo}</strong>.</span></span></p>
-<p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Informo-vos que o Requerimento do&nbsp;Registro de Licença de Funcionamento (RLE) do(a) <strong>${dados.fantasia}</strong>, CNPJ: <strong>${dados.cnpj}</strong>, situado no endereço <strong>${dados.endereco}</strong>, foi&nbsp;<strong><span style="color:#0000cd">APROVADO POR ${licencaAnosText}</span></strong>, para as atividades descritas no Certificado de Licenciamento anexo ao requerimento.</span></span></p>
-<p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Destinação Principal: ${dados.destinacao}<br>
-Grupo de Ocupação: ${dados.grupo}</span></span></p>
-<p><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Acompanhou a vistoria no dia&nbsp;<strong>${dados.dataVistoria} às ${dados.horaVistoria}H&nbsp;</strong>no local acima,&nbsp; a Sr(a). <strong>${dados.acompanhante}</strong>, que desempenha a função de&nbsp;<strong>${dados.funcao}</strong>.</span></span></p>
-<p style="text-align:center"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Atenciosamente,</span></span></p>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><strong>____________________________________________________________________________________________</strong></span></span></div>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><strong>DIRETORIA DE VISTORIAS - CBMDF/DESEG/DIVIS</strong></span></span></div>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><a href="https://segurancacontraincendio.cbm.df.gov.br/vistoria/" target="_blank">https://segurancacontraincendio.cbm.df.gov.br/vistoria/</a></span></span></div>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Seção de Fiscalização: (61) 99165-9322 /&nbsp;divis@cbm.df.gov.br</span></span></div>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Seção de Credenciamento (61) 98321-4748 /&nbsp;divis.secre@cbm.df.gov.br</span></span></div>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Endereço: Quartel do Comando Geral do CBMDF - Anexo II - SAM lote D módulo E - Brasília/DF - CEP: 70620-000</span></span></div>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Horário de atendimento: segunda a&nbsp;quinta-feira de&nbsp;13h&nbsp;às 19h;&nbsp;sexta-feira&nbsp;de&nbsp;07h às 13h.</span></span></div>
-`;
-
-		const type = "text/html";
-		const blob = new Blob([htmlSEI], { type });
-		const data = [new ClipboardItem({ [type]: blob })];
-
-		await navigator.clipboard.write(data);
-		Utils.showToast("Copiado com Grupo de Ocupação!", "success");
-
-	} catch (err) {
-		console.error(err);
-		Utils.showToast("Erro ao copiar para o SEI.", "danger");
-	}
-});
-
-document.getElementById('btnCopiarReprovado').addEventListener('click', async () => {
-	try {
-		// 1. Coleta de dados dinâmicos
-		const dados = {
-			fantasia: document.getElementById('instituicao')?.value.toUpperCase() || "---",
-			protocolo: document.getElementById('processoBusca')?.value || "---",
-			cnpj: document.getElementById('cnpj')?.value || "---",
-			endereco: document.getElementById('endereco')?.value.toUpperCase() || "---",
-			dataVistoria: new Date().toLocaleDateString('pt-BR'),
-			horaVistoria: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-			acompanhante: document.getElementById('acompanhante')?.value.toUpperCase() || "---",
-			funcao: document.getElementById('funcao')?.value.toUpperCase() || "---"
-		};
-
-		// 2. Mapeamento de Sistemas Existentes
-		let sistemasExistentes = [];
-		document.querySelectorAll('#exigenciasContainer h5, #exigenciasContainer .card-title').forEach(titulo => {
-			let texto = titulo.innerText.trim().toUpperCase();
-			if (texto) sistemasExistentes.push(texto);
-		});
-		const sistemasHTML = sistemasExistentes.length > 0 ? sistemasExistentes.join('<br />') : "MEDIDAS DE SEGURANÇA CONTRA INCÊNDIO E PÂNICO";
-
-		// 3. Mapeamento de Exigências (usando as .tag conforme funcionou anteriormente)
-		let listaExigenciasHTML = "";
-		
-		document.querySelectorAll('.tag').forEach(tag => {
-			
-		const tagElement = document.querySelector('.tag');
-		// Pega apenas o primeiro nó de texto, remove espaços extras e quebras de linha
-		const textoLimpo = tagElement.childNodes[0].textContent.trim();
-		console.log(textoLimpo);
-
-			let descricaoExigencia = tag.innerText.replace('[X]', '').trim();
-			const idExigencia = tag.getAttribute('data-id') || tag.id.replace('tag-', '');
-			const anotacao = (typeof anotacoesDoProcesso !== 'undefined') ? anotacoesDoProcesso[idExigencia] : "";
-
-			listaExigenciasHTML += `- ${descricaoExigencia}${anotacao ? ':<br /><em>' + anotacao + '</em>' : ''}<br />`;
-		});
-
-		if (listaExigenciasHTML === "") listaExigenciasHTML = "XXXX<br />XXXX";
-
-		// 4. Montagem do Template com a formatação exata do SEI
-		const htmlReprovado = `
-<p style="text-align:center"><span style="font-size:14px"><span style="font-family:arial, helvetica, sans-serif"><strong>RELAT&Oacute;RIO T&Eacute;CNICO REPROVADO</strong></span></span></p>
-<p style="text-align:justify"><br /><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">I - REFER&Ecirc;NCIA</span></span></p>
-<p style="text-align: justify;"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Processo protocolado na REDESIM sob o n&uacute;mero <strong>(</strong></span></span><strong><span style="color:#c0392b; font-size:12px; font-family:arial, helvetica, sans-serif;">${dados.protocolo}</span></strong><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><strong>)</strong>, em <strong>${dados.dataVistoria}</strong>.</span></span></p>
-<p style="text-align:justify"><br /><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">II - FINALIDADE</span></span></p>
-<p style="text-align: justify;"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Emitir Relat&oacute;rio T&eacute;cnico sobre as condi&ccedil;&otilde;es de seguran&ccedil;a contra inc&ecirc;ndio e p&acirc;nico do estabelecimento <strong>${dados.fantasia}</strong>, de CNPJ <strong>${dados.cnpj}</strong>, localizado no endere&ccedil;o <strong>${dados.endereco}</strong>,</span></span></p>
-<p style="text-align:justify"><br /><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">III - FUNDAMENTA&Ccedil;&Atilde;O LEGAL</span></span></p>
-<p style="text-align: justify;"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">O presente Parecer possui seu amparo legal no Regulamento de Seguran&ccedil;a contra Inc&ecirc;ndio e P&acirc;nico do Distrito Federal - RSIP, aprovado pelo Dec. 21.361 de 20 de julho de 2000, publicado no DODF N&ordm; 139/00, Normas T&eacute;cnicas do CBMDF e em Normas Brasileiras publicadas pela Associa&ccedil;&atilde;o Brasileira de Normas T&eacute;cnicas - ABNT.</span></span></p>
-<p style="text-align:justify"><br /><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">IV - FATOS OBSERVADOS</span></span></p>
-<p style="text-align: justify;"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Em vistoria realizada no dia <strong>${dados.dataVistoria} </strong>&agrave;s <strong>${dados.horaVistoria}</strong>, no endere&ccedil;o citado no item II, acompanhado pelo senhor <strong>${dados.acompanhante}</strong> que desempenha a fun&ccedil;&atilde;o de <strong>${dados.funcao}</strong>, foram observados os seguintes fatos:</span></span></p>
-<p style="text-align: justify;"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><strong>Sistemas existentes na edifica&ccedil;&atilde;o:</strong><br />${sistemasHTML}</span></span></p>
-<p style="text-align: justify;"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><strong>Exigências encontradas na edificação:</strong><br />${listaExigenciasHTML}</span></span></p>
-<p style="text-align:justify">&nbsp;</p>
-<p style="text-align:justify"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">V - PARECER DO CBMDF</span></span></p>
-<p style="text-align:justify"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Ap&oacute;s vistoria realizada no local citado no item II, o CBMDF, por meio dessa&nbsp;Subse&ccedil;&atilde;o,&nbsp;<u><strong>&Eacute; DE PARECER QUE O LOCAL N&Atilde;O OFERECE AS CONDI&Ccedil;&Otilde;ES DE SEGURAN&Ccedil;A CONTRA&nbsp;INC&Ecirc;NDIO E P&Acirc;NICO</strong></u>&nbsp;&nbsp;no momento da vistoria in loco, conforme a legisla&ccedil;&atilde;o em vigor.</span></span></p>
-<p style="text-align:justify"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><strong><font color="#ff0000">ATEN&Ccedil;&Atilde;O:&nbsp;</font></strong>&nbsp;O&nbsp;interessado ficar&aacute; respons&aacute;vel civil e criminalmente pela a&ccedil;&atilde;o/omiss&atilde;o de n&atilde;o conserva&ccedil;&atilde;o dos sistemas de seguran&ccedil;a contra inc&ecirc;ndio e p&acirc;nico descrita no decreto 21.361 de 20 de julho de 2000.&nbsp;</span></span></p>
-<p style="text-align:center"><br /><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif">Atenciosamente,</span></span></p>
-<div style="text-align:start"><span style="font-size:12px"><span style="font-family:arial, helvetica, sans-serif"><strong>____________________________________________________________________________________________</strong><br />
-<strong>DIRETORIA DE VISTORIAS - CBMDF/DESEG/DIVIS</strong><br />
-<a href="https://segurancacontraincendio.cbm.df.gov.br/vistoria/" target="_blank">https://segurancacontraincendio.cbm.df.gov.br/vistoria/</a><br />
-Se&ccedil;&atilde;o de Fiscaliza&ccedil;&atilde;o: (61) 3193-0215 / <a href="mailto:divis@cbm.df.gov.br">divis@cbm.df.gov.br</a><br />
-Endere&ccedil;o: Quartel do Comando Geral do CBMDF - Anexo II - SAM lote D m&oacute;dulo E - Bras&iacute;lia/DF - CEP: 70620-000<br />
-Hor&aacute;rio de atendimento: segunda &agrave;&nbsp;quinta-feira de&nbsp;13h&nbsp;&agrave;s 18h30;&nbsp;sexta-feira&nbsp;de&nbsp;07h30 &agrave;s 12h.</span></span></div>
-        `;
-
-		const type = "text/html";
-		const blob = new Blob([htmlReprovado], { type });
-		const data = [new ClipboardItem({ [type]: blob })];
-
-		await navigator.clipboard.write(data);
-		Utils.showToast("Relatório Reprovado copiado com formatação!", "success");
-
-	} catch (err) {
-		console.error(err);
-		Utils.showToast("Erro ao copiar relatório formatado.", "danger");
-	}
-});
 
 // Utilitários
 const Utils = {
@@ -2168,9 +2061,17 @@ if (processoInput) {
 
 			processoInput.value = formattedValue;
 		} else {
-			// COMPORTAMENTO TEXTO (Sem Máscara)
+			// COMPORTAMENTO ALFANUMÉRICO (Começa com letra)
 			processoInput.type = "text";
-			// Aqui não aplicamos replace nem formatação, permitindo letras e caracteres
+			
+			// Obtém as letras no início (máximo 3)
+			const matchLetters = rawValue.match(/^[a-zA-Z]+/);
+			const letterPart = matchLetters ? matchLetters[0].substring(0, 3).toUpperCase() : "";
+			
+			// O restante após as letras deve conter apenas dígitos (máximo 10)
+			const digitPart = rawValue.substring(letterPart.length).replace(/\D/g, "").substring(0, 10);
+			
+			processoInput.value = letterPart + digitPart;
 		}
 	});
 }
@@ -2436,8 +2337,7 @@ function buscarProcessoPorInput(evt) {
 		document.getElementById("badgesCategorias").innerHTML = "";
 		camposDeExigenciasAtivos = {};
 		document.getElementById("retornoNao").checked = true;
-		atualizarVisibilidadeBotaoSEI();
-		atualizarLayoutRetorno();
+		atualizarVisibilidadeRetorno();
 
 		// Reseta o processoId para um novo ID
 		const idInput = document.getElementById("processoId");
@@ -2528,6 +2428,71 @@ document.getElementById("btnSalvar").addEventListener("click", () => {
 });
 
 function coletarDadosDoFormulario() {
+	const tipo = document.getElementById("tipo")?.value || "";
+	if (tipo === "Eventual") {
+		return {
+			id: document.getElementById("processoId")?.value || "",
+			processoBusca: document.getElementById("processoBusca")?.value || "",
+			tipo: tipo,
+			status: statusAtualEventual || "A Fazer",
+			// Compatibility mapping for main listing:
+			instituicao: document.getElementById("ev_evento")?.value.toUpperCase() || "",
+			inicio: document.getElementById("ev_data_inicio")?.value || "",
+			cnpj: "",
+
+			// Eventual form fields
+			ev_evento: document.getElementById("ev_evento")?.value.toUpperCase() || "",
+			ev_ra: document.getElementById("ev_ra")?.value || "",
+			ev_endereco: document.getElementById("ev_endereco")?.value.toUpperCase() || "",
+			ev_geo: document.getElementById("ev_geo")?.value || "",
+			ev_data_inicio: document.getElementById("ev_data_inicio")?.value || "",
+			ev_data_fim: document.getElementById("ev_data_fim")?.value || "",
+			ev_obs_periodo: document.getElementById("ev_obs_periodo")?.value.toUpperCase() || "",
+			ev_publico: document.getElementById("ev_publico")?.value || "",
+			ev_area: document.getElementById("ev_area")?.value || "",
+			ev_vistoria_realizada: document.getElementById("ev_vistoria_realizada")?.value || "",
+			ev_responsavel: document.getElementById("ev_responsavel")?.value.toUpperCase() || "",
+			ev_tem_brigada: document.getElementById("ev_tem_brigada")?.value || "",
+			ev_empresa_brigada: document.getElementById("ev_empresa_brigada")?.value || "",
+			ev_cert_brigadista: document.getElementById("ev_cert_brigadista")?.value || "",
+			ev_qtd_brigadistas: document.getElementById("ev_qtd_brigadistas")?.value || "",
+			ev_possui_estrutura: document.getElementById("ev_possui_estrutura")?.value || "",
+			ev_cercamento: document.getElementById("ev_cercamento")?.value || "",
+			ev_laudo_inflamabilidade: document.getElementById("ev_laudo_inflamabilidade")?.value || "",
+			ev_q_tendas: document.getElementById("ev_q_tendas")?.value || "",
+			ev_q_palcos: document.getElementById("ev_q_palcos")?.value || "",
+			ev_q_arqui: document.getElementById("ev_q_arqui")?.value || "",
+			ev_q_porticos: document.getElementById("ev_q_porticos")?.value || "",
+			ev_q_eletro: document.getElementById("ev_q_eletro")?.value || "",
+			ev_q_camarotes: document.getElementById("ev_q_camarotes")?.value || "",
+			ev_q_inflaveis: document.getElementById("ev_q_inflaveis")?.value || "",
+			ev_eletrica_provisoria: document.getElementById("ev_eletrica_provisoria")?.value || "",
+			ev_q_quadros: document.getElementById("ev_q_quadros")?.value || "",
+			ev_q_geradores: document.getElementById("ev_q_geradores")?.value || "",
+			ev_q_extintores: document.getElementById("ev_q_extintores")?.value || "",
+			ev_extintores_validos: document.getElementById("ev_extintores_validos")?.value || "",
+			ev_qd_dr: document.getElementById("ev_qd_dr")?.value || "",
+			ev_itens_gerador_ok: document.getElementById("ev_itens_gerador_ok")?.value || "",
+			ev_estruturas_aterradas: document.getElementById("ev_estruturas_aterradas")?.value || "",
+			ev_glp: document.getElementById("ev_glp")?.value || "",
+			ev_central_glp: document.getElementById("ev_central_glp")?.value || "",
+			ev_q_p13: document.getElementById("ev_q_p13")?.value || "",
+			ev_parametros_p13: document.getElementById("ev_parametros_p13")?.value || "",
+			ev_q_food_trucks: document.getElementById("ev_q_food_trucks")?.value || "",
+			ev_fogos_artificio: document.getElementById("ev_fogos_artificio")?.value || "",
+			ev_liquido_inflamavel: document.getElementById("ev_liquido_inflamavel")?.value || "",
+			ev_saidas_iluminadas: document.getElementById("ev_saidas_iluminadas")?.value || "",
+			ev_saidas_desobstruidas: document.getElementById("ev_saidas_desobstruidas")?.value || "",
+			ev_distancias_cumpridas: document.getElementById("ev_distancias_cumpridas")?.value || "",
+			ev_art_estruturas: document.getElementById("ev_art_estruturas")?.value || "",
+			ev_art_eletrica: document.getElementById("ev_art_eletrica")?.value || "",
+			ev_croqui_evento: document.getElementById("ev_croqui_evento")?.value || "",
+			ev_cert_foodtruck: document.getElementById("ev_cert_foodtruck")?.value || "",
+			ev_contrato_brigada: document.getElementById("ev_contrato_brigada")?.value || "",
+			ev_declaracao_gerador: document.getElementById("ev_declaracao_gerador")?.value || ""
+		};
+	}
+
 	// 1. Coleta todas as exigências diretamente da tela para garantir que salva
 	const listaExigenciasOrdenada = [];
 
@@ -2606,6 +2571,37 @@ function preencherFormulario(data) {
 		}
 	}
 	document.getElementById("processoBusca").value = data.processoBusca || "";
+	document.getElementById("tipo").value = data.tipo || "";
+
+	if (data.tipo === "Eventual") {
+		alternarFormularios("Eventual");
+		statusAtualEventual = data.status || "A Fazer";
+		aplicarCorDoStatus(statusAtualEventual);
+
+		const fields = [
+			"ev_evento", "ev_ra", "ev_endereco", "ev_geo", "ev_data_inicio", "ev_data_fim",
+			"ev_obs_periodo", "ev_publico", "ev_area", "ev_vistoria_realizada", "ev_responsavel",
+			"ev_tem_brigada", "ev_empresa_brigada", "ev_cert_brigadista", "ev_qtd_brigadistas",
+			"ev_possui_estrutura", "ev_cercamento", "ev_laudo_inflamabilidade", "ev_q_tendas",
+			"ev_q_palcos", "ev_q_arqui", "ev_q_porticos", "ev_q_eletro", "ev_q_camarotes",
+			"ev_q_inflaveis", "ev_eletrica_provisoria", "ev_q_quadros", "ev_q_geradores",
+			"ev_q_extintores", "ev_extintores_validos", "ev_qd_dr", "ev_itens_gerador_ok",
+			"ev_estruturas_aterradas", "ev_glp", "ev_central_glp", "ev_q_p13", "ev_parametros_p13",
+			"ev_q_food_trucks", "ev_fogos_artificio", "ev_liquido_inflamavel", "ev_saidas_iluminadas",
+			"ev_saidas_desobstruidas", "ev_distancias_cumpridas", "ev_art_estruturas",
+			"ev_art_eletrica", "ev_croqui_evento", "ev_cert_foodtruck", "ev_contrato_brigada",
+			"ev_declaracao_gerador"
+		];
+		fields.forEach(f => {
+			const el = document.getElementById(f);
+			if (el) el.value = data[f] || "";
+		});
+		return;
+	}
+
+	// Restaurar visibilidade do formulário padrão
+	alternarFormularios(data.tipo || "");
+
 	document.getElementById("cnpj").value = data.cnpj || "";
 	document.getElementById("instituicao").value = data.instituicao || "";
 	document.getElementById("endereco").value = data.endereco || "";
@@ -2750,8 +2746,7 @@ function preencherFormulario(data) {
 			}
 		});
 	}
-	atualizarVisibilidadeBotaoSEI();
-	atualizarLayoutRetorno();
+	atualizarVisibilidadeRetorno();
 }
 
 // Botão EXCLUIR
@@ -2782,21 +2777,122 @@ document.getElementById("btnExcluir").addEventListener("click", () => {
 	}
 });
 
-// "Gerar Relatório" button
-document.getElementById("btnGerar").addEventListener("click", () => {
-	const dadosDoFormulario = coletarDadosDoFormulario();
+function alternarFormularios(tipo) {
+	const containerPadrao = document.getElementById("containerPadrao");
+	const containerEventual = document.getElementById("containerEventual");
+	const btnEnviarEventual = document.getElementById("btnEnviarEventual");
+	const containerCheckConcluido = document.getElementById("containerCheckConcluido");
 
-	// Salva os dados do formulário no localStorage
-	// 'dadosRelatorio' é a chave que usaremos no relatorio.html para recuperar os dados
-	localStorage.setItem("dadosRelatorio", JSON.stringify(dadosDoFormulario));
+	if (tipo === "Eventual") {
+		containerPadrao?.classList.add("d-none");
+		containerEventual?.classList.remove("d-none");
+		btnEnviarEventual?.classList.remove("d-none");
+		containerCheckConcluido?.classList.add("d-none");
+		toggleRequiredFields("Eventual");
+	} else {
+		containerPadrao?.classList.remove("d-none");
+		containerEventual?.classList.add("d-none");
+		btnEnviarEventual?.classList.add("d-none");
+		containerCheckConcluido?.classList.remove("d-none");
+		toggleRequiredFields(tipo);
+	}
+}
 
-	// Redireciona para a página do relatório
-	window.location.href = "relatorio.html";
+function toggleRequiredFields(tipo) {
+	if (tipo === "Eventual") {
+		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", false);
+		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim").prop("required", true);
+	} else {
+		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", true);
+		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim").prop("required", false);
+	}
+}
 
-	// Os consoles e toasts de "dados enviados para o console" não são mais necessários aqui
-	console.log("Dados coletados para o relatório:", dadosDoFormulario);
-	Utils.showToast(
-		"Dados do formulário enviados para o console (F12 > Console).",
-		"info"
-	);
-});
+function enviarParaGoogleForms() {
+	const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLScFdrzloQDqpN1nwU6M4K8n9UYbf4UhyAAVXo7IWYUdfRNa1g/viewform";
+	const v = (id) => document.getElementById(id)?.value || "";
+	
+	const dInicio = v("ev_data_inicio");
+	const dataInicio = dInicio ? dInicio.split("-") : ["", "", ""];
+	const dFim = v("ev_data_fim");
+	const dataFim = dFim ? dFim.split("-") : ["", "", ""];
+
+	const params = new URLSearchParams({
+		// Dados gerais
+		"entry.191765537": v("processoBusca"),
+		"entry.1200371070": v("ev_evento"),
+		"entry.2101176802": v("ev_ra"),
+		"entry.278707089": v("ev_endereco"),
+
+		// Datas (ANO / MÊS / DIA)
+		"entry.1788638115_year": dataInicio[0] || "",
+		"entry.1788638115_month": dataInicio[1] || "",
+		"entry.1788638115_day": dataInicio[2] || "",
+
+		"entry.635703155_year": dataFim[0] || "",
+		"entry.635703155_month": dataFim[1] || "",
+		"entry.635703155_day": dataFim[2] || "",
+
+		// Evento
+		"entry.209142364": v("ev_obs_periodo"),
+		"entry.2103689319": v("ev_publico"),
+		"entry.129765383": v("ev_area"),
+		"entry.647891186": v("ev_geo"),
+		"entry.1749955179": v("ev_responsavel"),
+
+		// Estruturas
+		"entry.1810871816": v("ev_cercamento"),
+		"entry.536781947": v("ev_vistoria_realizada"),
+		"entry.1275216650": v("ev_possui_estrutura"),
+		"entry.281654281": v("ev_q_tendas"),
+		"entry.506772746": v("ev_q_palcos"),
+		"entry.1153969985": v("ev_q_arqui"),
+		"entry.992128061": v("ev_q_porticos"),
+		"entry.1850464249": v("ev_q_eletro"),
+		"entry.2145745699": v("ev_q_camarotes"),
+		"entry.101557401": v("ev_q_inflaveis"),
+
+		// Segurança
+		"entry.2041242057": v("ev_laudo_inflamabilidade"),
+		"entry.1938619790": v("ev_eletrica_provisoria"),
+		"entry.1289290526": v("ev_q_quadros"),
+		"entry.1403662037": v("ev_qd_dr"),
+		"entry.1769025717": v("ev_q_geradores"),
+		"entry.1569675871": v("ev_itens_gerador_ok"),
+		"entry.1663636913": v("ev_declaracao_gerador"),
+		"entry.1068839709": v("ev_estruturas_aterradas"),
+
+		// Brigada
+		"entry.1292591391": v("ev_saidas_iluminadas"),
+		"entry.709435141": v("ev_tem_brigada"),
+		"entry.697486886": v("ev_cert_brigadista"),
+		"entry.230273607": v("ev_qtd_brigadistas"),
+		"entry.269907922": v("ev_empresa_brigada"),
+
+		// Riscos
+		"entry.854155456": v("ev_liquido_inflamavel"),
+		"entry.407142634": v("ev_fogos_artificio"),
+		"entry.452062403": v("ev_glp"),
+		"entry.875704157": v("ev_central_glp"),
+		"entry.1005818584": v("ev_q_p13"),
+		"entry.1355347284": v("ev_parametros_p13"),
+		"entry.1013043090": v("ev_q_food_trucks"),
+		"entry.959214189": v("ev_saidas_desobstruidas"),
+		"entry.1999225105": v("ev_distancias_cumpridas"),
+
+		// Extintores
+		"entry.299718848": v("ev_q_extintores"),
+		"entry.15816431": v("ev_extintores_validos"),
+
+		// Documentos
+		"entry.698760525": v("ev_art_estruturas"),
+		"entry.1171952603": v("ev_art_eletrica"),
+		"entry.2125304373": v("ev_croqui_evento"),
+		"entry.2002719496": v("ev_cert_foodtruck"),
+		"entry.928440077": v("ev_contrato_brigada")
+	});
+
+	window.location.href = FORM_URL + "?" + params.toString();
+}
+
+
