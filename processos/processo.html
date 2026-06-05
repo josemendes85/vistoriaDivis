@@ -447,18 +447,23 @@
 								<option>RA 35 - Água Quente</option>
 							</select>
 						</div>
-						<div class="col-md-6">
+						<div class="col-md-8">
 							<label class="form-label">Endereço do Evento</label>
 							<input type="text" class="form-control text-uppercase" id="ev_endereco" name="ev_endereco" />
 						</div>
 						<div class="col-md-4">
-							<label class="form-label">Georreferenciamento</label>
-							<input type="text" class="form-control" id="ev_geo" name="ev_geo" placeholder="-00.0000, -00.0000" />
-						</div>
-						<div class="col-md-2 d-grid">
-							<button type="button" class="btn btn-outline-primary btn-geo mt-auto" id="buscarLocalizacaoEventual">
-								<i class="bi bi-pin-map-fill"></i> Localização Atual
-							</button>
+							<label for="ev_geo" class="form-label">Coordenadas GPS</label>
+							<div class="input-group">
+								<input type="tel" class="form-control" id="ev_geo" name="ev_geo"
+									placeholder="-00.0000, -00.0000" />
+								<button class="btn btn-outline-success" type="button" id="buscarLocalizacaoEventual"
+									title="Obter localização atual">
+									<i class="bi bi-geo-alt-fill"></i>
+								</button>
+							</div>
+							<div id="msgLocalizacaoEventual" class="form-text">
+								Clique no botão para obter sua localização atual
+							</div>
 						</div>
 					</div>
 				</div>

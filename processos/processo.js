@@ -83,11 +83,12 @@ $(document).ready(function () {
 		if (navigator.geolocation) {
 			navigator.geolocation.getCurrentPosition(
 				(position) => {
-					const latitude = position.coords.latitude.toFixed(6);
-					const longitude = position.coords.longitude.toFixed(6);
+					const latitude = position.coords.latitude.toFixed(4);
+					const longitude = position.coords.longitude.toFixed(4);
 					document.getElementById("ev_geo").value = `${latitude}, ${longitude}`;
 					salvarAutomaticamente();
 					Utils.showToast("Localização obtida com sucesso!", "success");
+					document.getElementById("msgLocalizacaoEventual").textContent = "Localização encontrada manualmente";
 				},
 				(error) => {
 					let errorMessage = "Erro desconhecido ao buscar localização.";
@@ -2079,47 +2080,50 @@ if (processoInput) {
 
 
 // Lógica para a máscara de Localização
-const localizacaoInput = document.getElementById("localizacao");
-localizacaoInput.addEventListener("input", () => {
-	let value = localizacaoInput.value.replace(/\D/g, ""); // Remove tudo que não é dígito
+function aplicarMascaraGps(element, decimals = 6) {
+	if (!element) return;
+	element.addEventListener("input", () => {
+		let value = element.value.replace(/\D/g, ""); // Remove tudo que não é dígito
 
-	// Aplica o primeiro hífen (da latitude)
-	// Ex: "123" -> "-123"
-	if (value.length > 0) {
-		value = "-" + value;
-	}
+		// Aplica o primeiro hífen (da latitude)
+		if (value.length > 0) {
+			value = "-" + value;
+		}
 
-	// Aplica o ponto decimal da latitude
-	// Ex: "-123456" -> "-12.3456"
-	if (value.length > 3) {
-		// Considerando o hífen e 2 dígitos (-XX)
-		value = value.replace(/^(-?\d{2})(\d)/, "$1.$2");
-	}
+		// Aplica o ponto decimal da latitude
+		if (value.length > 3) {
+			value = value.replace(/^(-?\d{2})(\d)/, "$1.$2");
+		}
 
-	// Aplica a vírgula e o espaço após a latitude completa
-	// Ex: "-12.345678" -> "-12.34567, 8"
-	if (value.length > 10) {
-		// Considerando: -XX.YYYYY (10 caracteres no total)
-		value = value.replace(/^(-?\d{2}\.\d{6})(\d)/, "$1, $2");
-	}
+		// Aplica a vírgula e o espaço após a latitude completa
+		const latLength = 4 + decimals;
+		if (value.length > latLength) {
+			const regex = new RegExp(`^(-?\\d{2}\\.\\d{${decimals}})(\\d)`);
+			value = value.replace(regex, "$1, $2");
+		}
 
-	// Aplica o segundo hífen (da longitude)
-	// Ex: "-12.34567, 890" -> "-12.34567, -890"
-	if (value.length > 16) {
-		// Considerando: -XX.YYYYY,  (14 caracteres)
-		value = value.replace(/^(-?\d{2}\.\d{6}, )(\d{1,2})/, "$1-$2");
-	}
+		// Aplica o segundo hífen (da longitude)
+		const longHyphenLength = latLength + 4; // latitude formatada + ", "
+		if (value.length > longHyphenLength) {
+			const regex = new RegExp(`^(-?\\d{2}\\.\\d{${decimals}}, )(\\d{1,2})`);
+			value = value.replace(regex, "$1-$2");
+		}
 
-	// Aplica o ponto decimal da longitude
-	// Ex: "-12.34567, -89012" -> "-12.34567, -89.012"
-	if (value.length > 18) {
-		// Considerando: -XX.YYYYY, -XX (17 caracteres)
-		value = value.replace(/^(-?\d{2}\.\d{6}, -\d{2})(\d)/, "$1.$2");
-	}
+		// Aplica o ponto decimal da longitude
+		const longDotLength = latLength + 7; // latitude formatada + ", -" + XX
+		if (value.length > longDotLength) {
+			const regex = new RegExp(`^(-?\\d{2}\\.\\d{${decimals}}, -\\d{2})(\\d)`);
+			value = value.replace(regex, "$1.$2");
+		}
 
-	// Limita o tamanho final ao da máscara completa (1 hífen + 2 d.int + 1 ponto + 5 d.dec + 1 vírgula + 1 espaço + 1 hífen + 2 d.int + 1 ponto + 5 d.dec = 20 caracteres)
-	localizacaoInput.value = value.slice(0, 22);
-});
+		// Limita o tamanho final ao da máscara completa (10 + 2 * decimals)
+		const maxLength = 10 + 2 * decimals;
+		element.value = value.slice(0, maxLength);
+	});
+}
+
+aplicarMascaraGps(document.getElementById("localizacao"), 6);
+aplicarMascaraGps(document.getElementById("ev_geo"), 4);
 // Busca a localização atual
 document.getElementById("buscarLocalizacao").addEventListener("click", () => {
 	if (navigator.geolocation) {
@@ -2445,6 +2449,7 @@ function coletarDadosDoFormulario() {
 			ev_ra: document.getElementById("ev_ra")?.value || "",
 			ev_endereco: document.getElementById("ev_endereco")?.value.toUpperCase() || "",
 			ev_geo: document.getElementById("ev_geo")?.value || "",
+			ev_msgLocalizacao: document.getElementById("msgLocalizacaoEventual")?.textContent || "",
 			ev_data_inicio: document.getElementById("ev_data_inicio")?.value || "",
 			ev_data_fim: document.getElementById("ev_data_fim")?.value || "",
 			ev_obs_periodo: document.getElementById("ev_obs_periodo")?.value.toUpperCase() || "",
@@ -2596,6 +2601,11 @@ function preencherFormulario(data) {
 			const el = document.getElementById(f);
 			if (el) el.value = data[f] || "";
 		});
+		if (data.ev_msgLocalizacao) {
+			document.getElementById("msgLocalizacaoEventual").textContent = data.ev_msgLocalizacao;
+		} else {
+			document.getElementById("msgLocalizacaoEventual").textContent = "Clique no botão para obter sua localização atual";
+		}
 		return;
 	}
 
