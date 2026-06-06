@@ -1612,6 +1612,8 @@ $(document).ready(function () {
 	//$('#cpf').mask('000.000.000-00', { reverse: false });
 	$("#cnpj").mask("00.000.000/0000-00");
 	$("#areaConstruida").mask("000.000.000.000.000,00", { reverse: true });
+	$("#ev_cpf").mask("000.000.000-00");
+	$("#ev_telefone").mask("(00) 00000-0000");
 
 	// CNPJ Lookup Functionality
 	const cnpjInput = document.getElementById("cnpj");
@@ -2494,7 +2496,22 @@ function coletarDadosDoFormulario() {
 			ev_croqui_evento: document.getElementById("ev_croqui_evento")?.value || "",
 			ev_cert_foodtruck: document.getElementById("ev_cert_foodtruck")?.value || "",
 			ev_contrato_brigada: document.getElementById("ev_contrato_brigada")?.value || "",
-			ev_declaracao_gerador: document.getElementById("ev_declaracao_gerador")?.value || ""
+			ev_declaracao_gerador: document.getElementById("ev_declaracao_gerador")?.value || "",
+
+			// Novos campos da equipe de vistoria e responsáveis
+			ev_vistoriador01: document.getElementById("ev_vistoriador01")?.value.toUpperCase() || "",
+			ev_vistoriador02: document.getElementById("ev_vistoriador02")?.value.toUpperCase() || "",
+			ev_viatura: document.getElementById("ev_viatura")?.value.toUpperCase() || "",
+			ev_regime: document.getElementById("ev_regime")?.value || "",
+			ev_cpf: document.getElementById("ev_cpf")?.value || "",
+			ev_telefone: document.getElementById("ev_telefone")?.value || "",
+
+			// Resultado e parecer
+			ev_status_eventual: document.getElementById("ev_status_eventual")?.value || "",
+			ev_motivo_cancelamento: document.getElementById("ev_motivo_cancelamento")?.value.toUpperCase() || "",
+			ev_condicionantes: document.getElementById("ev_condicionantes")?.value.toUpperCase() || "",
+			ev_restricoes: document.getElementById("ev_restricoes")?.value.toUpperCase() || "",
+			ev_parecer_final: document.getElementById("ev_parecer_final")?.value.toUpperCase() || ""
 		};
 	}
 
@@ -2595,7 +2612,10 @@ function preencherFormulario(data) {
 			"ev_q_food_trucks", "ev_fogos_artificio", "ev_liquido_inflamavel", "ev_saidas_iluminadas",
 			"ev_saidas_desobstruidas", "ev_distancias_cumpridas", "ev_art_estruturas",
 			"ev_art_eletrica", "ev_croqui_evento", "ev_cert_foodtruck", "ev_contrato_brigada",
-			"ev_declaracao_gerador"
+			"ev_declaracao_gerador",
+			"ev_vistoriador01", "ev_vistoriador02", "ev_viatura", "ev_regime", "ev_cpf", "ev_telefone",
+			"ev_status_eventual", "ev_motivo_cancelamento", "ev_condicionantes", "ev_restricoes",
+			"ev_parecer_final"
 		];
 		fields.forEach(f => {
 			const el = document.getElementById(f);
@@ -2811,10 +2831,10 @@ function alternarFormularios(tipo) {
 function toggleRequiredFields(tipo) {
 	if (tipo === "Eventual") {
 		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", false);
-		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim").prop("required", true);
+		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", true);
 	} else {
 		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", true);
-		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim").prop("required", false);
+		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", false);
 	}
 }
 
@@ -2827,8 +2847,438 @@ function enviarParaGoogleForms() {
 	const dFim = v("ev_data_fim");
 	const dataFim = dFim ? dFim.split("-") : ["", "", ""];
 
-	const params = new URLSearchParams({
-		// Dados gerais
+	// Mapeamentos de Exigências (Checklist) para Google Forms Checkboxes
+	const checkboxMappings = {
+		"entry.1721739093": [
+			"Apresentar requerimento original de solicitação de Licença de Funcionamento Eventual.",
+			"Apresentar formulário de apoio para licença de funcionamento eventual.",
+			"Apresentar Memorial descritivo - evento acima de 1.000 pessoas.",
+			"Apresentar o Termo de declaração e de responsabilidade - evento acima de 1.000 pessoas.",
+			"Apresentar o Comprovante de disponibilidade de grupo gerador - evento acima de 1.000 pessoas.",
+			"Apresentar o croqui do evento.",
+			"Apresentar Projeto de Incêndio da Central de GLP."
+		],
+		"entry.1147682255": [
+			"Apresentar contrato da brigada.",
+			"Apresentar o certificado de credenciamento da empresa de brigada.",
+			"Apresentar os certificados dos brigadistas.",
+			"Quantidade de brigadista compatível com o tamanho do evento."
+		],
+		"entry.1994180731": [
+			"Apresentar o PBET aprovado - evento acima de 1.000 pessoas.",
+			"Aprovar o PBET para eventos em edificações permanentes - Quando SCIP insuficiente ou público superior ao projetado para a edificação.",
+			"Protocolar o PBET para análise com 30 dias antes do evento.",
+			"Retornar o PBET, com exigências, para reanálise com 10 dias antes do evento."
+		],
+		"entry.809039382": [
+			"Apresentar ART/RRT/TRT dos sistemas de SCIP e estruturas do evento - evento acima de 1.000 pessoas.",
+			"O responsável técnico pelo evento deve acompanhar a vistoria, quando solicitado.",
+			"O responsável técnico pelo parque de diversões deve atender a NBR 15926 e apresentar documentos técnicos.",
+			"Apresentar ART/RRT/TRT/Laudo de aterrameto elétrico de todas as massas metálicas das estruturas.",
+			"Apresentar ART/RRT/TRT de instalação elétrica provisória do evento.",
+			"Apresentar ART/RRT/TRT de aterramento elétrico do Gerador.",
+			"Apresentar ART/RRT/TRT e laudo de flamabilidade, registrados em livro de ordem, dos materiais de acabamento usados no evento.",
+			"Apresentar ART de execução do Laudo de Estanqueidade da Central de GLP.",
+			"Apresentar ART de instalação da Central de GLP.",
+			"O responsável técnico deverá acompanhar a montagem das estruturas do evento, emitir relatório e ART/RRT/TRT e fazer o registro no livro de ordem."
+		],
+		"entry.2006769390": [
+			"Apresentar o Parecer Técnico Específico Aprovado para eventos em edificações permanentes.",
+			"Apresentar ART/RRT/TRT das adaptações no interior das edificações."
+		],
+		"entry.980011299": [
+			"Instalar sistema de sinalização de segurança nas Saídas de Emergência.",
+			"Instalar sistema de sinalização de segurança na Rota de Fuga.",
+			"Instalar sistema de sinalização de segurança na Central de GLP.",
+			"Instalar sistema de sinalização de segurança no Gerador de Energia e Equipamentos Energizados.",
+			"Instalar sistema de sinalização de segurança nos Extintores.",
+			"Instalar as placas de sinalização em altura que garantam a sua vizualização."
+		],
+		"entry.891456062": [
+			"A indicação de capacidade máxima de público aprovada deve estar visivel nas entradas e setores.",
+			"Iluminar as placas de sinalização em eventos noturnos ao ar livre.",
+			"Apresentar o recurso audiovisual com informações sobre segurança contra incêndio e pânico - evento com fechamento e público acima de 1.000 pessoas."
+		],
+		"entry.647578535": [
+			"O evento deve estar montado 24h antes.",
+			"A aprovação da vistoria deve ocorrer até 3 horas antes do evento ou acesso do público."
+		],
+		"entry.2094522025": [
+			"Os sistemas de SCIP devem atender, além da edificação, as estruturas temporárias e os acréscimos de instalações.",
+			"As estruturas devem apresentar estabilidade estrutural e segurança.",
+			"Os suportes das tendas e coberturas devem ter resistência ao fogo.",
+			"As estruturas provisórias com piso em madeira devem ter resistência mecânica compatível, fixação e superfície plana, sem ressaltos ou aberturas.",
+			"Os elementos fixadores, tensionadores e estabilizadores devem ter resistência mecânica compatível, proteção mecânica e sinalização.",
+			"Os espaços vazios, abaixo das estruturas provisórias destinadas ao público, devem isolados (acesso restrito) sem materiais, pessoas ou qualquer atividade."
+		],
+		"entry.1255121135": [
+			"O piso das arquibancadas deve estar preso à estrutura de sustentação.",
+			"Nas arquibancadas, os assentos de cada fileira devem estar presos uns aos outros ou ao piso.",
+			"O comprimento máximo da fileira de assentos nas arquibancadas temporárias é de 14 m, se tiver acesso nas duas extremidades.",
+			"O comprimento máximo da fileira de assentos nas arquibancadas temporárias é de 7 m, se tiver apenas um corredor de acesso.",
+			"Os patamares (degraus) das arquibancadas temporárias devem possuir Largura mínima de 0,60 m e Altura máxima de 0,55 m.",
+			"Os degraus dos acessos radiais nas arquibancadas devem possuir Altura máxima de espelho de 0,19 m e Largura mínima da base de 0,25 m.",
+			"Os vãos (espelhos), entre os assentos das arquibancadas, com alturas superiores a 0,15 m devem ser fechados para impedir a passagem de pessoas. (vão máx 11 cm NT 10).",
+			"O uso dos patamares da arquibancada como degraus devem ter espelho com altura máxima de 0,19 m e fechados para impedir a passagem de pessoas, e base com largura mínima de 0,25 m.",
+			"Nas arquibancadas com cadeiras individuais, o espaçamento mínimo é de 0,30 m para circulação nas filas, entre as cadeiras.",
+			"Nas arquibancadas com cadeira individuais, à frente das primeiras fileiras, a distância mínima é de 0,45 m para circulação.",
+			"A altura mínima do guarda-corpo frontal da arquibancada é de 1,10 m.",
+			"Se o desnível entre a primeira fileira da arquibancada e o piso à frente for superior a 0,55 m, exigi-se guarda-corpo.",
+			"As arquibancadas devem ter fechamento lateral e dos encostos do último nível superior de assentos (guarda-costas), de forma idêntica aos guarda-corpos.",
+			"Guarda-corpo deve de ter altura mínima de 1,80 m, quando a última fileira da arquibancada tiver a altura superior a 2,10 m do nível do terreno.",
+			"Nos acessos radiais das arquibancadas, com assentos em ambos os lados, os corrimãos podem ser laterais ou centrais, com altura entre 0,80m e 0,92m.",
+			"Os corrimãos centrais devem ter continuidade com intervalos no mínimo a cada 2 fileiras e no máximo a cada 4 fileiras de assentos, para permitir a passagem de um lado para o outro. Estes intervalos devem possuir a largura livre correspondente à largura do patamar"
+		],
+		"entry.47633865": [
+			"As tendas devem ser instaladas sob supervisão de profissional habilitado, possuir estabilidade estrutural e característica retardante à propagação de chamas.",
+			"É vedada a utilização e armazenamento de produtos inflamáveis e fogos de artifício no interior de tendas para acomodação do público.",
+			"Portas das tendas abrindo no sentido de fluxo de saída e sempre destrancadas e desobstruídas.",
+			"Tenda fechada nas laterais e sem portas, deve ter demarcações de fácil identificação visual das aberturas na própria tenda."
+		],
+		"entry.1919379337": [
+			"O picadeiro em tendas de circos deve estar separado da área com os assentos por uma barreira sólida com no mínimo 0,40 m de altura.",
+			"As barreiras ou alambrados que separam a arena de outros locais acessíveis ao público deverão possuir passagens que permitam aos espectadores sua utilização em caso de emergência, mediante sistema de abertura."
+		],
+		"entry.1229226787": [
+			"O palco deve ter extintores de incêndio.",
+			"O palco com saída de emergência compatível com o público."
+		],
+		"entry.1426151753": [
+			"Os eventos em área extena das edificações devem possuir acesso independente.",
+			"Nos eventos no interior de edificações, as saídas devem comportar o público da edificação e do evento."
+		],
+		"entry.723661602": [
+			"Os acessos com catracas/barreiras não são consideradas saídas de emergência.",
+			"Instalar no mínimo 02 saídas de emegência para o evento.",
+			"As saídas devem estar em lados distintos, formando ângulo mínimo de 45º entre elas e o ponto mais distante.",
+			"As saídas de emergência devem ser dimensionadas em função do público máximo e do tempo de evacuação (máx. 6 min.) - podendo ser adotado aumento do número e/ou largura das saídas.",
+			"As saídas de emergência deverão conduzir a população a local aberto e seguro.",
+			"O espaço destinado ao trânsito de veículos deve ser distinto daquele delimitado para pedestres."
+		],
+		"entry.2071207835": [
+			"A definição do púbico máximo do evento será dado em função da largura das saídas, densidade de 2 pessoas/m2 e do tempo de evacuação (máx. 6 min.).",
+			"A definição do público de apoio em áreas de apoio de edificações será dada pela densidade de 1 pessoas/7m2.",
+			"Público acima de 10.000 pessoas - deverá ter sistema de contagem e controle de público."
+		],
+		"entry.193152464": [
+			"A \"distância máxima a ser percorrida\" em arquibancadas até local seguro será de 60m.",
+			"A \"distância máxima a ser percorrida\" em um setor de arquibancadas até o acesso radial será de 7m.",
+			"Os acessos radiais e laterais devem conduzir o público para fora da projeção da arquibancada."
+		],
+		"entry.2120416290": [
+			"As saídas de emergência deverão abrir no sentido da fuga ou permanecerem abertas durante o evento.",
+			"As portas ou portões abertos não podem obstruir ou diminuir as rotas de fuga.",
+			"As portas/portões das saídas de emergência devem ficar afastadas no minimo 5m de locais de aglomeração de pessoas."
+		],
+		"entry.222003179": [
+			"As rampas devem possuir inclinação máxima de 10%, com patamar horizontal a cada 15,0 m lineares.",
+			"As escadas e rampas, exceto das áreas de apoio, devem possuir largura mínima de 1,20 m.",
+			"As escadas e rampas com largura igual ou superior a 2,40 m, exceto aquelas com acesso restrito à organização do evento e ao palco, devem possuir corrimãos intermediários no máximo a cada 1,80 m e no mínimo a cada 1,20 m.",
+			"Rampas nas saídas dos setores com acomodação de pessoas portadoras de necessidades especiais."
+		],
+		"entry.1463757062": [
+			"Eventos descobertos com delimitação por barreiras, a distância máxima a ser percorrida para saída de emergêcia is 120 m.",
+			"Em construções provisórias, quando fechadas lateralmente, a distância máxima a ser percorrida para saída de emergência é 35 m.",
+			"Evento em edificações permanentes, a distância máxima a percorrer será conforme projeto aprovado para a edificação."
+		],
+		"entry.687433793": [
+			"Em eventos acima de 10.000 pessoas, instalar, próximo ao palco, barreiras antiesmagamento e corredor de segurança com largura mínima de 2,50 m.",
+			"As barreiras antiesmagamento devem ter altura entre 1,05 m e 1,22 m.",
+			"As barreiras antiesmagamento não devem possuir pontas ou bordas agudas.",
+			"As barreiras antiesmagamento devem possuir plataforma de apoio mais alta que o piso."
+		],
+		"entry.568079951": [
+			"Os eventos com público superior a 40 mil pessoas e com fechamento devem ter corredores de segurança e setorização de público com no máximo 10 mil pessoas por setor.",
+			"Instalar barreiras antiesmagamento para setorização do públcio com corredores de no mínimo 2,5m.",
+			"As fileiras deverão ter no máximo 60 assentos quando houver corredor somente em dois lados.",
+			"As fileiras deverão ter no máximo 30 assentos quando houver corredor somente em um lado.",
+			"A setorização de público sentado deverá ter no máximo 50 fileiras por setor e 3 mil pessoas.",
+			"Os corredores de segurança de público sentado deverão ter largura mínima de 1,20m.",
+			"Os agrupamentos de mesas com corredores em três ou mais lados deverão ter no maximo 48 pessoas.",
+			"Os agrupamentos de mesas com corredores em um ou dois lados deverão ter no maximo 24 pessoas.",
+			"A distância entre as mesas nos agrupamentos será de no mínimo 0,60m.",
+			"Os corredores entre os agrupamentos de mesas devem ter largura mínima de 1,20m."
+		],
+		"entry.1007099289": [
+			"Instalar sistema de iluminação de emergência nas rotas de fuga em recinto fechado/coberto e no interior de edificações.",
+			"Instalar sistema de iluminação de emergência nas saídas de emergência em recinto fechado/coberto e no interior de edificações.",
+			"Correto distanciamento entre os pontos de luz (distância de 4 vezes a altura)."
+		],
+		"entry.1762476025": [
+			"Instalar sistema de iluminação de emergência nas rotas de fuga nos eventos realizados em local aberto, no período noturno ou parcialmente noturno.",
+			"Instalar sistema de iluminação de emergência nas saidas de emergência nos eventos realizados em local aberto, no período noturno ou parcialmente noturno."
+		],
+		"entry.1870505228": [
+			"Instalar os extintores em bateria a no máximo 50m do risco e isolado do público."
+		],
+		"entry.2072061556": [
+			"Instalar extintores nas estruturas com cocção de alimentos.",
+			"Instalar extintores nas estruturas com equipamentos energizados (ex.: Gerador).",
+			"Instalar extintores nas estruturas com material combustível (ex.: Central de GLP).",
+			"Instalar extintores nas estruturas temporárias confeccionadas em material combustível, a no máximo 5,0 m do risco a proteger."
+		],
+		"entry.991345744": [
+			"Extintores devidamente fixados (nas paredes ou em suportes fixados no piso)",
+			"Extintores dentro do prazo de Validade",
+			"Extintores corretos de acordo com a classe de proteção (A B C)."
+		],
+		"entry.245960816": [
+			"Instalar gerador nos eventos de público superior a 10 mil pessoas.",
+			"Instalar gerador como fonte alternativa para brinquedos mecânicos.",
+			"Isolar o gerador e tanques com barreira física.",
+			"Não instalar o gerador em ambiente confinado.",
+			"Não operar o gerador em lugares molhados.",
+			"Instalar aterramento elétrico no gerador.",
+			"Direcionar a exaustão do gerador para fora do público."
+		],
+		"entry.1015126727": [
+			"O quadro de disjuntores deve estar isolado em local seguro fisicamente e eletricamente.",
+			"Instalar tomadas padrão de 3 pinos.",
+			"Isolar fiação elétrica das estruturas.",
+			"Proteger fiação estendida no solo em local de acesso ao público.",
+			"Instalar dispositivo de proteção DR contra fuga de corrente."
+		],
+		"entry.1387309357": [
+			"Instalar aterramento elétrico em todas as estruturas metálicas."
+		],
+		"entry.231274032": [
+			"O SPDA deve atender os requisitos da NBR 5419."
+		],
+		"entry.1615254798": [
+			"Abertura de ventilação adequada.",
+			"Instalar registro de corte para cada ponto de consumo de GLP.",
+			"Piso elevado.",
+			"Apresentar afastamentos mínimos (fonte de ignição, fonte de eletricidade, estacionamentos, vãos e aberturas...)."
+		],
+		"entry.1434165906": [
+			"É Proibido o uso de GLP nas bilheterias.",
+			"É Proibido o uso de GLP em estruturas, áreas de acomodação e circulação de público.",
+			"Instalar um P13 por ponto de consumo, com mangueira de malha de aço, registro, em local protegido e ventilado.",
+			"Substituir mangueira de GLP maior que 1,25m por tubo multicamada.",
+			"Instalar registro de corte para cada ponto de consumo ou recipiente P-13."
+		]
+	};
+
+	const codeToOptions = {
+		"01.003": [
+			["entry.809039382", "Apresentar ART/RRT/TRT dos sistemas de SCIP e estruturas do evento - evento acima de 1.000 pessoas."],
+			["entry.809039382", "O responsável técnico deverá acompanhar a montagem das estruturas do evento, emitir relatório e ART/RRT/TRT e fazer o registro no livro de ordem."]
+		],
+		"01.004": [
+			["entry.809039382", "Apresentar ART de execução do Laudo de Estanqueidade da Central de GLP."],
+			["entry.1721739093", "Apresentar Projeto de Incêndio da Central de GLP."]
+		],
+		"01.005": [
+			["entry.809039382", "Apresentar ART/RRT/TRT/Laudo de aterrameto elétrico de todas as massas metálicas das estruturas."]
+		],
+		"01.006": [
+			["entry.809039382", "Apresentar ART/RRT/TRT/Laudo de aterrameto elétrico de todas as massas metálicas das estruturas."]
+		],
+		"01.007": [
+			["entry.809039382", "Apresentar ART/RRT/TRT e laudo de flamabilidade, registrados em livro de ordem, dos materiais de acabamento usados no evento."]
+		],
+		"01.008": [
+			["entry.809039382", "Apresentar ART/RRT/TRT e laudo de flamabilidade, registrados em livro de ordem, dos materiais de acabamento usados no evento."]
+		],
+		"01.009": [
+			["entry.809039382", "Apresentar ART/RRT/TRT de aterramento elétrico do Gerador."]
+		],
+		"01.010": [
+			["entry.809039382", "Apresentar ART/RRT/TRT de instalação elétrica provisória do evento."]
+		],
+		"01.011": [
+			["entry.809039382", "Apresentar ART/RRT/TRT de instalação elétrica provisória do evento."]
+		],
+		"01.012": [
+			["entry.1721739093", "Apresentar o croqui do evento."]
+		],
+		"01.013": [
+			["entry.1721739093", "Apresentar requerimento original de solicitação de Licença de Funcionamento Eventual."],
+			["entry.1721739093", "Apresentar formulário de apoio para licença de funcionamento eventual."]
+		],
+		"01.017": [
+			["entry.809039382", "O responsável técnico pelo evento deve acompanhar a vistoria, quando solicitado."]
+		],
+		"02.001": [
+			["entry.980011299", "Instalar sistema de sinalização de segurança nas Saídas de Emergência."],
+			["entry.980011299", "Instalar sistema de sinalização de segurança na Rota de Fuga."]
+		],
+		"02.002": [
+			["entry.980011299", "Instalar sistema de sinalização de segurança nas Saídas de Emergência."]
+		],
+		"02.005": [
+			["entry.980011299", "Instalar as placas de sinalização em altura que garantam a sua vizualização."]
+		],
+		"02.007": [
+			["entry.980011299", "Instalar as placas de sinalização em altura que garantam a sua vizualização."]
+		],
+		"02.022": [
+			["entry.980011299", "Instalar as placas de sinalização em altura que garantam a sua vizualização."]
+		],
+		"02.029": [
+			["entry.980011299", "Instalar sistema de sinalização de segurança nas Saídas de Emergência."]
+		],
+		"02.033": [
+			["entry.980011299", "Instalar sistema de sinalização de segurança nos Extintores."]
+		],
+		"02.034": [
+			["entry.980011299", "Instalar sistema de sinalização de segurança na Central de GLP."]
+		],
+		"02.035": [
+			["entry.980011299", "Instalar sistema de sinalização de segurança no Gerador de Energia e Equipamentos Energizados."]
+		],
+		"02.057": [
+			["entry.891456062", "A indicação de capacidade máxima de público aprovada deve estar visivel nas entradas e setores."]
+		],
+		"02.071": [
+			["entry.891456062", "Iluminar as placas de sinalização em eventos noturnos ao ar livre."]
+		],
+		"03.001": [
+			["entry.1007099289", "Instalar sistema de iluminação de emergência nas rotas de fuga em recinto fechado/coberto e no interior de edificações."],
+			["entry.1007099289", "Instalar sistema de iluminação de emergência nas saídas de emergência em recinto fechado/coberto e no interior de edificações."]
+		],
+		"03.004": [
+			["entry.1007099289", "Instalar sistema de iluminação de emergência nas rotas de fuga em recinto fechado/coberto e no interior de edificações."]
+		],
+		"03.005": [
+			["entry.1007099289", "Instalar sistema de iluminação de emergência nas saídas de emergência em recinto fechado/coberto e no interior de edificações."]
+		],
+		"03.006": [
+			["entry.1007099289", "Correto distanciamento entre os pontos de luz (distância de 4 vezes a altura)."]
+		],
+		"03.008": [
+			["entry.1007099289", "Instalar sistema de iluminação de emergência nas rotas de fuga em recinto fechado/coberto e no interior de edificações."]
+		],
+		"03.040": [
+			["entry.1762476025", "Instalar sistema de iluminação de emergência nas rotas de fuga nos eventos realizados em local aberto, no período noturno ou parcialmente noturno."],
+			["entry.1762476025", "Instalar sistema de iluminação de emergência nas saidas de emergência nos eventos realizados em local aberto, no período noturno ou parcialmente noturno."]
+		],
+		"04.001": [
+			["entry.991345744", "Extintores devidamente fixados (nas paredes ou em suportes fixados no piso)"]
+		],
+		"04.004": [
+			["entry.991345744", "Extintores corretos de acordo com a classe de proteção (A B C)."]
+		],
+		"04.007": [
+			["entry.1870505228", "Instalar os extintores em bateria a no máximo 50m do risco e isolado do público."]
+		],
+		"04.010": [
+			["entry.991345744", "Extintores dentro do prazo de Validade"]
+		],
+		"05.001": [
+			["entry.723661602", "Instalar no mínimo 02 saídas de emegência para o evento."]
+		],
+		"05.002": [
+			["entry.723661602", "As saídas devem estar em lados distintos, formando ângulo mínimo de 45º entre elas e o ponto mais distante."]
+		],
+		"05.003": [
+			["entry.723661602", "As saídas de emergência devem ser dimensionadas em função do público máximo..."]
+		],
+		"05.004": [
+			["entry.723661602", "As saídas de emergência deverão conduzir a população a local aberto e seguro."]
+		],
+		"05.011": [
+			["entry.2120416290", "As saídas de emergência deverão abrir no sentido da fuga ou permanecerem abertas durante o evento."]
+		],
+		"05.012": [
+			["entry.2120416290", "As portas ou portões abertos não podem obstruir ou diminuir as rotas de fuga."]
+		],
+		"05.017": [
+			["entry.222003179", "As escadas e rampas, exceto das áreas de apoio, devem possuir largura mínima de 1,20 m."]
+		],
+		"05.021": [
+			["entry.222003179", "As rampas devem possuir inclinação máxima de 10%, com patamar horizontal a cada 15,0 m lineares."]
+		],
+		"08.001": [
+			["entry.1615254798", "Apresentar afastamentos mínimos (fonte de ignição, fonte de eletricidade, estacionamentos, vãos e aberturas...)."]
+		],
+		"08.002": [
+			["entry.1615254798", "Abertura de ventilação adequada."]
+		],
+		"08.003": [
+			["entry.1615254798", "Instalar registro de corte para cada ponto de consumo de GLP."]
+		],
+		"08.004": [
+			["entry.1615254798", "Piso elevado."]
+		],
+		"08.009": [
+			["entry.1434165906", "É Proibido o uso de GLP em estruturas, áreas de acomodação e circulação de público."]
+		],
+		"08.012": [
+			["entry.1434165906", "Instalar um P13 por ponto de consumo, com mangueira de malha de aço, registro, em local protegido e ventilado."]
+		],
+		"11.001": [
+			["entry.1015126727", "O quadro de disjuntores deve estar isolado em local seguro fisicamente e eletricamente."]
+		],
+		"11.003": [
+			["entry.1015126727", "Isolar fiação elétrica das estruturas."]
+		],
+		"11.004": [
+			["entry.1015126727", "Proteger fiação estendida no solo em local de acesso ao público."]
+		],
+		"11.012": [
+			["entry.1015126727", "Instalar dispositivo de proteção DR contra fuga de corrente."]
+		],
+		"12.001": [
+			["entry.1994180731", "Apresentar o PBET aprovado - evento acima de 1.000 pessoas."],
+			["entry.1994180731", "Aprovar o PBET para eventos em edificações permanentes - Quando SCIP insuficiente ou público superior ao projetado para a edificação."]
+		],
+		"12.002": [
+			["entry.1994180731", "Protocolar o PBET para análise com 30 dias antes do evento."]
+		],
+		"12.003": [
+			["entry.1994180731", "Retornar o PBET, com exigências, para reanálise com 10 dias antes do evento."]
+		],
+		"13.001": [
+			["entry.1147682255", "Apresentar contrato da brigada."],
+			["entry.1147682255", "Apresentar o certificado de credenciamento da empresa de brigada."]
+		],
+		"13.002": [
+			["entry.1147682255", "Quantidade de brigadista compatível com o tamanho do evento."]
+		],
+		"13.003": [
+			["entry.1147682255", "Apresentar os certificados dos brigadistas."]
+		]
+	};
+
+	// Coleta as exigências
+	const listaExigenciasOrdenada = [];
+	const cardsCategorias = Array.from(document.querySelectorAll('#exigenciasContainer .card'));
+	cardsCategorias.sort((a, b) => {
+		const catA = a.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+		const catB = b.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+		return parseInt(catA) - parseInt(catB);
+	});
+	cardsCategorias.forEach(card => {
+		const inputs = Array.from(card.querySelectorAll('input[name="exigencias[]"]'));
+		inputs.sort((a, b) => {
+			const codA = a.value.split(' ')[0].replace(',', '.');
+			const codB = b.value.split(' ')[0].replace(',', '.');
+			return parseFloat(codA) - parseFloat(codB);
+		});
+		inputs.forEach(input => {
+			if (input.value) listaExigenciasOrdenada.push(input.value);
+		});
+	});
+	if (listaExigenciasOrdenada.length === 0) {
+		document.querySelectorAll('input[name="exigencias[]"]').forEach(i => listaExigenciasOrdenada.push(i.value));
+	}
+
+	const formParams = {
+		// Email consent e Envio fixo por email
+		"entry.1714192818": "divis.fisc24@gmail.com",
+
+		// Vistoriadores e Viatura (Outros)
+		"entry.952823450": "__other_option__",
+		"entry.952823450.other_option_response": v("ev_vistoriador01"),
+		"entry.2094975252": "__other_option__",
+		"entry.2094975252.other_option_response": v("ev_vistoriador02"),
+		"entry.1503326683": "__other_option__",
+		"entry.1503326683.other_option_response": v("ev_viatura"),
+		"entry.1594942841": "__other_option__",
+		"entry.1594942841.other_option_response": v("ev_regime"),
+
+		// Dados gerais do processo
 		"entry.191765537": v("processoBusca"),
 		"entry.1200371070": v("ev_evento"),
 		"entry.2101176802": v("ev_ra"),
@@ -2843,12 +3293,17 @@ function enviarParaGoogleForms() {
 		"entry.635703155_month": dataFim[1] || "",
 		"entry.635703155_day": dataFim[2] || "",
 
-		// Evento
+		// Evento e Responsável Fixo
 		"entry.209142364": v("ev_obs_periodo"),
 		"entry.2103689319": v("ev_publico"),
 		"entry.129765383": v("ev_area"),
 		"entry.647891186": v("ev_geo"),
-		"entry.1749955179": v("ev_responsavel"),
+		"entry.1749955179": "Responsável não cadastrado",
+
+		// Novos campos do Responsável
+		"entry.1144946037": v("ev_responsavel"),
+		"entry.403351946": v("ev_cpf"),
+		"entry.1653755878": v("ev_telefone"),
 
 		// Estruturas
 		"entry.1810871816": v("ev_cercamento"),
@@ -2899,8 +3354,51 @@ function enviarParaGoogleForms() {
 		"entry.1171952603": v("ev_art_eletrica"),
 		"entry.2125304373": v("ev_croqui_evento"),
 		"entry.2002719496": v("ev_cert_foodtruck"),
-		"entry.928440077": v("ev_contrato_brigada")
+		"entry.928440077": v("ev_contrato_brigada"),
+
+		// Resultado e Parecer Final
+		"entry.2038015743": v("ev_status_eventual"),
+		"entry.527724047": v("ev_condicionantes"),
+		"entry.817281579": v("ev_restricoes"),
+		"entry.1325156845": v("ev_parecer_final"),
+		"entry.1426316217": v("ev_motivo_cancelamento")
+	};
+
+	const params = new URLSearchParams(formParams);
+
+	// Process checkboxes based on code and description mapping
+	const checkedOptions = {};
+
+	listaExigenciasOrdenada.forEach(exig => {
+		const codeMatch = exig.match(/^(\d+\.\d+)\s*-\s*/);
+		if (codeMatch && codeMatch[1]) {
+			const code = codeMatch[1];
+			if (codeToOptions[code]) {
+				codeToOptions[code].forEach(([entryId, optVal]) => {
+					if (!checkedOptions[entryId]) checkedOptions[entryId] = new Set();
+					checkedOptions[entryId].add(optVal);
+				});
+				return;
+			}
+		}
+
+		const exigClean = exig.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+		for (const [entryId, options] of Object.entries(checkboxMappings)) {
+			options.forEach(opt => {
+				const optClean = opt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]/g, "");
+				if (exigClean.includes(optClean) || optClean.includes(exigClean)) {
+					if (!checkedOptions[entryId]) checkedOptions[entryId] = new Set();
+					checkedOptions[entryId].add(opt);
+				}
+			});
+		}
 	});
+
+	for (const [entryId, optionsSet] of Object.entries(checkedOptions)) {
+		optionsSet.forEach(optVal => {
+			params.append(entryId, optVal);
+		});
+	}
 
 	window.location.href = FORM_URL + "?" + params.toString();
 }

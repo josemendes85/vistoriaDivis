@@ -94,6 +94,39 @@
             <div class="form-section">
                 <div class="card-body">
                     <h5 class="section-title">
+                        <i class="bi bi-people me-2"></i>Equipe de Vistoria
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <label class="form-label">Vistoriador 01</label>
+                            <input type="text" class="form-control" id="vistoriador01" placeholder="NOME - MATRÍCULA" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Vistoriador 02</label>
+                            <input type="text" class="form-control" id="vistoriador02" placeholder="NOME - MATRÍCULA" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Viatura</label>
+                            <input type="text" class="form-control" id="viatura" placeholder="ABC-1234" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Regime de Trabalho</label>
+                            <select class="form-select" id="regime">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="GSV">GSV</option>
+                                <option value="Plantão 24h">Plantão 24h</option>
+                                <option value="ALA A (SEG, QUA, SEX)">ALA A (SEG, QUA, SEX)</option>
+                                <option value="ALA B (TER, QUI, SEX)">ALA B (TER, QUI, SEX)</option>
+                                <option value="Expediente">Expediente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <div class="card-body">
+                    <h5 class="section-title">
                         <i class="bi bi-calendar-event me-2"></i>Período e Capacidade
                     </h5>
                     <div class="row g-3">
@@ -133,9 +166,17 @@
                         <i class="bi bi-person-check me-2"></i>Responsáveis
                     </h5>
                     <div class="row g-3">
-                        <div class="col-md-12">
-                            <label class="form-label">Responsável pelo evento</label>
+                        <div class="col-md-6">
+                            <label class="form-label">Nome do Responsável</label>
                             <input type="text" class="form-control" id="responsavel" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">CPF do Responsável</label>
+                            <input type="text" class="form-control" id="responsavel_cpf" placeholder="000.000.000-00" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label">Telefone do Responsável</label>
+                            <input type="text" class="form-control" id="responsavel_tel" placeholder="(61) 99999-9999" />
                         </div>
                         <div class="col-md-3">
                             <label class="form-label">Terá brigada?</label>
@@ -771,6 +812,43 @@
                     </div>
                 </div>
             </div>
+
+            <div class="form-section">
+                <div class="card-body">
+                    <h5 class="section-title">
+                        <i class="bi bi-journal-check me-2"></i>Resultado e Parecer Final
+                    </h5>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label">Status da Vistoria</label>
+                            <select class="form-select" id="status_eventual" required>
+                                <option value="">Selecione...</option>
+                                <option value="Aprovado">Aprovado</option>
+                                <option value="Reprovado">Reprovado</option>
+                                <option value="Cancelado">Cancelado</option>
+                                <option value="Não Realizada">Não Realizada</option>
+                            </select>
+                        </div>
+                        <div class="col-md-8">
+                            <label class="form-label">Motivo do Cancelamento/Reprovação (se aplicável)</label>
+                            <input type="text" class="form-control" id="motivo_cancelamento" placeholder="Descrever o motivo..." />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Condicionantes</label>
+                            <textarea class="form-control" id="condicionantes" rows="3" placeholder="Caso haja condicionantes..."></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Restrições</label>
+                            <textarea class="form-control" id="restricoes" rows="3" placeholder="Caso haja restrições..."></textarea>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Parecer Final</label>
+                            <textarea class="form-control" id="parecer_final" rows="3" placeholder="Descrever parecer final..." required></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="index.html" class="btn btn-outline-secondary">
@@ -795,8 +873,14 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.9/jquery.inputmask.min.js"></script>
 
     <script>
-        $(document).ready(function () {
+        const Utils = {
+            formatarClasseStatus(status) {
+                if (!status) return "";
+                return 'status-' + status.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+            }
+        };
 
+        $(document).ready(function () {
             // Converte o valor para maiúsculas enquanto o usuário digita
             $('input[type="text"]').on('input', function () {
                 this.value = this.value.toUpperCase();
@@ -807,12 +891,14 @@
                 this.value = this.value.toUpperCase();
             });
             
-            // Máscara para o processo
+            // Máscaras para os campos
             $("#processo").inputmask("99999-99999999/9999-99");
+            $("#responsavel_cpf").inputmask("999.999.999-99");
+            $("#responsavel_tel").inputmask("(99) 99999-9999");
 
             // --- 1. LÓGICA DE CARREGAMENTO (EDITAR) ---
             const urlParams = new URLSearchParams(window.location.search);
-            const editId = urlParams.get("id");
+            let editId = urlParams.get("id");
 
             if (editId) {
                 const dadosSalvos = JSON.parse(localStorage.getItem(editId));
@@ -821,18 +907,31 @@
                     Object.keys(dadosSalvos).forEach(key => {
                         const field = $(`#${key}`);
                         if (field.length) {
-                            field.val(decodeURIComponent(dadosSalvos[key]));
+                            const val = dadosSalvos[key];
+                            try {
+                                field.val(val ? decodeURIComponent(val) : "");
+                            } catch (e) {
+                                field.val(val || "");
+                            }
                         }
                     });
-                    // Caso especial para o responsável que é um select
-                    //   if (dadosSalvos.responsavel_full) $("#responsavel").val(dadosSalvos.responsavel_full);
+                    
+                    if (dadosSalvos.status_eventual) {
+                        aplicarCorDoStatus(dadosSalvos.status_eventual);
+                    }
                 }
             }
+
+            // Atualiza a cor do status ao alterar
+            $("#status_eventual").on("change", function() {
+                aplicarCorDoStatus(this.value);
+            });
 
             // Apply status color to title
             function aplicarCorDoStatus(status) {
                 const titulo = document.getElementById("tituloLaudo");
-                // Remove existing status classes (e.g., status-pendente, status-aprovado)
+                if (!titulo) return;
+                // Remove existing status classes
                 titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
 
                 const classe = Utils.formatarClasseStatus(status);
@@ -860,8 +959,6 @@
                     localStorage.removeItem(editId);
                 }
 
-                const responsavelRaw = $("#responsavel").val() || "";
-
                 // Coleta todos os dados do formulário
                 const dadosParaSalvar = {
                     id: idProcesso,
@@ -872,7 +969,13 @@
                     endereco: $("#endereco").val(),
                     geo: $("#geo").val(),
 
-                    // 2. Período e Público
+                    // Equipe de Vistoria
+                    vistoriador01: $("#vistoriador01").val(),
+                    vistoriador02: $("#vistoriador02").val(),
+                    viatura: $("#viatura").val(),
+                    regime: $("#regime").val(),
+
+                    // Período e Público
                     data_inicio: $("#data_inicio").val(),
                     data_fim: $("#data_fim").val(),
                     data: $("#data_inicio").val(), // duplicado para a tabela
@@ -881,14 +984,16 @@
                     area: $("#area").val(),
                     vistoria_realizada: $("#vistoria_realizada").val(),
 
-                    // 3. Responsáveis e Brigada
+                    // Responsáveis e Brigada
                     responsavel: $("#responsavel").val(),
+                    responsavel_cpf: $("#responsavel_cpf").val(),
+                    responsavel_tel: $("#responsavel_tel").val(),
                     tem_brigada: $("#tem_brigada").val(),
                     qtd_brigadistas: $("#qtd_brigadistas").val(),
-                    cert_brigadista: $("#cert_brigadista").val(), // ajuste se necessário
+                    cert_brigadista: $("#cert_brigadista").val(),
                     empresa_brigada: $("#empresa_brigada").val(),
 
-                    // 4. Estruturas (Quantidades)
+                    // Estruturas (Quantidades)
                     possui_estrutura: $("#possui_estrutura").val(),
                     q_tendas: $("#q_tendas").val(),
                     q_palcos: $("#q_palcos").val(),
@@ -900,7 +1005,7 @@
                     cercamento: $("#cercamento").val(),
                     laudo_inflamabilidade: $("#laudo_inflamabilidade").val(),
 
-                    // 5. Elétrica e Riscos
+                    // Elétrica e Riscos
                     eletrica_provisoria: $("#eletrica_provisoria").val(),
                     q_quadros: $("#q_quadros").val(),
                     qd_dr: $("#qd_dr").val(),
@@ -920,17 +1025,30 @@
                     q_extintores: $("#q_extintores").val(),
                     extintores_validos: $("#extintores_validos").val(),
 
-                    // 6. Documentação (Checklist)
+                    // Documentação (Checklist)
                     art_estruturas: $("#art_estruturas").val(),
                     art_eletrica: $("#art_eletrica").val(),
                     croqui_evento: $("#croqui_evento").val(),
                     cert_foodtruck: $("#cert_foodtruck").val(),
                     contrato_brigada: $("#contrato_brigada").val(),
-                    declaracao_gerador: $("#declaracao_gerador").val()
+                    declaracao_gerador: $("#declaracao_gerador").val(),
+
+                    // Resultado e Parecer
+                    status_eventual: $("#status_eventual").val(),
+                    motivo_cancelamento: $("#motivo_cancelamento").val(),
+                    condicionantes: $("#condicionantes").val(),
+                    restricoes: $("#restricoes").val(),
+                    parecer_final: $("#parecer_final").val()
                 };
 
                 try {
                     localStorage.setItem(idProcesso, JSON.stringify(dadosParaSalvar));
+                    
+                    // Sincroniza a URL e o editId para manter o estado da página correto
+                    editId = idProcesso;
+                    const newUrl = `${window.location.pathname}?id=${idProcesso}`;
+                    window.history.replaceState({ path: newUrl }, '', newUrl);
+
                     alert(novoStatus === "Enviado" ? "✅ Vistoria ENVIADA com sucesso!" : "💾 Progresso SALVO!");
                 } catch (e) {
                     console.error(e);
@@ -974,10 +1092,10 @@
 
         function confirmExclusao() {
             const urlParams = new URLSearchParams(window.location.search);
-            const editId = urlParams.get("id");
-            if (editId && confirm("Apagar este registo permanentemente?")) {
-                localStorage.removeItem(editId);
-                window.location.href = "lista_eventual.html";
+            const currentEditId = urlParams.get("id");
+            if (currentEditId && confirm("Apagar este registo permanentemente?")) {
+                localStorage.removeItem(currentEditId);
+                window.location.href = "index.html";
             }
         }
 
@@ -992,28 +1110,45 @@
             const dataFim = document.getElementById("data_fim").value.split("-");
 
             const params = new URLSearchParams({
+                // Email consent e Envio fixo por email
+                "entry.1714192818": "divis.fisc24@gmail.com",
 
-                // Dados gerais
+                // Vistoriadores e Viatura (Outros)
+                "entry.952823450": "__other_option__",
+                "entry.952823450.other_option_response": v("vistoriador01"),
+                "entry.2094975252": "__other_option__",
+                "entry.2094975252.other_option_response": v("vistoriador02"),
+                "entry.1503326683": "__other_option__",
+                "entry.1503326683.other_option_response": v("viatura"),
+                "entry.1594942841": "__other_option__",
+                "entry.1594942841.other_option_response": v("regime"),
+
+                // Dados gerais do processo
                 "entry.191765537": v("processo"),
                 "entry.1200371070": v("evento"),
                 "entry.2101176802": v("ra"),
                 "entry.278707089": v("endereco"),
 
                 // Datas (ANO / MÊS / DIA)
-                "entry.1788638115_year": dataInicio[0],
-                "entry.1788638115_month": dataInicio[1],
-                "entry.1788638115_day": dataInicio[2],
+                "entry.1788638115_year": dataInicio[0] || "",
+                "entry.1788638115_month": dataInicio[1] || "",
+                "entry.1788638115_day": dataInicio[2] || "",
 
-                "entry.635703155_year": dataFim[0],
-                "entry.635703155_month": dataFim[1],
-                "entry.635703155_day": dataFim[2],
+                "entry.635703155_year": dataFim[0] || "",
+                "entry.635703155_month": dataFim[1] || "",
+                "entry.635703155_day": dataFim[2] || "",
 
-                // Evento
+                // Evento e Responsável Fixo
                 "entry.209142364": v("obs_periodo"),
                 "entry.2103689319": v("publico"),
                 "entry.129765383": v("area"),
                 "entry.647891186": v("geo"),
-                "entry.1749955179": v("responsavel"),
+                "entry.1749955179": "Responsável não cadastrado",
+
+                // Novos campos do Responsável
+                "entry.1144946037": v("responsavel"),
+                "entry.403351946": v("responsavel_cpf"),
+                "entry.1653755878": v("responsavel_tel"),
 
                 // Estruturas
                 "entry.1810871816": v("cercamento"),
@@ -1056,33 +1191,27 @@
                 "entry.1999225105": v("distancias_cumpridas"),
 
                 // Extintores
-                "entry.299718848": v("q_extintores"), //20
-                "entry.15816431": v("extintores_validos"), //nao se aplica
+                "entry.299718848": v("q_extintores"),
+                "entry.15816431": v("extintores_validos"),
 
                 // Documentos
                 "entry.698760525": v("art_estruturas"),
                 "entry.1171952603": v("art_eletrica"),
                 "entry.2125304373": v("croqui_evento"),
                 "entry.2002719496": v("cert_foodtruck"),
-                "entry.928440077": v("contrato_brigada")
+                "entry.928440077": v("contrato_brigada"),
+
+                // Resultado e Parecer Final
+                "entry.2038015743": v("status_eventual"),
+                "entry.527724047": v("condicionantes"),
+                "entry.817281579": v("restricoes"),
+                "entry.1325156845": v("parecer_final"),
+                "entry.1426316217": v("motivo_cancelamento")
             });
 
             // Redireciona
             console.log("URL de envio:", FORM_URL + "?" + params.toString());
             window.location.href = FORM_URL + "?" + params.toString();
-        }
-        // Apply status color to title
-        function aplicarCorDoStatus(status) {
-            const titulo = document.getElementById("tituloLaudo");
-            // Remove existing status classes (e.g., status-pendente, status-aprovado)
-            titulo.classList.remove(...Array.from(titulo.classList).filter(c => c.startsWith('status-')));
-
-            const classe = Utils.formatarClasseStatus(status);
-            if (status) {
-                titulo.classList.add('text-light', classe);
-            } else {
-                titulo.classList.add('text-dark', 'status-sem-status'); // Default for no status
-            }
         }
     </script>
 </body>

@@ -65,8 +65,7 @@
 							<option value="DPV">Dilação de Prazo Vencida</option>
 							<option value="PPCI">PPCI - Plano de Prevenção</option>
 							<option value="Outros">Outros</option>
-							<option disabled>────────────────────</option>
-							<option value="Eventual" style="font-weight: bold; background-color: #f8f9fa;">Eventual</option>
+							<option value="Eventual" style="background-color: #79baca;">Eventual</option>
 						</select>
 						<div class="invalid-feedback">
 							Por favor, selecione o tipo de vistoria.
@@ -469,6 +468,39 @@
 				</div>
 
 				<div class="form-section">
+					<div class="card-body">
+						<h5 class="section-title">
+							<i class="bi bi-people me-2"></i>Equipe de Vistoria
+						</h5>
+						<div class="row g-3">
+							<div class="col-md-3">
+								<label class="form-label">Vistoriador 01</label>
+								<input type="text" class="form-control text-uppercase" id="ev_vistoriador01" name="ev_vistoriador01" />
+							</div>
+							<div class="col-md-3">
+								<label class="form-label">Vistoriador 02</label>
+								<input type="text" class="form-control text-uppercase" id="ev_vistoriador02" name="ev_vistoriador02" />
+							</div>
+							<div class="col-md-3">
+								<label class="form-label">Viatura</label>
+								<input type="text" class="form-control text-uppercase" id="ev_viatura" name="ev_viatura" placeholder="ABC-1234" />
+							</div>
+							<div class="col-md-3">
+								<label class="form-label">Regime de Trabalho</label>
+								<select class="form-select" id="ev_regime" name="ev_regime">
+									<option value="" selected disabled>Selecione...</option>
+									<option value="GSV">GSV</option>
+									<option value="Plantão 24h">Plantão 24h</option>
+									<option value="ALA A (SEG, QUA, SEX)">ALA A (SEG, QUA, SEX)</option>
+									<option value="ALA B (TER, QUI, SEX)">ALA B (TER, QUI, SEX)</option>
+									<option value="Expediente">Expediente</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-section">
 					<h5 class="section-title">
 						<i class="bi bi-calendar-event me-2"></i>Período e Capacidade
 					</h5>
@@ -508,9 +540,17 @@
 						<i class="bi bi-person-check me-2"></i>Responsáveis
 					</h5>
 					<div class="row g-3">
-						<div class="col-md-12">
-							<label class="form-label">Responsável pelo evento</label>
+						<div class="col-md-6">
+							<label class="form-label">Nome do Responsável</label>
 							<input type="text" class="form-control text-uppercase" id="ev_responsavel" name="ev_responsavel" />
+						</div>
+						<div class="col-md-3">
+							<label class="form-label">CPF do Responsável</label>
+							<input type="text" class="form-control" id="ev_cpf" name="ev_cpf" placeholder="000.000.000-00" />
+						</div>
+						<div class="col-md-3">
+							<label class="form-label">Telefone do Responsável</label>
+							<input type="text" class="form-control" id="ev_telefone" name="ev_telefone" placeholder="(61) 99999-9999" />
 						</div>
 						<div class="col-md-3">
 							<label class="form-label">Terá brigada?</label>
@@ -957,6 +997,42 @@
 								<option>Sim</option>
 								<option>Não</option>
 							</select>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-section">
+					<div class="card-body">
+						<h5 class="section-title">
+							<i class="bi bi-journal-check me-2"></i>Resultado e Parecer Final
+						</h5>
+						<div class="row g-3">
+							<div class="col-md-4">
+								<label class="form-label">Status da Vistoria</label>
+								<select class="form-select" id="ev_status_eventual" name="ev_status_eventual" required>
+									<option value="">Selecione...</option>
+									<option value="Aprovado">Aprovado</option>
+									<option value="Reprovado">Reprovado</option>
+									<option value="Cancelado">Cancelado</option>
+									<option value="Não Realizada">Não Realizada</option>
+								</select>
+							</div>
+							<div class="col-md-8">
+								<label class="form-label">Motivo do Cancelamento/Reprovação (se aplicável)</label>
+								<input type="text" class="form-control text-uppercase" id="ev_motivo_cancelamento" name="ev_motivo_cancelamento" placeholder="Descrever o motivo..." />
+							</div>
+							<div class="col-md-4">
+								<label class="form-label">Condicionantes</label>
+								<textarea class="form-control text-uppercase" id="ev_condicionantes" name="ev_condicionantes" rows="3" placeholder="Caso haja condicionantes..."></textarea>
+							</div>
+							<div class="col-md-4">
+								<label class="form-label">Restrições</label>
+								<textarea class="form-control text-uppercase" id="ev_restricoes" name="ev_restricoes" rows="3" placeholder="Caso haja restrições..."></textarea>
+							</div>
+							<div class="col-md-4">
+								<label class="form-label">Parecer Final</label>
+								<textarea class="form-control text-uppercase" id="ev_parecer_final" name="ev_parecer_final" rows="3" placeholder="Descrever parecer final..." required></textarea>
+							</div>
 						</div>
 					</div>
 				</div>
