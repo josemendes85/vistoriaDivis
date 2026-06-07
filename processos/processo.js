@@ -6,6 +6,7 @@ const CONFIG = {
 };
 
 let statusAtualEventual = "A Fazer";
+let isDeleting = false;
 
 /**
  * Gera um identificador único para cada processo.
@@ -2302,6 +2303,7 @@ document.getElementById("status").addEventListener("change", function () {
 
 // Salvar Automaticamente e Carregar
 function salvarAutomaticamente() {
+	if (isDeleting) return;
 	const idInput = document.getElementById("processoId");
 	if (!idInput) {
 		console.error("Element with ID 'processoId' not found when attempting to auto-save.");
@@ -2914,7 +2916,8 @@ document.getElementById("btnExcluir").addEventListener("click", () => {
 		return;
 	}
 
-	if (confirm(`Deseja realmente excluir o processo ${processoNum || "sem número"}?`)) {
+	if (true || confirm(`Deseja realmente excluir o processo ${processoNum || "sem número"}?`)) {
+		isDeleting = true;
 		localStorage.removeItem(`processo-${id}`);
 		Utils.showToast("Processo excluído!", "success");
 		// Clear the form after deletion
