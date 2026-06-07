@@ -55,6 +55,11 @@ $(document).ready(function () {
 		atualizarVisibilidadeRetorno();
 	});
 	document.getElementById('tipo').addEventListener('change', function () {
+		// Clear active requirements and badges
+		document.getElementById("exigenciasContainer").innerHTML = "";
+		document.getElementById("badgesCategorias").innerHTML = "";
+		camposDeExigenciasAtivos = {};
+
 		alternarFormularios(this.value);
 		atualizarVisibilidadeRetorno();
 	});
@@ -414,6 +419,9 @@ function renderizarExigencias(codigos, categoriasMap) {
 // --- FUNÇÃO CONTROLADORA (DISPARADA POR EVENTOS) ---
 
 function dispararVerificacaoDeExigencias() {
+	if (document.getElementById("tipo")?.value === "Eventual") {
+		return;
+	}
 	const container = document.getElementById("exigenciasContainer");
 
 	const possuiExigenciasReais = container.querySelectorAll('input[name="exigencias[]"]').length > 0;
@@ -579,6 +587,108 @@ function copiarProcessoBusca() {
 		copiaFallback(textoParaCopiar);
 	}
 }
+
+// Dados das exigências para o formulário Eventual
+const DADOS_SISTEMA_EVENTUAL = {
+	categorias: {
+		"001": "DOCUMENTAÇÃO E PROJETOS",
+		"002": "BRIGADA DE INCÊNDIO",
+		"003": "RESPONSABILIDADES TÉCNICAS (ART/RRT/TRT)",
+		"004": "SINALIZAÇÃO E AVISOS DE SEGURANÇA",
+		"005": "MONTAGEM E HORÁRIOS LIMITES",
+		"006": "ESTRUTURAS E SAÍDAS EM EVENTOS",
+		"007": "EXTINTORES DE INCÊNDIO",
+		"008": "GERADOR E ELETRICIDADE",
+		"009": "CENTRAL DE GÁS (GLP)"
+	},
+	exigencias: {
+		"001": [
+			"01.001 - Apresentar o requerimento de vistoria para a concessão da licença para o evento(Item 5.5.3.1 da NT 09/2022)",
+			"01.002 - Apresentar o Memorial Descritivo para eventos classificados como médios, grandes ou especiais (acima de 1.000 pessoas)(Alínea c do item 5.4.2.2 da NT 09/2022)",
+			"01.003 - Apresentar o Termo de Declaração e de Responsabilidade para eventos com público acima de 1.000 pessoas(Alínea d do item 5.4.2.2 da NT 09/2022)",
+			"01.004 - Apresentar o Comprovante de Disponibilidade de Grupo Gerador de energia para eventos com público acima de 1.000 pessoas(Alínea e do item 5.4.2.2 da NT 09/2022)",
+			"01.005 - Apresentar o croqui do evento integrando o Projeto Básico para Eventos Temporários (PBET), com as dimensões gerais, o palco, as arquibancadas e as demais delimitações(Alínea a do item 5.4.2.2 da NT 09/2022)",
+			"01.006 - Apresentar o Projeto de Incêndio (Projeto Executivo) da Central de GLP para análise(Item 6.1.6.1 da NT 09/2022 c/c item 5.1.2 da NT 05/2021)",
+			"01.007 - Apresentar o Projeto Básico para Eventos Temporários (PBET) aprovado em eventos com público acima de 1.000 pessoas(Alínea a do item 5.4.2.2 e item 5.5.1.4 da NT 09/2022)",
+			"01.008 - Aprovar o PBET para eventos em edificações permanentes quando as adaptações tornarem insuficientes as medidas de SCIP existentes ou quando o público for superior ao projetado originalmente para a edificação(Item 5.4.3.6 da NT 09/2022)",
+			"01.009 - Protocolar o PBET para análise junto ao CBMDF com, no mínimo, 30 dias de antecedência da data do evento(Item 5.5.1.1 da NT 09/2022)",
+			"01.010 - Retornar o PBET, quando constarem exigências, para nova análise com, no mínimo, 10 dias de antecedência da data do evento(Item 5.5.1.3.1 da NT 09/2022)",
+			"01.011 - Apresentar o Parecer Técnico Específico aprovado para as atividades temporárias que se pretenda desenvolver no interior de edificações permanentes(Item 5.4.3.2 da NT 09/2022)",
+			"01.012 - O responsável técnico pelo evento, pelas instalações e pelas estruturas deve acompanhar a vistoria, quando solicitado pelo agente fiscalizador(Item 5.5.3.7 da NT 09/2022)",
+			"01.013 - O responsável técnico pela montagem de parques de diversões deverá atender às exigências técnicas da NBR 15926 e apresentar laudos e documentos de responsabilidade técnica pela montagem, inspeções e ensaios(Item 6.1.7.1 da NT 09/2022)"
+		],
+		"002": [
+			"02.001 - A brigada de incêndio deverá possuir a gestão/coordenação de um Responsável Técnico, em conjunto com o Supervisor e/ou o Chefe da Brigada(Item 6.1.5.2 da NT 09/2022)",
+			"02.002 - Apresentar o contrato de prestação de serviços da brigada particular de incêndio(Alínea f do item 5.4.2.2 e alínea a do item 5.4.1.2 da NT 09/2022)",
+			"02.003 - Apresentar o certificado de credenciamento (CRD), emitido pelo CBMDF, da empresa responsável pelo fornecimento da brigada de incêndio(Alínea g do item 5.4.2.2 e alínea b do item 5.4.1.2 da NT 09/2022)",
+			"02.004 - Apresentar a relação nominal atualizada e os certificados de formação ou de capacitação continuada dos brigadistas particulares escalados para o evento(Alínea h do item 5.4.2.2 da NT 09/2022 c/c item 7.2.1 da NT 07/2011)",
+			"02.005 - Garantir que a quantidade de brigadistas seja compatível e dimensionada para o tamanho e o público do evento(Item 6.1.5.1 da NT 09/2022 c/c Anexo B da NT 07/2011)"
+		],
+		"003": [
+			"03.001 - Apresentar os documentos de responsabilidade técnica (ART/RRT/TRT) dos sistemas, dos serviços e das estruturas implementados no evento com público acima de 1.000 pessoas(Alínea b do item 5.4.2.2 da NT 09/2022)",
+			"03.002 - Apresentar o documento de responsabilidade técnica atestando as adaptações realizadas no interior das edificações permanentes(Item 5.4.3.3 da NT 09/2022)",
+			"03.003 - Apresentar o laudo técnico e o documento de responsabilidade técnica do aterramento elétrico de todas as massas metálicas em palcos, arquibancadas e demais estruturas(Item 6.1.8.2 da NT 09/2022)",
+			"03.004 - Apresentar o documento de responsabilidade técnica pela execução da rede de distribuição/instalação elétrica provisória do evento(Item 6.1.8.3 da NT 09/2022)",
+			"03.005 - Apresentar o laudo e o documento de responsabilidade técnica atestando o aterramento elétrico do gerador de energia do evento(Alínea d do item 6.2.4.4 da NT 09/2022)",
+			"03.006 - Apresentar o laudo ou a declaração registrada com o documento de responsabilidade técnica atestando as características retardantes à propagação de chamas dos materiais de acabamento e de revestimento usados no evento (lonas, carpetes, laterais)(Item 6.3.4.5 da NT 09/2022)",
+			"03.007 - Apresentar o laudo com o documento de responsabilidade técnica do teste de estanqueidade da Central de GLP(Item 6.1.6.1 da NT 09/2022 c/c item 1.1 da NT 05/2021)",
+			"03.008 - Apresentar o documento de responsabilidade técnica (ART/RRT) atestando a instalação da Central de GLP predial ou do evento(Item 6.1.6.1 da NT 09/2022 c/c item 5.1.5 da NT 05/2021)",
+			"03.009 - O responsável técnico deve acompanhar a montagem das estruturas do evento (palcos, tendas etc.), fazendo o respectivo registro no livro de ordem com o documento de responsabilidade técnica e o relatório fotográfico(Itens 6.3.1.4, 6.3.4.1 e 6.3.5.1 da NT 09/2022)"
+		],
+		"004": [
+			"04.001 - Instalar o sistema de sinalização de segurança indicando as saídas de emergência(Item 6.1.2.1 da NT 09/2022 e NT 22/2020)",
+			"04.002 - Instalar o sistema de sinalização de segurança nas rotas de fuga (orientação e salvamento)(Item 6.1.2.1 da NT 09/2022 e NT 22/2020)",
+			"04.003 - Instalar o system de sinalização de segurança e alerta na Central de GLP(Item 6.10.1 da NT 05/2021 e NT 22/2020)",
+			"04.004 - Instalar o sistema de sinalização de segurança e alerta para o gerador de energia e para as estruturas com equipamentos energizados(Item 5.1.8 da NT 41/2024 e NT 22/2020)",
+			"04.005 - Instalar o sistema de sinalização de equipamentos para identificar os extintores de incêndio(Item 6.1.4.1 da NT 09/2022 e NT 22/2020)",
+			"04.006 - Instalar as placas ou as faixas de sinalização em alturas que garantam a sua perfeita visualização pelos espectadores(Alínea c do item 6.1.2.2 da NT 09/2022)",
+			"04.007 - A indicação da capacidade máxima de público aprovada pelo CBMDF deve ficar exposta e visível em todas as entradas e os setores(Item 5.1.5 da NT 09/2022)",
+			"04.008 - As placas ou as faixas de sinalização devem dispor de iluminação (emergência) garantida em caso de eventos que ocorram no período noturno au ar livre(Alínea b do item 6.1.2.2 da NT 09/2022)",
+			"04.009 - Apresentar ou divulgar à plateia, por meio de recurso audiovisual (vídeo), informações e procedimentos de evacuação de segurança contra incêndio e pânico para eventos em locais fechados ou delimitados por barreiras com público acima de 1.000 pessoas(Item 6.2.2.1 da NT 09/2022)"
+		],
+		"005": [
+			"05.001 - O evento deve possuir todas as suas estruturas e medidas de segurança contra incêndio montadas com, no mínimo, 24 horas de antecedência da sua realização, para permitir a vistoria(Item 5.5.3.2 da NT 09/2022)",
+			"05.002 - A aprovação da vistoria deve ocorrer, em caráter final, com, no mínimo, 3 horas de antecedência ao início do evento ou ao acesso do público aos portões(Itens 5.5.3.8 e 5.5.3.8.1 da NT 09/2022)"
+		],
+		"006": [
+			"06.001 - O sistema de segurança (SCIP) e as condições de evacuação em eventos realizados no interior de edificações devem suportar a soma do público da edificação, que já opera normalmente, com o do próprio evento(Item 6.1.1.1 da NT 09/2022)",
+			"06.002 - Os sistemas de segurança contra incêndio e pânico (SCIP) das edificações devem garantir a proteção das instalações temporárias (estandes, boxes) nelas acrescidas(Item 5.4.3.4 da NT 09/2022)",
+			"06.003 - Eventos alocados em áreas externas às edificações permanentes devem possuir acesso independente para o logradouro público, de modo que o fluxo não necessite adentrar a edificação principal(Item 5.4.4.4 da NT 09/2022)",
+			"06.004 - Os acessos compostos por catracas ou roletas de acesso para o público não poderão ser computados como componentes de largura de saídas de emergência(Item 6.1.1.4 da NT 09/2022)",
+			"06.005 - As estruturas provisórias (palcos, tendas, arquibancadas) devem apresentar laudo de segurança e de estabilidade estrutural(Item 6.3.1.3 da NT 09/2022)",
+			"06.006 - Os elementos de suporte de tendas e as coberturas flexíveis devem possuir características de resistência ao fogo que garantam a segurança na evacuação(Item 6.3.1.2 da NT 09/2022)",
+			"06.007 - Os elementos fixadores, tensionadores e estabilizadores das estruturas devem possuir resistência mecânica adequada às solicitações de forças, possuindo proteção mecânica contra choques e a devida sinalização(Item 6.3.1.9 da NT 09/2022)",
+			"06.008 - Os espaços vazios abaixo das estruturas provisórias destinadas ao público (ex.: sob palcos e arquibancadas) devem permanecer isolados, com acesso restrito, não sendo permitido o seu uso como depósito, descarte de materiais ou local de comercialização(Alíneas a e b do item 6.3.1.8 da NT 09/2022)",
+			"06.009 - O palco deve contar com proteção por extintores de incêndio alocados ao seu redor ou nas suas proximidades (itens elétricos, lonas, materiais combustíveis)(Alíneas b, c e d do item 6.1.4.2 da NT 09/2022)",
+			"06.010 - Palcos que possuam área superior a 100 m² ou abriguem/admitam a presença de figurantes ou de público devem ser dotados de passagens para fuga (saídas de emergência) devidamente compatíveis(Item 6.3.6.1 da NT 09/2022)"
+		],
+		"007": [
+			"07.001 - Instalar extintores de incêndio para a proteção nas estruturas temporárias e nas barracas que possuam equipamentos energizados, como grupos geradores(Alínea b do item 6.1.4.2 e item 6.1.4.4 da NT 09/2022)",
+			"07.002 - Instalar extintores nas estruturas que possuam armazenamento de material combustível, a exemplo das barracas com a presença e a estocagem de cilindros de GLP(Alíneas a e c do item 6.1.4.2 da NT 09/2022)",
+			"07.003 - Instalar extintores para a proteção das estruturas temporárias confeccionadas em material combustível (como lonas, estandes de madeira etc.), não os distanciando a mais de 5,0 metros do risco a ser protegido(Alínea d do item 6.1.4.2 e item 6.1.4.3 da NT 09/2022)",
+			"07.004 - Manter os aparelhos extintores devidamente fixados em paredes, em pilares ou em suportes apropriados no piso acabado, evitando o contato direto com o chão(Item 4.1.2.3 da NT 03/2015)",
+			"07.005 - Os aparelhos extintores devem estar rigorosamente dentro do prazo de validade (teste hidrostático, manutenção e carga atestados pelo selo do INMETRO)(Item 5.2.1 da NT 03/2015)",
+			"07.006 - Os extintores devem ser posicionados e escolhidos com o agente extintor correto, correspondendo de forma adequada à respectiva classe de risco (A, B ou C) em que o foco de chamas se enquadrar(Item 4.1.2.7 da NT 03/2015)"
+		],
+		"008": [
+			"08.001 - O evento deve instalar, de forma obrigatória, um grupo gerador de energia (ou fonte alternativa) sempre que o público superar a marca de 10.000 (dez mil) pessoas(Item 6.2.4.1 da NT 09/2022)",
+			"08.002 - Instalar, de forma compulsória, na rede elétrica, o Dispositivo Diferencial-Residual (DR) de alta sensibilidade (30 mA) para a proteção e a interrupção rápida do circuito em caso de fugas ou choques elétricos(Item 5.1.3 da NT 39/2021 c/c item 5.1.6 da NT 41/2024)",
+			"08.003 - Promover o aterramento elétrico imediato em todas as estruturas modulares e massas metálicas instaladas (palcos, pórticos, grades e arquibancadas)(Item 6.1.8.2 da NT 09/2022)",
+			"08.004 - Caso seja dimensionado o Sistema de Proteção contra Descargas Atmosféricas (SPDA), o sistema deve atender a todas as rigorosidades e prescrições da NBR 5419(Item 6.1.8.4 da NT 09/2022)"
+		],
+		"009": [
+			"09.001 - A Central de GLP deve possuir aberturas de ventilação natural com dimensionamento adequado (ventilações inferior e superior), observando o distanciamento normativo(Item 6.3.1 da NT 05/2021)",
+			"09.002 - A Central de GLP e a rede de distribuição devem possuir um registro de corte no início da tubulação e, também, em cada ponto de consumo estipulado(Item 5.1.4 da NT 05/2021 e alínea e do item 6.1.6.2 da NT 09/2022)",
+			"09.003 - O piso e o abrigo da central de GLP devem ser planos e elevados (iguais ou superiores ao piso circundante), sem degraus ou rebaixos, garantindo o escoamento de gás em caso de vazamentos(Item 6.3.7 da NT 05/2021)",
+			"09.004 - A Central de GLP deve observar os recuos e os afastamentos mínimos de segurança em relação a fontes de ignição, passeios públicos, aberturas para pavimentos inferiores, rede de energia elétrica e divisas de lotes(Tabelas 3, 4 e 5 da NT 05/2021)",
+			"09.005 - É expressamente proibida a guarda ou a utilização de recipientes de Gás Liquefeito de Petróleo (GLP) no interior de bilheterias(Alínea b do item 6.1.6.3 da NT 09/2022)",
+			"09.006 - É expressamente proibida a guarda ou a utilização de Gás Liquefeito de Petróleo (GLP) em áreas de acomodação do público (como camarotes) e nas áreas vitais de acesso, circulação e rotas de fuga do evento(Alíneas a e c do item 6.1.6.3 da NT 09/2022)",
+			"09.007 - Em pontos onde for autorizada a utilização fracionada de GLP, é estipulada a regra de, no máximo, 01 (um) botijão P-13 isolado para cada ponto de consumo, o qual deverá conter válvula e registro, mangueira de malha de aço e ser abrigado em área extremamente ventilada e protegida do público(Alínea a do item 6.1.6.2 da NT 09/2022)",
+			"09.008 - Em distâncias longas entre o equipamento e o botijão de gás, nas quais seria exigida uma mangueira superior a 1,25 metro, o responsável técnico deve, compulsoriamente, substituir a borracha flexível por tubos multicamadas, de acordo com as normas(Alínea d do item 6.1.6.2 da NT 09/2022)",
+			"09.009 - Ao se utilizarem botijões portáteis de 13 kg (P-13), o responsável técnico precisa instalar um dispositivo (registro de corte) direto em cada vaso ou cilindro receptor(Alínea e do item 6.1.6.2 da NT 09/2022)"
+		]
+	}
+};
 
 // Dados das exigências
 const DADOS_SISTEMA = {
@@ -1604,6 +1714,10 @@ const DADOS_SISTEMA = {
 	},
 };
 
+function getDadosSistema() {
+	return document.getElementById("tipo")?.value === "Eventual" ? DADOS_SISTEMA_EVENTUAL : DADOS_SISTEMA;
+}
+
 let camposDeExigenciasAtivos = {}; // Para controlar quais categorias já estão ativas e suas exigências
 
 $(document).ready(function () {
@@ -1779,10 +1893,13 @@ $(document).ready(function () {
 
 function preencherSelectCategorias() {
 	const select = document.getElementById("selectCategoriaExigencia");
-	for (const chave in DADOS_SISTEMA.categorias) {
+	if (!select) return;
+	select.innerHTML = '<option value="">Selecione uma categoria para adicionar</option>';
+	const dados = getDadosSistema();
+	for (const chave in dados.categorias) {
 		const option = document.createElement("option");
 		option.value = chave;
-		option.textContent = DADOS_SISTEMA.categorias[chave];
+		option.textContent = dados.categorias[chave];
 		select.appendChild(option);
 	}
 }
@@ -1857,12 +1974,12 @@ function adicionarCategoria(categorias) {
 		// Inserção do iconeAlerta antes do título
 		divCategoria.innerHTML = `
 			<div class="d-flex justify-content-between align-items-center mb-3">
-				<h5 class="mb-0">${DADOS_SISTEMA.categorias[categoria]}&nbsp;${iconeAlerta}</h5>
+				<h5 class="mb-0">${getDadosSistema().categorias[categoria]}&nbsp;${iconeAlerta}</h5>
 				<button type="button" class="btn-close-custom" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')">[X]</button>
 			</div>
 			<div class="mb-3">
 				<div class="autocomplete-container">
-					<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${DADOS_SISTEMA.categorias[categoria]}" data-categoria="${categoria}">
+					<input type="text" class="form-control exigencia-autocomplete" placeholder="Adicionar exigência de ${getDadosSistema().categorias[categoria]}" data-categoria="${categoria}">
 					<div class="autocomplete-list"></div>
 				</div>
 			</div>
@@ -1891,7 +2008,7 @@ function adicionarBadgeCategoria(categoria) {
 	span.className = "status-sem-status"; // Using a neutral tag style, adjust as needed
 	span.id = `badge-categoria-${categoria}`;
 	span.innerHTML = `
-				${DADOS_SISTEMA.categorias[categoria]}
+				${getDadosSistema().categorias[categoria]}
 				<button type="button" class="btn-close-custom" onclick="removerCategoria('${categoria}')">[X]</button>
 			`;
 
@@ -1999,7 +2116,7 @@ function setupAutocomplete(inputElement, categoria) {
 			return;
 		}
 
-		const sugestoes = DADOS_SISTEMA.exigencias[categoria] || [];
+		const sugestoes = getDadosSistema().exigencias[categoria] || [];
 		// Filtra as sugestões, removendo as que já estão ativas para esta categoria
 		const filteredSugestoes = sugestoes.filter(
 			(sugestao) =>
@@ -2436,6 +2553,31 @@ document.getElementById("btnSalvar").addEventListener("click", () => {
 function coletarDadosDoFormulario() {
 	const tipo = document.getElementById("tipo")?.value || "";
 	if (tipo === "Eventual") {
+		const listaExigenciasOrdenada = [];
+		const cardsCategorias = Array.from(document.querySelectorAll('#exigenciasContainer .card'));
+
+		cardsCategorias.sort((a, b) => {
+			const catA = a.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+			const catB = b.querySelector('.card-header')?.innerText.split(' - ')[0] || "999";
+			return parseInt(catA) - parseInt(catB);
+		});
+
+		cardsCategorias.forEach(card => {
+			const inputs = Array.from(card.querySelectorAll('input[name="exigencias[]"]'));
+			inputs.sort((a, b) => {
+				const codA = a.value.split(' ')[0].replace(',', '.');
+				const codB = b.value.split(' ')[0].replace(',', '.');
+				return parseFloat(codA) - parseFloat(codB);
+			});
+			inputs.forEach(input => {
+				if (input.value) listaExigenciasOrdenada.push(input.value);
+			});
+		});
+
+		if (listaExigenciasOrdenada.length === 0) {
+			document.querySelectorAll('input[name="exigencias[]"]').forEach(i => listaExigenciasOrdenada.push(i.value));
+		}
+
 		return {
 			id: document.getElementById("processoId")?.value || "",
 			processoBusca: document.getElementById("processoBusca")?.value || "",
@@ -2511,7 +2653,13 @@ function coletarDadosDoFormulario() {
 			ev_motivo_cancelamento: document.getElementById("ev_motivo_cancelamento")?.value.toUpperCase() || "",
 			ev_condicionantes: document.getElementById("ev_condicionantes")?.value.toUpperCase() || "",
 			ev_restricoes: document.getElementById("ev_restricoes")?.value.toUpperCase() || "",
-			ev_parecer_final: document.getElementById("ev_parecer_final")?.value.toUpperCase() || ""
+			ev_parecer_final: document.getElementById("ev_parecer_final")?.value.toUpperCase() || "",
+
+			// Shared requirement / checklist fields:
+			categoriasSelecionadas: Object.keys(camposDeExigenciasAtivos || {}).sort((a, b) => parseInt(a) - parseInt(b)),
+			exigencias: listaExigenciasOrdenada,
+			anotacoesDoProcesso: typeof anotacoesDoProcesso !== 'undefined' ? anotacoesDoProcesso : {},
+			checkConcluido: document.getElementById("checkConcluido")?.checked || false
 		};
 	}
 
@@ -2626,44 +2774,46 @@ function preencherFormulario(data) {
 		} else {
 			document.getElementById("msgLocalizacaoEventual").textContent = "Clique no botão para obter sua localização atual";
 		}
-		return;
-	}
-
-	// Restaurar visibilidade do formulário padrão
-	alternarFormularios(data.tipo || "");
-
-	document.getElementById("cnpj").value = data.cnpj || "";
-	document.getElementById("instituicao").value = data.instituicao || "";
-	document.getElementById("endereco").value = data.endereco || "";
-	document.getElementById("localizacao").value = data.localizacao || "";
-	if (data.msgLocalizacao) {
-		document.getElementById("msgLocalizacao").textContent = data.msgLocalizacao;
-	}
-	document.getElementById("ocupacao").value = data.ocupacao || "";
-	//document.getElementById("grupo").value = data.grupo || "";
-	document.getElementById("area").value = data.area || "";
-	document.getElementById("altura").value = data.altura || "";
-	document.getElementById("pavimentos").value = data.pavimentos || "";
-	document.getElementById("responsavel").value = data.responsavel || "";
-	document.getElementById("tipo").value = data.tipo || "";
-	document.getElementById("inicio").value = data.inicio || "";
-	document.getElementById("fim").value = data.fim || "";
-	//document.getElementById("campoAnotacao").value = data.anotacao || "";
-
-	if (data.retorno) {
-		document.getElementById("retornoSim").checked = true;
 	} else {
-		document.getElementById("retornoNao").checked = true;
+		// Restaurar visibilidade do formulário padrão
+		alternarFormularios(data.tipo || "");
+
+		document.getElementById("cnpj").value = data.cnpj || "";
+		document.getElementById("instituicao").value = data.instituicao || "";
+		document.getElementById("endereco").value = data.endereco || "";
+		document.getElementById("localizacao").value = data.localizacao || "";
+		if (data.msgLocalizacao) {
+			document.getElementById("msgLocalizacao").textContent = data.msgLocalizacao;
+		}
+		document.getElementById("ocupacao").value = data.ocupacao || "";
+		document.getElementById("area").value = data.area || "";
+		document.getElementById("altura").value = data.altura || "";
+		document.getElementById("pavimentos").value = data.pavimentos || "";
+		document.getElementById("responsavel").value = data.responsavel || "";
+		document.getElementById("inicio").value = data.inicio || "";
+		document.getElementById("fim").value = data.fim || "";
+
+		if (data.retorno) {
+			document.getElementById("retornoSim").checked = true;
+		} else {
+			document.getElementById("retornoNao").checked = true;
+		}
+		document.getElementById("acompanhante").value = data.acompanhante || "";
+		document.getElementById("funcao").value = data.funcao || "";
+		document.getElementById("status").value = data.status || "";
+		document.getElementById("observacao").value = data.observacao || "";
 	}
-	document.getElementById("acompanhante").value = data.acompanhante || "";
-	//document.getElementById("cpf").value = data.cpf || "";
-	document.getElementById("funcao").value = data.funcao || "";
-	document.getElementById("status").value = data.status || "";
-	document.getElementById("observacao").value = data.observacao || "";
-	document.getElementById("checkConcluido").checked =
-		data.checkConcluido || false;
-	aplicarCorDoStatus(data.status || "Sem Status");
-	aplicarCorDoStatus(data.geolocation || "Sem Status");
+
+	// Shared logic for both:
+	document.getElementById("checkConcluido").checked = data.checkConcluido || false;
+
+	if (data.tipo !== "Eventual") {
+		aplicarCorDoStatus(data.status || "Sem Status");
+		aplicarCorDoStatus(data.geolocation || "Sem Status");
+	} else {
+		aplicarCorDoStatus(data.status || "Sem Status");
+	}
+
 	anotacoesDoProcesso = data.anotacoesDoProcesso || {};
 
 	// Clear existing exigencies and categories before re-filling
@@ -2672,9 +2822,10 @@ function preencherFormulario(data) {
 	camposDeExigenciasAtivos = {}; // Reset the control of active categories
 
 	if (data.exigencias && Array.isArray(data.exigencias)) {
+		const dadosSis = getDadosSistema();
 		data.exigencias.forEach((exigencia) => {
-			for (const categoriaKey in DADOS_SISTEMA.exigencias) {
-				if (DADOS_SISTEMA.exigencias[categoriaKey].includes(exigencia)) {
+			for (const categoriaKey in dadosSis.exigencias) {
+				if (dadosSis.exigencias[categoriaKey].includes(exigencia)) {
 					adicionarExigencia(categoriaKey, exigencia);
 					break;
 				}
@@ -2683,7 +2834,6 @@ function preencherFormulario(data) {
 	}
 
 	// Itere pelas exigências geradas e aplique a cor do ícone
-	// (Esta parte dependerá da sua função de geração de exigências e preenchimento)
 	Object.keys(anotacoesDoProcesso).forEach((id) => {
 		const iconElement = document.querySelector(
 			`.anotacao-icon[data-exigencia-id="${id}"]`
@@ -2695,82 +2845,53 @@ function preencherFormulario(data) {
 	});
 
 	// --- Nova lógica para os links de Mapa (Google Maps e Waze) ---
+	const googleMapsContainer = document.getElementById("googleMapsContainer");
+	const googleMapsLink = document.getElementById("googleMapsLink");
+	const wazeContainer = document.getElementById("wazeContainer");
+	const wazeLink = document.getElementById("wazeLink");
 
-	// Obtenha as referências para os elementos HTML
-	const googleMapsContainer = document.getElementById("googleMapsContainer"); // A div do container do Google Maps
-	const googleMapsLink = document.getElementById("googleMapsLink"); // O link <a> para Google Maps
-	// const locationGpsIcon = document.getElementById('locationGpsIcon'); // O <i>, se ainda for usado separadamente
+	const coordenadas = data.tipo === "Eventual" ? data.ev_geo : data.localizacao;
 
-	const wazeContainer = document.getElementById("wazeContainer"); // A div do container do Waze
-	const wazeLink = document.getElementById("wazeLink"); // O link <a> para Waze
-
-	// A variável 'data' deve ser o objeto que contém a localização, como 'data.localizacao'
-	const coordenadas = data.localizacao; // Pega a localização dos dados passados para a função (ex: "latitude,longitude")
-
-	// Verifica se há coordenadas válidas para mostrar os links
 	if (coordenadas) {
-		// Formata as coordenadas (remove espaços em branco)
 		const coordsFormatted = coordenadas.replace(/\s/g, "");
 
-		// --- Lógica para o Google Maps ---
-		// Usando o formato de URL exato que você forneceu: http://maps.google.com/maps?q=${coordenadas}
 		const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${coordsFormatted}`;
 		googleMapsLink.href = googleMapsUrl;
-		googleMapsLink.title = `Abrir no Google Maps: ${coordsFormatted}`; // Atualiza o título (tooltip)
-		googleMapsLink.style.cursor = "pointer"; // Torna o cursor indicativo de clicável
+		googleMapsLink.title = `Abrir no Google Maps: ${coordsFormatted}`;
+		googleMapsLink.style.cursor = "pointer";
 
-		// Exibe o container do Google Maps
 		googleMapsContainer.classList.add("d-flex");
-		googleMapsContainer.style.display = "flex"; // Garante que esteja visível
+		googleMapsContainer.style.display = "flex";
 
-		// --- Lógica para o Waze ---
-		// O formato do link Waze é https://waze.com/ul?ll=[latitude],[longitude]&navigate=yes
 		const wazeUrl = `https://waze.com/ul?ll=${coordsFormatted}&navigate=yes`;
 		wazeLink.href = wazeUrl;
-		wazeLink.title = `Abrir no Waze: ${coordsFormatted}`; // Atualiza o título (tooltip)
-		wazeLink.style.cursor = "pointer"; // Torna o cursor indicativo de clicável
+		wazeLink.title = `Abrir no Waze: ${coordsFormatted}`;
+		wazeLink.style.cursor = "pointer";
 
-		// Exibe o container do Waze
 		wazeContainer.classList.add("d-flex");
-		wazeContainer.style.display = "flex"; // Garante que esteja visível
+		wazeContainer.style.display = "flex";
 
-		console.log("com localizacao");
-		console.log(coordsFormatted);
+		console.log("com localizacao", coordsFormatted);
 	} else {
-		// Se não houver coordenadas, esconde ambos os containers
 		googleMapsContainer.classList.remove("d-flex");
-		googleMapsContainer.style.display = "none"; // Esconde completamente
+		googleMapsContainer.style.display = "none";
 		wazeContainer.classList.remove("d-flex");
-		wazeContainer.style.display = "none"; // Esconde completamente
+		wazeContainer.style.display = "none";
 
-		// Certifique-se de que os links também resetam seus hrefs para evitar cliques indesejados
 		googleMapsLink.href = "#";
 		wazeLink.href = "#";
 
 		console.log("SEM localizacao");
 	}
 
-	// O restante do seu código JavaScript, como a lógica para categorias selecionadas, deve vir aqui
-	// Also re-add any categories that were selected but had no exigencies
+	// Re-add categories that were selected but had no exigencies
 	if (
 		data.categoriasSelecionadas &&
 		Array.isArray(data.categoriasSelecionadas)
 	) {
+		const dadosSis = getDadosSistema();
 		data.categoriasSelecionadas.forEach((cat) => {
-			if (!camposDeExigenciasAtivos[cat] && DADOS_SISTEMA.categorias[cat]) {
-				// Only add if not already added by an exigency and category exists
-				adicionarCategoria(cat);
-			}
-		});
-	}
-
-	// Also re-add any categories that were selected but had no exigencies
-	if (
-		data.categoriasSelecionadas &&
-		Array.isArray(data.categoriasSelecionadas)
-	) {
-		data.categoriasSelecionadas.forEach((cat) => {
-			if (!camposDeExigenciasAtivos[cat] && DADOS_SISTEMA.categorias[cat]) {
+			if (!camposDeExigenciasAtivos[cat] && dadosSis.categorias[cat]) {
 				// Only add if not already added by an exigency and category exists
 				adicionarCategoria(cat);
 			}
@@ -2812,6 +2933,9 @@ function alternarFormularios(tipo) {
 	const containerEventual = document.getElementById("containerEventual");
 	const btnEnviarEventual = document.getElementById("btnEnviarEventual");
 	const containerCheckConcluido = document.getElementById("containerCheckConcluido");
+	const secaoExigencias = document.getElementById("secaoExigencias");
+	const placeholderPadrao = document.getElementById("placeholderExigenciasPadrao");
+	const placeholderEventual = document.getElementById("placeholderExigenciasEventual");
 
 	if (tipo === "Eventual") {
 		containerPadrao?.classList.add("d-none");
@@ -2819,13 +2943,20 @@ function alternarFormularios(tipo) {
 		btnEnviarEventual?.classList.remove("d-none");
 		containerCheckConcluido?.classList.add("d-none");
 		toggleRequiredFields("Eventual");
+		if (secaoExigencias && placeholderEventual) {
+			placeholderEventual.appendChild(secaoExigencias);
+		}
 	} else {
 		containerPadrao?.classList.remove("d-none");
 		containerEventual?.classList.add("d-none");
 		btnEnviarEventual?.classList.add("d-none");
 		containerCheckConcluido?.classList.remove("d-none");
 		toggleRequiredFields(tipo);
+		if (secaoExigencias && placeholderPadrao) {
+			placeholderPadrao.appendChild(secaoExigencias);
+		}
 	}
+	preencherSelectCategorias();
 }
 
 function toggleRequiredFields(tipo) {
@@ -3060,7 +3191,84 @@ function enviarParaGoogleForms() {
 	};
 
 	const codeToOptions = {
-		"01.003": [
+		// Eventual Checklist Mappings
+		"01.001": [["entry.1721739093", "Apresentar requerimento original de solicitação de Licença de Funcionamento Eventual."]],
+		"01.002": [["entry.1721739093", "Apresentar Memorial descritivo - evento acima de 1.000 pessoas."]],
+		"01.003": [["entry.1721739093", "Apresentar o Termo de declaração e de responsabilidade - evento acima de 1.000 pessoas."]],
+		"01.004": [["entry.1721739093", "Apresentar o Comprovante de disponibilidade de grupo gerador - evento acima de 1.000 pessoas."]],
+		"01.005": [["entry.1721739093", "Apresentar o croqui do evento."]],
+		"01.006": [["entry.1721739093", "Apresentar Projeto de Incêndio da Central de GLP."]],
+		"01.007": [["entry.1994180731", "Apresentar o PBET aprovado - evento acima de 1.000 pessoas."]],
+		"01.008": [["entry.1994180731", "Aprovar o PBET para eventos em edificações permanentes - Quando SCIP insuficiente ou público superior ao projetado para a edificação."]],
+		"01.009": [["entry.1994180731", "Protocolar o PBET para análise com 30 dias antes do evento."]],
+		"01.010": [["entry.1994180731", "Retornar o PBET, com exigências, para reanálise com 10 dias antes do evento."]],
+		"01.011": [["entry.2006769390", "Apresentar o Parecer Técnico Específico Aprovado para eventos em edificações permanentes."]],
+		"01.012": [["entry.809039382", "O responsável técnico pelo evento deve acompanhar a vistoria, quando solicitado."]],
+		"01.013": [["entry.809039382", "O responsável técnico pelo parque de diversões deve atender a NBR 15926 e apresentar documentos técnicos."]],
+
+		"02.002": [["entry.1147682255", "Apresentar contrato da brigada."]],
+		"02.003": [["entry.1147682255", "Apresentar o certificado de credenciamento da empresa de brigada."]],
+		"02.004": [["entry.1147682255", "Apresentar os certificados dos brigadistas."]],
+		"02.005": [["entry.1147682255", "Quantidade de brigadista compatível com o tamanho do evento."]],
+
+		"03.001": [["entry.809039382", "Apresentar ART/RRT/TRT dos sistemas de SCIP e estruturas do evento - evento acima de 1.000 pessoas."]],
+		"03.002": [["entry.2006769390", "Apresentar ART/RRT/TRT das adaptações no interior das edificações."]],
+		"03.003": [["entry.809039382", "Apresentar ART/RRT/TRT/Laudo de aterrameto elétrico de todas as massas metálicas das estruturas."]],
+		"03.004": [["entry.809039382", "Apresentar ART/RRT/TRT de instalação elétrica provisória do evento."]],
+		"03.005": [["entry.809039382", "Apresentar ART/RRT/TRT de aterramento elétrico do Gerador."]],
+		"03.006": [["entry.809039382", "Apresentar ART/RRT/TRT e laudo de flamabilidade, registrados em livro de ordem, dos materiais de acabamento usados no evento."]],
+		"03.007": [["entry.809039382", "Apresentar ART de execução do Laudo de Estanqueidade da Central de GLP."]],
+		"03.008": [["entry.809039382", "Apresentar ART de instalação da Central de GLP."]],
+		"03.009": [["entry.809039382", "O responsável técnico deverá acompanhar a montagem das estruturas do evento, emitir relatório e ART/RRT/TRT e fazer o registro no livro de ordem."]],
+
+		"04.001": [["entry.980011299", "Instalar sistema de sinalização de segurança nas Saídas de Emergência."]],
+		"04.002": [["entry.980011299", "Instalar sistema de sinalização de segurança na Rota de Fuga."]],
+		"04.003": [["entry.980011299", "Instalar sistema de sinalização de segurança na Central de GLP."]],
+		"04.004": [["entry.980011299", "Instalar sistema de sinalização de segurança no Gerador de Energia e Equipamentos Energizados."]],
+		"04.005": [["entry.980011299", "Instalar sistema de sinalização de segurança nos Extintores."]],
+		"04.006": [["entry.980011299", "Instalar as placas de sinalização em altura que garantam a sua vizualização."]],
+		"04.007": [["entry.891456062", "A indicação de capacidade máxima de público aprovada deve estar visivel nas entradas e setores."]],
+		"04.008": [["entry.891456062", "Iluminar as placas de sinalização em eventos noturnos ao ar livre."]],
+		"04.009": [["entry.891456062", "Apresentar o recurso audiovisual com informações sobre segurança contra incêndio e pânico - evento com fechamento e público acima de 1.000 pessoas."]],
+
+		"05.001": [["entry.647578535", "O evento deve estar montado 24h antes."]],
+		"05.002": [["entry.647578535", "A aprovação da vistoria deve ocorrer até 3 horas antes do evento ou acesso do público."]],
+
+		"06.001": [["entry.1426151753", "Nos eventos no interior de edificações, as saídas devem comportar o público da edificação e do evento."]],
+		"06.002": [["entry.2094522025", "Os sistemas de SCIP devem atender, além da edificação, as estruturas temporárias e os acréscimos de instalações."]],
+		"06.003": [["entry.1426151753", "Os eventos em área extena das edificações devem possuir acesso independente."]],
+		"06.004": [["entry.723661602", "Os acessos com catracas/barreiras não são consideradas saídas de emergência."]],
+		"06.005": [["entry.2094522025", "As estruturas devem apresentar estabilidade estrutural e segurança."]],
+		"06.006": [["entry.2094522025", "Os suportes das tendas e coberturas devem ter resistência ao fogo."]],
+		"06.007": [["entry.2094522025", "Os elementos fixadores, tensionadores e estabilizadores devem ter resistência mecânica compatível, proteção mecânica e sinalização."]],
+		"06.008": [["entry.2094522025", "Os espaços vazios, abaixo das estruturas provisórias destinadas ao público, devem isolados (acesso restrito) sem materiais, pessoas ou qualquer atividade."]],
+		"06.009": [["entry.1229226787", "O palco deve ter extintores de incêndio."]],
+		"06.010": [["entry.1229226787", "O palco com saída de emergência compatível com o público."]],
+
+		"07.001": [["entry.2072061556", "Instalar extintores nas estruturas com equipamentos energizados (ex.: Gerador)."]],
+		"07.002": [["entry.2072061556", "Instalar extintores nas estruturas com cocção de alimentos."], ["entry.2072061556", "Instalar extintores nas estruturas com material combustível (ex.: Central de GLP)."]],
+		"07.003": [["entry.2072061556", "Instalar extintores nas estruturas temporárias confeccionadas em material combustível, a no máximo 5,0 m do risco a proteger."]],
+		"07.004": [["entry.991345744", "Extintores devidamente fixados (nas paredes ou em suportes fixados no piso)"]],
+		"07.005": [["entry.991345744", "Extintores dentro do prazo de Validade"]],
+		"07.006": [["entry.991345744", "Extintores corretos de acordo com a classe de proteção (A B C)."]],
+
+		"08.001": [["entry.245960816", "Instalar gerador nos eventos de público superior a 10 mil pessoas."]],
+		"08.002": [["entry.1015126727", "Instalar dispositivo de proteção DR contra fuga de corrente."]],
+		"08.003": [["entry.1387309357", "Instalar aterramento elétrico em todas as estruturas metálicas."]],
+		"08.004": [["entry.231274032", "O SPDA deve atender os requisitos da NBR 5419."]],
+
+		"09.001": [["entry.1615254798", "Abertura de ventilação adequada."]],
+		"09.002": [["entry.1615254798", "Instalar registro de corte para cada ponto de consumo de GLP."]],
+		"09.003": [["entry.1615254798", "Piso elevado."]],
+		"09.004": [["entry.1615254798", "Apresentar afastamentos mínimos (fonte de ignição, fonte de eletricidade, estacionamentos, vãos e aberturas...)."]],
+		"09.005": [["entry.1434165906", "É Proibido o uso de GLP nas bilheterias."]],
+		"09.006": [["entry.1434165906", "É Proibido o uso de GLP em estruturas, áreas de acomodação e circulação de público."]],
+		"09.007": [["entry.1434165906", "Instalar um P13 por ponto de consumo, com mangueira de malha de aço, registro, em local protegido e ventilado."]],
+		"09.008": [["entry.1434165906", "Substituir mangueira de GLP maior que 1,25m por tubo multicamada."]],
+		"09.009": [["entry.1434165906", "Instalar registro de corte para cada ponto de consumo ou recipiente P-13."]],
+
+		// Standard RLE Checklist Mappings (Legacy)
+		"01.003_legacy": [
 			["entry.809039382", "Apresentar ART/RRT/TRT dos sistemas de SCIP e estruturas do evento - evento acima de 1.000 pessoas."],
 			["entry.809039382", "O responsável técnico deverá acompanhar a montagem das estruturas do evento, emitir relatório e ART/RRT/TRT e fazer o registro no livro de ordem."]
 		],
