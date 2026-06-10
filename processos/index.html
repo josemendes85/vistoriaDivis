@@ -18,17 +18,84 @@
     <link rel="stylesheet" href="../style.css"> 
     
     <style>
-        /* Adicione padding ao body para compensar o navbar fixo */
+        /* Adicione padding ao body para compensar o navbar fixo + equipe bar */
         body {
-            padding-top: 56px; /* Altura padrão do navbar no Bootstrap */
+            padding-top: 100px; /* Navbar + equipe bar */
         }
         .drag-process td:not(.drag-handle-cell) {
             cursor: pointer;
         }
         .drag-handle-cell {
-            width: 30px; /* Garante que o handle não ocupe muito espaço */
+            width: 30px;
             text-align: center;
             cursor: grab;
+        }
+        /* Equipe de Vistoria info bar */
+        .equipe-bar {
+            position: fixed;
+            top: 56px;
+            left: 0;
+            right: 0;
+            z-index: 1029;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: #fff;
+            padding: 6px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+        .equipe-bar .equipe-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .equipe-bar .equipe-info .badge-equipe {
+            background: rgba(255,255,255,0.15);
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.8rem;
+        }
+        .equipe-bar .equipe-info .vistoriador-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .equipe-bar .btn-equipe-config {
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.3);
+            color: #fff;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .equipe-bar .btn-equipe-config:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .equipe-bar.equipe-warning {
+            background: linear-gradient(135deg, #b71c1c 0%, #c62828 100%);
+            animation: pulse-warning 2s infinite;
+        }
+        @keyframes pulse-warning {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.85; }
+        }
+        /* Modal styling */
+        .modal-equipe .modal-header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: #fff;
+            border-bottom: none;
+        }
+        .modal-equipe .modal-header .btn-close {
+            filter: invert(1);
+        }
+        .modal-equipe .campo-obrigatorio::after {
+            content: ' *';
+            color: #dc3545;
         }
     </style>
 </head>
@@ -44,6 +111,67 @@
             <div style="width: 75px;"></div>
         </div>
     </nav>
+
+    <!-- Barra de informação da Equipe de Vistoria -->
+    <div class="equipe-bar" id="equipeBar">
+        <div class="equipe-info">
+            <i class="bi bi-person-badge"></i>
+            <span class="vistoriador-name" id="equipeBarNome">Nenhum vistoriador configurado</span>
+            <span class="badge-equipe" id="equipeBarViatura" style="display:none;"></span>
+            <span class="badge-equipe" id="equipeBarRegime" style="display:none;"></span>
+        </div>
+        <button class="btn-equipe-config" id="btnAbrirEquipeModal" title="Configurar Equipe de Vistoria">
+            <i class="bi bi-gear me-1"></i>Equipe
+        </button>
+    </div>
+
+    <!-- Modal da Equipe de Vistoria -->
+    <div class="modal fade modal-equipe" id="equipeModal" tabindex="-1" aria-labelledby="equipeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="equipeModalLabel">
+                        <i class="bi bi-people me-2"></i>Equipe de Vistoria
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label for="eqVistoriador01" class="form-label campo-obrigatorio">Vistoriador 01</label>
+                            <input type="text" class="form-control text-uppercase" id="eqVistoriador01" placeholder="Nome do vistoriador principal" />
+                            <div class="invalid-feedback">Informe o Vistoriador 01.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="eqVistoriador02" class="form-label">Vistoriador 02</label>
+                            <input type="text" class="form-control text-uppercase" id="eqVistoriador02" placeholder="Nome do segundo vistoriador (opcional)" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="eqViatura" class="form-label">Viatura</label>
+                            <input type="text" class="form-control text-uppercase" id="eqViatura" placeholder="ABC-1234" />
+                        </div>
+                        <div class="col-md-6">
+                            <label for="eqRegime" class="form-label">Regime de Trabalho</label>
+                            <select class="form-select" id="eqRegime">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="GSV">GSV</option>
+                                <option value="Plantão 24h">Plantão 24h</option>
+                                <option value="ALA A (SEG, QUA, SEX)">ALA A (SEG, QUA, SEX)</option>
+                                <option value="ALA B (TER, QUI, SEX)">ALA B (TER, QUI, SEX)</option>
+                                <option value="Expediente">Expediente</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnSalvarEquipe">
+                        <i class="bi bi-check-lg me-1"></i>Salvar Equipe
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <div class="container-fluid mt-0"> 
         <div class="text-center mb-4">
@@ -396,6 +524,9 @@
 
         // Adiciona event listeners quando o DOM estiver completamente carregado
         document.addEventListener('DOMContentLoaded', () => {
+            // Inicializar equipe de vistoria
+            inicializarEquipeVistoria();
+
             carregarEExibirProcessos();
 
             const filtroPesquisa = document.getElementById('filtroPesquisa');
@@ -408,6 +539,113 @@
                 filtroStatus.addEventListener('change', carregarEExibirProcessos);
             }
         });
+
+        // ========== EQUIPE DE VISTORIA ==========
+        const EQUIPE_STORAGE_KEY = 'equipeVistoria';
+
+        function getEquipeData() {
+            try {
+                return JSON.parse(localStorage.getItem(EQUIPE_STORAGE_KEY)) || {};
+            } catch (e) {
+                return {};
+            }
+        }
+
+        function salvarEquipeData(data) {
+            localStorage.setItem(EQUIPE_STORAGE_KEY, JSON.stringify(data));
+        }
+
+        function atualizarBarraEquipe() {
+            const equipe = getEquipeData();
+            const bar = document.getElementById('equipeBar');
+            const nomeEl = document.getElementById('equipeBarNome');
+            const viaturaEl = document.getElementById('equipeBarViatura');
+            const regimeEl = document.getElementById('equipeBarRegime');
+
+            if (equipe.vistoriador01 && equipe.vistoriador01.trim()) {
+                nomeEl.textContent = equipe.vistoriador01;
+                bar.classList.remove('equipe-warning');
+
+                if (equipe.viatura) {
+                    viaturaEl.textContent = '\uD83D\uDE97 ' + equipe.viatura;
+                    viaturaEl.style.display = '';
+                } else {
+                    viaturaEl.style.display = 'none';
+                }
+
+                if (equipe.regime) {
+                    regimeEl.textContent = '\uD83D\uDCC5 ' + equipe.regime;
+                    regimeEl.style.display = '';
+                } else {
+                    regimeEl.style.display = 'none';
+                }
+            } else {
+                nomeEl.textContent = '\u26A0\uFE0F Configure a Equipe de Vistoria';
+                bar.classList.add('equipe-warning');
+                viaturaEl.style.display = 'none';
+                regimeEl.style.display = 'none';
+            }
+        }
+
+        function preencherModalEquipe() {
+            const equipe = getEquipeData();
+            document.getElementById('eqVistoriador01').value = equipe.vistoriador01 || '';
+            document.getElementById('eqVistoriador02').value = equipe.vistoriador02 || '';
+            document.getElementById('eqViatura').value = equipe.viatura || '';
+            document.getElementById('eqRegime').value = equipe.regime || '';
+        }
+
+        function inicializarEquipeVistoria() {
+            atualizarBarraEquipe();
+
+            // Bot\u00e3o para abrir modal
+            document.getElementById('btnAbrirEquipeModal').addEventListener('click', () => {
+                preencherModalEquipe();
+                const modal = new bootstrap.Modal(document.getElementById('equipeModal'));
+                modal.show();
+            });
+
+            // Bot\u00e3o salvar no modal
+            document.getElementById('btnSalvarEquipe').addEventListener('click', () => {
+                const v01 = document.getElementById('eqVistoriador01').value.trim().toUpperCase();
+                const v01Input = document.getElementById('eqVistoriador01');
+
+                if (!v01) {
+                    v01Input.classList.add('is-invalid');
+                    v01Input.focus();
+                    return;
+                }
+                v01Input.classList.remove('is-invalid');
+
+                const equipeData = {
+                    vistoriador01: v01,
+                    vistoriador02: document.getElementById('eqVistoriador02').value.trim().toUpperCase(),
+                    viatura: document.getElementById('eqViatura').value.trim().toUpperCase(),
+                    regime: document.getElementById('eqRegime').value
+                };
+
+                salvarEquipeData(equipeData);
+                atualizarBarraEquipe();
+
+                const modal = bootstrap.Modal.getInstance(document.getElementById('equipeModal'));
+                if (modal) modal.hide();
+            });
+
+            // Limpar valida\u00e7\u00e3o ao digitar
+            document.getElementById('eqVistoriador01').addEventListener('input', function() {
+                if (this.value.trim()) this.classList.remove('is-invalid');
+            });
+
+            // Se n\u00e3o tem equipe configurada, abrir modal automaticamente
+            const equipe = getEquipeData();
+            if (!equipe.vistoriador01 || !equipe.vistoriador01.trim()) {
+                setTimeout(() => {
+                    preencherModalEquipe();
+                    const modal = new bootstrap.Modal(document.getElementById('equipeModal'));
+                    modal.show();
+                }, 500);
+            }
+        }
     </script>
     <script>
     if ('serviceWorker' in navigator) {

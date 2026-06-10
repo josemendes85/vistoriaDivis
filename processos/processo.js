@@ -1368,7 +1368,7 @@ const DADOS_SISTEMA = {
 			"10.003 - Apresentar documento de responsabilidade técnica (Anotação, Registro ou Termo de Responsabilidade Técnica - ART/RRT/TRT) de execução ou manutenção do sistema de chuveiros automáticos instalado, emitido por profissional e visado no seu respectivo órgão de classe, de acordo com o Item 15.2.8 da IN 01/2021 - DESEG/CBMDF e Decreto nº 21.361/2000. (Art. 6º, do Dec. 23.154/2002)",
 			"10.004 - A manutenção e conservação dos sistemas de proteção contra incêndio por chuveiros automáticos são de responsabilidade do proprietário ou do usuário, devendo ser contratados profissionais ou empresas credenciadas pelo CBMDF, com responsabilidade técnica emitida por órgão competente, para execução desse serviço, de acordo com o item 5.18 da NT 13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.005 - A mínima pressão operacional em qualquer chuveiro automático deve ser de 48 kPa, de acordo com o item 5.4 da NT 13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
-			"10.006 - Nas edificações onde houver exigência da instalação do sistema de chuveiros automáticos, o dimensionamento deve ser aplicado a todas as áreas da edificação, observadas as exceções dos itens 5.9.1, 5.10, 5.11 e 5.11.1 da NT 13/2021-CBMDF, de acordo com o item 5.9 da NT 13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
+			"10.006 - Nas edificações onde houver exigência da instalação do sistema de chuveiros automáticos, o dimensionamento deve ser aplicado a todas as áreas da edificação, observadas as exceções dos itens 5.9.1, 5.10, 5.11 e 5.11.1 da NT 13/2021-CBMDF, de acordo com o item 5.9 da NT 13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.007 - As subestações de energia elétrica, instaladas no interior de edificações, abrigadas em ambiente compartimentado, com estrutura resistente a 4 horas de fogo e acesso por portas corta fogo resistente a 120 minutos, poderão ter neste ambiente, o sistema de chuveiros automáticos substituído pelo sistema de detecção automática, de acordo com o item 5.9.1 da NT 13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.008 - A instalação de chuveiros automáticos em edificações onde não exista obrigatoriedade do dimensionamento do sistema ou quando este for apresentado ou proposto como solução técnica alternativa, deverá atender às demais exigências de dimensionamento previstas nas normas aplicáveis, de acordo com o item 5.10 da NT/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
 			"10.009 - É obrigatório a instalação de chuveiros automáticos em casa de máquinas, casa de bombas de incêndio, sala de gerador e similares, onde haja exclusivamente equipamentos elétricos energizados, ou substituíção por outros sistemas automáticos de combate a incêndio, de acordo com o item 5.11 da NT 13/2021-CBMDF. (Art. 6º, do Dec. 23.154/2002)",
@@ -2302,8 +2302,28 @@ document.getElementById("status").addEventListener("change", function () {
 });
 
 // Salvar Automaticamente e Carregar
+function getEquipeVistoria() {
+	try {
+		return JSON.parse(localStorage.getItem('equipeVistoria')) || {};
+	} catch(e) {
+		return {};
+	}
+}
+
+function validarEquipeVistoria(mostrarAlerta) {
+	const equipe = getEquipeVistoria();
+	if (!equipe.vistoriador01 || equipe.vistoriador01.trim() === '') {
+		if (mostrarAlerta) {
+			Utils.showToast('Configure a Equipe de Vistoria na tela principal antes de salvar.', 'danger');
+		}
+		return false;
+	}
+	return true;
+}
+
 function salvarAutomaticamente() {
 	if (isDeleting) return;
+	if (!validarEquipeVistoria(false)) return;
 	const idInput = document.getElementById("processoId");
 	if (!idInput) {
 		console.error("Element with ID 'processoId' not found when attempting to auto-save.");
@@ -2539,6 +2559,7 @@ document
 
 // Botão SALVAR MANUALMENTE
 document.getElementById("btnSalvar").addEventListener("click", () => {
+	if (!validarEquipeVistoria(true)) return;
 	const form = document.querySelector(".needs-validation");
 	if (!form.checkValidity()) {
 		form.classList.add("was-validated");
@@ -2642,11 +2663,11 @@ function coletarDadosDoFormulario() {
 			ev_contrato_brigada: document.getElementById("ev_contrato_brigada")?.value || "",
 			ev_declaracao_gerador: document.getElementById("ev_declaracao_gerador")?.value || "",
 
-			// Novos campos da equipe de vistoria e responsáveis
-			ev_vistoriador01: document.getElementById("ev_vistoriador01")?.value.toUpperCase() || "",
-			ev_vistoriador02: document.getElementById("ev_vistoriador02")?.value.toUpperCase() || "",
-			ev_viatura: document.getElementById("ev_viatura")?.value.toUpperCase() || "",
-			ev_regime: document.getElementById("ev_regime")?.value || "",
+			// Campos da equipe de vistoria - lidos da configuração global (localStorage)
+			ev_vistoriador01: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador01 || ''; } catch(e) { return ''; } })(),
+			ev_vistoriador02: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador02 || ''; } catch(e) { return ''; } })(),
+			ev_viatura: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.viatura || ''; } catch(e) { return ''; } })(),
+			ev_regime: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.regime || ''; } catch(e) { return ''; } })(),
 			ev_cpf: document.getElementById("ev_cpf")?.value || "",
 			ev_telefone: document.getElementById("ev_telefone")?.value || "",
 
@@ -2763,7 +2784,7 @@ function preencherFormulario(data) {
 			"ev_saidas_desobstruidas", "ev_distancias_cumpridas", "ev_art_estruturas",
 			"ev_art_eletrica", "ev_croqui_evento", "ev_cert_foodtruck", "ev_contrato_brigada",
 			"ev_declaracao_gerador",
-			"ev_vistoriador01", "ev_vistoriador02", "ev_viatura", "ev_regime", "ev_cpf", "ev_telefone",
+			"ev_cpf", "ev_telefone",
 			"ev_status_eventual", "ev_motivo_cancelamento", "ev_condicionantes", "ev_restricoes",
 			"ev_parecer_final"
 		];
@@ -3479,15 +3500,15 @@ function enviarParaGoogleForms() {
 		// Email consent e Envio fixo por email
 		"entry.1714192818": "divis.fisc24@gmail.com",
 
-		// Vistoriadores e Viatura (Outros)
+		// Vistoriadores e Viatura (lidos da configuração global)
 		"entry.952823450": "__other_option__",
-		"entry.952823450.other_option_response": v("ev_vistoriador01"),
+		"entry.952823450.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador01 || ''; } catch(e) { return ''; } })(),
 		"entry.2094975252": "__other_option__",
-		"entry.2094975252.other_option_response": v("ev_vistoriador02"),
+		"entry.2094975252.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador02 || ''; } catch(e) { return ''; } })(),
 		"entry.1503326683": "__other_option__",
-		"entry.1503326683.other_option_response": v("ev_viatura"),
+		"entry.1503326683.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.viatura || ''; } catch(e) { return ''; } })(),
 		"entry.1594942841": "__other_option__",
-		"entry.1594942841.other_option_response": v("ev_regime"),
+		"entry.1594942841.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.regime || ''; } catch(e) { return ''; } })(),
 
 		// Dados gerais do processo
 		"entry.191765537": v("processoBusca"),
