@@ -1,192 +1,424 @@
-<div style="font-family: Arial, sans-serif; width: 100%; max-width: 100%; margin: 0; color: #333333; line-height: 1.5; padding: 0;">
+<style>
+.campo-negrito {
+    display: inline;
+    padding: 0;
+    margin: 0;
+    border: none;
+    outline: none;
+    text-transform: uppercase;
+    font-weight: bold;
+    background: transparent;
+}
+
+.container-geral {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    color: #333333;
+    line-height: 1.5;
+    padding: 0;
+}
+
+.certificado-moldura {
+    border: 4px double #2e7d32;
+    padding: 30px;
+    background-color: #fafafa;
+    border-radius: 8px;
+    margin-bottom: 40px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    box-sizing: border-box;
+}
+
+.topo-titulo-container {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.topo-titulo-container h1 {
+    margin: 0;
+    font-size: 28px;
+    color: #0d47a1;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.topo-titulo-container p {
+    margin: 6px 0 0 0;
+    font-size: 14px;
+    color: #555;
+}
+
+.texto-certificado {
+    font-size: 16px;
+    text-align: justify;
+    margin-bottom: 35px;
+    text-indent: 40px;
+    line-height: 1.8;
+}
+
+.resultado-container {
+    background-color: #e8f5e9;
+    border: 2px solid #2e7d32;
+    border-radius: 6px;
+    padding: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.resultado-titulo {
+    font-size: 12px;
+    text-transform: uppercase;
+    display: block;
+    letter-spacing: 1px;
+    color: #555;
+    font-weight: bold;
+    margin-bottom: 3px;
+}
+
+.resultado-status {
+    font-size: 26px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #2e7d32;
+    letter-spacing: 2px;
+}
+
+.rodape-certificado {
+    text-align: center;
+    margin-top: 25px;
+    font-size: 13px;
+    color: #666;
+}
+
+.rodape-certificado p.assinatura {
+    margin: 0;
+    font-style: italic;
+}
+
+.rodape-certificado p.autenticidade {
+    margin: 4px 0 0 0;
+    font-size: 11px;
+    color: #999;
+}
+
+.laudo-cabecalho {
+    text-align: center;
+    margin: 40px 0 20px 0;
+    padding-top: 20px;
+    page-break-before: always;
+    break-before: page;
+}
+
+.laudo-cabecalho h2 {
+    margin: 0;
+    font-size: 22px;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.laudo-cabecalho p {
+    margin: 5px 0 0 0;
+    font-size: 13px;
+    color: #666;
+}
+
+.secao-container {
+    margin-bottom: 25px;
+    width: 100%;
+}
+
+.secao-titulo {
+    background-color: #f1f5f9;
+    padding: 8px 12px;
+    font-weight: bold;
+    font-size: 14px;
+    text-transform: uppercase;
+    color: #1e293b;
+    border-left: 4px solid #0d47a1;
+    margin-bottom: 10px;
+}
+
+.secao-titulo.destaque-alerta {
+    border-left: 4px solid #e65100;
+}
+
+.tabela-dados {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.tabela-dados td, .tabela-dados th {
+    padding: 8px;
+    border: 1px solid #e2e8f0;
+}
+
+.tabela-dados td.rotulo {
+    background-color: #f8fafc;
+    font-weight: bold;
+}
+
+.tabela-dados tr.linha-destaque {
+    background-color: #f8fafc;
+}
+
+.tabela-dados th {
+    background-color: #f8fafc;
+}
+
+.tabela-grade {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.tabela-grade tr.cabecalho {
+    background-color: #e2e8f0;
+    font-weight: bold;
+}
+
+.tabela-grade td {
+    padding: 6px;
+    border: 1px solid #cbd5e1;
+    background-color: #fff;
+}
+
+.container-condicionantes {
+    font-size: 13px;
+    background-color: #fffaf0;
+    border: 1px solid #feebc8;
+    padding: 15px;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.container-condicionantes p {
+    margin: 0 0 8px 0;
+    font-weight: bold;
+    color: #c05621;
+}
+
+.container-condicionantes ul {
+    margin: 0;
+    padding-left: 20px;
+    line-height: 1.6;
+    color: #7b341e;
+}
+
+.w-20 { width: 20%; }
+.w-30 { width: 30%; }
+.w-70 { width: 70%; }
+
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+
+.status-conforme {
+    font-weight: bold;
+    color: #2e7d32;
+}
+
+.status-atencao {
+    font-weight: bold;
+    color: #111;
+}
+
+.status-inativo {
+    font-weight: bold;
+    color: #b71c1c;
+}
+
+.status-ausente {
+    color: #777;
+}
+
+.subtexto {
+    color: #666;
+}
+
+.text-reprovado {
+    font-weight: bold;
+    color: #c62828;
+}
+
+.text-aprovado {
+    font-weight: bold;
+    color: #2e7d32;
+}
+</style>
+
+<div contenteditable="false" class="container-geral">
     
-    <div style="border: 4px double #2e7d32; padding: 30px; background-color: #fafafa; border-radius: 8px; margin-bottom: 40px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); box-sizing: border-box;">
-        
-        <table style="width: 100%; border-collapse: collapse; margin-bottom: 25px; border: none;">
-            <tr>
-                <td style="width: 15%; text-align: left; vertical-align: middle; padding: 5px; border: none;">
-                    <div style="border: 1px dashed #ccc; padding: 10px; font-size: 10px; color: #777; text-align: center; background-color: #fff; min-height: 70px; display: flex; align-items: center; justify-content: center;">
-                        [Insira a Logo<br>do CBMDF aqui]
-                    </div>
-                </td>
-                
-                <td style="width: 70%; text-align: center; vertical-align: middle; padding: 5px; border: none;">
-                    <p style="margin: 0; font-size: 13px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; color: #555;">Governo do Distrito Federal</p>
-                    <p style="margin: 3px 0 0 0; font-size: 15px; font-weight: bold; text-transform: uppercase; color: #111;">Corpo de Bombeiros Militar do Distrito Federal</p>
-                    <p style="margin: 2px 0 0 0; font-size: 12px; color: #666; font-weight: bold; text-transform: uppercase;">Departamento de Segurança Contra Incêndio - Diretoria de Vistorias</p>
-                </td>
-                
-                <td style="width: 15%; text-align: right; vertical-align: middle; padding: 5px; border: none;">
-                    <div style="border: 1px dashed #ccc; padding: 10px; font-size: 10px; color: #777; text-align: center; background-color: #fff; min-height: 70px; display: flex; align-items: center; justify-content: center;">
-                        [Insira a Logo<br>da DIVIS aqui]
-                    </div>
-                </td>
-            </tr>
-        </table>
+    <div class="certificado-moldura">
 
-        <div style="text-align: center; margin-bottom: 30px;">
-            <h1 style="margin: 0; font-size: 28px; color: #0d47a1; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Certificado de Vistoria Eventual</h1>
-            <p style="margin: 6px 0 0 0; font-size: 14px; color: #555;">Protocolo SEI: <strong>12345-12345678/2024-01</strong></p>
+        <div class="topo-titulo-container">
+            <h1>Certificado de Vistoria Eventual</h1>
+            <p>Protocolo SEI: <span class="campo-negrito" contenteditable="true">@processo@ </span></p>
         </div>
 
-        <div style="font-size: 16px; text-align: justify; margin-bottom: 35px; text-indent: 40px; line-height: 1.8;">
-            O Corpo de Bombeiros Militar do Distrito Federal, por meio de sua Diretoria de Vistorias, certifica que o evento provisório denominado <strong style="color: #0d47a1;">Nome do Evento</strong>, localizado em <span style="border-bottom: 1px dashed #999;">Enedereço do evento – RA 2 - Gama</span>, com área informada de <strong>100 m²</strong> e público estimado de até <strong>100 pessoas</strong>, sob responsabilidade de <strong>nome completo do responsável</strong> (CPF: 123.456.789-00), foi submetido à inspeção técnica de segurança contra incêndio e pânico para o período de validade de <strong>05/06/2026</strong> a <strong>05/06/2026</strong>.
+        <div class="texto-certificado">
+            O Corpo de Bombeiros Militar do Distrito Federal, por meio de sua Diretoria de Vistorias, certifica que o evento provisório denominado <span class="campo-negrito" contenteditable="true">Nome do Evento</span>, localizado em <span class="campo-negrito" contenteditable="true">Enedereço do evento – RA 2 - Gama</span>, com área informada de <span class="campo-negrito" contenteditable="true">100</span><strong> m²</strong> e público estimado de até <span class="campo-negrito" contenteditable="true">100</span><strong> pessoas</strong>, sob responsabilidade de <span class="campo-negrito" contenteditable="true">nome completo do responsável</span> (CPF: <span class="campo-negrito" contenteditable="true">123.456.789-00</span>), foi submetido à inspeção técnica de segurança contra incêndio e pânico para o período de validade de <strong>05/06/2026</strong> a <strong>05/06/2026</strong>.
         </div>
 
-        <div style="background-color: #e8f5e9; border: 2px solid #2e7d32; border-radius: 6px; padding: 18px; text-align: center; margin-bottom: 20px;">
-            <span style="font-size: 12px; text-transform: uppercase; display: block; letter-spacing: 1px; color: #555; font-weight: bold; margin-bottom: 3px;">Resultado Final da Avaliação</span>
-            <span style="font-size: 26px; font-weight: bold; text-transform: uppercase; color: #2e7d32; letter-spacing: 2px;">APROVADO</span>
+        <div class="resultado-container">
+            <span class="resultado-titulo">Resultado Final da Avaliação</span>
+            <span class="resultado-status">APROVADO</span>
         </div>
 
-        <div style="text-align: center; margin-top: 25px; font-size: 13px; color: #666;">
-            <p style="margin: 0; font-style: italic;">Documento assinado eletronicamente conforme parâmetros do sistema SEI.</p>
-            <p style="margin: 4px 0 0 0; font-size: 11px; color: #999;">A autenticidade deste certificado pode ser verificada no portal oficial do SEI-GDF.</p>
+        <div class="rodape-certificado">
+            <p class="assinatura">Documento assinado eletronicamente conforme parâmetros do sistema SEI.</p>
+            <p class="autenticidade">A autenticidade deste certificado pode ser verificada no portal oficial do SEI-GDF.</p>
         </div>
     </div>
 
 <!--inserir border-top: 2px dashed #ccc; se não for quebrar a página-->
-    <div style="text-align: center; margin: 40px 0 20px 0; padding-top: 20px; page-break-before: always; break-before: page;">
-        <h2 style="margin: 0; font-size: 22px; color: #333; text-transform: uppercase; letter-spacing: 1px; font-weight: bold;">Laudo Técnico de Vistoria de Evento</h2>
-        <p style="margin: 5px 0 0 0; font-size: 13px; color: #666;">Dados integrados via FormResponse (Formulário de Vistoria Eventual)</p>
+    <div class="laudo-cabecalho">
+        <h2>Laudo Técnico de Vistoria de Evento</h2>
+        <p>Dados integrados via FormResponse (Formulário de Vistoria Eventual)</p>
     </div>
 
-    <div style="margin-bottom: 25px; width: 100%;">
-        <div style="background-color: #f1f5f9; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; color: #1e293b; border-left: 4px solid #0d47a1; margin-bottom: 10px;">
+    <div class="secao-container">
+        <div class="secao-titulo">
             1. Informações Gerais e Logística
         </div>
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <table class="tabela-dados">
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; width: 20%; font-weight: bold;">Processo SEI:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; width: 30%;">12345-12345678/2024-01</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; width: 20%; font-weight: bold;">Nome do Evento:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; width: 30%;">Nome do Evento</td>
+                <td class="rotulo w-20">Processo SEI:</td>
+                <td class="w-30">12345-12345678/2024-01</td>
+                <td class="rotulo w-20">Nome do Evento:</td>
+                <td class="w-30">Nome do Evento</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Região Administrativa:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">RA 2 - Gama</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Endereço:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Enedereço do evento</td>
+                <td class="rotulo">Região Administrativa:</td>
+                <td>RA 2 - Gama</td>
+                <td class="rotulo">Endereço:</td>
+                <td>Enedereço do evento</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Georreferenciamento:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">-15.1234, -47.1234</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Viatura Empregada:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">ABC 123</td>
+                <td class="rotulo">Georreferenciamento:</td>
+                <td>-15.1234, -47.1234</td>
+                <td class="rotulo">Viatura Empregada:</td>
+                <td>ABC 123</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Período do Evento:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;" colspan="3">De 05/06/2026 até 05/06/2026</td>
+                <td class="rotulo">Período do Evento:</td>
+                <td colspan="3">De 05/06/2026 até 05/06/2026</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Vistoriador 01:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">nomePrimeorVistoriador - Matrc 1234567</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Vistoriador 02:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">nomeSegundoVistoriador - Matrc 7654321</td>
+                <td class="rotulo">Vistoriador 01:</td>
+                <td>nomePrimeorVistoriador - Matrc 1234567</td>
+                <td class="rotulo">Vistoriador 02:</td>
+                <td>nomeSegundoVistoriador - Matrc 7654321</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Regime de Trabalho:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;" colspan="3">GSV / Plantão 24h / ALA A / Expediente</td>
+                <td class="rotulo">Regime de Trabalho:</td>
+                <td colspan="3">GSV / Plantão 24h / ALA A / Expediente</td>
             </tr>
         </table>
     </div>
 
-    <div style="margin-bottom: 25px; width: 100%;">
-        <div style="background-color: #f1f5f9; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; color: #1e293b; border-left: 4px solid #0d47a1; margin-bottom: 10px;">
+    <div class="secao-container">
+        <div class="secao-titulo">
             2. Dimensionamento e Estruturas Declaradas
         </div>
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-            <tr style="background-color: #f8fafc;">
-                <td style="padding: 8px; border: 1px solid #e2e8f0; font-weight: bold; width: 20%;">Público Alvo:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; width: 30%;">100 pessoas</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; font-weight: bold; width: 20%;">Área Total Declarada:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; width: 30%;">100 m²</td>
+        <table class="tabela-dados">
+            <tr class="linha-destaque">
+                <td class="rotulo w-20">Público Alvo:</td>
+                <td class="w-30">100 pessoas</td>
+                <td class="rotulo w-20">Área Total Declarada:</td>
+                <td class="w-30">100 m²</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Estrutura Provisória?</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Sim</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Cercamento do Evento?</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Sim</td>
+                <td class="rotulo">Estrutura Provisória?</td>
+                <td>Sim</td>
+                <td class="rotulo">Cercamento do Evento?</td>
+                <td>Sim</td>
             </tr>
         </table>
 
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 10px; text-align: center;">
-            <tr style="background-color: #e2e8f0; font-weight: bold;">
-                <td style="padding: 6px; border: 1px solid #cbd5e1;">Tendas/Barracas</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1;">Palcos</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1;">Arquibancadas</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1;">Pórticos</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1;">Brinquedos Eletromec.</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1;">Camarotes</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1;">Brinquedos Infláveis</td>
+        <table class="tabela-grade">
+            <tr class="cabecalho">
+                <td>Tendas/Barracas</td>
+                <td>Palcos</td>
+                <td>Arquibancadas</td>
+                <td>Pórticos</td>
+                <td>Brinquedos Eletromec.</td>
+                <td>Camarotes</td>
+                <td>Brinquedos Infláveis</td>
             </tr>
             <tr>
-                <td style="padding: 6px; border: 1px solid #cbd5e1; background-color: #fff;">1</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1; background-color: #fff;">2</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1; background-color: #fff;">3</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1; background-color: #fff;">4</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1; background-color: #fff;">5</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1; background-color: #fff;">6</td>
-                <td style="padding: 6px; border: 1px solid #cbd5e1; background-color: #fff;">7</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
             </tr>
         </table>
     </div>
 
-    <div style="margin-bottom: 25px; width: 100%;">
-        <div style="background-color: #f1f5f9; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; color: #1e293b; border-left: 4px solid #0d47a1; margin-bottom: 10px;">
+    <div class="secao-container">
+        <div class="secao-titulo">
             3. Verificação de Critérios Técnicos (SCIP / Instalações)
         </div>
         
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
-            <tr style="background-color: #f8fafc;">
-                <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: left; width: 70%;">Item de Segurança Inspecionado</th>
-                <th style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; width: 30%;">Status do Requisito</th>
+        <table class="tabela-dados">
+            <tr class="linha-destaque">
+                <th class="text-left w-70">Item de Segurança Inspecionado</th>
+                <th class="text-center w-30">Status do Requisito</th>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Apresentação do Laudo de Inflamabilidade (Tendas/Toldos)</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2e7d32;">Sim / Conforme</td>
+                <td>Apresentação do Laudo de Inflamabilidade (Tendas/Toldos)</td>
+                <td class="text-center status-conforme">Sim / Conforme</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Instalação de Elétrica Provisória com Quadros Isolados e Dispositivo DR</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2e7d32;">Sim (Quadros: 23)</td>
+                <td>Instalação de Elétrica Provisória com Quadros Isolados e Dispositivo DR</td>
+                <td class="text-center status-conforme">Sim (Quadros: 23)</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Uso de Grupo Gerador (Isolamento, Sinalização, Aterramento e Extintor)</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2e7d32;">Sim (Qtd: 65456)</td>
+                <td>Uso de Grupo Gerador (Isolamento, Sinalização, Aterramento e Extintor)</td>
+                <td class="text-center status-conforme">Sim (Qtd: 65456)</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Aterramento de todas as Estruturas Metálicas</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2e7d32;">Sim / Conforme</td>
+                <td>Aterramento de todas as Estruturas Metálicas</td>
+                <td class="text-center status-conforme">Sim / Conforme</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Sinalização e Iluminação das Rotas e Saídas de Emergência</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2e7d32;">Sim / Ativo</td>
+                <td>Sinalização e Iluminação das Rotas e Saídas de Emergência</td>
+                <td class="text-center status-conforme">Sim / Ativo</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Brigada de Incêndio Credenciada e Certificados Válidos</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #111;">Sim (1 Brigadista) <br><small style="color:#666;">EMPRESA BRIGARDISTA - EMP-B/123-45</small></td>
+                <td>Brigada de Incêndio Credenciada e Certificados Válidos</td>
+                <td class="text-center status-atencao">Sim (1 Brigadista) <br><small class="subtexto">EMPRESA BRIGARDISTA - EMP-B/123-45</small></td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Utilização de Gases / Combustíveis (Líquido Inflamável, GLP ou Fogos)</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #b71c1c;">Não se aplica / Ausente</td>
+                <td>Utilização de Gases / Combustíveis (Líquido Inflamável, GLP ou Fogos)</td>
+                <td class="text-center status-inativo">Não se aplica / Ausente</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Sistemas de Proteção por Extintores (Fixação, Validade e Classes ABC)</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; font-weight: bold; color: #2e7d32;">Sim / Conforme (Qtd: 1)</td>
+                <td>Sistemas de Proteção por Extintores (Fixação, Validade e Classes ABC)</td>
+                <td class="text-center status-conforme">Sim / Conforme (Qtd: 1)</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">Presença e dimensionamento do Sistema de Proteção contra Descargas Atmosféricas (SPDA)</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; text-align: center; color: #777;">Não se aplica</td>
+                <td>Presença e dimensionamento do Sistema de Proteção contra Descargas Atmosféricas (SPDA)</td>
+                <td class="text-center status-ausente">Não se aplica</td>
             </tr>
         </table>
     </div>
 
-    <div style="margin-bottom: 25px; width: 100%;">
-        <div style="background-color: #f1f5f9; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; color: #1e293b; border-left: 4px solid #e65100; margin-bottom: 10px;">
+    <div class="secao-container">
+        <div class="secao-titulo destaque-alerta">
             4. Exigências e Diretrizes Técnicas Observadas (Se aplicável)
         </div>
-        <div style="font-size: 13px; background-color: #fffaf0; border: 1px solid #feebc8; padding: 15px; border-radius: 4px; box-sizing: border-box;">
-            <p style="margin: 0 0 8px 0; font-weight: bold; color: #c05621;">Itens extraídos das condicionantes aplicadas ao evento:</p>
-            <ul style="margin: 0; padding-left: 20px; line-height: 1.6; color: #7b341e;">
+        <div class="container-condicionantes">
+            <p>Itens extraídos das condicionantes aplicadas ao evento:</p>
+            <ul>
                 <li>Apresentar requerimento original de solicitação de Licença de Funcionamento Eventual, formulário de apoio, memorial descritivo e termo de responsabilidade para eventos.</li>
                 <li>Apresentar o Comprovante de disponibilidade de grupo gerador e o croqui estruturado do evento.</li>
                 <li>Apresentar contrato da brigada, certificado de credenciamento da empresa e os certificados válidos de todos os brigadistas.</li>
@@ -197,29 +429,28 @@
         </div>
     </div>
 
-    <div style="margin-bottom: 20px; width: 100%;">
-        <div style="background-color: #f1f5f9; padding: 8px 12px; font-weight: bold; font-size: 14px; text-transform: uppercase; color: #1e293b; border-left: 4px solid #0d47a1; margin-bottom: 10px;">
+    <div class="secao-container">
+        <div class="secao-titulo">
             5. Desfecho Técnico da Inspeção
         </div>
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+        <table class="tabela-dados">
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; width: 20%; font-weight: bold;">Status da Vistoria:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; width: 30%; font-weight: bold; color: #c62828;">Reprovado</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; width: 20%; font-weight: bold;">Condicionante Aplicada:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; width: 30%;">CONDICIONANTE APROVADO</td>
+                <td class="rotulo w-20">Status da Vistoria:</td>
+                <td class="w-30 text-reprovado">Reprovado</td>
+                <td class="rotulo w-20">Condicionante Aplicada:</td>
+                <td class="w-30">CONDICIONANTE APROVADO</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Restrições Registradas:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;">RESTRIÇÕES</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Parecer Final:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; font-weight: bold; color: #2e7d32;">VISTORIA CONCLUÍDA</td>
+                <td class="rotulo">Restrições Registradas:</td>
+                <td>RESTRIÇÕES</td>
+                <td class="rotulo">Parecer Final:</td>
+                <td class="text-aprovado">VISTORIA CONCLUÍDA</td>
             </tr>
             <tr>
-                <td style="padding: 8px; border: 1px solid #e2e8f0; background-color: #f8fafc; font-weight: bold;">Observações Finais:</td>
-                <td style="padding: 8px; border: 1px solid #e2e8f0;" colspan="3">Sem observações adicionais gravadas no sistema.</td>
+                <td class="rotulo">Observações Finais:</td>
+                <td colspan="3">Sem observações adicionais gravadas no sistema.</td>
             </tr>
         </table>
     </div>
 
 </div>
-<!--<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSczAwEJVAI5rHFQeeOD9T-lOdvuC6n5ceUnLa64E07qzMSmFA/viewform?embedded=true" width="640" height="11493" frameborder="0" marginheight="0" marginwidth="0">Carregando…</iframe>-->

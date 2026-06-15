@@ -122,6 +122,10 @@ $(document).ready(function () {
 	$('#containerEventual input[type="text"]').on('input', function () {
 		this.value = this.value.toUpperCase();
 	});
+
+	// Ajusta obrigatoriedade dinâmica de processo e cnpj
+	$("#processoBusca, #cnpj").on("input change", ajustarRequiredProcessoCnpj);
+	ajustarRequiredProcessoCnpj();
 });
 
 
@@ -2324,6 +2328,17 @@ function validarEquipeVistoria(mostrarAlerta) {
 function salvarAutomaticamente() {
 	if (isDeleting) return;
 	if (!validarEquipeVistoria(false)) return;
+
+	const processoInput = document.getElementById("processoBusca");
+	const processoNum = processoInput?.value.trim() || "";
+	const cnpjInput = document.getElementById("cnpj");
+	const cnpj = cnpjInput?.value.trim() || "";
+
+	if (!processoNum && !cnpj) {
+		console.log("Ignorando salvamento automático: número do processo e CNPJ estão vazios.");
+		return;
+	}
+
 	const idInput = document.getElementById("processoId");
 	if (!idInput) {
 		console.error("Element with ID 'processoId' not found when attempting to auto-save.");
@@ -2334,9 +2349,6 @@ function salvarAutomaticamente() {
 		id = generateId();
 		idInput.value = id;
 	}
-
-	const processoInput = document.getElementById("processoBusca");
-	const processoNum = processoInput?.value.trim();
 
 	// Validar se o código de processo inserido é único (não cadastrado em outro processo)
 	if (processoNum && !isProcessoBuscaUnique(processoNum, id)) {
@@ -2483,6 +2495,7 @@ function buscarProcessoPorInput(evt) {
 		camposDeExigenciasAtivos = {};
 		document.getElementById("retornoNao").checked = true;
 		atualizarVisibilidadeRetorno();
+		ajustarRequiredProcessoCnpj();
 
 		// Reseta o processoId para um novo ID
 		const idInput = document.getElementById("processoId");
@@ -2560,6 +2573,27 @@ document
 // Botão SALVAR MANUALMENTE
 document.getElementById("btnSalvar").addEventListener("click", () => {
 	if (!validarEquipeVistoria(true)) return;
+
+	const processoNum = document.getElementById("processoBusca")?.value.trim() || "";
+	const cnpj = document.getElementById("cnpj")?.value.trim() || "";
+	const tipo = document.getElementById("tipo")?.value || "";
+
+	if (tipo !== "Eventual" && !processoNum && !cnpj) {
+		Utils.showToast(
+			"Preencha o Número do Processo e/ou o CNPJ antes de salvar.",
+			"danger"
+		);
+		document.getElementById("processoBusca")?.focus();
+		return;
+	} else if (tipo === "Eventual" && !processoNum) {
+		Utils.showToast(
+			"Preencha o Número do Processo antes de salvar.",
+			"danger"
+		);
+		document.getElementById("processoBusca")?.focus();
+		return;
+	}
+
 	const form = document.querySelector(".needs-validation");
 	if (!form.checkValidity()) {
 		form.classList.add("was-validated");
@@ -2937,7 +2971,7 @@ document.getElementById("btnExcluir").addEventListener("click", () => {
 		return;
 	}
 
-	if (true || confirm(`Deseja realmente excluir o processo ${processoNum || "sem número"}?`)) {
+	if (confirm(`Deseja realmente excluir o processo ${processoNum || "sem número"}?`)) {
 		isDeleting = true;
 		localStorage.removeItem(`processo-${id}`);
 		Utils.showToast("Processo excluído!", "success");
@@ -2991,6 +3025,40 @@ function toggleRequiredFields(tipo) {
 		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", true);
 		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", false);
 	}
+	ajustarRequiredProcessoCnpj();
+}
+
+function ajustarRequiredProcessoCnpj() {
+	const tipo = document.getElementById("tipo")?.value || "";
+	const processoBusca = document.getElementById("processoBusca");
+	const cnpj = document.getElementById("cnpj");
+
+	if (!processoBusca || !cnpj) return;
+
+	const temProcesso = processoBusca.value.trim() !== "";
+	const temCnpj = cnpj.value.trim() !== "";
+
+	if (tipo === "Eventual") {
+		cnpj.required = false;
+		processoBusca.required = true;
+	} else {
+		if (temProcesso && !temCnpj) {
+			processoBusca.required = true;
+			cnpj.required = false;
+		} else if (!temProcesso && temCnpj) {
+			processoBusca.required = false;
+			cnpj.required = true;
+		} else {
+			processoBusca.required = true;
+			cnpj.required = true;
+		}
+	}
+
+	const astProcesso = document.getElementById("asteriscoProcesso");
+	const astCnpj = document.getElementById("asteriscoCnpj");
+
+	if (astProcesso) astProcesso.style.display = processoBusca.required ? "inline" : "none";
+	if (astCnpj) astCnpj.style.display = cnpj.required ? "inline" : "none";
 }
 
 function enviarParaGoogleForms() {
