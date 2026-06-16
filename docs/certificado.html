@@ -1,13 +1,27 @@
 <style>
+
 .campo-negrito {
-    display: inline;
-    padding: 0;
-    margin: 0;
-    border: none;
-    outline: none;
     text-transform: uppercase;
     font-weight: bold;
     background: transparent;
+    text-align: center;
+}
+
+.campo-negrito:empty::before {
+    color:#999;
+    font-weight:normal;
+}
+
+.campo-normal {
+    text-transform: uppercase;
+    background: transparent;
+    text-align: center;
+    border: none;
+}
+
+.campo-normal:empty::before {
+    color:#999;
+    font-weight:normal;
 }
 
 .container-geral {
@@ -211,31 +225,8 @@
     color: #7b341e;
 }
 
-.w-20 { width: 20%; }
-.w-30 { width: 30%; }
-.w-70 { width: 70%; }
-
 .text-left { text-align: left; }
 .text-center { text-align: center; }
-
-.status-conforme {
-    font-weight: bold;
-    color: #2e7d32;
-}
-
-.status-atencao {
-    font-weight: bold;
-    color: #111;
-}
-
-.status-inativo {
-    font-weight: bold;
-    color: #b71c1c;
-}
-
-.status-ausente {
-    color: #777;
-}
 
 .subtexto {
     color: #666;
@@ -258,11 +249,17 @@
 
         <div class="topo-titulo-container">
             <h1>Certificado de Vistoria Eventual</h1>
-            <p>Protocolo SEI: <span class="campo-negrito" contenteditable="true">@processo@ </span></p>
+            <p>Protocolo SEI: <span class="campo-negrito" contenteditable="true">@processo@</span></p>
         </div>
 
         <div class="texto-certificado">
-            O Corpo de Bombeiros Militar do Distrito Federal, por meio de sua Diretoria de Vistorias, certifica que o evento provisório denominado <span class="campo-negrito" contenteditable="true">Nome do Evento</span>, localizado em <span class="campo-negrito" contenteditable="true">Enedereço do evento – RA 2 - Gama</span>, com área informada de <span class="campo-negrito" contenteditable="true">100</span><strong> m²</strong> e público estimado de até <span class="campo-negrito" contenteditable="true">100</span><strong> pessoas</strong>, sob responsabilidade de <span class="campo-negrito" contenteditable="true">nome completo do responsável</span> (CPF: <span class="campo-negrito" contenteditable="true">123.456.789-00</span>), foi submetido à inspeção técnica de segurança contra incêndio e pânico para o período de validade de <strong>05/06/2026</strong> a <strong>05/06/2026</strong>.
+            O Corpo de Bombeiros Militar do Distrito Federal, por meio de sua Diretoria de Vistorias, certifica que o evento provisório denominado 
+            <span class="campo-negrito" contenteditable="true">NOME_DO_EVENTO</span>
+            , localizado em <span class="campo-negrito" contenteditable="true">ENDERECO_DO_EVENTO</span>
+            , com área informada de <span class="campo-negrito" contenteditable="true">000</span>
+            <strong> m²</strong> e público estimado de até <span class="campo-negrito" contenteditable="true">000</span><strong> pessoas</strong>
+            , sob responsabilidade de <span class="campo-negrito" contenteditable="true">NOME_DO_RESPONSÁVEL</span>
+             (CPF: <span class="campo-negrito" contenteditable="true">000.000.000-00</span>), foi submetido à inspeção técnica de segurança contra incêndio e pânico para o período de validade de <span class="campo-negrito" contenteditable="true">00/00/0000</span> a <span class="campo-negrito" contenteditable="true">00/00/0000</span>.
         </div>
 
         <div class="resultado-container">
@@ -288,37 +285,42 @@
         </div>
         <table class="tabela-dados">
             <tr>
-                <td class="rotulo w-20">Processo SEI:</td>
-                <td class="w-30">12345-12345678/2024-01</td>
-                <td class="rotulo w-20">Nome do Evento:</td>
-                <td class="w-30">Nome do Evento</td>
+                <td class="rotulo">Processo SEI:</td>
+                <td><span class="campo-normal" contenteditable="true">@processo@</span></td>
+                <td class="rotulo">Nome do Evento:</td>
+                <td>
+                    <span class="campo-normal" contenteditable="true">NOME_DO_EVENTO</span>
+                </td>
             </tr>
             <tr>
                 <td class="rotulo">Região Administrativa:</td>
-                <td>RA 2 - Gama</td>
+                <td><span class="campo-normal" contenteditable="true">RA_0_-_NOME_DO_RA</span></td>
                 <td class="rotulo">Endereço:</td>
-                <td>Enedereço do evento</td>
+                <td><span class="campo-normal" contenteditable="true">ENDERECO_DO_EVENTO</span></td>
             </tr>
             <tr>
                 <td class="rotulo">Georreferenciamento:</td>
-                <td>-15.1234, -47.1234</td>
+                <td><span class="campo-normal" contenteditable="true">-00.0000, - 00.0000</span></td>
                 <td class="rotulo">Viatura Empregada:</td>
-                <td>ABC 123</td>
+                <td><span class="campo-normal" contenteditable="true">AAA_000</span></td>
             </tr>
             <tr>
                 <td class="rotulo">Período do Evento:</td>
-                <td colspan="3">De 05/06/2026 até 05/06/2026</td>
+                <td colspan="3"><span class="campo-normal" contenteditable="true">PERÍODO_DO_EVENTO</span></td>
             </tr>
             <tr>
                 <td class="rotulo">Vistoriador 01:</td>
-                <td>nomePrimeorVistoriador - Matrc 1234567</td>
+                <td>
+                    <span class="campo-normal" contenteditable="true">NOME_DO_VISTORIADOR_01</span>
+                    <span class="campo-normal" contenteditable="false"> - Matrc.: </span>
+                    <span class="campo-normal" contenteditable="true">0000000</span>
+                </td>
                 <td class="rotulo">Vistoriador 02:</td>
-                <td>nomeSegundoVistoriador - Matrc 7654321</td>
-            </tr>
-            <tr>
-                <td class="rotulo">Regime de Trabalho:</td>
-                <td colspan="3">GSV / Plantão 24h / ALA A / Expediente</td>
-            </tr>
+                <td>
+                    <span class="campo-normal" contenteditable="true">NOME_DO_VISTORIADOR_02</span>
+                    <span class="campo-normal" contenteditable="false"> - Matrc.: </span>
+                    <span class="campo-normal" contenteditable="true">0000000</span>
+                </td>
         </table>
     </div>
 
@@ -327,17 +329,17 @@
             2. Dimensionamento e Estruturas Declaradas
         </div>
         <table class="tabela-dados">
-            <tr class="linha-destaque">
-                <td class="rotulo w-20">Público Alvo:</td>
-                <td class="w-30">100 pessoas</td>
-                <td class="rotulo w-20">Área Total Declarada:</td>
-                <td class="w-30">100 m²</td>
+            <tr>
+                <td class="rotulo">Público Alvo:</td>
+                <td><span class="campo-normal" contenteditable="true">000</span> pessoas</td>
+                <td class="rotulo">Área Total Declarada:</td>
+                <td><span class="campo-normal" contenteditable="true">000</span> m²</td>
             </tr>
             <tr>
                 <td class="rotulo">Estrutura Provisória?</td>
-                <td>Sim</td>
+                <td><span class="campo-normal" contenteditable="true">Sim</span></td>
                 <td class="rotulo">Cercamento do Evento?</td>
-                <td>Sim</td>
+                <td><span class="campo-normal" contenteditable="true">Sim</span></td>
             </tr>
         </table>
 
@@ -352,13 +354,13 @@
                 <td>Brinquedos Infláveis</td>
             </tr>
             <tr>
-                <td>1</td>
-                <td>2</td>
-                <td>3</td>
-                <td>4</td>
-                <td>5</td>
-                <td>6</td>
-                <td>7</td>
+                <td><span class="campo-normal" contenteditable="true">00</span></td>
+                <td><span class="campo-normal" contenteditable="true">00</span></td>
+                <td><span class="campo-normal" contenteditable="true">00</span></td>
+                <td><span class="campo-normal" contenteditable="true">00</span></td>
+                <td><span class="campo-normal" contenteditable="true">00</span></td>
+                <td><span class="campo-normal" contenteditable="true">00</span></td>
+                <td><span class="campo-normal" contenteditable="true">00</span></td>
             </tr>
         </table>
     </div>
@@ -370,44 +372,57 @@
         
         <table class="tabela-dados">
             <tr class="linha-destaque">
-                <th class="text-left w-70">Item de Segurança Inspecionado</th>
-                <th class="text-center w-30">Status do Requisito</th>
+                <th class="text-left rotulo">Item de Segurança Inspecionado</th>
+                <th class="text-center rotulo">Aprovado?</th>
             </tr>
             <tr>
                 <td>Apresentação do Laudo de Inflamabilidade (Tendas/Toldos)</td>
-                <td class="text-center status-conforme">Sim / Conforme</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">Sim</span></td>
             </tr>
             <tr>
                 <td>Instalação de Elétrica Provisória com Quadros Isolados e Dispositivo DR</td>
-                <td class="text-center status-conforme">Sim (Quadros: 23)</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">Sim</span>
+                    <span contenteditable="false"> (Quadros: </span>
+                    <span class="campo-negrito" contenteditable="true">00</span>
+                    <span contenteditable="false">)</span></td>
             </tr>
             <tr>
                 <td>Uso de Grupo Gerador (Isolamento, Sinalização, Aterramento e Extintor)</td>
-                <td class="text-center status-conforme">Sim (Qtd: 65456)</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">Sim</span>
+                    <span contenteditable="false"> (Qtd: </span>
+                    <span class="campo-negrito" contenteditable="true">00</span>
+                    <span contenteditable="false">)</span>
+                </td>
             </tr>
             <tr>
                 <td>Aterramento de todas as Estruturas Metálicas</td>
-                <td class="text-center status-conforme">Sim / Conforme</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">Sim</span></td>
             </tr>
             <tr>
                 <td>Sinalização e Iluminação das Rotas e Saídas de Emergência</td>
-                <td class="text-center status-conforme">Sim / Ativo</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">Sim</span></td>
             </tr>
             <tr>
                 <td>Brigada de Incêndio Credenciada e Certificados Válidos</td>
-                <td class="text-center status-atencao">Sim (1 Brigadista) <br><small class="subtexto">EMPRESA BRIGARDISTA - EMP-B/123-45</small></td>
+                <td class="text-center">
+                    <span class="campo-negrito" contenteditable="true">Sim</span>
+                    <span contenteditable="false"> (</span>
+                    <span class="campo-negrito" contenteditable="true"> 00 </span>
+                    <span contenteditable="false"> Brigadistas)</span>
+                    <br><small class="subtexto campo-normal" contenteditable="true">EMPRESA_BRIGADISTA </small><small class="subtexto campo-normal" contenteditable="false"> - EMP-B/</small><small class="subtexto campo-normal" contenteditable="true">123-45</small>
+                </td>
             </tr>
             <tr>
                 <td>Utilização de Gases / Combustíveis (Líquido Inflamável, GLP ou Fogos)</td>
-                <td class="text-center status-inativo">Não se aplica / Ausente</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">NÃO</span></td>
             </tr>
             <tr>
                 <td>Sistemas de Proteção por Extintores (Fixação, Validade e Classes ABC)</td>
-                <td class="text-center status-conforme">Sim / Conforme (Qtd: 1)</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">SIM</span></td>
             </tr>
             <tr>
                 <td>Presença e dimensionamento do Sistema de Proteção contra Descargas Atmosféricas (SPDA)</td>
-                <td class="text-center status-ausente">Não se aplica</td>
+                <td class="text-center"><span class="campo-negrito" contenteditable="true">NÃO SE APLICA</span></td>
             </tr>
         </table>
     </div>
@@ -435,20 +450,26 @@
         </div>
         <table class="tabela-dados">
             <tr>
-                <td class="rotulo w-20">Status da Vistoria:</td>
-                <td class="w-30 text-reprovado">Reprovado</td>
-                <td class="rotulo w-20">Condicionante Aplicada:</td>
-                <td class="w-30">CONDICIONANTE APROVADO</td>
+                <td class="rotulo">Status da Vistoria:</td>
+                <td><span class="campo-normal" contenteditable="true">Reprovado</span></td>
+                <td class="rotulo">Condicionante Aplicada:</td>
+                <td><span class="campo-normal" contenteditable="true">CONDICIONANTE APROVADO</span></td>
             </tr>
             <tr>
                 <td class="rotulo">Restrições Registradas:</td>
-                <td>RESTRIÇÕES</td>
+                <td>
+                    <span class="campo-normal" contenteditable="true">RESTRIÇÕES</span>
+                </td>
                 <td class="rotulo">Parecer Final:</td>
-                <td class="text-aprovado">VISTORIA CONCLUÍDA</td>
+                <td>
+                    <span class="campo-normal" contenteditable="true">VISTORIA CONCLUÍDA</span>
+                </td>
             </tr>
             <tr>
                 <td class="rotulo">Observações Finais:</td>
-                <td colspan="3">Sem observações adicionais gravadas no sistema.</td>
+                <td colspan="3">
+                    <span class="campo-normal" contenteditable="true">Sem observações adicionais gravadas no sistema.</span>
+                </td>
             </tr>
         </table>
     </div>
