@@ -211,3 +211,9 @@
     padding-right: 1rem; /* Adiciona um pouco de espaço à direita */
     width: 100%; /* Garante que o item ocupe toda a largura */
 }
+
+#divStatus {
+	border-radius: 0.375rem;
+	padding: 0.25rem 0.75rem;
+	transition: background-color 0.25s ease, color 0.25s ease;
+}

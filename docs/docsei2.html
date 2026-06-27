@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+
+<title>Modelo Institucional SEI - CBMDF</title>
+
+<style>
+
+/* =====================================================
+   MODELO INSTITUCIONAL SEI
+   Inspirado em documentos normativos federais
+===================================================== */
+
+body{
+    font-family:"Times New Roman", Times, serif;
+    font-size:12pt;
+    line-height:1.5;
+    color:#222;
+    background:#fff;
+    max-width:18cm;
+    margin:0 auto;
+    padding:2cm;
+}
+
+/* =====================================================
+   CABEÇALHO
+===================================================== */
+
+.I33_Cabeçalho{
+    text-align:center;
+    text-transform:uppercase;
+    font-weight:bold;
+    font-size:15pt;
+    letter-spacing:.5pt;
+    margin-bottom:24pt;
+    border-bottom:1px solid #444;
+    padding-bottom:12pt;
+}
+
+.I04_Centralizado_14{
+    text-align:center;
+    font-size:14pt;
+    font-weight:bold;
+    text-transform:uppercase;
+    margin:24pt 0 18pt 0;
+}
+
+.I03_Centralizado_12{
+    text-align:center;
+    font-size:12pt;
+    font-weight:bold;
+    margin:12pt 0;
+}
+
+.I36_Centralizado_12_Entre_Linhas_Reduzido{
+    text-align:center;
+    line-height:1.15;
+}
+
+.I38_Centralizado_Caixa_Alta{
+    text-align:center;
+    text-transform:uppercase;
+    font-weight:bold;
+    letter-spacing:1pt;
+    margin:18pt 0;
+}
+
+.I32_Times_16{
+    font-size:16pt;
+    text-align:center;
+    font-weight:bold;
+}
+
+/* =====================================================
+   TEXTO
+===================================================== */
+
+.I01_Justificado_Recuo_Primeira_Linha{
+    text-align:justify;
+    text-indent:2cm;
+    margin:0 0 6pt 0;
+}
+
+.I02_Justificado_12{
+    text-align:justify;
+    margin:0 0 6pt 0;
+}
+
+.I31_Justificado_12_Entre_Linhas_Reduzido,
+.I34_Justificado_12_Entre_Linhas_Reduzido{
+    text-align:justify;
+    line-height:1.15;
+    margin-bottom:4pt;
+}
+
+.I20_Texto_Alinhado_Direita{
+    text-align:right;
+}
+
+.I27_Ementa_alinhado_direita_recuo_centralizado{
+    width:55%;
+    margin-left:auto;
+    margin-bottom:24pt;
+    text-align:justify;
+    font-style:italic;
+}
+
+/* =====================================================
+   ITENS
+===================================================== */
+
+.I05_Item_Nivel1{
+    margin-left:0;
+    padding-left:1cm;
+}
+
+.I05_Item_Nivel1:before{
+    content:"I – ";
+    font-weight:bold;
+}
+
+.I06_Item_Nivel2{
+    margin-left:1cm;
+    padding-left:1cm;
+}
+
+.I06_Item_Nivel2:before{
+    content:"1. ";
+    font-weight:bold;
+}
+
+.I07_Item_Nivel3{
+    margin-left:2cm;
+    padding-left:1cm;
+}
+
+.I07_Item_Nivel3:before{
+    content:"a) ";
+    font-weight:bold;
+}
+
+.I08_Item_Nivel4{
+    margin-left:3cm;
+    padding-left:1cm;
+}
+
+.I08_Item_Nivel4:before{
+    content:"• ";
+}
+
+.II09_Item_Nivel5{
+    margin-left:4cm;
+    padding-left:1cm;
+}
+
+.II09_Item_Nivel5:before{
+    content:"◦ ";
+}
+
+.II10_Item_Nivel6{
+    margin-left:5cm;
+    padding-left:1cm;
+}
+
+.II10_Item_Nivel6:before{
+    content:"▪ ";
+}
+
+.II11_Item_Alinea_Letra{
+    margin-left:2cm;
+}
+
+.II11_Item_Alinea_Letra:before{
+    content:"a) ";
+    font-weight:bold;
+}
+
+/* =====================================================
+   INCISOS
+===================================================== */
+
+.I10_Item_Inciso_Romano{
+    margin-left:1cm;
+}
+
+.I10_Item_Inciso_Romano:before{
+    content:"IV – ";
+    font-weight:bold;
+}
+
+/* =====================================================
+   PARÁGRAFOS NUMERADOS
+===================================================== */
+
+.I11_Paragrafo_Numerado_Nivel1{
+    margin-left:1cm;
+}
+
+.I11_Paragrafo_Numerado_Nivel1:before{
+    content:"§ 1º ";
+    font-weight:bold;
+}
+
+.I12_Paragrafo_Numerado_Nivel2{
+    margin-left:2cm;
+}
+
+.I12_Paragrafo_Numerado_Nivel2:before{
+    content:"1.1 ";
+    font-weight:bold;
+}
+
+.I13_Paragrafo_Numerado_Nivel3{
+    margin-left:3cm;
+}
+
+.I13_Paragrafo_Numerado_Nivel3:before{
+    content:"1.1.1 ";
+    font-weight:bold;
+}
+
+.I14_Paragrafo_Numerado_Nivel4{
+    margin-left:4cm;
+}
+
+.I14_Paragrafo_Numerado_Nivel4:before{
+    content:"1.1.1.1 ";
+    font-weight:bold;
+}
+
+.I14a_Paragrafo_Numerado_Nivel5{
+    margin-left:5cm;
+}
+
+.I14a_Paragrafo_Numerado_Nivel5:before{
+    content:"1.1.1.1.1 ";
+    font-weight:bold;
+}
+
+.I14b_Paragrafo_Numerado_Nivel6{
+    margin-left:6cm;
+}
+
+.I14b_Paragrafo_Numerado_Nivel6:before{
+    content:"1.1.1.1.1.1 ";
+    font-weight:bold;
+}
+
+/* =====================================================
+   CITAÇÃO
+===================================================== */
+
+.I15_Citacao{
+    margin:12pt 0 12pt 2cm;
+    padding-left:12pt;
+    border-left:3px solid #777;
+    font-style:italic;
+    color:#444;
+}
+
+/* =====================================================
+   TABELAS
+===================================================== */
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin:12pt 0;
+}
+
+th{
+    background:#e6e6e6;
+    font-weight:bold;
+}
+
+th, td{
+    border:1px solid #555;
+    padding:5pt;
+}
+
+.I16_Tabela_Texto_Centralizado{
+    text-align:center;
+}
+
+.I17_Tabela_Texto_Alinhado_Direita{
+    text-align:right;
+}
+
+.I18_Tabela_Texto_Alinhado_Esquerda{
+    text-align:left;
+}
+
+.I19_Tabela_Texto_8{
+    font-size:8pt;
+}
+
+.I26_Tabela_Texto_Centralizado_8{
+    font-size:8pt;
+    text-align:center;
+}
+
+/* =====================================================
+   PUBLICAÇÕES
+===================================================== */
+
+.I23_padrao_publicação_dodf,
+.I29_padrao_publicação_dou_justificado{
+    text-align:justify;
+}
+
+.I24_padrao_publicação_dodf_centralizado,
+.I30_padrao_publicação_dou_centralizado{
+    text-align:center;
+    font-weight:bold;
+    text-transform:uppercase;
+}
+
+.I28_padrao_publicação_dou_recuo_primeira_linha{
+    text-align:justify;
+    text-indent:2cm;
+}
+
+/* =====================================================
+   TEXTO VERTICAL
+===================================================== */
+
+.I27a_Texto_Vertical{
+    writing-mode:vertical-rl;
+}
+
+.I27b_Texto_Vertical_8{
+    writing-mode:vertical-rl;
+    font-size:8pt;
+}
+
+/* =====================================================
+   RODAPÉ
+===================================================== */
+
+.I35_Nota_de_Rodapé{
+    margin-top:24pt;
+    padding-top:6pt;
+    border-top:1px solid #777;
+    font-size:8pt;
+}
+
+.I35_Rodapé{
+    margin-top:30pt;
+    text-align:center;
+    color:#666;
+    font-size:9pt;
+}
+
+hr{
+    border:none;
+    border-top:1px solid #bbb;
+    margin:24pt 0;
+}
+
+.demo{
+    color:#666;
+    font-style:italic;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="I33_Cabeçalho">
+Corpo de Bombeiros Militar do Distrito Federal
+</div>
+
+<div class="I04_Centralizado_14">
+MODELO INSTITUCIONAL DE DOCUMENTO SEI
+</div>
+
+<div class="I03_Centralizado_12">
+Demonstração de Classes de Estilo
+</div>
+
+<div class="I27_Ementa_alinhado_direita_recuo_centralizado">
+EMENTA: Modelo visual padronizado para documentos administrativos, laudos, pareceres, certificados e relatórios produzidos no Sistema Eletrônico de Informações.
+</div>
+
+<div class="I38_Centralizado_Caixa_Alta">
+DISPOSIÇÕES GERAIS
+</div>
+
+<p class="I01_Justificado_Recuo_Primeira_Linha">
+Este parágrafo demonstra o estilo institucional recomendado para documentos administrativos, utilizando alinhamento justificado e recuo na primeira linha.
+</p>
+
+<p class="I02_Justificado_12">
+Este é o estilo padrão para redação de textos correntes no âmbito dos processos administrativos.
+</p>
+
+<p class="I31_Justificado_12_Entre_Linhas_Reduzido">
+Texto com espaçamento reduzido normalmente utilizado em publicações, observações ou registros compactos.
+</p>
+
+<hr>
+
+<div class="I05_Item_Nivel1">Item de primeiro nível.</div>
+<div class="I06_Item_Nivel2">Item de segundo nível.</div>
+<div class="I07_Item_Nivel3">Item de terceiro nível.</div>
+<div class="I08_Item_Nivel4">Item de quarto nível.</div>
+<div class="II09_Item_Nivel5">Item de quinto nível.</div>
+<div class="II10_Item_Nivel6">Item de sexto nível.</div>
+
+<hr>
+
+<div class="I10_Item_Inciso_Romano">
+Inciso em algarismo romano.
+</div>
+
+<div class="II11_Item_Alinea_Letra">
+Alínea de exemplo.
+</div>
+
+<hr>
+
+<div class="I11_Paragrafo_Numerado_Nivel1">
+Parágrafo numerado nível 1.
+</div>
+
+<div class="I12_Paragrafo_Numerado_Nivel2">
+Parágrafo numerado nível 2.
+</div>
+
+<div class="I13_Paragrafo_Numerado_Nivel3">
+Parágrafo numerado nível 3.
+</div>
+
+<div class="I14_Paragrafo_Numerado_Nivel4">
+Parágrafo numerado nível 4.
+</div>
+
+<div class="I14a_Paragrafo_Numerado_Nivel5">
+Parágrafo numerado nível 5.
+</div>
+
+<div class="I14b_Paragrafo_Numerado_Nivel6">
+Parágrafo numerado nível 6.
+</div>
+
+<hr>
+
+<div class="I15_Citacao">
+"Exemplo de citação destacada utilizada para transcrição de normas, pareceres ou dispositivos legais."
+</div>
+
+<hr>
+
+<div class="I32_Times_16">
+TABELA DE EXEMPLO
+</div>
+
+<table>
+<tr>
+<th>Item</th>
+<th>Centralizado</th>
+<th>Direita</th>
+</tr>
+
+<tr>
+<td class="I18_Tabela_Texto_Alinhado_Esquerda">Extintores</td>
+<td class="I16_Tabela_Texto_Centralizado">15</td>
+<td class="I17_Tabela_Texto_Alinhado_Direita">100%</td>
+</tr>
+
+<tr>
+<td class="I18_Tabela_Texto_Alinhado_Esquerda">Sinalização</td>
+<td class="I16_Tabela_Texto_Centralizado">48</td>
+<td class="I17_Tabela_Texto_Alinhado_Direita">100%</td>
+</tr>
+</table>
+
+<hr>
+
+<div class="I24_padrao_publicação_dodf_centralizado">
+PUBLICAÇÃO DODF
+</div>
+
+<p class="I23_padrao_publicação_dodf">
+Texto formatado conforme padrão de publicação no Diário Oficial do Distrito Federal.
+</p>
+
+<hr>
+
+<div class="I30_padrao_publicação_dou_centralizado">
+PUBLICAÇÃO DOU
+</div>
+
+<p class="I28_padrao_publicação_dou_recuo_primeira_linha">
+Texto com recuo de primeira linha para publicação em Diário Oficial da União.
+</p>
+
+<p class="I29_padrao_publicação_dou_justificado">
+Texto justificado para publicação institucional.
+</p>
+
+<hr>
+
+<p class="I20_Texto_Alinhado_Direita">
+Brasília, 22 de junho de 2026.
+</p>
+
+<div class="I36_Centralizado_12_Entre_Linhas_Reduzido">
+NOME DO RESPONSÁVEL<br>
+Cargo ou Função
+</div>
+
+<div class="I35_Nota_de_Rodapé">
+Nota de rodapé: informações complementares, referências normativas ou observações técnicas.
+</div>
+
+<div class="I35_Rodapé">
+Documento gerado pelo Sistema Eletrônico de Informações – SEI
+</div>
+
+</body>
+</html>

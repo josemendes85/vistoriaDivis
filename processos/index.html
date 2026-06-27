@@ -142,13 +142,31 @@
                             <input type="text" class="form-control text-uppercase" id="eqVistoriador01" placeholder="Nome do vistoriador principal" />
                             <div class="invalid-feedback">Informe o Vistoriador 01.</div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="eqVistoriador02" class="form-label">Vistoriador 02</label>
-                            <input type="text" class="form-control text-uppercase" id="eqVistoriador02" placeholder="Nome do segundo vistoriador (opcional)" />
+                        <div class="col-md-3">
+                            <label for="eqPatente" class="form-label">Patente</label>
+                            <select class="form-select" id="eqPatente">
+                                <option value="" selected disabled>Selecione...</option>
+                                <option value="SD">SD</option>
+                                <option value="CB">CB</option>
+                                <option value="3ºSGT">3ºSGT</option>
+                                <option value="2ºSGT">2ºSGT</option>
+                                <option value="1°SGT">1°SGT</option>
+                                <option value="ST">ST</option>
+                                <option value="2ºTEN">2ºTEN</option>
+                                <option value="1ºTEN">1ºTEN</option>
+                                <option value="CAP">CAP</option>
+                                <option value="MAJ">MAJ</option>
+                                <option value="TC">TC</option>
+                                <option value="CEL">CEL</option>
+                            </select>
+                        </div>
+                        <div class="col-md-3">
+                            <label for="eqMatricula" class="form-label">Matrícula</label>
+                            <input type="text" class="form-control" id="eqMatricula" placeholder="Apenas números" inputmode="numeric" />
                         </div>
                         <div class="col-md-6">
                             <label for="eqViatura" class="form-label">Viatura</label>
-                            <input type="text" class="form-control text-uppercase" id="eqViatura" placeholder="ABC-1234" />
+                            <input type="text" class="form-control text-uppercase" id="eqViatura" placeholder="ABC 1234" />
                         </div>
                         <div class="col-md-6">
                             <label for="eqRegime" class="form-label">Regime de Trabalho</label>
@@ -160,6 +178,10 @@
                                 <option value="ALA B (TER, QUI, SEX)">ALA B (TER, QUI, SEX)</option>
                                 <option value="Expediente">Expediente</option>
                             </select>
+                        </div>
+                        <div class="col-md-12">
+                            <label for="eqEmailAddress" class="form-label">E-mail Google</label>
+                            <input type="email" class="form-control" id="eqEmailAddress" placeholder="divis.fiscXX@gmail.com" />
                         </div>
                     </div>
                 </div>
@@ -563,24 +585,34 @@
             const regimeEl = document.getElementById('equipeBarRegime');
 
             if (equipe.vistoriador01 && equipe.vistoriador01.trim()) {
-                nomeEl.textContent = equipe.vistoriador01;
+                let nomeFormatado = equipe.vistoriador01;
+                if (equipe.patente) {
+                    let patenteFormatada = equipe.patente.replace('°', 'º');
+                    if (patenteFormatada.includes('SGT') && !patenteFormatada.includes(' ')) patenteFormatada = patenteFormatada.replace('SGT', ' SGT');
+                    if (patenteFormatada.includes('TEN') && !patenteFormatada.includes(' ')) patenteFormatada = patenteFormatada.replace('TEN', ' TEN');
+                    nomeFormatado += " " + patenteFormatada;
+                }
+                if (equipe.matricula) {
+                    nomeFormatado += " - Matr. " + equipe.matricula;
+                }
+                nomeEl.textContent = nomeFormatado;
                 bar.classList.remove('equipe-warning');
 
                 if (equipe.viatura) {
-                    viaturaEl.textContent = '\uD83D\uDE97 ' + equipe.viatura;
+                    viaturaEl.textContent = '🚗 ' + equipe.viatura;
                     viaturaEl.style.display = '';
                 } else {
                     viaturaEl.style.display = 'none';
                 }
 
                 if (equipe.regime) {
-                    regimeEl.textContent = '\uD83D\uDCC5 ' + equipe.regime;
+                    regimeEl.textContent = '📅 ' + equipe.regime;
                     regimeEl.style.display = '';
                 } else {
                     regimeEl.style.display = 'none';
                 }
             } else {
-                nomeEl.textContent = '\u26A0\uFE0F Configure a Equipe de Vistoria';
+                nomeEl.textContent = '⚠️ Configure a Equipe de Vistoria';
                 bar.classList.add('equipe-warning');
                 viaturaEl.style.display = 'none';
                 regimeEl.style.display = 'none';
@@ -590,22 +622,45 @@
         function preencherModalEquipe() {
             const equipe = getEquipeData();
             document.getElementById('eqVistoriador01').value = equipe.vistoriador01 || '';
-            document.getElementById('eqVistoriador02').value = equipe.vistoriador02 || '';
+            document.getElementById('eqPatente').value = equipe.patente || '';
+            document.getElementById('eqMatricula').value = equipe.matricula || '';
             document.getElementById('eqViatura').value = equipe.viatura || '';
             document.getElementById('eqRegime').value = equipe.regime || '';
+            document.getElementById('eqEmailAddress').value = equipe.emailAddress || '';
         }
 
         function inicializarEquipeVistoria() {
             atualizarBarraEquipe();
 
-            // Bot\u00e3o para abrir modal
+            // Restringir matrícula a números
+            document.getElementById('eqMatricula').addEventListener('input', function() {
+                this.value = this.value.replace(/\D/g, '');
+            });
+
+            // Formatar viatura como LEL-NUM (insere espaço antes do primeiro dígito numérico)
+            document.getElementById('eqViatura').addEventListener('input', function() {
+                let cursor = this.selectionStart;
+                let originalLen = this.value.length;
+                let clean = this.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                let firstDigitIdx = clean.search(/\d/);
+                if (firstDigitIdx !== -1) {
+                    this.value = clean.slice(0, firstDigitIdx) + ' ' + clean.slice(firstDigitIdx);
+                    if (this.value.length > originalLen && cursor > firstDigitIdx) {
+                        this.setSelectionRange(cursor + 1, cursor + 1);
+                    }
+                } else {
+                    this.value = clean;
+                }
+            });
+
+            // Botão para abrir modal
             document.getElementById('btnAbrirEquipeModal').addEventListener('click', () => {
                 preencherModalEquipe();
                 const modal = new bootstrap.Modal(document.getElementById('equipeModal'));
                 modal.show();
             });
 
-            // Bot\u00e3o salvar no modal
+            // Botão salvar no modal
             document.getElementById('btnSalvarEquipe').addEventListener('click', () => {
                 const v01 = document.getElementById('eqVistoriador01').value.trim().toUpperCase();
                 const v01Input = document.getElementById('eqVistoriador01');
@@ -619,19 +674,22 @@
 
                 const equipeData = {
                     vistoriador01: v01,
-                    vistoriador02: document.getElementById('eqVistoriador02').value.trim().toUpperCase(),
+                    patente: document.getElementById('eqPatente').value,
+                    matricula: document.getElementById('eqMatricula').value.replace(/\D/g, ''),
                     viatura: document.getElementById('eqViatura').value.trim().toUpperCase(),
-                    regime: document.getElementById('eqRegime').value
+                    regime: document.getElementById('eqRegime').value,
+                    emailAddress: document.getElementById('eqEmailAddress').value.trim()
                 };
 
                 salvarEquipeData(equipeData);
+                localStorage.setItem('emailAddress', equipeData.emailAddress);
                 atualizarBarraEquipe();
 
                 const modal = bootstrap.Modal.getInstance(document.getElementById('equipeModal'));
                 if (modal) modal.hide();
             });
 
-            // Limpar valida\u00e7\u00e3o ao digitar
+            // Limpar validação ao digitar
             document.getElementById('eqVistoriador01').addEventListener('input', function() {
                 if (this.value.trim()) this.classList.remove('is-invalid');
             });

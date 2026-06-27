@@ -5,8 +5,56 @@ const CONFIG = {
 	TOAST_DURATION: 3000,
 };
 
-let statusAtualEventual = "A Fazer";
+let statusAtualEventual = "Pendente";
 let isDeleting = false;
+let opcoesOriginaisTipo = null;
+
+function atualizarOpcoesTipo() {
+	const selectTipo = document.getElementById("tipo");
+	if (!selectTipo) return;
+
+	if (!opcoesOriginaisTipo) {
+		opcoesOriginaisTipo = Array.from(selectTipo.options).map(opt => ({
+			value: opt.value,
+			text: opt.text,
+			disabled: opt.disabled,
+			selected: opt.selected
+		}));
+	}
+
+	const valorSelecionado = selectTipo.value;
+	selectTipo.innerHTML = "";
+
+	if (valorSelecionado === "Eventual") {
+		const opt = document.createElement("option");
+		opt.value = "Eventual";
+		opt.text = "Eventual";
+		opt.selected = true;
+		selectTipo.appendChild(opt);
+	} else if (valorSelecionado !== "" && valorSelecionado !== null) {
+		opcoesOriginaisTipo.forEach(orig => {
+			if (orig.value !== "Eventual") {
+				const opt = document.createElement("option");
+				opt.value = orig.value;
+				opt.text = orig.text;
+				opt.disabled = orig.disabled;
+				if (orig.value === valorSelecionado) {
+					opt.selected = true;
+				}
+				selectTipo.appendChild(opt);
+			}
+		});
+	} else {
+		opcoesOriginaisTipo.forEach(orig => {
+			const opt = document.createElement("option");
+			opt.value = orig.value;
+			opt.text = orig.text;
+			opt.disabled = orig.disabled;
+			opt.selected = orig.selected;
+			selectTipo.appendChild(opt);
+		});
+	}
+}
 
 /**
  * Gera um identificador único para cada processo.
@@ -55,6 +103,9 @@ $(document).ready(function () {
 	document.getElementById('status').addEventListener('change', () => {
 		atualizarVisibilidadeRetorno();
 	});
+	document.getElementById('ev_status_eventual')?.addEventListener('change', function () {
+		aplicarCorDoStatus(this.value);
+	});
 	document.getElementById('tipo').addEventListener('change', function () {
 		// Clear active requirements and badges
 		document.getElementById("exigenciasContainer").innerHTML = "";
@@ -64,6 +115,18 @@ $(document).ready(function () {
 		alternarFormularios(this.value);
 		atualizarVisibilidadeRetorno();
 	});
+
+	// Adiciona ouvintes para o campo de busca do processo
+	const processoBuscaEl = document.getElementById('processoBusca');
+	if (processoBuscaEl) {
+		processoBuscaEl.addEventListener('input', function () {
+			alternarFormularios();
+		});
+		processoBuscaEl.addEventListener('change', function () {
+			alternarFormularios();
+		});
+	}
+
 	alternarFormularios(document.getElementById('tipo').value);
 	atualizarVisibilidadeRetorno();
 
@@ -77,8 +140,7 @@ $(document).ready(function () {
 			return;
 		}
 
-		if (confirm("Deseja marcar esta vistoria como CONCLUÍDA/ENVIADA?")) {
-			statusAtualEventual = "Enviado";
+		if (confirm("Deseja salvar e enviar esta vistoria?")) {
 			salvarAutomaticamente();
 			enviarParaGoogleForms();
 		}
@@ -1733,7 +1795,7 @@ $(document).ready(function () {
 	$("#areaConstruida").mask("000.000.000.000.000,00", { reverse: true });
 	$("#ev_cpf").mask("000.000.000-00");
 	$("#ev_telefone").mask("(00) 00000-0000");
-
+	$("#responsavel_telefone").mask("(00) 00000-0000");
 	// CNPJ Lookup Functionality
 	const cnpjInput = document.getElementById("cnpj");
 	const enderecoInput = document.getElementById("endereco");
@@ -1872,9 +1934,44 @@ $(document).ready(function () {
 	const params = new URLSearchParams(window.location.search);
 	const idParam = params.get("id");
 	const processoParam = params.get("processo");
+	const hasShareData = params.has("tipo") && params.has("processoBusca");
 	const idInput = document.getElementById("processoId");
 
-	if (idParam) {
+	if (hasShareData) {
+		try {
+			const importData = {};
+			for (const [key, value] of params.entries()) {
+				if (value.startsWith("[") || value.startsWith("{")) {
+					try {
+						importData[key] = JSON.parse(value);
+					} catch(e) {
+						importData[key] = value;
+					}
+				} else if (value === "true" || value === "false") {
+					importData[key] = (value === "true");
+				} else {
+					importData[key] = value;
+				}
+			}
+
+			if (!importData.id) {
+				importData.id = generateId();
+			}
+
+			localStorage.setItem(`processo-${importData.id}`, JSON.stringify(importData));
+			if (idInput) {
+				idInput.value = importData.id;
+			}
+			buscarProcessoPorId(importData.id);
+			Utils.showToast("Processo importado e carregado com sucesso!", "success");
+
+			const cleanUrl = `${window.location.pathname}?id=${encodeURIComponent(importData.id)}`;
+			window.history.replaceState({ path: cleanUrl }, '', cleanUrl);
+		} catch (e) {
+			console.error("Erro na importação:", e);
+			Utils.showToast("Falha ao decodificar os dados compartilhados.", "danger");
+		}
+	} else if (idParam) {
 		if (idInput) {
 			idInput.value = idParam;
 		}
@@ -2288,16 +2385,29 @@ document.getElementById("buscarLocalizacao").addEventListener("click", () => {
 // Apply status color to title
 function aplicarCorDoStatus(status) {
 	const titulo = document.getElementById("tituloLaudo");
-	// Remove existing status classes (e.g., status-pendente, status-aprovado)
-	titulo.classList.remove(
-		...Array.from(titulo.classList).filter((c) => c.startsWith("status-"))
-	);
+	const divStatus = document.getElementById("divStatus");
+
+	// Reset status classes on both
+	if (titulo) {
+		titulo.classList.remove(
+			...Array.from(titulo.classList).filter((c) => c.startsWith("status-")),
+			"text-light", "text-dark"
+		);
+	}
+	if (divStatus) {
+		divStatus.classList.remove(
+			...Array.from(divStatus.classList).filter((c) => c.startsWith("status-")),
+			"text-light", "text-dark"
+		);
+	}
 
 	const classe = Utils.formatarClasseStatus(status);
 	if (status) {
-		titulo.classList.add("text-light", classe);
+		if (titulo) titulo.classList.add("text-light", classe);
+		if (divStatus) divStatus.classList.add("text-light", classe);
 	} else {
-		titulo.classList.add("text-dark", "status-sem-status"); // Default for no status
+		if (titulo) titulo.classList.add("text-dark", "status-sem-status");
+		if (divStatus) divStatus.classList.add("text-dark", "status-sem-status");
 	}
 }
 
@@ -2496,6 +2606,7 @@ function buscarProcessoPorInput(evt) {
 		document.getElementById("retornoNao").checked = true;
 		atualizarVisibilidadeRetorno();
 		ajustarRequiredProcessoCnpj();
+		alternarFormularios();
 
 		// Reseta o processoId para um novo ID
 		const idInput = document.getElementById("processoId");
@@ -2607,6 +2718,85 @@ document.getElementById("btnSalvar").addEventListener("click", () => {
 	Utils.showToast("Dados salvos com sucesso!", "success");
 });
 
+// Botão COMPARTILHAR
+document.getElementById("btnCompartilhar")?.addEventListener("click", () => {
+	const processoNum = document.getElementById("processoBusca")?.value.trim() || "";
+	const tipo = document.getElementById("tipo")?.value || "";
+
+	if (!processoNum || !tipo) {
+		Utils.showToast("Preencha as informações básicas antes de compartilhar.", "danger");
+		return;
+	}
+
+	// Salva primeiro para garantir que as alterações estão persistidas
+	const form = document.querySelector(".needs-validation");
+	if (!form.checkValidity()) {
+		form.classList.add("was-validated");
+		Utils.showToast("Por favor, preencha todos os campos obrigatórios.", "danger");
+		return;
+	}
+	salvarAutomaticamente();
+
+	const dados = coletarDadosDoFormulario();
+	if (!dados || !dados.id) {
+		Utils.showToast("Erro ao coletar dados para compartilhamento.", "danger");
+		return;
+	}
+
+	try {
+		const params = new URLSearchParams();
+		const chavesExcluidas = [
+			"ev_vistoriador01", "ev_vistoriador02", "ev_viatura", "ev_regime",
+			"vistoriador01", "vistoriador02", "viatura", "regime", "patente", "matricula"
+		];
+
+		for (const [key, value] of Object.entries(dados)) {
+			if (chavesExcluidas.includes(key)) {
+				continue;
+			}
+			if (value === "" || value === null || value === undefined) {
+				continue;
+			}
+			if (Array.isArray(value) && value.length === 0) {
+				continue;
+			}
+			if (typeof value === 'object' && Object.keys(value).length === 0) {
+				continue;
+			}
+
+			if (typeof value === 'object') {
+				params.set(key, JSON.stringify(value));
+			} else {
+				params.set(key, value);
+			}
+		}
+
+		const shareUrl = `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+
+		if (navigator.share) {
+			navigator.share({
+				title: 'Compartilhar Vistoria',
+				text: `Dados da vistoria do processo ${dados.processoBusca || ''}`,
+				url: shareUrl
+			}).catch(err => {
+				navigator.clipboard.writeText(shareUrl).then(() => {
+					Utils.showToast("Link copiado para a área de transferência!", "success");
+				});
+			});
+		} else {
+			navigator.clipboard.writeText(shareUrl).then(() => {
+				Utils.showToast("Link copiado para a área de transferência!", "success");
+			}).catch(err => {
+				console.error("Erro ao copiar link:", err);
+				prompt("Copie o link abaixo para compartilhar:", shareUrl);
+			});
+		}
+	} catch (e) {
+		console.error("Erro ao gerar link de compartilhamento:", e);
+		Utils.showToast("Erro ao gerar link de compartilhamento.", "danger");
+	}
+});
+
 function coletarDadosDoFormulario() {
 	const tipo = document.getElementById("tipo")?.value || "";
 	if (tipo === "Eventual") {
@@ -2639,7 +2829,7 @@ function coletarDadosDoFormulario() {
 			id: document.getElementById("processoId")?.value || "",
 			processoBusca: document.getElementById("processoBusca")?.value || "",
 			tipo: tipo,
-			status: statusAtualEventual || "A Fazer",
+			status: document.getElementById("ev_status_eventual")?.value || "Pendente",
 			// Compatibility mapping for main listing:
 			instituicao: document.getElementById("ev_evento")?.value.toUpperCase() || "",
 			inicio: document.getElementById("ev_data_inicio")?.value || "",
@@ -2698,8 +2888,27 @@ function coletarDadosDoFormulario() {
 			ev_declaracao_gerador: document.getElementById("ev_declaracao_gerador")?.value || "",
 
 			// Campos da equipe de vistoria - lidos da configuração global (localStorage)
-			ev_vistoriador01: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador01 || ''; } catch(e) { return ''; } })(),
-			ev_vistoriador02: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador02 || ''; } catch(e) { return ''; } })(),
+			ev_vistoriador01: (function() {
+				try {
+					const eq = JSON.parse(localStorage.getItem('equipeVistoria') || '{}');
+					if (!eq.vistoriador01) return '';
+					let nome = eq.vistoriador01.toUpperCase();
+					let patente = eq.patente || '';
+					if (patente) {
+						patente = patente.replace('°', 'º');
+						if (patente.includes('SGT') && !patente.includes(' ')) patente = patente.replace('SGT', ' SGT');
+						if (patente.includes('TEN') && !patente.includes(' ')) patente = patente.replace('TEN', ' TEN');
+						nome += ' ' + patente;
+					}
+					if (eq.matricula) {
+						nome += ' - Matr. ' + eq.matricula;
+					}
+					return nome;
+				} catch(e) {
+					return '';
+				}
+			})(),
+			ev_vistoriador02: 'Não se aplica',
 			ev_viatura: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.viatura || ''; } catch(e) { return ''; } })(),
 			ev_regime: (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.regime || ''; } catch(e) { return ''; } })(),
 			ev_cpf: document.getElementById("ev_cpf")?.value || "",
@@ -2769,6 +2978,9 @@ function coletarDadosDoFormulario() {
 		altura: document.getElementById("altura")?.value || "",
 		pavimentos: document.getElementById("pavimentos")?.value || "",
 		responsavel: document.getElementById("responsavel")?.value.toUpperCase() || "",
+		responsavel_funcao: document.getElementById("responsavel_funcao")?.value.toUpperCase() || "",
+		responsavel_telefone: document.getElementById("responsavel_telefone")?.value || "",
+		responsavel_email: document.getElementById("responsavel_email")?.value.toLowerCase() || "",
 		tipo: document.getElementById("tipo")?.value || "",
 		inicio: document.getElementById("inicio")?.value || "",
 		fim: document.getElementById("fim")?.value || "",
@@ -2802,7 +3014,7 @@ function preencherFormulario(data) {
 
 	if (data.tipo === "Eventual") {
 		alternarFormularios("Eventual");
-		statusAtualEventual = data.status || "A Fazer";
+		statusAtualEventual = data.status || "Pendente";
 		aplicarCorDoStatus(statusAtualEventual);
 
 		const fields = [
@@ -2824,7 +3036,13 @@ function preencherFormulario(data) {
 		];
 		fields.forEach(f => {
 			const el = document.getElementById(f);
-			if (el) el.value = data[f] || "";
+			if (el) {
+				if (f === "ev_status_eventual") {
+					el.value = data.ev_status_eventual || data.status || "Pendente";
+				} else {
+					el.value = data[f] || "";
+				}
+			}
 		});
 		if (data.ev_msgLocalizacao) {
 			document.getElementById("msgLocalizacaoEventual").textContent = data.ev_msgLocalizacao;
@@ -2847,6 +3065,9 @@ function preencherFormulario(data) {
 		document.getElementById("altura").value = data.altura || "";
 		document.getElementById("pavimentos").value = data.pavimentos || "";
 		document.getElementById("responsavel").value = data.responsavel || "";
+		document.getElementById("responsavel_funcao").value = data.responsavel_funcao || "";
+		document.getElementById("responsavel_telefone").value = data.responsavel_telefone || "";
+		document.getElementById("responsavel_email").value = data.responsavel_email || "";
 		document.getElementById("inicio").value = data.inicio || "";
 		document.getElementById("fim").value = data.fim || "";
 
@@ -2987,6 +3208,12 @@ document.getElementById("btnExcluir").addEventListener("click", () => {
 });
 
 function alternarFormularios(tipo) {
+	atualizarOpcoesTipo();
+	if (!tipo) {
+		tipo = document.getElementById("tipo")?.value || "";
+	}
+	const processoNum = document.getElementById("processoBusca")?.value.trim() || "";
+
 	const containerPadrao = document.getElementById("containerPadrao");
 	const containerEventual = document.getElementById("containerEventual");
 	const btnEnviarEventual = document.getElementById("btnEnviarEventual");
@@ -2995,11 +3222,21 @@ function alternarFormularios(tipo) {
 	const placeholderPadrao = document.getElementById("placeholderExigenciasPadrao");
 	const placeholderEventual = document.getElementById("placeholderExigenciasEventual");
 
+	if (!processoNum || !tipo) {
+		containerPadrao?.classList.add("d-none");
+		containerEventual?.classList.add("d-none");
+		btnEnviarEventual?.classList.add("d-none");
+		containerCheckConcluido?.classList.add("d-none");
+		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", false);
+		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", false);
+		return;
+	}
+
 	if (tipo === "Eventual") {
 		containerPadrao?.classList.add("d-none");
 		containerEventual?.classList.remove("d-none");
 		btnEnviarEventual?.classList.remove("d-none");
-		containerCheckConcluido?.classList.add("d-none");
+		containerCheckConcluido?.classList.remove("d-none");
 		toggleRequiredFields("Eventual");
 		if (secaoExigencias && placeholderEventual) {
 			placeholderEventual.appendChild(secaoExigencias);
@@ -3020,9 +3257,11 @@ function alternarFormularios(tipo) {
 function toggleRequiredFields(tipo) {
 	if (tipo === "Eventual") {
 		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", false);
+		$("#responsavel, #responsavel_funcao, #responsavel_telefone, #responsavel_email").prop("required", false);
 		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", true);
 	} else {
 		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", true);
+		$("#responsavel, #responsavel_funcao, #responsavel_telefone, #responsavel_email").prop("required", true);
 		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", false);
 	}
 	ajustarRequiredProcessoCnpj();
@@ -3565,18 +3804,29 @@ function enviarParaGoogleForms() {
 	}
 
 	const formParams = {
-		// Email consent e Envio fixo por email
-		"entry.1714192818": "divis.fisc24@gmail.com",
-
-		// Vistoriadores e Viatura (lidos da configuração global)
-		"entry.952823450": "__other_option__",
-		"entry.952823450.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador01 || ''; } catch(e) { return ''; } })(),
-		"entry.2094975252": "__other_option__",
-		"entry.2094975252.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.vistoriador02 || ''; } catch(e) { return ''; } })(),
-		"entry.1503326683": "__other_option__",
-		"entry.1503326683.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.viatura || ''; } catch(e) { return ''; } })(),
-		"entry.1594942841": "__other_option__",
-		"entry.1594942841.other_option_response": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.regime || ''; } catch(e) { return ''; } })(),
+		"entry.952823450": (function() {
+			try {
+				const eq = JSON.parse(localStorage.getItem('equipeVistoria') || '{}');
+				if (!eq.vistoriador01) return '';
+				let nome = eq.vistoriador01.toUpperCase();
+				let patente = eq.patente || '';
+				if (patente) {
+					patente = patente.replace('°', 'º');
+					if (patente.includes('SGT') && !patente.includes(' ')) patente = patente.replace('SGT', ' SGT');
+					if (patente.includes('TEN') && !patente.includes(' ')) patente = patente.replace('TEN', ' TEN');
+					nome += ' ' + patente;
+				}
+				if (eq.matricula) {
+					nome += ' - Matr. ' + eq.matricula;
+				}
+				return nome;
+			} catch(e) {
+				return '';
+			}
+		})(),
+		"entry.2094975252": "Não se aplica",
+		"entry.1503326683": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.viatura || ''; } catch(e) { return ''; } })(),
+		"entry.1594942841": (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.regime || ''; } catch(e) { return ''; } })(),
 
 		// Dados gerais do processo
 		"entry.191765537": v("processoBusca"),
@@ -3698,6 +3948,11 @@ function enviarParaGoogleForms() {
 		optionsSet.forEach(optVal => {
 			params.append(entryId, optVal);
 		});
+	}
+
+	const emailAddress = localStorage.getItem('emailAddress') || (function() { try { return JSON.parse(localStorage.getItem('equipeVistoria'))?.emailAddress || ''; } catch(e) { return ''; } })() || "";
+	if (emailAddress) {
+		params.set("emailAddress", emailAddress);
 	}
 
 	window.location.href = FORM_URL + "?" + params.toString();

@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Modelo de Estilos SEI</title>
+
+    <style>
+      body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        color: #333;
+        max-width: 900px;
+        margin: auto;
+        padding: 40px;
+        background: #fafafa;
+        line-height: 1.6;
+      }
+
+      /* =====================================================
+   TÍTULOS
+===================================================== */
+
+      .I33_Cabeçalho {
+        font-size: 20pt;
+        font-weight: 600;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 30px;
+        color: #222;
+      }
+
+      .I04_Centralizado_14 {
+        text-align: center;
+        font-size: 14pt;
+        font-weight: 600;
+        margin: 25px 0 15px;
+      }
+
+      .I03_Centralizado_12 {
+        text-align: center;
+        font-size: 12pt;
+      }
+
+      .I38_Centralizado_Caixa_Alta {
+        text-align: center;
+        text-transform: uppercase;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+
+      .I32_Times_16 {
+        font-family: "Times New Roman", serif;
+        font-size: 16pt;
+        text-align: center;
+      }
+
+      /* =====================================================
+   PARÁGRAFOS
+===================================================== */
+
+      .I01_Justificado_Recuo_Primeira_Linha {
+        text-align: justify;
+        text-indent: 2cm;
+      }
+
+      .I02_Justificado_12,
+      .I31_Justificado_12_Entre_Linhas_Reduzido,
+      .I34_Justificado_12_Entre_Linhas_Reduzido {
+        text-align: justify;
+        font-size: 12pt;
+      }
+
+      .I31_Justificado_12_Entre_Linhas_Reduzido,
+      .I34_Justificado_12_Entre_Linhas_Reduzido {
+        line-height: 1.2;
+      }
+
+      .I20_Texto_Alinhado_Direita {
+        text-align: right;
+      }
+
+      .I36_Centralizado_12_Entre_Linhas_Reduzido {
+        text-align: center;
+        font-size: 12pt;
+        line-height: 1.2;
+      }
+
+      .I27_Ementa_alinhado_direita_recuo_centralizado {
+        width: 60%;
+        margin-left: auto;
+        text-align: justify;
+        font-style: italic;
+      }
+
+      /* =====================================================
+   ITENS HIERÁRQUICOS
+===================================================== */
+
+      .I05_Item_Nivel1,
+      .I06_Item_Nivel2,
+      .I07_Item_Nivel3,
+      .I08_Item_Nivel4,
+      .II09_Item_Nivel5,
+      .II10_Item_Nivel6 {
+        display: block;
+        margin: 6px 0;
+      }
+
+      .I05_Item_Nivel1 {
+        margin-left: 0;
+      }
+      .I06_Item_Nivel2 {
+        margin-left: 30px;
+      }
+      .I07_Item_Nivel3 {
+        margin-left: 60px;
+      }
+      .I08_Item_Nivel4 {
+        margin-left: 90px;
+      }
+      .II09_Item_Nivel5 {
+        margin-left: 120px;
+      }
+      .II10_Item_Nivel6 {
+        margin-left: 150px;
+      }
+
+      .I05_Item_Nivel1:before {
+        content: "I - ";
+        font-weight: bold;
+      }
+
+      .I06_Item_Nivel2:before {
+        content: "1. ";
+        font-weight: bold;
+      }
+
+      .I07_Item_Nivel3:before {
+        content: "a) ";
+        font-weight: bold;
+      }
+
+      .I08_Item_Nivel4:before {
+        content: "• ";
+      }
+
+      .II09_Item_Nivel5:before {
+        content: "◦ ";
+      }
+
+      .II10_Item_Nivel6:before {
+        content: "▪ ";
+      }
+
+      /* =====================================================
+   INCISO ROMANO
+===================================================== */
+
+      .I10_Item_Inciso_Romano {
+        margin-left: 30px;
+      }
+
+      .I10_Item_Inciso_Romano:before {
+        content: "IV - ";
+        font-weight: bold;
+      }
+
+      /* =====================================================
+   PARÁGRAFOS NUMERADOS
+===================================================== */
+
+      .I11_Paragrafo_Numerado_Nivel1,
+      .I12_Paragrafo_Numerado_Nivel2,
+      .I13_Paragrafo_Numerado_Nivel3,
+      .I14_Paragrafo_Numerado_Nivel4,
+      .I14a_Paragrafo_Numerado_Nivel5,
+      .I14b_Paragrafo_Numerado_Nivel6 {
+        display: block;
+        margin: 6px 0;
+      }
+
+      .I11_Paragrafo_Numerado_Nivel1:before {
+        content: "§1º ";
+      }
+      .I12_Paragrafo_Numerado_Nivel2:before {
+        content: "1.1 ";
+      }
+      .I13_Paragrafo_Numerado_Nivel3:before {
+        content: "1.1.1 ";
+      }
+      .I14_Paragrafo_Numerado_Nivel4:before {
+        content: "1.1.1.1 ";
+      }
+      .I14a_Paragrafo_Numerado_Nivel5:before {
+        content: "1.1.1.1.1 ";
+      }
+      .I14b_Paragrafo_Numerado_Nivel6:before {
+        content: "1.1.1.1.1.1 ";
+      }
+
+      /* =====================================================
+   ALÍNEAS
+===================================================== */
+
+      .II11_Item_Alinea_Letra {
+        margin-left: 40px;
+      }
+
+      .II11_Item_Alinea_Letra:before {
+        content: "a) ";
+        font-weight: bold;
+      }
+
+      /* =====================================================
+   CITAÇÃO
+===================================================== */
+
+      .I15_Citacao {
+        margin: 15px 40px;
+        padding: 15px;
+        border-left: 4px solid #999;
+        background: #f3f3f3;
+        font-style: italic;
+      }
+
+      /* =====================================================
+   TABELAS
+===================================================== */
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+        background: white;
+      }
+
+      th {
+        background: #ececec;
+      }
+
+      td,
+      th {
+        border: 1px solid #cfcfcf;
+        padding: 8px;
+      }
+
+      .I16_Tabela_Texto_Centralizado {
+        text-align: center;
+      }
+
+      .I17_Tabela_Texto_Alinhado_Direita {
+        text-align: right;
+      }
+
+      .I18_Tabela_Texto_Alinhado_Esquerda {
+        text-align: left;
+      }
+
+      .I19_Tabela_Texto_8,
+      .I26_Tabela_Texto_Centralizado_8 {
+        font-size: 8pt;
+      }
+
+      .I26_Tabela_Texto_Centralizado_8 {
+        text-align: center;
+      }
+
+      /* =====================================================
+   PUBLICAÇÃO DODF
+===================================================== */
+
+      .I23_padrao_publicação_dodf {
+        text-align: justify;
+        font-size: 11pt;
+      }
+
+      .I24_padrao_publicação_dodf_centralizado {
+        text-align: center;
+        font-size: 11pt;
+      }
+
+      /* =====================================================
+   PUBLICAÇÃO DOU
+===================================================== */
+
+      .I28_padrao_publicação_dou_recuo_primeira_linha {
+        text-align: justify;
+        text-indent: 2cm;
+      }
+
+      .I29_padrao_publicação_dou_justificado {
+        text-align: justify;
+      }
+
+      .I30_padrao_publicação_dou_centralizado {
+        text-align: center;
+      }
+
+      /* =====================================================
+   TEXTO VERTICAL
+===================================================== */
+
+      .I27a_Texto_Vertical {
+        writing-mode: vertical-rl;
+      }
+
+      .I27b_Texto_Vertical_8 {
+        writing-mode: vertical-rl;
+        font-size: 8pt;
+      }
+
+      /* =====================================================
+   RODAPÉ
+===================================================== */
+
+      .I35_Nota_de_Rodapé {
+        font-size: 8pt;
+        border-top: 1px solid #ccc;
+        margin-top: 20px;
+        padding-top: 8px;
+      }
+
+      .I35_Rodapé {
+        text-align: center;
+        font-size: 9pt;
+        color: #666;
+        margin-top: 30px;
+      }
+
+      hr {
+        border: none;
+        border-top: 1px solid #ddd;
+        margin: 30px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="I33_Cabeçalho">MODELO DE ESTILOS SEI</div>
+
+    <div class="I04_Centralizado_14">Título Principal</div>
+
+    <div class="I03_Centralizado_12">Subtítulo Centralizado</div>
+
+    <hr />
+
+    <p class="I01_Justificado_Recuo_Primeira_Linha">Parágrafo justificado com recuo na primeira linha.</p>
+
+    <p class="I02_Justificado_12">Parágrafo justificado padrão.</p>
+
+    <p class="I31_Justificado_12_Entre_Linhas_Reduzido">Parágrafo com espaçamento reduzido.</p>
+
+    <div class="I20_Texto_Alinhado_Direita">Texto alinhado à direita.</div>
+
+    <hr />
+
+    <div class="I38_Centralizado_Caixa_Alta">SEÇÃO EM CAIXA ALTA</div>
+
+    <div class="I32_Times_16">Texto Times New Roman 16</div>
+
+    <hr />
+
+    <div class="I05_Item_Nivel1">Item Nível 1</div>
+    <div class="I06_Item_Nivel2">Item Nível 2</div>
+    <div class="I07_Item_Nivel3">Item Nível 3</div>
+    <div class="I08_Item_Nivel4">Item Nível 4</div>
+    <div class="II09_Item_Nivel5">Item Nível 5</div>
+    <div class="II10_Item_Nivel6">Item Nível 6</div>
+
+    <hr />
+
+    <div class="I10_Item_Inciso_Romano">Inciso Romano</div>
+
+    <div class="II11_Item_Alinea_Letra">Alínea</div>
+
+    <hr />
+
+    <div class="I11_Paragrafo_Numerado_Nivel1">Parágrafo nível 1</div>
+    <div class="I12_Paragrafo_Numerado_Nivel2">Parágrafo nível 2</div>
+    <div class="I13_Paragrafo_Numerado_Nivel3">Parágrafo nível 3</div>
+    <div class="I14_Paragrafo_Numerado_Nivel4">Parágrafo nível 4</div>
+    <div class="I14a_Paragrafo_Numerado_Nivel5">Parágrafo nível 5</div>
+    <div class="I14b_Paragrafo_Numerado_Nivel6">Parágrafo nível 6</div>
+
+    <hr />
+
+    <div class="I15_Citacao">Este é um exemplo de citação.</div>
+
+    <hr />
+
+    <table>
+      <tr>
+        <th>Centralizado</th>
+        <th>Direita</th>
+        <th>Esquerda</th>
+      </tr>
+      <tr>
+        <td class="I16_Tabela_Texto_Centralizado">123</td>
+        <td class="I17_Tabela_Texto_Alinhado_Direita">456</td>
+        <td class="I18_Tabela_Texto_Alinhado_Esquerda">Texto</td>
+      </tr>
+    </table>
+
+    <hr />
+
+    <div class="I27_Ementa_alinhado_direita_recuo_centralizado">
+      EMENTA: Modelo de documento corporativo para demonstração dos estilos do SEI.
+    </div>
+
+    <hr />
+
+    <div class="I24_padrao_publicação_dodf_centralizado">PUBLICAÇÃO DODF</div>
+
+    <p class="I23_padrao_publicação_dodf">Texto padrão para publicação no Diário Oficial do Distrito Federal.</p>
+
+    <hr />
+
+    <div class="I30_padrao_publicação_dou_centralizado">PUBLICAÇÃO DOU</div>
+
+    <p class="I28_padrao_publicação_dou_recuo_primeira_linha">Texto padrão DOU com recuo.</p>
+
+    <p class="I29_padrao_publicação_dou_justificado">Texto padrão DOU justificado.</p>
+
+    <hr />
+
+    <div class="I35_Nota_de_Rodapé">Nota de rodapé de exemplo.</div>
+
+    <div class="I35_Rodapé">Documento gerado para demonstração dos estilos do SEI.</div>
+  </body>
+</html>
