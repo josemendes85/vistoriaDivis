@@ -600,11 +600,11 @@ function toggleExigenciaCumprida(exigenciaId) {
 	);
 	iconElements.forEach((iconElement) => {
 		if (exigenciasCumpridas[exigenciaId]) {
-			iconElement.classList.remove("bi-check-circle", "text-secondary");
-			iconElement.classList.add("bi-check-circle-fill", "text-success");
+			iconElement.classList.remove("text-secondary");
+			iconElement.classList.add("text-success");
 		} else {
-			iconElement.classList.remove("bi-check-circle-fill", "text-success");
-			iconElement.classList.add("bi-check-circle", "text-secondary");
+			iconElement.classList.remove("text-success");
+			iconElement.classList.add("text-secondary");
 		}
 	});
 
@@ -2109,7 +2109,7 @@ function adicionarCategoria(categorias) {
 		divCategoria.innerHTML = `
 			<div class="d-flex justify-content-between align-items-center mb-3">
 				<h5 class="mb-0">${getDadosSistema().categorias[categoria]}&nbsp;${iconeAlerta}</h5>
-				<button type="button" class="btn-close-custom" aria-label="Remover Categoria" onclick="removerCategoria('${categoria}')">[X]</button>
+				<i class="bi bi-x-lg btn-close-custom-icon" onclick="removerCategoria('${categoria}')" title="Remover Categoria" aria-label="Remover Categoria"></i>
 			</div>
 			<div class="mb-3">
 				<div class="autocomplete-container">
@@ -2143,13 +2143,17 @@ function adicionarBadgeCategoria(categoria) {
 	span.id = `badge-categoria-${categoria}`;
 	span.innerHTML = `
 				${getDadosSistema().categorias[categoria]}
-				<button type="button" class="btn-close-custom" onclick="removerCategoria('${categoria}')">[X]</button>
+				<i class="bi bi-x btn-close-custom-icon" onclick="removerCategoria('${categoria}')" title="Remover Categoria" aria-label="Remover Categoria"></i>
 			`;
 
 	wrapper.appendChild(span);
 }
 
 function removerCategoria(categoria) {
+	const nomeCategoria = getDadosSistema().categorias[categoria] || categoria;
+	const confirmar = confirm(`Deseja realmente remover a categoria "${nomeCategoria}" e todas as suas exigências?`);
+	if (!confirmar) return;
+
 	document.getElementById(`exigencias-categoria-${categoria}`)?.remove();
 	document.getElementById(`badge-categoria-${categoria}`)?.remove();
 	delete camposDeExigenciasAtivos[categoria];
@@ -2175,21 +2179,21 @@ function adicionarExigencia(categoria, exigencia) {
 			: "text-secondary";
 
 		const itemCumprido = exigenciasCumpridas[exigencia] || false;
-		const checkIconClass = itemCumprido
-			? "bi-check-circle-fill text-success"
-			: "bi-check-circle text-secondary";
+		const checkColorClass = itemCumprido
+			? "text-success"
+			: "text-secondary";
 
 		// Cria o elemento <span> para a tag visível
 		const tagSpan = document.createElement("span");
 		tagSpan.className = "tag";
 		tagSpan.id = `tag-${categoria}-${encodedExigency}`;
 		tagSpan.innerHTML = `
-            ${exigencia}
-            
-            <i class="bi ${checkIconClass} check-cumprido-icon" data-exigencia-id="${exigencia}" onclick="toggleExigenciaCumprida('${exigencia}')" title="Marcar como cumprida/não cumprida"></i>
-            <i class="bi bi-info-circle-fill anotacao-icon ${iconColorClass}" data-exigencia-id="${exigencia}" onclick="abrirModalAnotacao('${exigencia}', '${exigencia}')" title="Anotações"></i>
-
-            <button type="button" class="btn-close-custom" onclick="removerExigencia('${categoria}', '${encodedExigency}', '${exigencia}')" aria-label="Remover">[X]</button>
+            <span>${exigencia}</span>
+            <div class="tag-actions">
+                <i class="bi bi-x-circle-fill tag-action-icon tag-close-icon" onclick="removerExigencia('${categoria}', '${encodedExigency}', '${exigencia}')" title="Remover exigência"></i>
+                <i class="bi bi-check-circle-fill tag-action-icon check-cumprido-icon ${checkColorClass}" data-exigencia-id="${exigencia}" onclick="toggleExigenciaCumprida('${exigencia}')" title="Marcar como cumprida/não cumprida"></i>
+                <i class="bi bi-info-circle-fill tag-action-icon anotacao-icon ${iconColorClass}" data-exigencia-id="${exigencia}" onclick="abrirModalAnotacao('${exigencia}', '${exigencia}')" title="Anotações"></i>
+            </div>
         `;
 
 		// Cria o elemento <input type="hidden"> para coletar o dado
@@ -2215,6 +2219,9 @@ function adicionarExigencia(categoria, exigencia) {
 }
 
 function removerExigencia(categoria, encodedExigenciaId, exigenciaValue) {
+	const confirmar = confirm(`Deseja realmente remover a exigência "${exigenciaValue}"?`);
+	if (!confirmar) return;
+
 	if (camposDeExigenciasAtivos[categoria]) {
 		const index = camposDeExigenciasAtivos[categoria].indexOf(exigenciaValue);
 		if (index > -1) {
@@ -3171,8 +3178,8 @@ function preencherFormulario(data) {
 			`.check-cumprido-icon[data-exigencia-id="${id}"]`
 		);
 		if (iconElement) {
-			iconElement.classList.remove("bi-check-circle", "text-secondary");
-			iconElement.classList.add("bi-check-circle-fill", "text-success");
+			iconElement.classList.remove("text-secondary");
+			iconElement.classList.add("text-success");
 		}
 	});
 

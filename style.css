@@ -71,6 +71,23 @@
 .btn-close-custom:hover {
 	opacity: 1;
 }
+.btn-close-custom-icon {
+	cursor: pointer;
+	font-size: 1rem;
+	color: currentColor;
+	opacity: 0.6;
+	transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out, color 0.15s ease-in-out;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+	margin-left: 0.5rem;
+}
+.btn-close-custom-icon:hover {
+	opacity: 1;
+	color: var(--danger-color) !important;
+	transform: scale(1.15);
+}
 /* Status Colors */
 .status-pendente {
 	background-color: var(--warning-color);
@@ -183,23 +200,14 @@
 
 /* Estilo para o ícone de anotação */
 .anotacao-icon {
-	/* Define a cor padrão como cinza claro, para indicar que está vazio */
-	color: var(--secondary-color); 
 	cursor: pointer;
-	font-size: 1.2rem;
-	margin-left: 10px;
-	transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.anotacao-icon:hover {
-	/* Pequeno efeito ao passar o mouse */
-	transform: scale(1.1);
-	color: var(--primary-color) !important; /* Força cor no hover */
+	transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 }
 
 /* Garante que o ícone de anotação colorida fique azul para indicar que tem conteúdo */
 .anotacao-icon.text-primary {
 	color: var(--info-color) !important;
+	opacity: 1;
 }
 
 /* Estilo para alinhar o item de exigência */
@@ -216,18 +224,64 @@
 
 /* Estilo para o ícone de marcar como cumprido */
 .check-cumprido-icon {
-	color: var(--secondary-color); 
 	cursor: pointer;
-	font-size: 1.2rem;
-	margin-left: 10px;
-	transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.check-cumprido-icon:hover {
-	transform: scale(1.1);
-	color: var(--success-color) !important;
+	transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
 }
 
 .check-cumprido-icon.text-success {
 	color: var(--success-color) !important;
+	opacity: 1;
+}
+
+/* Container para organizar as ações da tag na vertical */
+.tag-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	margin-left: 10px;
+	border-left: 1px solid #dee2e6;
+	padding-left: 8px;
+}
+
+/* Estilo comum para todos os ícones de ação da tag */
+.tag-action-icon {
+	font-size: 1.1rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+}
+
+.tag-action-icon:hover {
+	transform: scale(1.2);
+}
+
+/* Ícone de fechar (sempre vermelho) */
+.tag-close-icon {
+	color: var(--danger-color) !important;
+	opacity: 0.6;
+}
+.tag-close-icon:hover {
+	opacity: 1;
+	color: #bd2130 !important;
+}
+
+/* Colorização se não estiverem marcados (check e anotação) */
+.check-cumprido-icon.text-secondary,
+.anotacao-icon.text-secondary {
+	color: #c8d6e5 !important; /* Coloração mais clara */
+	opacity: 0.6;
+}
+
+.check-cumprido-icon.text-secondary:hover {
+	color: var(--success-color) !important;
+	opacity: 1;
+}
+
+.anotacao-icon.text-secondary:hover {
+	color: var(--info-color) !important;
+	opacity: 1;
 }
