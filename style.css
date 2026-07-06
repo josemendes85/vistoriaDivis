@@ -246,13 +246,14 @@
 
 /* Estilo comum para todos os ícones de ação da tag */
 .tag-action-icon {
-	font-size: 1.1rem;
+	font-size: 1.15rem !important;
+	width: 1.2rem !important;
+	height: 1.2rem !important;
+	line-height: 1.2rem !important;
+	text-align: center !important;
 	cursor: pointer;
 	transition: all 0.2s ease;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	line-height: 1;
+	display: inline-block !important;
 }
 
 .tag-action-icon:hover {
