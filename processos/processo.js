@@ -7,6 +7,7 @@ const CONFIG = {
 
 let statusAtualEventual = "Pendente";
 let isDeleting = false;
+let originalProcessState = null;
 let opcoesOriginaisTipo = null;
 
 function atualizarOpcoesTipo() {
@@ -2558,6 +2559,7 @@ function buscarProcessoPorId(id) {
 		try {
 			const parsedData = JSON.parse(dados);
 			parsedData.id = id;
+			originalProcessState = JSON.parse(JSON.stringify(parsedData));
 			preencherFormulario(parsedData);
 		} catch (e) {
 			console.error("Erro ao parsear dados do processo:", id, e);
@@ -2595,10 +2597,11 @@ function buscarProcessoPorNumeroParam(processoNum) {
 		if (idInput) {
 			idInput.value = idEncontrado;
 		}
-		// Atualiza a URL
+		// ...
 		const newUrl = `${window.location.pathname}?id=${encodeURIComponent(idEncontrado)}`;
 		window.history.replaceState({ path: newUrl }, '', newUrl);
 
+		originalProcessState = JSON.parse(JSON.stringify(dadosEncontrados));
 		preencherFormulario(dadosEncontrados);
 		Utils.showToast("Processo carregado com sucesso!", "success");
 	} else {
@@ -2620,6 +2623,7 @@ function buscarProcessoPorNumeroParam(processoNum) {
 				const newUrl = `${window.location.pathname}?id=${encodeURIComponent(newId)}`;
 				window.history.replaceState({ path: newUrl }, '', newUrl);
 
+				originalProcessState = JSON.parse(JSON.stringify(parsed));
 				preencherFormulario(parsed);
 				Utils.showToast("Processo migrado e carregado com sucesso!", "success");
 				return;
@@ -2695,6 +2699,7 @@ function buscarProcessoPorInput(evt) {
 				const newUrl = `${window.location.pathname}?id=${encodeURIComponent(idEncontrado)}`;
 				window.history.replaceState({ path: newUrl }, '', newUrl);
 
+				originalProcessState = JSON.parse(JSON.stringify(dadosEncontrados));
 				preencherFormulario(dadosEncontrados);
 				Utils.showToast("Processo carregado com sucesso!", "success");
 			} else {
@@ -2764,6 +2769,55 @@ document.getElementById("btnSalvar").addEventListener("click", () => {
 	salvarAutomaticamente(); // This will save the current form state
 	Utils.showToast("Dados salvos com sucesso!", "success");
 });
+
+// Botão CANCELAR ALTERAÇÕES
+document.getElementById("btnCancelar")?.addEventListener("click", cancelarEdicao);
+
+function cancelarEdicao() {
+	const confirmar = confirm("Deseja realmente cancelar as alterações? Isso irá desfazer tudo o que você fez neste processo.");
+	if (!confirmar) return;
+
+	const idInput = document.getElementById("processoId");
+	const id = idInput?.value;
+
+	if (originalProcessState) {
+		// Se existia um estado original salvo, restaura no localStorage
+		localStorage.setItem(`processo-${originalProcessState.id}`, JSON.stringify(originalProcessState));
+		// Preenche o formulário novamente com os dados originais
+		preencherFormulario(originalProcessState);
+		Utils.showToast("Alterações canceladas. Dados originais restaurados.", "info");
+	} else {
+		// Se era um processo novo (não existia no localStorage antes), remove do localStorage
+		if (id) {
+			isDeleting = true; // impede salvamento automático durante a limpeza
+			localStorage.removeItem(`processo-${id}`);
+			isDeleting = false;
+		}
+		
+		// Limpa o formulário completamente
+		document.querySelector("form").reset();
+		document.getElementById("tituloLaudo").className = "display-6";
+		document.getElementById("exigenciasContainer").innerHTML = "";
+		document.getElementById("badgesCategorias").innerHTML = "";
+		camposDeExigenciasAtivos = {};
+		anotacoesDoProcesso = {};
+		exigenciasCumpridas = {};
+		document.getElementById("retornoNao").checked = true;
+		atualizarVisibilidadeRetorno();
+		ajustarRequiredProcessoCnpj();
+		alternarFormularios();
+
+		// Gera um novo ID e atualiza URL
+		const newId = generateId();
+		if (idInput) {
+			idInput.value = newId;
+		}
+		const newUrl = `${window.location.pathname}?id=${encodeURIComponent(newId)}`;
+		window.history.replaceState({ path: newUrl }, '', newUrl);
+
+		Utils.showToast("Processo novo cancelado e formulário limpo.", "info");
+	}
+}
 
 // Botão COMPARTILHAR
 document.getElementById("btnCompartilhar")?.addEventListener("click", () => {
