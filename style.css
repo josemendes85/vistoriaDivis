@@ -213,3 +213,21 @@
 	padding: 0.25rem 0.75rem;
 	transition: background-color 0.25s ease, color 0.25s ease;
 }
+
+/* Estilo para o ícone de marcar como cumprido */
+.check-cumprido-icon {
+	color: var(--secondary-color); 
+	cursor: pointer;
+	font-size: 1.2rem;
+	margin-left: 10px;
+	transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.check-cumprido-icon:hover {
+	transform: scale(1.1);
+	color: var(--success-color) !important;
+}
+
+.check-cumprido-icon.text-success {
+	color: var(--success-color) !important;
+}

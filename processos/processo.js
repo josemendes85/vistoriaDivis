@@ -272,6 +272,7 @@ const Utils = {
 };
 
 let anotacoesDoProcesso = {};
+let exigenciasCumpridas = {};
 // ----------------------------------------------------
 // NOVO: Lógica do Modal de Anotação
 // ----------------------------------------------------
@@ -585,6 +586,29 @@ function salvarAnotacao() {
 		// Dispara o salvamento automático
 		// autoSaveProcesso(); // (Assumindo que esta função existe)
 	}
+}
+
+function toggleExigenciaCumprida(exigenciaId) {
+	if (exigenciasCumpridas[exigenciaId]) {
+		delete exigenciasCumpridas[exigenciaId];
+	} else {
+		exigenciasCumpridas[exigenciaId] = true;
+	}
+
+	const iconElements = document.querySelectorAll(
+		`.check-cumprido-icon[data-exigencia-id="${exigenciaId}"]`
+	);
+	iconElements.forEach((iconElement) => {
+		if (exigenciasCumpridas[exigenciaId]) {
+			iconElement.classList.remove("bi-check-circle", "text-secondary");
+			iconElement.classList.add("bi-check-circle-fill", "text-success");
+		} else {
+			iconElement.classList.remove("bi-check-circle-fill", "text-success");
+			iconElement.classList.add("bi-check-circle", "text-secondary");
+		}
+	});
+
+	salvarAutomaticamente();
 }
 
 /**
@@ -1794,8 +1818,16 @@ $(document).ready(function () {
 	$("#cnpj").mask("00.000.000/0000-00");
 	$("#areaConstruida").mask("000.000.000.000.000,00", { reverse: true });
 	$("#ev_cpf").mask("000.000.000-00");
-	$("#ev_telefone").mask("(00) 00000-0000");
-	$("#responsavel_telefone").mask("(00) 00000-0000");
+	const TelMaskBehavior = function (val) {
+		return val.replace(/\D/g, '').length === 11 ? '(00) 0 0000-0000' : '(00) 0000-00009';
+	};
+	const telOptions = {
+		onKeyPress: function(val, e, field, options) {
+			field.mask(TelMaskBehavior.apply({}, arguments), options);
+		}
+	};
+	$("#ev_telefone").mask(TelMaskBehavior, telOptions);
+	$("#responsavel_telefone").mask(TelMaskBehavior, telOptions);
 	// CNPJ Lookup Functionality
 	const cnpjInput = document.getElementById("cnpj");
 	const enderecoInput = document.getElementById("endereco");
@@ -2142,6 +2174,11 @@ function adicionarExigencia(categoria, exigencia) {
 			? "text-primary"
 			: "text-secondary";
 
+		const itemCumprido = exigenciasCumpridas[exigencia] || false;
+		const checkIconClass = itemCumprido
+			? "bi-check-circle-fill text-success"
+			: "bi-check-circle text-secondary";
+
 		// Cria o elemento <span> para a tag visível
 		const tagSpan = document.createElement("span");
 		tagSpan.className = "tag";
@@ -2149,7 +2186,8 @@ function adicionarExigencia(categoria, exigencia) {
 		tagSpan.innerHTML = `
             ${exigencia}
             
-            <i class="bi bi-info-circle-fill anotacao-icon ${iconColorClass}" data-exigencia-id="${exigencia}" onclick="abrirModalAnotacao('${exigencia}', '${exigencia}')"></i>
+            <i class="bi ${checkIconClass} check-cumprido-icon" data-exigencia-id="${exigencia}" onclick="toggleExigenciaCumprida('${exigencia}')" title="Marcar como cumprida/não cumprida"></i>
+            <i class="bi bi-info-circle-fill anotacao-icon ${iconColorClass}" data-exigencia-id="${exigencia}" onclick="abrirModalAnotacao('${exigencia}', '${exigencia}')" title="Anotações"></i>
 
             <button type="button" class="btn-close-custom" onclick="removerExigencia('${categoria}', '${encodedExigency}', '${exigencia}')" aria-label="Remover">[X]</button>
         `;
@@ -2603,6 +2641,8 @@ function buscarProcessoPorInput(evt) {
 		document.getElementById("exigenciasContainer").innerHTML = "";
 		document.getElementById("badgesCategorias").innerHTML = "";
 		camposDeExigenciasAtivos = {};
+		anotacoesDoProcesso = {};
+		exigenciasCumpridas = {};
 		document.getElementById("retornoNao").checked = true;
 		atualizarVisibilidadeRetorno();
 		ajustarRequiredProcessoCnpj();
@@ -2925,6 +2965,7 @@ function coletarDadosDoFormulario() {
 			categoriasSelecionadas: Object.keys(camposDeExigenciasAtivos || {}).sort((a, b) => parseInt(a) - parseInt(b)),
 			exigencias: listaExigenciasOrdenada,
 			anotacoesDoProcesso: typeof anotacoesDoProcesso !== 'undefined' ? anotacoesDoProcesso : {},
+			exigenciasCumpridas: typeof exigenciasCumpridas !== 'undefined' ? exigenciasCumpridas : {},
 			checkConcluido: document.getElementById("checkConcluido")?.checked || false
 		};
 	}
@@ -2997,6 +3038,7 @@ function coletarDadosDoFormulario() {
 		exigencias: listaExigenciasOrdenada, // A lista agora está garantida e ordenada
 
 		anotacoesDoProcesso: typeof anotacoesDoProcesso !== 'undefined' ? anotacoesDoProcesso : {},
+		exigenciasCumpridas: typeof exigenciasCumpridas !== 'undefined' ? exigenciasCumpridas : {},
 		checkConcluido: document.getElementById("checkConcluido")?.checked || false
 	};
 }
@@ -3093,6 +3135,7 @@ function preencherFormulario(data) {
 	}
 
 	anotacoesDoProcesso = data.anotacoesDoProcesso || {};
+	exigenciasCumpridas = data.exigenciasCumpridas || {};
 
 	// Clear existing exigencies and categories before re-filling
 	document.getElementById("exigenciasContainer").innerHTML = "";
@@ -3119,6 +3162,17 @@ function preencherFormulario(data) {
 		if (iconElement) {
 			iconElement.classList.remove("text-secondary");
 			iconElement.classList.add("text-primary");
+		}
+	});
+
+	// Itere pelas exigências geradas e aplique a cor/classe do ícone de check
+	Object.keys(exigenciasCumpridas).forEach((id) => {
+		const iconElement = document.querySelector(
+			`.check-cumprido-icon[data-exigencia-id="${id}"]`
+		);
+		if (iconElement) {
+			iconElement.classList.remove("bi-check-circle", "text-secondary");
+			iconElement.classList.add("bi-check-circle-fill", "text-success");
 		}
 	});
 
@@ -3202,6 +3256,8 @@ document.getElementById("btnExcluir").addEventListener("click", () => {
 		document.getElementById("exigenciasContainer").innerHTML = "";
 		document.getElementById("badgesCategorias").innerHTML = "";
 		camposDeExigenciasAtivos = {};
+		anotacoesDoProcesso = {};
+		exigenciasCumpridas = {};
 		document.getElementById("retornoNao").checked = true; // Set default radio
 		window.location.href = "index.html";
 	}
