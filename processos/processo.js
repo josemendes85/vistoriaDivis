@@ -92,7 +92,7 @@ function isProcessoBuscaUnique(processoBuscaValue, currentId) {
 // ou o usuário digitar/modificar o conteúdo (evento 'input').
 $(document).ready(function () {
 	// 1. Adiciona o listener para cada campo
-	$("#ocupacao, #area, #altura, #pavimentos").on(
+	$("#ocupacao, #area, #altura, #pavimentos, #populacao_fixa").on(
 		"blur",
 		dispararVerificacaoDeExigencias
 	);
@@ -3079,6 +3079,7 @@ function coletarDadosDoFormulario() {
 		area: document.getElementById("area")?.value || "",
 		altura: document.getElementById("altura")?.value || "",
 		pavimentos: document.getElementById("pavimentos")?.value || "",
+		populacao_fixa: document.getElementById("populacao_fixa")?.value || "",
 		responsavel: document.getElementById("responsavel")?.value.toUpperCase() || "",
 		responsavel_funcao: document.getElementById("responsavel_funcao")?.value.toUpperCase() || "",
 		responsavel_telefone: document.getElementById("responsavel_telefone")?.value || "",
@@ -3167,6 +3168,7 @@ function preencherFormulario(data) {
 		document.getElementById("area").value = data.area || "";
 		document.getElementById("altura").value = data.altura || "";
 		document.getElementById("pavimentos").value = data.pavimentos || "";
+		document.getElementById("populacao_fixa").value = data.populacao_fixa || "";
 		document.getElementById("responsavel").value = data.responsavel || "";
 		document.getElementById("responsavel_funcao").value = data.responsavel_funcao || "";
 		document.getElementById("responsavel_telefone").value = data.responsavel_telefone || "";
@@ -3344,7 +3346,7 @@ function alternarFormularios(tipo) {
 		containerEventual?.classList.add("d-none");
 		btnEnviarEventual?.classList.add("d-none");
 		containerCheckConcluido?.classList.add("d-none");
-		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", false);
+		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos, #populacao_fixa").prop("required", false);
 		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", false);
 		return;
 	}
@@ -3373,11 +3375,11 @@ function alternarFormularios(tipo) {
 
 function toggleRequiredFields(tipo) {
 	if (tipo === "Eventual") {
-		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", false);
+		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos, #populacao_fixa").prop("required", false);
 		$("#responsavel, #responsavel_funcao, #responsavel_telefone, #responsavel_email").prop("required", false);
 		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", true);
 	} else {
-		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos").prop("required", true);
+		$("#cnpj, #instituicao, #endereco, #ocupacao, #area, #altura, #pavimentos, #populacao_fixa").prop("required", true);
 		$("#responsavel, #responsavel_funcao, #responsavel_telefone, #responsavel_email").prop("required", true);
 		$("#ev_evento, #ev_ra, #ev_data_inicio, #ev_data_fim, #ev_status_eventual, #ev_parecer_final").prop("required", false);
 	}
