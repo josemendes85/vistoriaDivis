@@ -311,7 +311,7 @@
 						<div class="col-md-4">
 							<label for="responsavel_telefone" class="form-label">Telefone <span class="text-danger">*</span></label>
 							<input type="tel" class="form-control" id="responsavel_telefone"
-								placeholder="(00) 00000-0000" required pattern="\(\d{2}\)\s\d{4,5}-\d{4}" />
+								placeholder="(00) 0000-0000 ou (00) 9 0000-0000" required pattern="\(\d{2}\)\s(?:\d\s)?\d{4}-\d{4}" />
 							<div class="invalid-feedback">
 								Por favor, informe um telefone válido.
 							</div>
@@ -575,8 +575,8 @@
 						</div>
 						<div class="col-md-3">
 							<label class="form-label">Telefone do Responsável</label>
-							<input type="text" class="form-control" id="ev_telefone" name="ev_telefone"
-								placeholder="(61) 99999-9999" />
+							<input type="tel" class="form-control" id="ev_telefone" name="ev_telefone"
+								placeholder="(00) 0000-0000 ou (00) 9 0000-0000" />
 						</div>
 						<div class="col-md-3">
 							<label class="form-label">Terá brigada?</label>

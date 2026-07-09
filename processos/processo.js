@@ -3293,6 +3293,9 @@ function preencherFormulario(data) {
 		});
 	}
 	atualizarVisibilidadeRetorno();
+
+	// Trigger input to apply masks on loaded values
+	$("#cnpj, #areaConstruida, #ev_cpf, #ev_telefone, #responsavel_telefone").trigger('input');
 }
 
 // Botão EXCLUIR
