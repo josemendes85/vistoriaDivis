@@ -259,6 +259,40 @@
         }
 
         /**
+         * Formata uma data para o padrão brasileiro (DD/MM/YYYY) sem desvio de fuso horário.
+         */
+        function formatarData(dateStr) {
+            if (!dateStr) return "-";
+            
+            // Caso seja apenas data (YYYY-MM-DD)
+            if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+                const parts = dateStr.split('-');
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            
+            // Caso seja data e hora local (YYYY-MM-DDTHH:MM)
+            if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(dateStr)) {
+                const parts = dateStr.split('T');
+                const dateParts = parts[0].split('-');
+                return `${dateParts[2]}/${dateParts[1]}/${dateParts[0]} ${parts[1]}`;
+            }
+
+            // Fallback
+            try {
+                const d = new Date(dateStr);
+                if (!isNaN(d.getTime())) {
+                    if (dateStr.length === 10 && dateStr.includes('-')) {
+                        const parts = dateStr.split('-');
+                        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+                    }
+                    return d.toLocaleString();
+                }
+            } catch (e) {}
+
+            return dateStr;
+        }
+
+        /**
          * Migra processos salvos no formato antigo (chave processo-[numero])
          * para a estrutura com chave primária (chave processo-[id]).
          */
@@ -406,9 +440,9 @@
                         <tr class="drag-process" data-id="${item.id}" onclick="if(!event.target.closest('.drag-handle-cell')) window.location.href='processo.html?id=${encodeURIComponent(item.id)}'"> 
                             <td class="drag-handle-cell"><i class="bi bi-grip-vertical"></i></td>
                             <td>${item.processo}</td>
-                            <td>${item.instituicao || "-"}</td>
-                            <td>${item.inicio ? new Date(item.inicio).toLocaleString() : "-"}</td>
-                            <td>${item.tipo || "-"}</td>
+                             <td>${item.instituicao || "-"}</td>
+                             <td>${formatarData(item.inicio)}</td>
+                             <td>${item.tipo || "-"}</td>
                             <td>${item.status || (item.status || "-")}</td> 
                         </tr>
                     `).join("");
@@ -707,13 +741,26 @@
     </script>
     <script>
     if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-        navigator.serviceWorker.register('../sw.js').then(function (registration) {
-        console.log('Service Worker registrado com sucesso:', registration.scope);
-        }, function (err) {
-        console.log('Erro ao registrar o Service Worker:', err);
+        window.addEventListener('load', function () {
+            if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                        registration.unregister().then(function(success) {
+                            if (success) {
+                                console.log('Service Worker desregistrado para desenvolvimento local.');
+                                window.location.reload();
+                            }
+                        });
+                    }
+                });
+            } else {
+                navigator.serviceWorker.register('../sw.js').then(function (registration) {
+                    console.log('Service Worker registrado com sucesso:', registration.scope);
+                }, function (err) {
+                    console.log('Erro ao registrar o Service Worker:', err);
+                });
+            }
         });
-    });
     }
     </script>
 	<script src="../js/Sortable.min.js"></script>

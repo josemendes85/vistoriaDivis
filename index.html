@@ -104,9 +104,22 @@
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function () {
-                navigator.serviceWorker.register('sw.js').then(function (reg) {
-                    console.log('SW registrado');
-                });
+                if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+                    navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                        for(let registration of registrations) {
+                            registration.unregister().then(function(success) {
+                                if (success) {
+                                    console.log('SW desregistrado para local dev.');
+                                    window.location.reload();
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    navigator.serviceWorker.register('sw.js').then(function (reg) {
+                        console.log('SW registrado');
+                    });
+                }
             });
         }
     </script>
