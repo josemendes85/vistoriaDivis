@@ -950,9 +950,12 @@ const determinarGrauRisco = (silencioso = false) => {
   let originalRisco = "";
   const riscoValues = { "A": 1, "B-1": 2, "B-2": 3, "C-1": 4, "C-2": 5 };
 
-  const verificarCnae = (cnaeStr) => {
+  const avaliarCnae = (cnaeStr) => {
     const code = extrairCodigoCnae(cnaeStr);
-    if (!code) return;
+    if (!code) return null;
+
+    let bestMatch = null;
+    let bestMatchRiscoVal = 0;
 
     for (const grupo of NT02_TABELA2) {
       for (const nivel of grupo.niveis) {
@@ -989,27 +992,59 @@ const determinarGrauRisco = (silencioso = false) => {
             }
 
             const currentVal = riscoValues[finalRisco] || 0;
-            if (currentVal > highestRiscoVal) {
-              highestRiscoVal = currentVal;
-              highestRisco = finalRisco;
-              matchedTermo = exemplo.termo;
-              matchedCnae = cnaeStr;
-              matchedGrupo = grupo.grupo;
-              matchedOcupacao = exemplo.ocupacao;
-              ajustadoArea = isAdjusted;
-              originalRisco = nivel.risco;
+            if (currentVal > bestMatchRiscoVal) {
+              bestMatchRiscoVal = currentVal;
+              bestMatch = {
+                risco: finalRisco,
+                termo: exemplo.termo,
+                cnae: cnaeStr,
+                grupo: grupo.grupo,
+                ocupacao: exemplo.ocupacao,
+                ajustadoArea: isAdjusted,
+                originalRisco: nivel.risco,
+                riscoVal: currentVal
+              };
             }
           }
         }
       }
     }
+    return bestMatch;
   };
 
-  if (form.value.cnaePrincipal) {
-    verificarCnae(form.value.cnaePrincipal);
+  // 1. Evaluate Primary CNAE
+  const primaryResult = form.value.cnaePrincipal ? avaliarCnae(form.value.cnaePrincipal) : null;
+  if (primaryResult) {
+    highestRisco = primaryResult.risco;
+    highestRiscoVal = primaryResult.riscoVal;
+    matchedTermo = primaryResult.termo;
+    matchedCnae = primaryResult.cnae;
+    matchedGrupo = primaryResult.grupo;
+    matchedOcupacao = primaryResult.ocupacao;
+    ajustadoArea = primaryResult.ajustadoArea;
+    originalRisco = primaryResult.originalRisco;
   }
+
+  // 2. Evaluate Secondary CNAEs to find the highest risk level
   if (form.value.cnaeSecundarios && form.value.cnaeSecundarios.length > 0) {
-    form.value.cnaeSecundarios.forEach(sec => verificarCnae(sec));
+    form.value.cnaeSecundarios.forEach(sec => {
+      const secResult = avaliarCnae(sec);
+      if (secResult) {
+        if (secResult.riscoVal > highestRiscoVal) {
+          highestRiscoVal = secResult.riscoVal;
+          highestRisco = secResult.risco;
+          matchedTermo = secResult.termo;
+          matchedCnae = secResult.cnae;
+          matchedGrupo = secResult.grupo;
+          ajustadoArea = secResult.ajustadoArea;
+          originalRisco = secResult.originalRisco;
+          // Keep primary occupancy! Only set if primary is not matched
+          if (!matchedOcupacao) {
+            matchedOcupacao = secResult.ocupacao;
+          }
+        }
+      }
+    });
   }
 
   if (highestRisco) {
