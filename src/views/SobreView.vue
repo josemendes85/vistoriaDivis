@@ -1,0 +1,30 @@
+<template>
+  <BaseLayout title="Sobre o Sistema" backRoute="/">
+    <div class="max-width-container mx-auto" style="max-width: 600px;">
+      <h1 class="mb-4 mt-2">Sobre o Sistema</h1>
+      
+      <div class="card p-4 shadow-sm mb-4 border-0">
+        <h2 class="h5 border-bottom pb-2"><i class="bi bi-info-circle me-2 text-primary"></i>Informações do Sistema</h2>
+        <p class="mt-3"><strong>Nome do Sistema:</strong> Vistorias DIVIS</p>
+        <p><strong>Versão:</strong> v2.0.0 (Migrado para Vue 3)</p>
+        <p class="text-muted small mb-0">Última atualização: Julho de 2026</p>
+      </div>
+
+      <div class="card p-4 shadow-sm mb-4 border-0">
+        <h2 class="h5 border-bottom pb-2"><i class="bi bi-person me-2 text-success"></i>Direitos Autorais e Contato</h2>
+        <p class="mt-3 text-muted">
+          &copy; 2026. Todos os direitos reservados.
+        </p>
+        <p>Desenvolvido por: <strong>2ºSGT José Mendes</strong>.</p>
+
+        <a href="https://www.linkedin.com/in/josemendes85/" target="_blank" class="btn btn-outline-primary btn-sm mt-2">
+          <i class="bi bi-linkedin me-2"></i>Ver Perfil no LinkedIn
+        </a>
+      </div>
+    </div>
+  </BaseLayout>
+</template>
+
+<script setup>
+import BaseLayout from '../components/BaseLayout.vue';
+</script>

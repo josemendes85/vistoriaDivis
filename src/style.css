@@ -1,0 +1,294 @@
+:root {
+	--primary-color: #0066cc;
+	--success-color: #198754;
+	--warning-color: #ffc107;
+	--danger-color: #dc3545;
+	--info-color: #17a2b8;
+	--secondary-color: #6c757d;
+	--purple-color: #6f42c1;
+    /* Cor para 'Em Vistoria' */
+    --orange-color: #fd7e14;
+    /* Cor para 'Não Realizada' */
+    --dark-color: #343a40;
+    /* Cor para 'Sem Status' */
+    --light-green-color: #90ee90;
+    /* Nova cor para Concluído */
+}
+html, body, #app {
+	background-color: #f5f6f8 !important;
+}
+.autocomplete-container {
+	position: relative;
+}
+.autocomplete-list {
+	position: absolute;
+	z-index: 1000;
+	width: 100%;
+	max-height: 400px;
+	overflow-y: scroll;
+	background-color: #fff;
+	border: 1px solid #ced4da;
+	border-top: none;
+	border-radius: 0 0 0.375rem 0.375rem;
+	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+	overscroll-behavior: contain;
+}
+.autocomplete-item {
+	padding: 0.75rem;
+	cursor: pointer;
+	border-bottom: 1px solid #e9ecef;
+	transition: background-color 0.15s ease-in-out;
+}
+.autocomplete-item:hover,
+.autocomplete-item.highlighted {
+	background-color: #e9ecef;
+}
+.autocomplete-item:last-child {
+	border-bottom: none;
+}
+.tag {
+	background-color: #f8f9fa;
+	border: 1px solid #dee2e6;
+	border-radius: 0.375rem;
+	padding: 0.375rem 0.75rem;
+	margin: 0.25rem 0;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	font-size: 0.875rem;
+	transition: all 0.15s ease-in-out;
+	width: 100%;
+	box-sizing: border-box;
+}
+.tag:hover {
+	background-color: #e9ecef;
+	border-color: #adb5bd;
+	color: #343a40;
+}
+.btn-close-custom {
+	background: none;
+	border: none;
+	font-size: 0.75rem;
+	margin-left: 0.5rem;
+	opacity: 0.5;
+	transition: opacity 0.15s ease-in-out;
+	cursor: pointer;
+}
+.btn-close-custom:hover {
+	opacity: 1;
+}
+.btn-close-custom-icon {
+	cursor: pointer;
+	font-size: 1rem;
+	color: currentColor;
+	opacity: 0.6;
+	transition: opacity 0.15s ease-in-out, transform 0.15s ease-in-out, color 0.15s ease-in-out;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	vertical-align: middle;
+	margin-left: 0.5rem;
+}
+.btn-close-custom-icon:hover {
+	opacity: 1;
+	color: var(--danger-color) !important;
+	transform: scale(1.15);
+}
+/* Status Colors */
+.status-pendente {
+	background-color: var(--warning-color);
+	color: #000;
+}
+.status-analise {
+	background-color: var(--info-color);
+	color: #fff;
+}
+.status-vistoria {
+	background-color: #6f42c1;
+	color: #fff;
+}
+.status-aprovado {
+	background-color: var(--success-color);
+	color: #fff;
+}
+.status-reprovado {
+	background-color: var(--danger-color);
+	color: #fff;
+}
+.status-cancelado {
+	background-color: var(--secondary-color);
+	color: #fff;
+}
+.status-nao-realizada {
+	background-color: #fd7e14;
+	color: #fff;
+}
+.status-sem-status {
+	background-color: #343a40;
+	color: #fff;
+}
+.status-concluido {
+	background-color: var(--light-green-color);
+}
+.status-a-fazer {
+	background-color: var(--secondary-color);
+	color: #fff;
+}
+.form-section {
+	margin-bottom: 2rem;
+	padding: 1.5rem;
+	background-color: #f8f9fa;
+	border-radius: 0.5rem;
+}
+.section-title {
+	margin-bottom: 1rem;
+	padding-bottom: 0.5rem;
+	border-bottom: 2px solid var(--primary-color);
+	color: var(--primary-color);
+	font-weight: 600;
+}
+.loading-spinner {
+	display: none;
+	text-align: center;
+	padding: 1rem;
+}
+.toast-container {
+	position: fixed;
+	top: 20px;
+	right: 20px;
+	z-index: 1055;
+}
+.location-icon {
+	transform: scale(2.5);
+	color: #ced4da;
+	transition: transform 0.3s ease;
+}
+.location-icon:hover {
+	transform: scale(3);
+}
+.location-link-full {
+	display: flex;
+	/* Para centralizar o conteúdo (o ícone) dentro do link */
+	width: 100%;
+	/* Faz o link ocupar toda a largura da div pai */
+	height: 100%;
+	/* Faz o link ocupar toda a altura da div pai */
+	justify-content: center;
+	/* Centraliza horizontalmente o ícone */
+	align-items: center;
+	/* Centraliza verticalmente o ícone */
+	text-decoration: none;
+	/* Opcional: remove o sublinhado padrão do link */
+	color: inherit;
+	/* Opcional: herda a cor do texto do pai (para o ícone) */
+}
+.location-link-full:hover {
+	background-color: rgba(255, 255, 255, 0.1);
+	/* Um leve escurecimento no hover */
+	/* ou qualquer outro efeito visual que você desejar */
+}
+@media (max-width: 768px) {
+	.form-section {
+		padding: 1rem;
+	}
+	.location-icon {
+		transform: scale(2);
+	}
+}
+#gpsContainer {
+	background-image: url("bgmap.png");
+	opacity: 0.5;
+	color: #000;
+}
+#observacao{
+	overflow-y: scroll;
+}
+
+/* Estilo para o ícone de anotação */
+.anotacao-icon {
+	cursor: pointer;
+	transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+/* Garante que o ícone de anotação colorida fique azul para indicar que tem conteúdo */
+.anotacao-icon.text-primary {
+	color: var(--info-color) !important;
+	opacity: 1;
+}
+
+/* Estilo para alinhar o item de exigência */
+.exigencia-item {
+    padding-right: 1rem; /* Adiciona um pouco de espaço à direita */
+    width: 100%; /* Garante que o item ocupe toda a largura */
+}
+
+#divStatus {
+	border-radius: 0.375rem;
+	padding: 0.25rem 0.75rem;
+	transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Estilo para o ícone de marcar como cumprido */
+.check-cumprido-icon {
+	cursor: pointer;
+	transition: color 0.2s ease, transform 0.2s ease, opacity 0.2s ease;
+}
+
+.check-cumprido-icon.text-success {
+	color: var(--success-color) !important;
+	opacity: 1;
+}
+
+/* Container para organizar as ações da tag na vertical */
+.tag-actions {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	margin-left: 10px;
+	border-left: 1px solid #dee2e6;
+	padding-left: 8px;
+}
+
+/* Estilo comum para todos os ícones de ação da tag */
+.tag-action-icon {
+	font-size: 1.15rem !important;
+	width: 1.2rem !important;
+	height: 1.2rem !important;
+	line-height: 1.2rem !important;
+	text-align: center !important;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	display: inline-block !important;
+}
+
+.tag-action-icon:hover {
+	transform: scale(1.2);
+}
+
+/* Ícone de fechar (sempre vermelho) */
+.tag-close-icon {
+	color: var(--danger-color) !important;
+	opacity: 0.6;
+}
+.tag-close-icon:hover {
+	opacity: 1;
+	color: #bd2130 !important;
+}
+
+/* Colorização se não estiverem marcados (check e anotação) */
+.check-cumprido-icon.text-secondary,
+.anotacao-icon.text-secondary {
+	color: #c8d6e5 !important; /* Coloração mais clara */
+	opacity: 0.6;
+}
+
+.check-cumprido-icon.text-secondary:hover {
+	color: var(--success-color) !important;
+	opacity: 1;
+}
+
+.anotacao-icon.text-secondary:hover {
+	color: var(--info-color) !important;
+	opacity: 1;
+}
