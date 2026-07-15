@@ -716,6 +716,11 @@
                 <div class="mt-2 p-2 bg-white rounded border small text-muted text-uppercase fw-semibold shadow-xs">
                   {{ motivoRisco.cnae }}
                 </div>
+                <!-- Area adjustment notice -->
+                <div v-if="motivoRisco.ajustadoArea" class="mt-2 text-primary fw-medium small d-flex align-items-center gap-1">
+                  <i class="bi bi-info-circle-fill"></i>
+                  Risco recalculado de {{ motivoRisco.originalRisco }} para {{ motivoRisco.risco }} pela área de {{ motivoRisco.areaVal }} m².
+                </div>
               </div>
             </div>
             <div v-else-if="form.cnaePrincipal" class="mb-4 p-3 rounded border border-warning shadow-sm" style="background-color: rgba(255, 193, 7, 0.05); border-color: rgba(255, 193, 7, 0.2) !important;">
@@ -941,6 +946,8 @@ const determinarGrauRisco = (silencioso = false) => {
   let matchedCnae = "";
   let matchedGrupo = "";
   let matchedOcupacao = "";
+  let ajustadoArea = false;
+  let originalRisco = "";
   const riscoValues = { "A": 1, "B-1": 2, "B-2": 3, "C-1": 4, "C-2": 5 };
 
   const verificarCnae = (cnaeStr) => {
@@ -951,14 +958,46 @@ const determinarGrauRisco = (silencioso = false) => {
       for (const nivel of grupo.niveis) {
         for (const exemplo of nivel.exemplos) {
           if (exemplo.cnaes && exemplo.cnaes.includes(code)) {
-            const currentVal = riscoValues[nivel.risco] || 0;
+            let finalRisco = nivel.risco;
+            let isAdjusted = false;
+            const areaVal = parseFloat(form.value.area) || 0;
+
+            if (grupo.grupo === "Comerciais") {
+              if (areaVal > 0) {
+                if (areaVal <= 750) {
+                  finalRisco = "A";
+                } else if (areaVal > 750 && areaVal <= 1000) {
+                  finalRisco = "B-1";
+                } else {
+                  finalRisco = "B-2";
+                }
+                if (finalRisco !== nivel.risco) {
+                  isAdjusted = true;
+                }
+              }
+            } else if (grupo.grupo === "Escolares") {
+              if (areaVal > 0 && exemplo.termo !== "Escolas para portadores de necessidades especiais") {
+                if (areaVal <= 200) {
+                  finalRisco = "A";
+                } else {
+                  finalRisco = "B-1";
+                }
+                if (finalRisco !== nivel.risco) {
+                  isAdjusted = true;
+                }
+              }
+            }
+
+            const currentVal = riscoValues[finalRisco] || 0;
             if (currentVal > highestRiscoVal) {
               highestRiscoVal = currentVal;
-              highestRisco = nivel.risco;
+              highestRisco = finalRisco;
               matchedTermo = exemplo.termo;
               matchedCnae = cnaeStr;
               matchedGrupo = grupo.grupo;
               matchedOcupacao = exemplo.ocupacao;
+              ajustadoArea = isAdjusted;
+              originalRisco = nivel.risco;
             }
           }
         }
@@ -984,16 +1023,28 @@ const determinarGrauRisco = (silencioso = false) => {
       termo: matchedTermo,
       cnae: matchedCnae,
       grupo: matchedGrupo,
-      risco: highestRisco
+      risco: highestRisco,
+      ajustadoArea,
+      areaVal: form.value.area,
+      originalRisco
     };
 
     if (!silencioso) {
-      showToast(`Grau de Risco determinado: ${highestRisco}`, "info");
+      showToast(`Grau de Risco recalculado: ${highestRisco}`, "info");
     }
   } else {
     motivoRisco.value = null;
   }
 };
+
+watch(
+  () => form.value.area,
+  (newArea) => {
+    if (form.value.cnaePrincipal || (form.value.cnaeSecundarios && form.value.cnaeSecundarios.length > 0)) {
+      determinarGrauRisco(true);
+    }
+  }
+);
 
 // Auto populate suggestions setup
 const getFiltradasSugestoes = (catCode) => {
