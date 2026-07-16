@@ -203,9 +203,66 @@ export const NT02_TABELA2 = [
             "ocupacao": "06",
             "cnaes": [
               "4641-9/03",
-              "4755-5/02"
+              "4755-5/02",
+              "4713-0/05",
+              "4721-1/03",
+              "4721-1/04",
+              "4722-9/02",
+              "4723-7/00",
+              "4729-6/02",
+              "4729-6/99",
+              "4731-8/00",
+              "4732-6/00",
+              "4741-5/00",
+              "4742-3/00",
+              "4743-1/00",
+              "4744-0/01",
+              "4744-0/03",
+              "4744-0/04",
+              "4744-0/05",
+              "4744-0/06",
+              "4744-0/99",
+              "4751-2/01",
+              "4751-2/02",
+              "4752-1/00",
+              "4753-9/00",
+              "4754-7/01",
+              "4754-7/03",
+              "4755-5/01",
+              "4755-5/03",
+              "4756-3/00",
+              "4757-1/00",
+              "4759-8/01",
+              "4759-8/99",
+              "4761-0/01",
+              "4761-0/02",
+              "4761-0/03",
+              "4762-8/00",
+              "4763-6/01",
+              "4763-6/02",
+              "4763-6/03",
+              "4763-6/04",
+              "4763-6/05",
+              "4771-7/04",
+              "4772-5/00",
+              "4773-3/00",
+              "4774-1/00",
+              "4782-2/02",
+              "4783-1/01",
+              "4783-1/02",
+              "4784-9/00",
+              "4785-7/01",
+              "4785-7/99",
+              "4789-0/01",
+              "4789-0/02",
+              "4789-0/03",
+              "4789-0/04",
+              "4789-0/05",
+              "4789-0/07",
+              "4789-0/08",
+              "4789-0/99"
             ],
-            "obs": "Encontrado(s) 2 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 59 CNAE(s) correspondente(s) (incluindo fallbacks comerciais)."
           },
           {
             "termo": "Butiques",
@@ -552,12 +609,10 @@ export const NT02_TABELA2 = [
               "3299-0/02",
               "3314-7/09",
               "4647-8/01",
-              "4789-0/07",
               "7733-1/00",
-              "8211-3/00",
-              "8219-9/99"
+              "8211-3/00"
             ],
-            "obs": "Encontrado(s) 9 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 7 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Laboratório de análises clínicas",
@@ -673,7 +728,6 @@ export const NT02_TABELA2 = [
               "4520-0/07",
               "4543-9/00",
               "4615-0/00",
-              "4753-9/00",
               "6209-1/00",
               "8219-9/99",
               "9511-8/00",
@@ -687,7 +741,7 @@ export const NT02_TABELA2 = [
               "9529-1/99",
               "9603-3/01"
             ],
-            "obs": "Encontrado(s) 68 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 67 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Centro de processamento de dados",
@@ -715,13 +769,12 @@ export const NT02_TABELA2 = [
             "ocupacao": "11",
             "cnaes": [
               "3220-5/00",
-              "4756-3/00",
               "5920-1/00",
               "7729-2/02",
               "8592-9/03",
               "9001-9/02"
             ],
-            "obs": "Encontrado(s) 6 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 5 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Laboratórios técnico-científicos",
@@ -809,7 +862,6 @@ export const NT02_TABELA2 = [
               "2640-0/00",
               "2670-1/02",
               "4649-4/07",
-              "4753-9/00",
               "5911-1/01",
               "5911-1/02",
               "5911-1/99",
@@ -818,7 +870,7 @@ export const NT02_TABELA2 = [
               "5914-6/00",
               "7722-5/00"
             ],
-            "obs": "Encontrado(s) 13 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 12 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Estofamento de móveis",
@@ -960,13 +1012,12 @@ export const NT02_TABELA2 = [
             "ocupacao": "13",
             "cnaes": [
               "2092-4/02",
-              "4789-0/06",
               "6209-1/00",
               "7119-7/03",
               "8541-4/00",
               "8542-2/00"
             ],
-            "obs": "Encontrado(s) 6 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 5 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Escolas para idosos",
@@ -1024,11 +1075,10 @@ export const NT02_TABELA2 = [
               "4617-6/00",
               "4635-4/03",
               "4635-4/99",
-              "4723-7/00",
               "5611-2/04",
               "5611-2/05"
             ],
-            "obs": "Encontrado(s) 11 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 10 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Estação rodoviária",
@@ -1131,11 +1181,10 @@ export const NT02_TABELA2 = [
               "4617-6/00",
               "4635-4/03",
               "4635-4/99",
-              "4723-7/00",
               "5611-2/04",
               "5611-2/05"
             ],
-            "obs": "Encontrado(s) 11 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 10 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Bibliotecas e assemelhados",
@@ -1253,9 +1302,6 @@ export const NT02_TABELA2 = [
               "4665-6/00",
               "4669-9/01",
               "4669-9/99",
-              "4744-0/02",
-              "4789-0/01",
-              "4789-0/03",
               "6422-1/00",
               "6431-0/00",
               "8592-9/02",
@@ -1266,7 +1312,7 @@ export const NT02_TABELA2 = [
               "9102-3/01",
               "9493-6/00"
             ],
-            "obs": "Encontrado(s) 47 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 44 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Ginásios",
@@ -1277,6 +1323,15 @@ export const NT02_TABELA2 = [
               "9311-5/00"
             ],
             "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
+          },
+          {
+            "termo": "Locais de exibição de flores",
+            "ocupacao": null,
+            "cnaes": [
+              "7319-0/01",
+              "8230-0/01"
+            ],
+            "obs": "Encontrado(s) 2 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Locais de exposições permanentes",
@@ -1331,11 +1386,10 @@ export const NT02_TABELA2 = [
             "cnaes": [
               "4211-1/02",
               "4329-1/04",
-              "4713-0/05",
               "5240-1/01",
               "5240-1/99"
             ],
-            "obs": "Encontrado(s) 5 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 4 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Autódromo",
@@ -1639,11 +1693,9 @@ export const NT02_TABELA2 = [
               "4679-6/04",
               "4679-6/99",
               "4685-1/00",
-              "4744-0/05",
-              "4744-0/99",
               "7732-2/01"
             ],
-            "obs": "Encontrado(s) 36 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 34 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Oficina retificadora de motores",
@@ -1911,14 +1963,13 @@ export const NT02_TABELA2 = [
               "3314-7/09",
               "4649-4/02",
               "4652-4/00",
-              "4757-1/00",
               "6619-3/04",
               "7729-2/01",
               "9329-8/04",
               "9511-8/00",
               "9521-5/00"
             ],
-            "obs": "Encontrado(s) 14 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 13 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Hidroelétricas",
@@ -1934,10 +1985,9 @@ export const NT02_TABELA2 = [
             "ocupacao": "33",
             "cnaes": [
               "1052-0/00",
-              "4631-1/00",
-              "4721-1/03"
+              "4631-1/00"
             ],
-            "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 2 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Curtumes, peles e couros",
@@ -2155,7 +2205,6 @@ export const NT02_TABELA2 = [
               "4623-1/09",
               "4662-1/00",
               "4689-3/01",
-              "4789-0/04",
               "5231-1/01",
               "5240-1/01",
               "5240-1/99",
@@ -2187,7 +2236,7 @@ export const NT02_TABELA2 = [
               "9529-1/99",
               "9609-2/04"
             ],
-            "obs": "Encontrado(s) 143 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 142 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Usinagem e metalúrgica",
@@ -2232,12 +2281,11 @@ export const NT02_TABELA2 = [
               "4617-6/00",
               "4635-4/03",
               "4635-4/99",
-              "4723-7/00",
               "5611-2/03",
               "5611-2/04",
               "5611-2/05"
             ],
-            "obs": "Encontrado(s) 14 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 13 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Vidro e seus produtos",
@@ -2247,10 +2295,9 @@ export const NT02_TABELA2 = [
               "2312-5/00",
               "2319-2/00",
               "2399-1/01",
-              "4679-6/03",
-              "4743-1/00"
+              "4679-6/03"
             ],
-            "obs": "Encontrado(s) 6 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 5 CNAE(s) correspondente(s)."
           }
         ]
       },
@@ -2272,10 +2319,9 @@ export const NT02_TABELA2 = [
             "cnaes": [
               "1922-5/02",
               "4681-8/01",
-              "4681-8/05",
-              "4732-6/00"
+              "4681-8/05"
             ],
-            "obs": "Encontrado(s) 4 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Beneficiamento de algodão",
@@ -2413,10 +2459,9 @@ export const NT02_TABELA2 = [
               "3314-7/20",
               "4616-8/00",
               "4643-5/01",
-              "4782-2/01",
               "9529-1/01"
             ],
-            "obs": "Encontrado(s) 14 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 13 CNAE(s) correspondente(s)."
           }
         ]
       }
@@ -2434,11 +2479,9 @@ export const NT02_TABELA2 = [
             "ocupacao": "36",
             "cnaes": [
               "4679-6/04",
-              "4679-6/99",
-              "4744-0/05",
-              "4744-0/99"
+              "4679-6/99"
             ],
-            "obs": "Encontrado(s) 4 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 2 CNAE(s) correspondente(s)."
           }
         ]
       },
@@ -2459,10 +2502,9 @@ export const NT02_TABELA2 = [
             "ocupacao": "37",
             "cnaes": [
               "4649-4/07",
-              "4762-8/00",
               "7722-5/00"
             ],
-            "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 2 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Doces",
@@ -2470,10 +2512,9 @@ export const NT02_TABELA2 = [
             "cnaes": [
               "1093-7/01",
               "1093-7/02",
-              "4637-1/07",
-              "4721-1/04"
+              "4637-1/07"
             ],
-            "obs": "Encontrado(s) 4 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Máquinas e equipamentos mecânicos e eletromecânicos",
@@ -2591,11 +2632,9 @@ export const NT02_TABELA2 = [
               "1354-5/00",
               "4641-9/01",
               "4649-4/04",
-              "4754-7/02",
-              "4755-5/01",
               "8640-2/14"
             ],
-            "obs": "Encontrado(s) 10 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 8 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Couro e pele",
@@ -2654,10 +2693,9 @@ export const NT02_TABELA2 = [
               "3101-2/00",
               "3103-9/00",
               "4613-3/00",
-              "4671-1/00",
-              "4744-0/02"
+              "4671-1/00"
             ],
-            "obs": "Encontrado(s) 15 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 14 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Papel",
@@ -2716,10 +2754,9 @@ export const NT02_TABELA2 = [
               "2099-1/99",
               "4681-8/01",
               "4681-8/05",
-              "4684-2/99",
-              "4732-6/00"
+              "4684-2/99"
             ],
-            "obs": "Encontrado(s) 10 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 9 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Madeira",
@@ -2738,10 +2775,9 @@ export const NT02_TABELA2 = [
               "3101-2/00",
               "3103-9/00",
               "4613-3/00",
-              "4671-1/00",
-              "4744-0/02"
+              "4671-1/00"
             ],
-            "obs": "Encontrado(s) 15 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 14 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Comércio de fogos de artifício (classes A, B, C e D) com massa explosiva acima de 864 g/m³",
@@ -2774,19 +2810,15 @@ export const NT02_TABELA2 = [
               "4681-8/04",
               "4682-6/00",
               "4689-3/01",
-              "4731-8/00",
-              "4784-9/00",
               "7739-0/01"
             ],
-            "obs": "Encontrado(s) 22 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 20 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Posto de combustíveis",
             "ocupacao": "40",
-            "cnaes": [
-              "4731-8/00"
-            ],
-            "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
+            "cnaes": null,
+            "obs": "Encontrado(s) 0 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Posto de lubrificantes",
@@ -2794,19 +2826,17 @@ export const NT02_TABELA2 = [
             "cnaes": [
               "1922-5/02",
               "4681-8/01",
-              "4681-8/05",
-              "4732-6/00"
+              "4681-8/05"
             ],
-            "obs": "Encontrado(s) 4 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Posto de revenda de GLP",
             "ocupacao": "40",
             "cnaes": [
-              "4682-6/00",
-              "4784-9/00"
+              "4682-6/00"
             ],
-            "obs": "Encontrado(s) 2 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           }
         ]
       },
@@ -2817,10 +2847,8 @@ export const NT02_TABELA2 = [
           {
             "termo": "Armas e munições",
             "ocupacao": "41",
-            "cnaes": [
-              "4789-0/09"
-            ],
-            "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
+            "cnaes": null,
+            "obs": "Encontrado(s) 0 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Destilarias",
@@ -2834,10 +2862,9 @@ export const NT02_TABELA2 = [
             "termo": "Depósitos de fogos de artifício",
             "ocupacao": "41",
             "cnaes": [
-              "2092-4/02",
-              "4789-0/06"
+              "2092-4/02"
             ],
-            "obs": "Encontrado(s) 2 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Materiais explosivos",
@@ -2870,11 +2897,9 @@ export const NT02_TABELA2 = [
               "4681-8/04",
               "4682-6/00",
               "4689-3/01",
-              "4731-8/00",
-              "4784-9/00",
               "7739-0/01"
             ],
-            "obs": "Encontrado(s) 22 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 20 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Produtos corrosivos",
@@ -2912,11 +2937,9 @@ export const NT02_TABELA2 = [
               "4681-8/04",
               "4682-6/00",
               "4689-3/01",
-              "4731-8/00",
-              "4784-9/00",
               "7739-0/01"
             ],
-            "obs": "Encontrado(s) 22 CNAE(s) correspondente(s)."
+            "obs": "Encontrado(s) 20 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Produtos perigosos",
