@@ -166,7 +166,7 @@ import Sortable from 'sortablejs';
 
 const router = useRouter();
 
-const statusOptions = ['Pendente', 'Análise', 'Vistoria', 'Aprovado', 'Reprovado', 'Cancelado', 'Não Realizada', 'Sem Status', 'Concluído'];
+const statusOptions = ['Sem Status', 'Pendente', 'Análise', 'Vistoria', 'Aprovado', 'Reprovado', 'Cancelado', 'Não Realizada', 'Concluído'];
 
 const filterStatus = ref('');
 const searchTerm = ref('');

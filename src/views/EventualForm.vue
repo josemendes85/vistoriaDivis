@@ -2,8 +2,9 @@
   <BaseLayout :title="isEdit ? 'Editar Eventual' : 'Novo Eventual'" backRoute="/eventuais" backText="Voltar ao Painel">
     <div class="pt-2 px-1">
       <form class="needs-validation" novalidate @submit.prevent="salvarRegistro">
-        
-        <!-- Identificação do Processo/Evento -->
+        <div class="row">
+          <div class="col-12">
+            <!-- Identificação do Processo/Evento -->
         <div class="form-section mb-4">
           <h4 class="section-title">
             <i class="bi bi-file-text me-2"></i>Identificação do Processo / Evento
@@ -182,6 +183,8 @@
               <i class="bi bi-trash me-1"></i>Excluir
             </button>
           </div>
+          </div>
+        </div>
         </div>
       </form>
     </div>

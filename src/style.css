@@ -124,7 +124,7 @@ html, body, #app {
 	color: #fff;
 }
 .status-sem-status {
-	background-color: #343a40;
+	background-color: var(--primary-color);
 	color: #fff;
 }
 .status-concluido {
