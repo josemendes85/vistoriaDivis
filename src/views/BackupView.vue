@@ -1,24 +1,28 @@
 <template>
   <BaseLayout title="Gerenciamento de Dados" backRoute="/">
-    <div class="backup-card bg-white mx-auto shadow-sm p-4" style="max-width: 500px; border-radius: 12px; margin-top: 50px;">
-      <h2 class="text-center mb-4 h4 fw-bold">Gerenciamento de Dados</h2>
-      <p class="text-center text-muted mb-4 small">
-        Faça o backup de todos os dados salvos localmente ou restaure-os de um arquivo JSON.
-      </p>
-
-      <!-- Botão de Exportar/Backup -->
-      <div class="mb-3">
-        <button class="btn btn-success w-100 py-3 fw-bold" @click="exportBackup">
-          <i class="bi bi-download me-2"></i>Fazer Backup (Exportar Dados)
-        </button>
-      </div>
-
-      <!-- Botão de Importar/Restaurar -->
-      <div class="mb-3">
-        <label for="fileInputBackup" class="btn btn-warning w-100 py-3 mb-0 text-dark fw-bold cursor-pointer">
-          <i class="bi bi-upload me-2"></i>Restaurar Dados (Importar Backup)
-        </label>
-        <input type="file" id="fileInputBackup" accept="application/json" class="d-none" @change="importBackup" />
+    <div class="pt-2 px-1">
+      <div class="form-section shadow-sm bg-white p-4">
+        <h4 class="section-title text-center mb-4">
+          <i class="bi bi-cloud-arrow-up me-2"></i>Backup & Restauração
+        </h4>
+        <p class="text-center text-muted mb-4 small">
+          Faça o backup de todos os dados salvos localmente ou restaure-os de um arquivo JSON.
+        </p>
+  
+        <!-- Botão de Exportar/Backup -->
+        <div class="mb-3">
+          <button class="btn btn-success w-100 py-3 fw-bold" @click="exportBackup">
+            <i class="bi bi-download me-2"></i>Fazer Backup (Exportar Dados)
+          </button>
+        </div>
+  
+        <!-- Botão de Importar/Restaurar -->
+        <div class="mb-3">
+          <label for="fileInputBackup" class="btn btn-warning w-100 py-3 mb-0 text-dark fw-bold cursor-pointer">
+            <i class="bi bi-upload me-2"></i>Restaurar Dados (Importar Backup)
+          </label>
+          <input type="file" id="fileInputBackup" accept="application/json" class="d-none" @change="importBackup" />
+        </div>
       </div>
     </div>
   </BaseLayout>

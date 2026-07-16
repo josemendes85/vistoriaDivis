@@ -3,19 +3,10 @@
     <nav class="navbar navbar-dark fixed-top shadow-sm transition-navbar" :class="navbarClass" :style="!navbarClass ? 'background-color: var(--primary-color) !important; color: #ffffff !important;' : ''">
       <div class="container-fluid d-flex align-items-center justify-content-between">
         
-        <!-- Left Side: Back button OR Module Navigation -->
-        <div class="d-flex align-items-center">
-          <router-link
-            v-if="backRoute"
-            :to="backRoute"
-            class="btn btn-sm d-flex align-items-center fw-medium shadow-sm transition-btn"
-            :class="isLightNavbar ? 'btn-dark' : 'btn-outline-light'"
-          >
-            <i class="bi bi-arrow-left me-1"></i> <span>{{ backText || 'Voltar' }}</span>
-          </router-link>
-
-          <!-- Navigation options when on home (Processes) page (Dropdown for all screen sizes) -->
-          <div v-else ref="dropdownContainer" class="dropdown">
+        <!-- Left Side: Back button and/or Module Navigation -->
+        <div class="d-flex align-items-center gap-2">
+          <!-- Always show Menu Dropdown for easy global navigation -->
+          <div ref="dropdownContainer" class="dropdown">
             <button 
               class="btn btn-sm dropdown-toggle fw-medium shadow-sm transition-btn" 
               :class="[isLightNavbar ? 'btn-dark' : 'btn-outline-light', { show: isMenuOpen }]" 
@@ -28,8 +19,8 @@
             </button>
             <ul class="dropdown-menu shadow-lg border-0" :class="{ show: isMenuOpen }" aria-labelledby="navDropdown">
               <li>
-                <router-link to="/eventuais" class="dropdown-item py-2" @click="closeMenu">
-                  <i class="bi bi-ticket-perforated me-2 text-success"></i>Eventuais
+                <router-link to="/processos" class="dropdown-item py-2" @click="closeMenu">
+                  <i class="bi bi-folder2-open me-2 text-primary"></i>Processos
                 </router-link>
               </li>
               <li>
@@ -55,6 +46,16 @@
               </li>
             </ul>
           </div>
+
+          <!-- Back Button next to menu if backRoute is provided -->
+          <router-link
+            v-if="backRoute"
+            :to="backRoute"
+            class="btn btn-sm d-flex align-items-center fw-medium shadow-sm transition-btn"
+            :class="isLightNavbar ? 'btn-dark' : 'btn-outline-light'"
+          >
+            <i class="bi bi-arrow-left me-1"></i> <span>{{ backText || 'Voltar' }}</span>
+          </router-link>
         </div>
 
         <!-- Center: Title -->
@@ -62,18 +63,17 @@
           {{ title || 'Vistorias DIVIS' }}
         </span>
 
-        <!-- Right Side: Equipe button (only on home screen) -->
+        <!-- Right Side: Equipe button (always visible) -->
         <div>
-          <button v-if="!backRoute" class="btn btn-sm fw-medium shadow-sm transition-btn" :class="isLightNavbar ? 'btn-outline-dark' : 'btn-outline-light'" @click="showEquipeModal = true">
+          <button class="btn btn-sm fw-medium shadow-sm transition-btn" :class="isLightNavbar ? 'btn-outline-dark' : 'btn-outline-light'" @click="showEquipeModal = true">
             <i class="bi bi-people-fill me-1"></i>Equipe
           </button>
-          <div v-else style="width: 80px;"></div>
         </div>
       </div>
     </nav>
 
     <!-- Main Content Area -->
-    <main class="container-fluid" style="margin-top: 80px; padding-bottom: 50px;">
+    <main class="container" style="margin-top: 80px; padding-bottom: 50px;">
       <slot />
     </main>
 

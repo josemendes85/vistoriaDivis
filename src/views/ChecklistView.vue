@@ -1,92 +1,94 @@
 <template>
   <BaseLayout title="Checklist de Incêndio" backRoute="/">
-    <!-- Fixed Controls Bar -->
-    <div class="controls-bar bg-white shadow-sm border-bottom py-3 px-4 mb-4">
-      <div class="row g-3 align-items-center">
-        <!-- Search Input -->
-        <div class="col-md-4">
-          <input
-            v-model="searchTerm"
-            type="text"
-            class="form-control"
-            placeholder="Digite para filtrar os itens..."
-          />
-        </div>
-
-        <!-- Filter Category Select -->
-        <div class="col-md-3">
-          <select v-model="selectedCategory" class="form-select">
-            <option value="">Todas as Categorias</option>
-            <option v-for="cat in categories" :key="cat" :value="cat">
-              {{ cat }}
-            </option>
-          </select>
-        </div>
-
-        <!-- Action Buttons -->
-        <div class="col-md-5 d-flex gap-2 justify-content-md-end flex-wrap">
-          <button
-            class="btn btn-success flex-grow-1"
-            :disabled="selectedIds.size === 0"
-            @click="copySelectedItems"
-          >
-            <i class="bi bi-file-earmark-check me-1"></i>
-            Copiar Notificação ({{ selectedIds.size }})
-          </button>
-          <button
-            class="btn btn-primary flex-grow-1"
-            :disabled="selectedIds.size === 0"
-            @click="copyTableFormat"
-          >
-            <i class="bi bi-file-earmark-spreadsheet me-1"></i>
-            Copiar Retorno ({{ selectedIds.size }})
-          </button>
-          <button
-            class="btn btn-orange text-white"
-            :disabled="selectedIds.size === 0"
-            @click="clearSelection"
-          >
-            <i class="bi bi-x-circle me-1"></i>
-            Limpar
-          </button>
+    <div class="pt-2 px-1">
+      <!-- Fixed Controls Bar -->
+      <div class="controls-bar bg-white shadow-sm border-bottom py-3 px-3 mb-4 rounded-3" style="position: sticky; top: 80px; z-index: 10;">
+        <div class="row g-3 align-items-center">
+          <!-- Search Input -->
+          <div class="col-md-4">
+            <input
+              v-model="searchTerm"
+              type="text"
+              class="form-control"
+              placeholder="Digite para filtrar os itens..."
+            />
+          </div>
+  
+          <!-- Filter Category Select -->
+          <div class="col-md-3">
+            <select v-model="selectedCategory" class="form-select">
+              <option value="">Todas as Categorias</option>
+              <option v-for="cat in categories" :key="cat" :value="cat">
+                {{ cat }}
+              </option>
+            </select>
+          </div>
+  
+          <!-- Action Buttons -->
+          <div class="col-md-5 d-flex gap-2 justify-content-md-end flex-wrap">
+            <button
+              class="btn btn-success flex-grow-1"
+              :disabled="selectedIds.size === 0"
+              @click="copySelectedItems"
+            >
+              <i class="bi bi-file-earmark-check me-1"></i>
+              Copiar Notificação ({{ selectedIds.size }})
+            </button>
+            <button
+              class="btn btn-primary flex-grow-1"
+              :disabled="selectedIds.size === 0"
+              @click="copyTableFormat"
+            >
+              <i class="bi bi-file-earmark-spreadsheet me-1"></i>
+              Copiar Retorno ({{ selectedIds.size }})
+            </button>
+            <button
+              class="btn btn-orange text-white"
+              :disabled="selectedIds.size === 0"
+              @click="clearSelection"
+            >
+              <i class="bi bi-x-circle me-1"></i>
+              Limpar
+            </button>
+          </div>
         </div>
       </div>
-    </div>
-
-    <!-- Checklist Content -->
-    <div class="container-fluid pt-2 px-md-4">
-      <div v-if="filteredGroups.length === 0" class="text-center text-muted py-5">
-        <i class="bi bi-info-circle display-4 mb-3"></i>
-        <h3>Nenhum registro encontrado.</h3>
-      </div>
-
-      <div v-else class="row">
-        <div
-          v-for="group in filteredGroups"
-          :key="group.title"
-          class="col-12 mb-4"
-        >
-          <div class="card item-group shadow-sm border-0">
-            <div class="card-header bg-danger text-white p-3 fw-bold fs-5">
-              {{ group.title }}
-            </div>
-            <div class="list-group list-group-flush">
-              <div
-                v-for="item in group.items"
-                :key="item.id"
-                :class="['list-group-item', 'checklist-item', { 'selected': selectedIds.has(item.id) }]"
-                @click="toggleItem(item.id)"
-              >
-                <div class="d-flex align-items-start">
-                  <span class="item-id text-danger fw-bold me-2">{{ item.id }}</span>
-                  <div class="flex-grow-1 text-content">{{ item.text }}</div>
-                  <div class="form-check ms-3">
-                    <input
-                      type="checkbox"
-                      class="form-check-input check-indicator"
-                      :checked="selectedIds.has(item.id)"
-                      @click.stop="toggleItem(item.id)"
-                    />
+  
+      <!-- Checklist Content -->
+      <div class="px-0">
+        <div v-if="filteredGroups.length === 0" class="text-center text-muted py-5">
+          <i class="bi bi-info-circle display-4 mb-3"></i>
+          <h3>Nenhum registro encontrado.</h3>
+        </div>
+  
+        <div v-else class="row">
+          <div
+            v-for="group in filteredGroups"
+            :key="group.title"
+            class="col-12 mb-4"
+          >
+            <div class="card item-group shadow-sm border-0">
+              <div class="card-header bg-danger text-white p-3 fw-bold fs-5">
+                {{ group.title }}
+              </div>
+              <div class="list-group list-group-flush">
+                <div
+                  v-for="item in group.items"
+                  :key="item.id"
+                  :class="['list-group-item', 'checklist-item', { 'selected': selectedIds.has(item.id) }]"
+                  @click="toggleItem(item.id)"
+                >
+                  <div class="d-flex align-items-start">
+                    <span class="item-id text-danger fw-bold me-2">{{ item.id }}</span>
+                    <div class="flex-grow-1 text-content">{{ item.text }}</div>
+                    <div class="form-check ms-3">
+                      <input
+                        type="checkbox"
+                        class="form-check-input check-indicator"
+                        :checked="selectedIds.has(item.id)"
+                        @click.stop="toggleItem(item.id)"
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
@@ -188,16 +190,16 @@ const copyTableFormat = () => {
 <style scoped>
 .controls-bar {
   position: sticky;
-  top: 56px;
+  top: 80px;
   z-index: 99;
 }
 .btn-orange {
-  background-color: #f57c00;
-  border-color: #f57c00;
+  background-color: var(--orange-color) !important;
+  border-color: var(--orange-color) !important;
+  color: #fff !important;
 }
 .btn-orange:hover {
-  background-color: #ef6c00;
-  border-color: #ef6c00;
+  filter: brightness(0.9);
 }
 .item-group {
   border-radius: 10px;
@@ -209,17 +211,17 @@ const copyTableFormat = () => {
   padding: 1rem 1.25rem;
 }
 .checklist-item:hover {
-  background-color: #ffe0e0;
-  border-left: 5px solid #d32f2f;
+  background-color: rgba(205, 106, 106, 0.1);
+  border-left: 5px solid var(--danger-color);
   transform: translateY(-2px);
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 .checklist-item.selected {
-  background-color: #e8f5e9 !important;
-  border-left: 5px solid #2e7d32;
+  background-color: rgba(112, 162, 136, 0.1) !important;
+  border-left: 5px solid var(--success-color);
 }
 .checklist-item.selected .item-id {
-  color: #2e7d32 !important;
+  color: var(--success-color) !important;
 }
 .check-indicator {
   cursor: pointer;

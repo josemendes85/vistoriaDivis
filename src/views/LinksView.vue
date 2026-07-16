@@ -1,75 +1,77 @@
 <template>
   <BaseLayout title="Portal de Links Rápidos" backRoute="/">
-    <div class="container-fluid" style="max-width: 900px;">
-      <div class="section-title mb-4">
-        <h2 class="h4"><i class="fas fa-link me-2 text-primary"></i>Sistemas e Acessos Rápidos</h2>
-      </div>
-
-      <div class="row g-4 mb-5">
-        <div v-for="link in links" :key="link.title" class="col-md-6 col-lg-4">
-          <a :href="link.url" target="_blank" class="text-decoration-none">
-            <div class="card link-card shadow-sm p-4 h-100 border-0">
-              <div :class="['icon-box', link.statusClass]">
-                <i :class="link.icon"></i>
+    <div class="pt-2 px-1">
+      
+      <!-- Seção de Links -->
+      <div class="form-section shadow-sm bg-white p-4 mb-4">
+        <h4 class="section-title mb-4">
+          <i class="bi bi-link-45deg me-2 text-primary"></i>Sistemas e Acessos Rápidos
+        </h4>
+        <div class="row g-3">
+          <div v-for="link in links" :key="link.title" class="col-md-6 col-lg-4">
+            <a :href="link.url" target="_blank" class="text-decoration-none">
+              <div class="card link-card shadow-sm p-3 h-100 border border-light-subtle">
+                <div :class="['icon-box mb-2 text-white', link.statusClass]">
+                  <i :class="link.icon"></i>
+                </div>
+                <h6 class="text-dark fw-bold mb-1">{{ link.title }}</h6>
+                <p class="text-muted small mb-0" style="font-size: 0.75rem; line-height: 1.2;">{{ link.description }}</p>
               </div>
-              <h5 class="text-dark fw-bold mt-2">{{ link.title }}</h5>
-              <p class="text-muted small mb-0">{{ link.description }}</p>
-            </div>
-          </a>
+            </a>
+          </div>
         </div>
       </div>
 
-      <div class="card card-form shadow-sm border-0 mb-5">
-        <div class="form-section p-4">
-          <div class="section-title mb-3">
-            <h2 class="h4"><i class="bi bi-shield-check me-2 text-success"></i>Assunção de Serviço</h2>
-          </div>
+      <!-- Seção de Assunção de Serviço -->
+      <div class="form-section shadow-sm bg-white p-4 mb-5">
+        <h4 class="section-title mb-3">
+          <i class="bi bi-shield-check me-2 text-success"></i>Assunção de Serviço
+        </h4>
 
-          <form @submit.prevent="enviarAssuncao">
-            <div class="row g-3">
-              <div class="col-12">
-                <label class="form-label fw-bold">Graduação e Nome Completo</label>
-                <input
-                  v-model="assuncao.nome"
-                  type="text"
-                  class="form-control"
-                  placeholder="Ex: Sgt Fulano"
-                  required
-                />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Matrícula</label>
-                <input
-                  v-model="assuncao.matricula"
-                  type="text"
-                  class="form-control"
-                  placeholder="000.000-0"
-                  required
-                />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold">Telefone</label>
-                <input
-                  :value="assuncao.telefone"
-                  type="text"
-                  class="form-control"
-                  placeholder="(61) 90000-0000"
-                  maxlength="15"
-                  required
-                  @input="formatarTelefone"
-                />
-              </div>
-              <div class="col-12 mt-4">
-                <button type="submit" class="btn w-100 p-3 btn-success fw-bold border-0 shadow-sm d-flex align-items-center justify-content-center">
-                  <i class="bi bi-whatsapp me-2 fs-5"></i> SELECIONAR CONTATOS E ENVIAR
-                </button>
-              </div>
+        <form @submit.prevent="enviarAssuncao">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label fw-bold small text-muted">Graduação e Nome Completo</label>
+              <input
+                v-model="assuncao.nome"
+                type="text"
+                class="form-control"
+                placeholder="Ex: Sgt Fulano"
+                required
+              />
             </div>
-          </form>
-
-          <div class="mt-3 text-center text-muted small">
-            <p>A mensagem será enviada para os números: <br /> 6191346402, 6196210941, 6192019990</p>
+            <div class="col-md-6">
+              <label class="form-label fw-bold small text-muted">Matrícula</label>
+              <input
+                v-model="assuncao.matricula"
+                type="text"
+                class="form-control"
+                placeholder="000.000-0"
+                required
+              />
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-bold small text-muted">Telefone</label>
+              <input
+                :value="assuncao.telefone"
+                type="text"
+                class="form-control"
+                placeholder="(61) 90000-0000"
+                maxlength="15"
+                required
+                @input="formatarTelefone"
+              />
+            </div>
+            <div class="col-12 mt-4">
+              <button type="submit" class="btn w-100 p-3 btn-success fw-bold border-0 shadow-sm d-flex align-items-center justify-content-center">
+                <i class="bi bi-whatsapp me-2 fs-5"></i> SELECIONAR CONTATOS E ENVIAR
+              </button>
+            </div>
           </div>
+        </form>
+
+        <div class="mt-3 text-center text-muted small">
+          <p class="mb-0">A mensagem será enviada para os números: <br /> 6191346402, 6196210941, 6192019990</p>
         </div>
       </div>
     </div>

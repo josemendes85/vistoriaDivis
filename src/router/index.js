@@ -5,8 +5,6 @@ import BackupView from '../views/BackupView.vue';
 import ChecklistView from '../views/ChecklistView.vue';
 import ProcessosDashboard from '../views/ProcessosDashboard.vue';
 import ProcessoForm from '../views/ProcessoForm.vue';
-import EventuaisDashboard from '../views/EventuaisDashboard.vue';
-import EventualForm from '../views/EventualForm.vue';
 
 const routes = [
   { path: '/', name: 'Home', component: ProcessosDashboard },
@@ -15,9 +13,7 @@ const routes = [
   { path: '/backup', name: 'Backup', component: BackupView },
   { path: '/checklist', name: 'Checklist', component: ChecklistView },
   { path: '/processos', redirect: '/' },
-  { path: '/processo/:id?', name: 'ProcessoForm', component: ProcessoForm },
-  { path: '/eventuais', name: 'Eventuais', component: EventuaisDashboard },
-  { path: '/eventual/:id?', name: 'EventualForm', component: EventualForm }
+  { path: '/processo/:id?', name: 'ProcessoForm', component: ProcessoForm }
 ];
 
 const router = createRouter({
