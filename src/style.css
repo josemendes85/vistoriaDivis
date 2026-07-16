@@ -292,3 +292,191 @@ html, body, #app {
 	color: var(--info-color) !important;
 	opacity: 1;
 }
+
+/* ==========================================================================
+   ELEMENTS CUSTOM COLOR MAPPINGS BASED ON :ROOT VARIABLES
+   ========================================================================== */
+
+/* Button overrides */
+.btn-primary {
+	background-color: var(--primary-color) !important;
+	border-color: var(--primary-color) !important;
+	color: #ffffff !important;
+}
+.btn-primary:hover, .btn-primary:focus {
+	background-color: #3b6680 !important;
+	border-color: #3b6680 !important;
+	filter: brightness(0.9);
+}
+
+.btn-success {
+	background-color: var(--success-color) !important;
+	border-color: var(--success-color) !important;
+	color: #ffffff !important;
+}
+.btn-success:hover, .btn-success:focus {
+	background-color: #5c8b72 !important;
+	border-color: #5c8b72 !important;
+	filter: brightness(0.9);
+}
+
+.btn-warning {
+	background-color: var(--warning-color) !important;
+	border-color: var(--warning-color) !important;
+	color: #323842 !important;
+}
+.btn-warning:hover, .btn-warning:focus {
+	background-color: #c2a14b !important;
+	border-color: #c2a14b !important;
+	filter: brightness(0.9);
+}
+
+.btn-danger {
+	background-color: var(--danger-color) !important;
+	border-color: var(--danger-color) !important;
+	color: #ffffff !important;
+}
+.btn-danger:hover, .btn-danger:focus {
+	background-color: #b75757 !important;
+	border-color: #b75757 !important;
+	filter: brightness(0.9);
+}
+
+.btn-info {
+	background-color: var(--info-color) !important;
+	border-color: var(--info-color) !important;
+	color: #ffffff !important;
+}
+.btn-info:hover, .btn-info:focus {
+	background-color: #498590 !important;
+	border-color: #498590 !important;
+	filter: brightness(0.9);
+}
+
+.btn-secondary {
+	background-color: var(--secondary-color) !important;
+	border-color: var(--secondary-color) !important;
+	color: #ffffff !important;
+}
+.btn-secondary:hover, .btn-secondary:focus {
+	background-color: #697682 !important;
+	border-color: #697682 !important;
+	filter: brightness(0.9);
+}
+
+.btn-dark {
+	background-color: var(--dark-color) !important;
+	border-color: var(--dark-color) !important;
+	color: #ffffff !important;
+}
+.btn-dark:hover, .btn-dark:focus {
+	background-color: #242930 !important;
+	border-color: #242930 !important;
+}
+
+/* Outline Buttons */
+.btn-outline-primary {
+	color: var(--primary-color) !important;
+	border-color: var(--primary-color) !important;
+}
+.btn-outline-primary:hover {
+	background-color: var(--primary-color) !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-success {
+	color: var(--success-color) !important;
+	border-color: var(--success-color) !important;
+}
+.btn-outline-success:hover {
+	background-color: var(--success-color) !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-danger {
+	color: var(--danger-color) !important;
+	border-color: var(--danger-color) !important;
+}
+.btn-outline-danger:hover {
+	background-color: var(--danger-color) !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-info {
+	color: var(--info-color) !important;
+	border-color: var(--info-color) !important;
+}
+.btn-outline-info:hover {
+	background-color: var(--info-color) !important;
+	color: #ffffff !important;
+}
+
+.btn-outline-warning {
+	color: var(--warning-color) !important;
+	border-color: var(--warning-color) !important;
+}
+.btn-outline-warning:hover {
+	background-color: var(--warning-color) !important;
+	color: #323842 !important;
+}
+
+/* Alerts */
+.alert-success {
+	background-color: var(--light-green-color) !important;
+	border-color: var(--success-color) !important;
+	color: #2d4c3c !important;
+}
+.alert-warning {
+	background-color: rgba(214, 181, 94, 0.15) !important;
+	border-color: var(--warning-color) !important;
+	color: #5b4919 !important;
+}
+.alert-danger {
+	background-color: rgba(205, 106, 106, 0.15) !important;
+	border-color: var(--danger-color) !important;
+	color: #5d2b2b !important;
+}
+.alert-info {
+	background-color: rgba(89, 156, 168, 0.15) !important;
+	border-color: var(--info-color) !important;
+	color: #2b4f55 !important;
+}
+
+/* Text and BG Utility Overrides */
+.text-primary {
+	color: var(--primary-color) !important;
+}
+.text-success {
+	color: var(--success-color) !important;
+}
+.text-danger {
+	color: var(--danger-color) !important;
+}
+.text-warning {
+	color: var(--warning-color) !important;
+}
+.text-info {
+	color: var(--info-color) !important;
+}
+.text-secondary {
+	color: var(--secondary-color) !important;
+}
+
+.bg-primary {
+	background-color: var(--primary-color) !important;
+}
+.bg-success {
+	background-color: var(--success-color) !important;
+}
+.bg-danger {
+	background-color: var(--danger-color) !important;
+}
+.bg-warning {
+	background-color: var(--warning-color) !important;
+}
+.bg-info {
+	background-color: var(--info-color) !important;
+}
+.bg-secondary {
+	background-color: var(--secondary-color) !important;
+}
