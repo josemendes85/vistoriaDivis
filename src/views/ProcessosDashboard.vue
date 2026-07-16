@@ -1,18 +1,16 @@
 <template>
-  <BaseLayout title="Painel de Processos (Vistorias Padrão)">
+  <BaseLayout title="Painel de Processos">
     <div class="pt-2 px-1">
       <!-- Filtering Options and Actions -->
       <div class="form-section mb-4 bg-transparent p-0">
-        <h4 class="section-title">
-          <i class="bi bi-funnel me-2 text-primary"></i>Opções de Filtragem e Ações
-        </h4>
+        <h4 class="section-title"><i class="bi bi-funnel me-2 text-primary"></i>Opções de Filtragem e Ações</h4>
         <div class="row g-3 align-items-end">
           <div class="col-md-3">
             <label class="form-label fw-bold small text-muted">Filtrar por Status:</label>
             <select v-model="filterStatus" class="form-select">
               <option value="">Todos os Status</option>
               <option v-for="st in statusOptions" :key="st" :value="st">
-                {{ st === 'Análise' ? 'Em Análise' : st === 'Vistoria' ? 'Em Vistoria' : st }}
+                {{ st === "Análise" ? "Em Análise" : st === "Vistoria" ? "Em Vistoria" : st }}
               </option>
             </select>
           </div>
@@ -50,16 +48,24 @@
 
       <!-- Drag and Drop Process Cards Grouped by Status -->
       <div v-else class="row">
-        <div
-          v-for="status in visibleStatuses"
-          :key="status"
-          class="col-12 mb-4"
-        >
+        <div v-for="status in visibleStatuses" :key="status" class="col-12 mb-4">
           <div class="card shadow-sm border-0 rounded-3 overflow-hidden">
-            <div :class="['card-header', 'text-white', 'py-2', 'px-3', 'd-flex', 'justify-content-between', 'align-items-center', getStatusHeaderClass(status)]">
+            <div
+              :class="[
+                'card-header',
+                'text-white',
+                'py-2',
+                'px-3',
+                'd-flex',
+                'justify-content-between',
+                'align-items-center',
+                getStatusHeaderClass(status),
+              ]"
+            >
               <h5 class="mb-0 fw-bold">
-                {{ status === 'Análise' ? 'Em Análise' : status === 'Vistoria' ? 'Em Vistoria' : status }}
-                ({{ getProcessesByStatus(status).length }} {{ getProcessesByStatus(status).length === 1 ? 'processo' : 'processos' }})
+                {{ status === "Análise" ? "Em Análise" : status === "Vistoria" ? "Em Vistoria" : status }}
+                ({{ getProcessesByStatus(status).length }}
+                {{ getProcessesByStatus(status).length === 1 ? "processo" : "processos" }})
               </h5>
             </div>
             <div class="card-body p-0">
@@ -67,12 +73,12 @@
                 <table class="table table-striped table-hover m-0">
                   <thead class="table-light">
                     <tr>
-                      <th style="width: 50px;"></th>
+                      <th style="width: 50px"></th>
                       <th>Processo</th>
                       <th>Instituição</th>
                       <th>Data de Início</th>
                       <th>Tipo</th>
-                      <th class="text-center" style="width: 130px;">Localização</th>
+                      <th class="text-center" style="width: 130px">Localização</th>
                     </tr>
                   </thead>
                   <tbody
@@ -92,18 +98,24 @@
                       </td>
                       <td class="fw-bold text-primary">
                         {{ p.processo }}
-                        <span v-if="p.checkConcluido" class="badge bg-success ms-2 small" style="font-weight: normal; font-size: 0.75rem;">
+                        <span
+                          v-if="p.checkConcluido"
+                          class="badge bg-success ms-2 small"
+                          style="font-weight: normal; font-size: 0.75rem"
+                        >
                           <i class="bi bi-check-circle-fill me-1"></i>Concluído
                         </span>
                       </td>
-                      <td>{{ p.instituicao || '-' }}</td>
+                      <td>{{ p.instituicao || "-" }}</td>
                       <td>{{ formatDataStr(p.inicio) }}</td>
-                      <td>{{ p.tipo || '-' }}</td>
+                      <td>{{ p.tipo || "-" }}</td>
                       <td class="text-center" @click.stop>
-                        <a 
-                          v-if="p.localizacao" 
-                          :href="'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.localizacao)" 
-                          target="_blank" 
+                        <a
+                          v-if="p.localizacao"
+                          :href="
+                            'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.localizacao)
+                          "
+                          target="_blank"
                           class="d-inline-flex align-items-center justify-content-center text-decoration-none link-hover-scale"
                           title="Obter rotas para o local"
                         >
@@ -120,11 +132,15 @@
                   </tbody>
                 </table>
               </div>
-              
+
               <!-- Pagination -->
-              <div v-if="getTotalPages(status) > 1" class="d-flex justify-content-between align-items-center p-3 border-top bg-light flex-wrap gap-2">
+              <div
+                v-if="getTotalPages(status) > 1"
+                class="d-flex justify-content-between align-items-center p-3 border-top bg-light flex-wrap gap-2"
+              >
                 <span class="small text-muted">
-                  Exibindo {{ getPaginatedStart(status) }}-{{ getPaginatedEnd(status) }} de {{ getProcessesByStatus(status).length }} processos
+                  Exibindo {{ getPaginatedStart(status) }}-{{ getPaginatedEnd(status) }} de
+                  {{ getProcessesByStatus(status).length }} processos
                 </span>
                 <nav aria-label="Navegação de processos">
                   <ul class="pagination pagination-sm mb-0">
@@ -133,10 +149,10 @@
                         <i class="bi bi-chevron-left"></i>
                       </a>
                     </li>
-                    <li 
-                      v-for="pg in getTotalPages(status)" 
-                      :key="pg" 
-                      class="page-item" 
+                    <li
+                      v-for="pg in getTotalPages(status)"
+                      :key="pg"
+                      class="page-item"
                       :class="{ active: getCurrentPage(status) === pg }"
                     >
                       <a class="page-link" href="#" @click.prevent="setPage(status, pg)">{{ pg }}</a>
@@ -158,18 +174,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, watch, nextTick } from 'vue';
-import { useRouter } from 'vue-router';
-import BaseLayout from '../components/BaseLayout.vue';
-import { showToast } from '../utils/utils.js';
-import Sortable from 'sortablejs';
+import { ref, onMounted, computed, watch, nextTick } from "vue";
+import { useRouter } from "vue-router";
+import BaseLayout from "../components/BaseLayout.vue";
+import { showToast } from "../utils/utils.js";
+import Sortable from "sortablejs";
 
 const router = useRouter();
 
-const statusOptions = ['Sem Status', 'Pendente', 'Análise', 'Vistoria', 'Aprovado', 'Reprovado', 'Cancelado', 'Não Realizada', 'Concluído'];
+const statusOptions = [
+  "Sem Status",
+  "Pendente",
+  "Análise",
+  "Vistoria",
+  "Aprovado",
+  "Reprovado",
+  "Cancelado",
+  "Não Realizada",
+  "Concluído",
+];
 
-const filterStatus = ref('');
-const searchTerm = ref('');
+const filterStatus = ref("");
+const searchTerm = ref("");
 const exibirConcluidos = ref(false);
 const processos = ref([]);
 const currentPages = ref({});
@@ -179,20 +205,20 @@ const carregarProcessos = () => {
   const loaded = [];
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key.startsWith('processo-')) {
+    if (key.startsWith("processo-")) {
       try {
         const item = JSON.parse(localStorage.getItem(key));
         if (item) {
           loaded.push({
             id: item.id || key.substring(9),
-            processo: item.processoBusca || 'Sem número',
-            instituicao: item.instituicao || '',
-            cnpj: item.cnpj || '',
-            inicio: item.inicio || '',
-            tipo: item.tipo || '',
-            status: item.status || 'Sem Status',
+            processo: item.processoBusca || "Sem número",
+            instituicao: item.instituicao || "",
+            cnpj: item.cnpj || "",
+            inicio: item.inicio || "",
+            tipo: item.tipo || "",
+            status: item.status || "Sem Status",
             checkConcluido: item.checkConcluido || false,
-            localizacao: item.localizacao || ''
+            localizacao: item.localizacao || "",
           });
         }
       } catch (e) {
@@ -206,22 +232,23 @@ const carregarProcessos = () => {
 // Filtered processes based on query and selected status filter
 const filteredProcessos = computed(() => {
   const query = searchTerm.value.toLowerCase();
-  const cleanQuery = query.replace(/\D/g, '');
+  const cleanQuery = query.replace(/\D/g, "");
   const statusFilter = filterStatus.value;
 
-  return processos.value.filter(p => {
+  return processos.value.filter((p) => {
     // Hide completed processes unless the toggle switch is checked
     if (!exibirConcluidos.value && p.checkConcluido) {
       return false;
     }
 
     const matchesStatus = !statusFilter || p.status === statusFilter;
-    const cleanCnpj = p.cnpj.replace(/\D/g, '');
-    const matchesSearch = !query ||
+    const cleanCnpj = p.cnpj.replace(/\D/g, "");
+    const matchesSearch =
+      !query ||
       p.processo.toLowerCase().includes(query) ||
       p.instituicao.toLowerCase().includes(query) ||
       p.cnpj.toLowerCase().includes(query) ||
-      (cleanQuery !== '' && cleanCnpj.includes(cleanQuery));
+      (cleanQuery !== "" && cleanCnpj.includes(cleanQuery));
 
     return matchesStatus && matchesSearch;
   });
@@ -232,7 +259,7 @@ const visibleStatuses = computed(() => {
   if (filterStatus.value) {
     return [filterStatus.value];
   }
-  return statusOptions.filter(status => {
+  return statusOptions.filter((status) => {
     return getProcessesByStatus(status).length > 0;
   });
 });
@@ -275,16 +302,16 @@ const setPage = (status, page) => {
 };
 
 const getProcessesByStatus = (status) => {
-  const group = filteredProcessos.value.filter(p => p.status === status);
-  
+  const group = filteredProcessos.value.filter((p) => p.status === status);
+
   // Sort items based on saved order if any
   const savedOrderRaw = localStorage.getItem(`vistorias_process_item_order_${status}`);
   if (savedOrderRaw) {
     try {
       const order = JSON.parse(savedOrderRaw);
-      const map = new Map(group.map(p => [p.id, p]));
+      const map = new Map(group.map((p) => [p.id, p]));
       const sorted = [];
-      order.forEach(id => {
+      order.forEach((id) => {
         if (map.has(id)) {
           sorted.push(map.get(id));
           map.delete(id);
@@ -300,32 +327,44 @@ const getProcessesByStatus = (status) => {
 };
 
 const formatarClasseStatus = (status) => {
-  return status.toLowerCase()
-    .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s+/g, '-')
-    .replace(/[^a-z0-9\-]/g, '');
+  return status
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9\-]/g, "");
 };
 
 const getStatusHeaderClass = (status) => {
-  const s = (status || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+  const s = (status || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9\-]/g, "");
   return `status-${s}`;
 };
 
 const getStatusBadgeClass = (status) => {
-  const s = (status || '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '');
+  const s = (status || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/[^a-z0-9\-]/g, "");
   return `status-${s}`;
 };
 
 const formatDataStr = (dateStr) => {
-  if (!dateStr) return '-';
-  if (dateStr.includes('T')) {
-    const [datePart, timePart] = dateStr.split('T');
-    const parts = datePart.split('-');
+  if (!dateStr) return "-";
+  if (dateStr.includes("T")) {
+    const [datePart, timePart] = dateStr.split("T");
+    const parts = datePart.split("-");
     if (parts.length === 3) {
       return `${parts[2]}/${parts[1]}/${parts[0]} ${timePart}`;
     }
   }
-  const parts = dateStr.split('-');
+  const parts = dateStr.split("-");
   if (parts.length === 3) {
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
   }
@@ -334,33 +373,33 @@ const formatDataStr = (dateStr) => {
 
 // Route navigation
 const novoProcesso = () => {
-  router.push('/processo');
+  router.push("/processo");
 };
 
 const editarProcesso = (id, event) => {
-  if (event.target.closest('.drag-handle-cell')) return;
+  if (event.target.closest(".drag-handle-cell")) return;
   router.push(`/processo/${id}`);
 };
 
 // Drag and drop setup with SortableJS
 const initSortables = () => {
   nextTick(() => {
-    statusOptions.forEach(status => {
-      const el = document.getElementById('sortable-list-' + formatarClasseStatus(status));
+    statusOptions.forEach((status) => {
+      const el = document.getElementById("sortable-list-" + formatarClasseStatus(status));
       if (el) {
         // Destroy existing Sortable if any
         if (el.__sortable) {
           el.__sortable.destroy();
         }
-        
+
         el.__sortable = new Sortable(el, {
-          group: 'processos',
+          group: "processos",
           animation: 150,
-          handle: '.drag-handle-cell',
+          handle: ".drag-handle-cell",
           onEnd: (evt) => {
-            const fromStatus = evt.from.getAttribute('data-status');
-            const toStatus = evt.to.getAttribute('data-status');
-            const processId = evt.item.getAttribute('data-id');
+            const fromStatus = evt.from.getAttribute("data-status");
+            const toStatus = evt.to.getAttribute("data-status");
+            const processId = evt.item.getAttribute("data-id");
 
             // Update status in localStorage
             const key = `processo-${processId}`;
@@ -369,7 +408,7 @@ const initSortables = () => {
               try {
                 const data = JSON.parse(raw);
                 data.status = toStatus;
-                if (toStatus === 'Concluído') {
+                if (toStatus === "Concluído") {
                   data.checkConcluido = true;
                 } else {
                   data.checkConcluido = false;
@@ -382,19 +421,22 @@ const initSortables = () => {
 
             // Save new positions
             const fromOrder = Array.from(evt.from.children)
-              .map(c => c.getAttribute('data-id'))
-              .filter(id => id !== null);
+              .map((c) => c.getAttribute("data-id"))
+              .filter((id) => id !== null);
             const toOrder = Array.from(evt.to.children)
-              .map(c => c.getAttribute('data-id'))
-              .filter(id => id !== null);
+              .map((c) => c.getAttribute("data-id"))
+              .filter((id) => id !== null);
 
             localStorage.setItem(`vistorias_process_item_order_${fromStatus}`, JSON.stringify(fromOrder));
             localStorage.setItem(`vistorias_process_item_order_${toStatus}`, JSON.stringify(toOrder));
 
-            showToast(`Processo movido para "${toStatus === 'Análise' ? 'Em Análise' : toStatus === 'Vistoria' ? 'Em Vistoria' : toStatus}"!`, 'success');
-            
+            showToast(
+              `Processo movido para "${toStatus === "Análise" ? "Em Análise" : toStatus === "Vistoria" ? "Em Vistoria" : toStatus}"!`,
+              "success",
+            );
+
             carregarProcessos();
-          }
+          },
         });
       }
     });
@@ -406,9 +448,13 @@ onMounted(() => {
 });
 
 // Watch visible statuses and current pages to initialize SortableJS on container updates
-watch([visibleStatuses, currentPages], () => {
-  initSortables();
-}, { deep: true, immediate: true });
+watch(
+  [visibleStatuses, currentPages],
+  () => {
+    initSortables();
+  },
+  { deep: true, immediate: true },
+);
 
 // Reset pages when query filters change
 watch([filterStatus, searchTerm, exibirConcluidos], () => {
@@ -431,7 +477,9 @@ watch([filterStatus, searchTerm, exibirConcluidos], () => {
   cursor: grab;
 }
 .link-hover-scale {
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
   opacity: 0.85;
 }
 .link-hover-scale:hover {

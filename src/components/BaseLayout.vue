@@ -15,34 +15,41 @@
           </router-link>
 
           <!-- Navigation options when on home (Processes) page (Dropdown for all screen sizes) -->
-          <div v-else class="dropdown">
-            <button class="btn btn-sm dropdown-toggle fw-medium shadow-sm transition-btn" :class="isLightNavbar ? 'btn-dark' : 'btn-outline-light'" type="button" id="navDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <div v-else ref="dropdownContainer" class="dropdown">
+            <button 
+              class="btn btn-sm dropdown-toggle fw-medium shadow-sm transition-btn" 
+              :class="[isLightNavbar ? 'btn-dark' : 'btn-outline-light', { show: isMenuOpen }]" 
+              type="button" 
+              id="navDropdown" 
+              @click="toggleMenu"
+              :aria-expanded="isMenuOpen ? 'true' : 'false'"
+            >
               <i class="bi bi-list me-1"></i>Menu
             </button>
-            <ul class="dropdown-menu shadow-lg border-0" aria-labelledby="navDropdown">
+            <ul class="dropdown-menu shadow-lg border-0" :class="{ show: isMenuOpen }" aria-labelledby="navDropdown">
               <li>
-                <router-link to="/eventuais" class="dropdown-item py-2">
+                <router-link to="/eventuais" class="dropdown-item py-2" @click="closeMenu">
                   <i class="bi bi-ticket-perforated me-2 text-success"></i>Eventuais
                 </router-link>
               </li>
               <li>
-                <router-link to="/checklist" class="dropdown-item py-2">
+                <router-link to="/checklist" class="dropdown-item py-2" @click="closeMenu">
                   <i class="bi bi-person-lines-fill me-2 text-info"></i>Checklist
                 </router-link>
               </li>
               <li>
-                <router-link to="/backup" class="dropdown-item py-2">
+                <router-link to="/backup" class="dropdown-item py-2" @click="closeMenu">
                   <i class="bi bi-cloud-arrow-up me-2 text-warning"></i>Backup
                 </router-link>
               </li>
               <li>
-                <router-link to="/links" class="dropdown-item py-2">
+                <router-link to="/links" class="dropdown-item py-2" @click="closeMenu">
                   <i class="bi bi-link-45deg me-2 text-danger"></i>Links
                 </router-link>
               </li>
               <li><hr class="dropdown-divider"></li>
               <li>
-                <router-link to="/sobre" class="dropdown-item py-2">
+                <router-link to="/sobre" class="dropdown-item py-2" @click="closeMenu">
                   <i class="bi bi-info-circle me-2 text-secondary"></i>Sobre
                 </router-link>
               </li>
@@ -76,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import EquipeModal from './EquipeModal.vue';
 
 const props = defineProps({
@@ -101,6 +108,31 @@ const props = defineProps({
 const showEquipeModal = ref(false);
 
 const isLightNavbar = computed(() => props.navbarClass === 'status-pendente');
+
+const isMenuOpen = ref(false);
+const dropdownContainer = ref(null);
+
+const toggleMenu = () => {
+  isMenuOpen.value = !isMenuOpen.value;
+};
+
+const closeMenu = () => {
+  isMenuOpen.value = false;
+};
+
+const clickOutsideHandler = (event) => {
+  if (dropdownContainer.value && !dropdownContainer.value.contains(event.target)) {
+    isMenuOpen.value = false;
+  }
+};
+
+onMounted(() => {
+  document.addEventListener('click', clickOutsideHandler);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('click', clickOutsideHandler);
+});
 </script>
 
 <style scoped>
