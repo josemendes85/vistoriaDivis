@@ -7,7 +7,7 @@
           <i class="bi bi-funnel me-2 text-primary"></i>Opções de Filtragem e Ações
         </h4>
         <div class="row g-3 align-items-end">
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label fw-bold small text-muted">Filtrar por Status:</label>
             <select v-model="filterStatus" class="form-select">
               <option value="">Todos os Status</option>
@@ -16,7 +16,7 @@
               </option>
             </select>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <label class="form-label fw-bold small text-muted">Pesquisar (Processo/Instituição/CNPJ):</label>
             <input
               v-model="searchTerm"
@@ -25,7 +25,15 @@
               placeholder="Buscar número, instituição ou CNPJ..."
             />
           </div>
-          <div class="col-md-4 d-flex">
+          <div class="col-md-3 pb-2 d-flex align-items-center justify-content-center">
+            <div class="form-check form-switch mb-0">
+              <input v-model="exibirConcluidos" class="form-check-input" type="checkbox" id="exibirConcluidos" />
+              <label class="form-check-label fw-bold text-muted small" for="exibirConcluidos">
+                Exibir concluídos
+              </label>
+            </div>
+          </div>
+          <div class="col-md-3 d-flex">
             <button class="btn btn-primary w-100 py-2 fw-bold" @click="novoProcesso">
               <i class="bi bi-plus-circle me-1"></i>Novo Processo
             </button>
@@ -82,7 +90,12 @@
                       <td class="drag-handle-cell text-center" @click.stop>
                         <i class="bi bi-grip-vertical text-muted fs-5 cursor-grab"></i>
                       </td>
-                      <td class="fw-bold text-primary">{{ p.processo }}</td>
+                      <td class="fw-bold text-primary">
+                        {{ p.processo }}
+                        <span v-if="p.checkConcluido" class="badge bg-success ms-2 small" style="font-weight: normal; font-size: 0.75rem;">
+                          <i class="bi bi-check-circle-fill me-1"></i>Concluído
+                        </span>
+                      </td>
                       <td>{{ p.instituicao || '-' }}</td>
                       <td>{{ formatDataStr(p.inicio) }}</td>
                       <td>{{ p.tipo || '-' }}</td>
@@ -121,6 +134,7 @@ const statusOptions = ['Pendente', 'Análise', 'Vistoria', 'Aprovado', 'Reprovad
 
 const filterStatus = ref('');
 const searchTerm = ref('');
+const exibirConcluidos = ref(false);
 const processos = ref([]);
 
 // Load processes from LocalStorage
@@ -158,6 +172,11 @@ const filteredProcessos = computed(() => {
   const statusFilter = filterStatus.value;
 
   return processos.value.filter(p => {
+    // Hide completed processes unless the toggle switch is checked
+    if (!exibirConcluidos.value && p.checkConcluido) {
+      return false;
+    }
+
     const matchesStatus = !statusFilter || p.status === statusFilter;
     const cleanCnpj = p.cnpj.replace(/\D/g, '');
     const matchesSearch = !query ||
