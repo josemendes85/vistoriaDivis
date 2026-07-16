@@ -72,7 +72,7 @@
                       <th>Instituição</th>
                       <th>Data de Início</th>
                       <th>Tipo</th>
-                      <th>Status</th>
+                      <th class="text-center" style="width: 130px;">Localização</th>
                     </tr>
                   </thead>
                   <tbody
@@ -99,10 +99,18 @@
                       <td>{{ p.instituicao || '-' }}</td>
                       <td>{{ formatDataStr(p.inicio) }}</td>
                       <td>{{ p.tipo || '-' }}</td>
-                      <td>
-                        <span :class="['badge', getStatusBadgeClass(p.status)]">
-                          {{ p.status === 'Análise' ? 'Em Análise' : p.status === 'Vistoria' ? 'Em Vistoria' : p.status }}
-                        </span>
+                      <td class="text-center" @click.stop>
+                        <a 
+                          v-if="p.localizacao" 
+                          :href="'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.localizacao)" 
+                          target="_blank" 
+                          class="btn btn-sm btn-outline-primary py-0 px-2 d-inline-flex align-items-center gap-1 shadow-xs transition-btn"
+                          title="Obter rotas para o local"
+                        >
+                          <i class="bi bi-geo-alt-fill text-danger fs-6"></i>
+                          <span class="small fw-semibold">Rota</span>
+                        </a>
+                        <span v-else class="text-muted small italic">-</span>
                       </td>
                     </tr>
                     <tr v-if="getProcessesByStatus(status).length === 0">
@@ -184,7 +192,8 @@ const carregarProcessos = () => {
             inicio: item.inicio || '',
             tipo: item.tipo || '',
             status: item.status || 'Sem Status',
-            checkConcluido: item.checkConcluido || false
+            checkConcluido: item.checkConcluido || false,
+            localizacao: item.localizacao || ''
           });
         }
       } catch (e) {
