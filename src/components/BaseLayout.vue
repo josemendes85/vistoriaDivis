@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-dark fixed-top shadow-sm transition-navbar" :class="navbarClass" :style="!navbarClass ? 'background-color: #000000 !important; color: #ffffff !important;' : ''">
+    <nav class="navbar navbar-dark fixed-top shadow-sm transition-navbar" :class="navbarClass" :style="!navbarClass ? 'background-color: var(--dark-color) !important; color: #ffffff !important;' : ''">
       <div class="container-fluid d-flex align-items-center justify-content-between">
         
         <!-- Left Side: Back button OR Module Navigation -->
