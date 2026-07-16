@@ -1,17 +1,20 @@
 <template>
   <div>
-    <nav class="navbar navbar-dark fixed-top shadow-sm transition-navbar" :class="navbarClass" :style="!navbarClass ? 'background-color: var(--primary-color) !important; color: #ffffff !important;' : ''">
+    <nav
+      class="navbar navbar-dark fixed-top shadow-sm transition-navbar"
+      :class="navbarClass"
+      :style="!navbarClass ? 'background-color: var(--primary-color) !important; color: #ffffff !important;' : ''"
+    >
       <div class="container-fluid d-flex align-items-center justify-content-between">
-        
         <!-- Left Side: Back button and/or Module Navigation -->
         <div class="d-flex align-items-center gap-2">
           <!-- Always show Menu Dropdown for easy global navigation -->
           <div ref="dropdownContainer" class="dropdown">
-            <button 
-              class="btn btn-sm dropdown-toggle fw-medium shadow-sm transition-btn" 
-              :class="[isLightNavbar ? 'btn-dark' : 'btn-outline-light', { show: isMenuOpen }]" 
-              type="button" 
-              id="navDropdown" 
+            <button
+              class="btn btn-sm dropdown-toggle fw-medium shadow-sm transition-btn"
+              :class="[isLightNavbar ? 'btn-dark' : 'btn-outline-light', { show: isMenuOpen }]"
+              type="button"
+              id="navDropdown"
               @click="toggleMenu"
               :aria-expanded="isMenuOpen ? 'true' : 'false'"
             >
@@ -38,7 +41,7 @@
                   <i class="bi bi-link-45deg me-2 text-danger"></i>Links
                 </router-link>
               </li>
-              <li><hr class="dropdown-divider"></li>
+              <li><hr class="dropdown-divider" /></li>
               <li>
                 <router-link to="/sobre" class="dropdown-item py-2" @click="closeMenu">
                   <i class="bi bi-info-circle me-2 text-secondary"></i>Sobre
@@ -54,18 +57,25 @@
             class="btn btn-sm d-flex align-items-center fw-medium shadow-sm transition-btn"
             :class="isLightNavbar ? 'btn-dark' : 'btn-outline-light'"
           >
-            <i class="bi bi-arrow-left me-1"></i> <span>{{ backText || 'Voltar' }}</span>
+            <i class="bi bi-arrow-left me-1"></i> <span>{{ backText || "Voltar" }}</span>
           </router-link>
         </div>
 
         <!-- Center: Title -->
-        <span class="navbar-brand fw-bold text-uppercase text-center d-none d-sm-block flex-grow-1 mx-2" style="color: inherit;">
-          {{ title || 'Vistorias DIVIS' }}
+        <span
+          class="navbar-brand fw-bold text-uppercase text-center d-none d-sm-block flex-grow-1 mx-2"
+          style="color: inherit"
+        >
+          {{ title || "Vistorias DIVIS" }}
         </span>
 
         <!-- Right Side: Equipe button (always visible) -->
         <div>
-          <button class="btn btn-sm fw-medium shadow-sm transition-btn" :class="isLightNavbar ? 'btn-outline-dark' : 'btn-outline-light'" @click="showEquipeModal = true">
+          <button
+            class="btn btn-sm fw-medium shadow-sm transition-btn"
+            :class="isLightNavbar ? 'btn-outline-dark' : 'btn-outline-light'"
+            @click="showEquipeModal = true"
+          >
             <i class="bi bi-people-fill me-1"></i>Equipe
           </button>
         </div>
@@ -73,7 +83,10 @@
     </nav>
 
     <!-- Main Content Area -->
-    <main class="container" style="margin-top: 80px; padding-bottom: 50px;">
+    <main
+      class="container-fluid px-md-5 px-3 mx-auto"
+      style="margin-top: 80px; padding-bottom: 50px; max-width: 1600px"
+    >
       <slot />
     </main>
 
@@ -83,31 +96,31 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-import EquipeModal from './EquipeModal.vue';
+import { ref, computed, onMounted, onUnmounted } from "vue";
+import EquipeModal from "./EquipeModal.vue";
 
 const props = defineProps({
   title: {
     type: String,
-    default: 'Vistorias DIVIS'
+    default: "Vistorias DIVIS",
   },
   backRoute: {
     type: String,
-    default: ''
+    default: "",
   },
   backText: {
     type: String,
-    default: 'Voltar'
+    default: "Voltar",
   },
   navbarClass: {
     type: String,
-    default: ''
-  }
+    default: "",
+  },
 });
 
 const showEquipeModal = ref(false);
 
-const isLightNavbar = computed(() => props.navbarClass === 'status-pendente');
+const isLightNavbar = computed(() => props.navbarClass === "status-pendente");
 
 const isMenuOpen = ref(false);
 const dropdownContainer = ref(null);
@@ -127,11 +140,11 @@ const clickOutsideHandler = (event) => {
 };
 
 onMounted(() => {
-  document.addEventListener('click', clickOutsideHandler);
+  document.addEventListener("click", clickOutsideHandler);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('click', clickOutsideHandler);
+  document.removeEventListener("click", clickOutsideHandler);
 });
 </script>
 
@@ -145,7 +158,10 @@ onUnmounted(() => {
   text-overflow: ellipsis;
 }
 .transition-navbar {
-  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  transition:
+    background-color 0.4s ease,
+    color 0.4s ease,
+    border-color 0.4s ease;
 }
 .transition-btn {
   transition: all 0.25s ease;
