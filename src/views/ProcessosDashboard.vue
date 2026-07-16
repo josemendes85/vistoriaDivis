@@ -81,7 +81,7 @@
                     class="sortable-tbody"
                   >
                     <tr
-                      v-for="p in getProcessesByStatus(status)"
+                      v-for="p in getPaginatedProcesses(status)"
                       :key="p.id"
                       :data-id="p.id"
                       class="drag-process cursor-pointer"
@@ -113,6 +113,35 @@
                   </tbody>
                 </table>
               </div>
+              
+              <!-- Pagination -->
+              <div v-if="getTotalPages(status) > 1" class="d-flex justify-content-between align-items-center p-3 border-top bg-light flex-wrap gap-2">
+                <span class="small text-muted">
+                  Exibindo {{ getPaginatedStart(status) }}-{{ getPaginatedEnd(status) }} de {{ getProcessesByStatus(status).length }} processos
+                </span>
+                <nav aria-label="Navegação de processos">
+                  <ul class="pagination pagination-sm mb-0">
+                    <li class="page-item" :class="{ disabled: getCurrentPage(status) === 1 }">
+                      <a class="page-link" href="#" @click.prevent="setPage(status, getCurrentPage(status) - 1)">
+                        <i class="bi bi-chevron-left"></i>
+                      </a>
+                    </li>
+                    <li 
+                      v-for="pg in getTotalPages(status)" 
+                      :key="pg" 
+                      class="page-item" 
+                      :class="{ active: getCurrentPage(status) === pg }"
+                    >
+                      <a class="page-link" href="#" @click.prevent="setPage(status, pg)">{{ pg }}</a>
+                    </li>
+                    <li class="page-item" :class="{ disabled: getCurrentPage(status) === getTotalPages(status) }">
+                      <a class="page-link" href="#" @click.prevent="setPage(status, getCurrentPage(status) + 1)">
+                        <i class="bi bi-chevron-right"></i>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
             </div>
           </div>
         </div>
@@ -136,6 +165,7 @@ const filterStatus = ref('');
 const searchTerm = ref('');
 const exibirConcluidos = ref(false);
 const processos = ref([]);
+const currentPages = ref({});
 
 // Load processes from LocalStorage
 const carregarProcessos = () => {
@@ -198,6 +228,43 @@ const visibleStatuses = computed(() => {
     return getProcessesByStatus(status).length > 0;
   });
 });
+
+// Pagination Helpers
+const getCurrentPage = (status) => {
+  return currentPages.value[status] || 1;
+};
+
+const getTotalPages = (status) => {
+  const len = getProcessesByStatus(status).length;
+  return Math.ceil(len / 15) || 1;
+};
+
+const getPaginatedProcesses = (status) => {
+  const list = getProcessesByStatus(status);
+  const page = getCurrentPage(status);
+  const start = (page - 1) * 15;
+  return list.slice(start, start + 15);
+};
+
+const getPaginatedStart = (status) => {
+  const page = getCurrentPage(status);
+  return (page - 1) * 15 + 1;
+};
+
+const getPaginatedEnd = (status) => {
+  const start = getPaginatedStart(status);
+  const len = getProcessesByStatus(status).length;
+  const end = start + 14;
+  return end > len ? len : end;
+};
+
+const setPage = (status, page) => {
+  const max = getTotalPages(status);
+  let target = page;
+  if (target < 1) target = 1;
+  if (target > max) target = max;
+  currentPages.value[status] = target;
+};
 
 const getProcessesByStatus = (status) => {
   const group = filteredProcessos.value.filter(p => p.status === status);
@@ -330,10 +397,15 @@ onMounted(() => {
   carregarProcessos();
 });
 
-// Watch visible statuses to initialize SortableJS on container updates
-watch(visibleStatuses, () => {
+// Watch visible statuses and current pages to initialize SortableJS on container updates
+watch([visibleStatuses, currentPages], () => {
   initSortables();
 }, { deep: true, immediate: true });
+
+// Reset pages when query filters change
+watch([filterStatus, searchTerm, exibirConcluidos], () => {
+  currentPages.value = {};
+});
 </script>
 
 <style scoped>
