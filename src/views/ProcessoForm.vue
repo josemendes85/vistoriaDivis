@@ -1,5 +1,5 @@
 <template>
-  <BaseLayout :title="isEdit ? 'Editar Processo' : 'Novo Processo'" backRoute="/processos" backText="Voltar ao Painel">
+  <BaseLayout :title="isEdit ? 'Editar Processo' : 'Novo Processo'" backRoute="/processos" backText="Voltar ao Painel" :navbarClass="statusClass">
     <div class="pt-2 px-1">
       <!-- Master Form -->
       <form class="needs-validation" novalidate @submit.prevent="salvarRegistro">

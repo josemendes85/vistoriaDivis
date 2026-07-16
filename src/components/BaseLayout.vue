@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="navbar navbar-light bg-light fixed-top shadow-sm">
+    <nav class="navbar navbar-dark fixed-top shadow-sm transition-navbar" :class="navbarClass" :style="!navbarClass ? 'background-color: #000000 !important; color: #ffffff !important;' : ''">
       <div class="container-fluid d-flex align-items-center justify-content-between">
         
         <!-- Left Side: Back button OR Module Navigation -->
@@ -8,40 +8,41 @@
           <router-link
             v-if="backRoute"
             :to="backRoute"
-            class="btn btn-dark btn-sm d-flex align-items-center"
+            class="btn btn-sm d-flex align-items-center fw-medium shadow-sm transition-btn"
+            :class="isLightNavbar ? 'btn-dark' : 'btn-outline-light'"
           >
             <i class="bi bi-arrow-left me-1"></i> <span>{{ backText || 'Voltar' }}</span>
           </router-link>
 
           <!-- Navigation options when on home (Processes) page (Dropdown for all screen sizes) -->
           <div v-else class="dropdown">
-            <button class="btn btn-sm btn-dark dropdown-toggle" type="button" id="navDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <button class="btn btn-sm dropdown-toggle fw-medium shadow-sm transition-btn" :class="isLightNavbar ? 'btn-dark' : 'btn-outline-light'" type="button" id="navDropdown" data-bs-toggle="dropdown" aria-expanded="false">
               <i class="bi bi-list me-1"></i>Menu
             </button>
-            <ul class="dropdown-menu shadow" aria-labelledby="navDropdown">
+            <ul class="dropdown-menu shadow-lg border-0" aria-labelledby="navDropdown">
               <li>
-                <router-link to="/eventuais" class="dropdown-item">
+                <router-link to="/eventuais" class="dropdown-item py-2">
                   <i class="bi bi-ticket-perforated me-2 text-success"></i>Eventuais
                 </router-link>
               </li>
               <li>
-                <router-link to="/checklist" class="dropdown-item">
+                <router-link to="/checklist" class="dropdown-item py-2">
                   <i class="bi bi-person-lines-fill me-2 text-info"></i>Checklist
                 </router-link>
               </li>
               <li>
-                <router-link to="/backup" class="dropdown-item">
+                <router-link to="/backup" class="dropdown-item py-2">
                   <i class="bi bi-cloud-arrow-up me-2 text-warning"></i>Backup
                 </router-link>
               </li>
               <li>
-                <router-link to="/links" class="dropdown-item">
+                <router-link to="/links" class="dropdown-item py-2">
                   <i class="bi bi-link-45deg me-2 text-danger"></i>Links
                 </router-link>
               </li>
               <li><hr class="dropdown-divider"></li>
               <li>
-                <router-link to="/sobre" class="dropdown-item">
+                <router-link to="/sobre" class="dropdown-item py-2">
                   <i class="bi bi-info-circle me-2 text-secondary"></i>Sobre
                 </router-link>
               </li>
@@ -50,13 +51,13 @@
         </div>
 
         <!-- Center: Title -->
-        <span class="navbar-brand fw-bold text-uppercase text-center text-primary d-none d-sm-block flex-grow-1 mx-2">
+        <span class="navbar-brand fw-bold text-uppercase text-center d-none d-sm-block flex-grow-1 mx-2" style="color: inherit;">
           {{ title || 'Vistorias DIVIS' }}
         </span>
 
         <!-- Right Side: Equipe button (only on home screen) -->
         <div>
-          <button v-if="!backRoute" class="btn btn-outline-primary btn-sm" @click="toggleEquipeModal(true)">
+          <button v-if="!backRoute" class="btn btn-sm fw-medium shadow-sm transition-btn" :class="isLightNavbar ? 'btn-outline-dark' : 'btn-outline-light'" @click="toggleEquipeModal(true)">
             <i class="bi bi-people-fill me-1"></i>Equipe
           </button>
           <div v-else style="width: 80px;"></div>
@@ -158,7 +159,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { showToast } from '../utils/utils.js';
 import { verificarAcesso } from '../utils/usuariosPermitidos.js';
 
@@ -174,11 +175,17 @@ const props = defineProps({
   backText: {
     type: String,
     default: 'Voltar'
+  },
+  navbarClass: {
+    type: String,
+    default: ''
   }
 });
 
 const showEquipeModal = ref(false);
 const isMandatory = ref(false);
+
+const isLightNavbar = computed(() => props.navbarClass === 'status-pendente');
 
 const equipe = ref({
   vistoriador01: '',
@@ -278,5 +285,11 @@ onMounted(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.transition-navbar {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+}
+.transition-btn {
+  transition: all 0.25s ease;
 }
 </style>
