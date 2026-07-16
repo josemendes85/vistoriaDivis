@@ -1,17 +1,17 @@
 :root {
-	--primary-color: #0066cc;
-	--success-color: #198754;
-	--warning-color: #ffc107;
-	--danger-color: #dc3545;
-	--info-color: #17a2b8;
-	--secondary-color: #6c757d;
-	--purple-color: #6f42c1;
+	--primary-color: #4E7D9A;
+	--success-color: #70A288;
+	--warning-color: #D6B55E;
+	--danger-color: #CD6A6A;
+	--info-color: #599CA8;
+	--secondary-color: #7E8A96;
+	--purple-color: #8F75A8;
     /* Cor para 'Em Vistoria' */
-    --orange-color: #fd7e14;
+    --orange-color: #D78B5D;
     /* Cor para 'Não Realizada' */
-    --dark-color: #343a40;
+    --dark-color: #323842;
     /* Cor para 'Sem Status' */
-    --light-green-color: #90ee90;
+    --light-green-color: #C8E2D6;
     /* Nova cor para Concluído */
 }
 html, body, #app {
