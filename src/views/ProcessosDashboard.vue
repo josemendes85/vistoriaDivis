@@ -104,11 +104,10 @@
                           v-if="p.localizacao" 
                           :href="'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(p.localizacao)" 
                           target="_blank" 
-                          class="btn btn-sm btn-outline-primary py-0 px-2 d-inline-flex align-items-center gap-1 shadow-xs transition-btn"
+                          class="d-inline-flex align-items-center justify-content-center text-decoration-none link-hover-scale"
                           title="Obter rotas para o local"
                         >
-                          <i class="bi bi-geo-alt-fill text-danger fs-6"></i>
-                          <span class="small fw-semibold">Rota</span>
+                          <i class="bi bi-geo-alt-fill text-danger fs-4"></i>
                         </a>
                         <span v-else class="text-muted small italic">-</span>
                       </td>
@@ -430,5 +429,13 @@ watch([filterStatus, searchTerm, exibirConcluidos], () => {
 }
 .cursor-grab {
   cursor: grab;
+}
+.link-hover-scale {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.85;
+}
+.link-hover-scale:hover {
+  transform: scale(1.2);
+  opacity: 1;
 }
 </style>
