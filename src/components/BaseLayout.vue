@@ -84,8 +84,8 @@
 
     <!-- Main Content Area -->
     <main
-      class="container-fluid px-md-5 px-3 mx-auto"
-      style="margin-top: 80px; padding-bottom: 50px; max-width: 1600px"
+      class="container-fluid px-3"
+      style="margin-top: 80px; padding-bottom: 50px"
     >
       <slot />
     </main>
