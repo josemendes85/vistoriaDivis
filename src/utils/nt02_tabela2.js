@@ -580,6 +580,9 @@ export const NT02_TABELA2 = [
             "termo": "Madeireiras",
             "ocupacao": "08",
             "cnaes": [
+              "0210-1/05",
+              "0210-1/07",
+              "0220-9/01",
               "1610-2/03",
               "1610-2/04",
               "1610-2/05",
@@ -762,6 +765,7 @@ export const NT02_TABELA2 = [
             "termo": "Assistência técnica, reparação e manutenção de aparelhos eletrodomésticos",
             "ocupacao": "12",
             "cnaes": [
+              "0161-0/03",
               "1013-9/02",
               "1051-1/00",
               "1311-1/00",
@@ -854,6 +858,7 @@ export const NT02_TABELA2 = [
               "3220-5/00",
               "5920-1/00",
               "7729-2/02",
+              "8592-9/03",
               "9001-9/02"
             ],
             "obs": "Encontrado(s) 5 CNAE(s) correspondente(s)."
@@ -868,7 +873,8 @@ export const NT02_TABELA2 = [
               "6433-6/00",
               "7210-0/00",
               "7220-7/00",
-              "7320-3/00"
+              "7320-3/00",
+              "8599-6/04"
             ],
             "obs": "Encontrado(s) 8 CNAE(s) correspondente(s)."
           },
@@ -1057,6 +1063,7 @@ export const NT02_TABELA2 = [
             "termo": "Academias de ginástica, musculação, esportes e artes marciais",
             "ocupacao": "15",
             "cnaes": [
+              "8591-1/00",
               "9311-5/00",
               "9313-1/00"
             ],
@@ -1271,6 +1278,8 @@ export const NT02_TABELA2 = [
               "4930-2/01",
               "4930-2/02",
               "4930-2/04",
+              "8592-9/01",
+              "8592-9/02",
               "9001-9/03",
               "9329-8/01"
             ],
@@ -1296,6 +1305,8 @@ export const NT02_TABELA2 = [
               "4930-2/01",
               "4930-2/02",
               "4930-2/04",
+              "8592-9/01",
+              "8592-9/02",
               "9001-9/03",
               "9329-8/01"
             ],
@@ -1324,6 +1335,7 @@ export const NT02_TABELA2 = [
             "ocupacao": "20",
             "cnaes": [
               "4299-5/01",
+              "8591-1/00",
               "9311-5/00"
             ],
             "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
@@ -1362,6 +1374,8 @@ export const NT02_TABELA2 = [
               "4212-0/00",
               "6422-1/00",
               "6431-0/00",
+              "8592-9/02",
+              "8592-9/99",
               "9001-9/99",
               "9002-7/02",
               "9003-5/00",
@@ -1375,6 +1389,7 @@ export const NT02_TABELA2 = [
             "ocupacao": "20",
             "cnaes": [
               "4299-5/01",
+              "8591-1/00",
               "9311-5/00"
             ],
             "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
@@ -1451,6 +1466,7 @@ export const NT02_TABELA2 = [
             "ocupacao": "20",
             "cnaes": [
               "4299-5/01",
+              "8591-1/00",
               "9311-5/00"
             ],
             "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
@@ -1460,6 +1476,7 @@ export const NT02_TABELA2 = [
             "ocupacao": "20",
             "cnaes": [
               "4299-5/01",
+              "8591-1/00",
               "9311-5/00"
             ],
             "obs": "Encontrado(s) 3 CNAE(s) correspondente(s)."
@@ -1872,13 +1889,19 @@ export const NT02_TABELA2 = [
           {
             "termo": "Asilos",
             "ocupacao": "31",
-            "cnaes": [],
+            "cnaes": [
+              "8711-5/01",
+              "8720-4/99"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Abrigos geriátricos",
             "ocupacao": "31",
-            "cnaes": [],
+            "cnaes": [
+              "8711-5/01",
+              "8711-5/05"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
@@ -1900,7 +1923,9 @@ export const NT02_TABELA2 = [
           {
             "termo": "Instituição de reabilitação de deficientes físicos e mentais",
             "ocupacao": "31",
-            "cnaes": [],
+            "cnaes": [
+              "8711-5/03"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
@@ -1957,6 +1982,7 @@ export const NT02_TABELA2 = [
             "termo": "Avicultura",
             "ocupacao": "33",
             "cnaes": [
+              "0155-5/04",
               "1012-1/01",
               "3041-5/00",
               "3042-3/00",
@@ -1977,6 +2003,7 @@ export const NT02_TABELA2 = [
             "termo": "Beneficiamento de cereais e grãos",
             "ocupacao": "33",
             "cnaes": [
+              "0111-3/99",
               "1061-9/01",
               "1062-7/00",
               "1069-4/00",
@@ -2127,6 +2154,9 @@ export const NT02_TABELA2 = [
             "termo": "Ração animal",
             "ocupacao": "33",
             "cnaes": [
+              "0161-0/03",
+              "0210-1/07",
+              "0220-9/01",
               "0500-3/01",
               "0600-0/01",
               "0600-0/02",
@@ -2239,6 +2269,8 @@ export const NT02_TABELA2 = [
               "6822-6/00",
               "7739-0/01",
               "8219-9/99",
+              "8411-6/00",
+              "8550-3/01",
               "9002-7/02",
               "9102-3/01",
               "9102-3/02",
@@ -2343,6 +2375,8 @@ export const NT02_TABELA2 = [
             "termo": "Beneficiamento de algodão",
             "ocupacao": "34",
             "cnaes": [
+              "0112-1/01",
+              "0163-6/00",
               "1311-1/00",
               "1312-0/00",
               "1321-9/00",
@@ -2625,6 +2659,7 @@ export const NT02_TABELA2 = [
             "termo": "Cereais e grãos",
             "ocupacao": "38",
             "cnaes": [
+              "0111-3/99",
               "1072-4/02",
               "4632-0/01",
               "4632-0/03"
@@ -2671,6 +2706,7 @@ export const NT02_TABELA2 = [
             "termo": "Látex, cola e borracha",
             "ocupacao": "38",
             "cnaes": [
+              "0161-0/01",
               "2051-7/00",
               "2073-8/00",
               "2831-3/00",
@@ -2691,6 +2727,8 @@ export const NT02_TABELA2 = [
             "termo": "Madeira, cortiça",
             "ocupacao": "38",
             "cnaes": [
+              "0210-1/07",
+              "0220-9/01",
               "1610-2/03",
               "1610-2/04",
               "1610-2/05",
@@ -2737,6 +2775,7 @@ export const NT02_TABELA2 = [
             "termo": "Algodão",
             "ocupacao": "39",
             "cnaes": [
+              "0112-1/01",
               "1311-1/00",
               "1312-0/00",
               "1321-9/00",
@@ -2772,6 +2811,8 @@ export const NT02_TABELA2 = [
             "termo": "Madeira",
             "ocupacao": "39",
             "cnaes": [
+              "0210-1/07",
+              "0220-9/01",
               "1610-2/03",
               "1610-2/04",
               "1610-2/05",
@@ -3011,19 +3052,26 @@ export const NT02_TABELA2 = [
           {
             "termo": "Cadeias",
             "ocupacao": "50",
-            "cnaes": [],
+            "cnaes": [
+              "8424-8/00"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Casa de detenção",
             "ocupacao": "50",
-            "cnaes": [],
+            "cnaes": [
+              "8424-8/00"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Centros de reabilitação de menores",
             "ocupacao": "50",
-            "cnaes": [],
+            "cnaes": [
+              "8730-1/99",
+              "8730-1/02"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
@@ -3038,13 +3086,17 @@ export const NT02_TABELA2 = [
           {
             "termo": "Presídios",
             "ocupacao": "50",
-            "cnaes": [],
+            "cnaes": [
+              "8424-8/00"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           },
           {
             "termo": "Reformatórios",
             "ocupacao": "50",
-            "cnaes": [],
+            "cnaes": [
+              "8730-1/99"
+            ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."
           }
         ]
