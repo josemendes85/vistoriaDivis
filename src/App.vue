@@ -10,6 +10,6 @@ import ToastNotification from './components/ToastNotification.vue';
 <style>
 /* Global style adjustments for the Vue app */
 body {
-  background-color: #f8f9fa;
+  background-color: var(--app-bg);
 }
 </style>

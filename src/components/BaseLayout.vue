@@ -2,8 +2,7 @@
   <div>
     <nav
       class="navbar navbar-dark fixed-top shadow-sm transition-navbar"
-      :class="navbarClass"
-      :style="!navbarClass ? 'background-color: var(--primary-color) !important; color: #ffffff !important;' : ''"
+      :class="navbarClass || 'navbar-default-bg'"
     >
       <div class="container-fluid d-flex align-items-center justify-content-between">
         <!-- Left Side: Back button and/or Module Navigation -->
@@ -61,16 +60,22 @@
           </router-link>
         </div>
 
-        <!-- Center: Title -->
         <span
-          class="navbar-brand fw-bold text-uppercase text-center d-none d-sm-block flex-grow-1 mx-2"
-          style="color: inherit"
+          class="navbar-brand fw-bold text-uppercase text-center d-none d-sm-block flex-grow-1 mx-2 text-reset"
         >
           {{ title || "Vistorias DIVIS" }}
         </span>
 
-        <!-- Right Side: Equipe button (always visible) -->
-        <div>
+        <!-- Right Side: Theme toggler & Equipe button -->
+        <div class="d-flex align-items-center gap-2">
+          <button 
+            class="btn btn-sm shadow-sm transition-btn" 
+            :class="isLightNavbar ? 'btn-outline-dark' : 'btn-outline-light'" 
+            @click="toggleTheme" 
+            :title="currentTheme === 'dark' ? 'Alternar para Tema Claro' : 'Alternar para Tema Escuro'"
+          >
+            <i class="bi" :class="currentTheme === 'dark' ? 'bi-sun-fill' : 'bi-moon-fill'"></i>
+          </button>
           <button
             class="btn btn-sm fw-medium shadow-sm transition-btn"
             :class="isLightNavbar ? 'btn-outline-dark' : 'btn-outline-light'"
@@ -83,10 +88,7 @@
     </nav>
 
     <!-- Main Content Area -->
-    <main
-      class="container-fluid px-3"
-      style="margin-top: 80px; padding-bottom: 50px"
-    >
+    <main class="container-fluid px-3 main-content">
       <slot />
     </main>
 
@@ -122,6 +124,21 @@ const showEquipeModal = ref(false);
 
 const isLightNavbar = computed(() => props.navbarClass === "status-pendente");
 
+// Theme Switching Logic (Light & Dark Mode)
+const currentTheme = ref("light");
+
+const setTheme = (theme) => {
+  currentTheme.value = theme;
+  document.documentElement.setAttribute("data-bs-theme", theme);
+  document.documentElement.setAttribute("data-theme", theme);
+  localStorage.setItem("theme", theme);
+};
+
+const toggleTheme = () => {
+  const newTheme = currentTheme.value === "light" ? "dark" : "light";
+  setTheme(newTheme);
+};
+
 const isMenuOpen = ref(false);
 const dropdownContainer = ref(null);
 
@@ -141,6 +158,8 @@ const clickOutsideHandler = (event) => {
 
 onMounted(() => {
   document.addEventListener("click", clickOutsideHandler);
+  const savedTheme = localStorage.getItem("theme") || "light";
+  setTheme(savedTheme);
 });
 
 onUnmounted(() => {

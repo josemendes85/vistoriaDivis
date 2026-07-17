@@ -1,21 +1,127 @@
 :root {
+	/* Palette Colors */
 	--primary-color: #4E7D9A;
+	--primary-hover: #3b6680;
 	--success-color: #70A288;
+	--success-hover: #5c8b72;
 	--warning-color: #D6B55E;
+	--warning-hover: #c2a14b;
 	--danger-color: #CD6A6A;
+	--danger-hover: #b75757;
 	--info-color: #599CA8;
+	--info-hover: #498590;
 	--secondary-color: #7E8A96;
+	--secondary-hover: #697682;
 	--purple-color: #8F75A8;
-    /* Cor para 'Em Vistoria' */
-    --orange-color: #D78B5D;
-    /* Cor para 'Não Realizada' */
-    --dark-color: #323842;
-    /* Cor para 'Sem Status' */
-    --light-green-color: #C8E2D6;
-    /* Nova cor para Concluído */
+	--orange-color: #D78B5D;
+	--dark-color: #323842;
+	--dark-hover: #242930;
+	--light-green-color: #C8E2D6;
+
+	/* Basic Colors */
+	--white: #ffffff;
+	--black: #000000;
+
+	/* Theme Colors (Light default) */
+	--app-bg: #f5f6f8;
+	--form-section-bg: #f8f9fa;
+	--tag-bg: #f8f9fa;
+	--tag-hover-bg: #e9ecef;
+	--tag-hover-text: #343a40;
+	--border-color: #dee2e6;
+	--border-color-hover: #adb5bd;
+	--text-dark: #212529;
+	--text-dark-hover: #343a40;
+	--card-bg: #ffffff;
+	--table-bg: #ffffff;
+	--table-striped-bg: rgba(0, 0, 0, 0.03);
+	--table-hover-bg: rgba(0, 0, 0, 0.05);
+	--table-color: #212529;
+	--table-border-color: #dee2e6;
+
+	/* Autocomplete Colors */
+	--autocomplete-bg: #ffffff;
+	--autocomplete-border: #ced4da;
+	--autocomplete-item-border: #e9ecef;
+	--autocomplete-item-hover: #e9ecef;
+
+	/* Interaction Overlay Colors */
+	--hover-bg-overlay: rgba(255, 255, 255, 0.1);
+	--tag-actions-border: #dee2e6;
+	--tag-close-hover: #bd2130;
+	--icon-unmarked-color: #c8d6e5;
+
+	/* Specific Status Colors */
+	--status-vistoria-bg: #6f42c1;
+	--status-nao-realizada-bg: #fd7e14;
+
+	/* Alert Text Colors */
+	--alert-success-text: #2d4c3c;
+	--alert-warning-text: #5b4919;
+	--alert-danger-text: #5d2b2b;
+	--alert-info-text: #2b4f55;
+
+	/* Dynamic Cards & Modal Overlays */
+	--card-supervisor-bg: rgba(13, 110, 253, 0.02);
+	--card-chefe-bg: rgba(253, 126, 20, 0.02);
+	--card-particular-bg: rgba(220, 53, 69, 0.02);
+	--card-voluntario-bg: rgba(25, 135, 84, 0.02);
+	--info-bg-light: rgba(76, 162, 173, 0.05);
+	--info-border-light: rgba(76, 162, 173, 0.2);
+	--warning-bg-light: rgba(255, 193, 7, 0.05);
+	--warning-border-light: rgba(255, 193, 7, 0.2);
 }
+
+[data-theme="dark"] {
+	/* Theme Colors (Dark overrides) */
+	--app-bg: #1a1e24;
+	--form-section-bg: #242930;
+	--tag-bg: #2a3038;
+	--tag-hover-bg: #353c47;
+	--tag-hover-text: #ffffff;
+	--border-color: #3a424e;
+	--border-color-hover: #5a6678;
+	--text-dark: #e1e6eb;
+	--text-dark-hover: #ffffff;
+	--card-bg: #242930;
+	--table-bg: #242930;
+	--table-striped-bg: rgba(255, 255, 255, 0.03);
+	--table-hover-bg: rgba(255, 255, 255, 0.05);
+	--table-color: #e1e6eb;
+	--table-border-color: #3a424e;
+
+	/* Autocomplete Colors */
+	--autocomplete-bg: #242930;
+	--autocomplete-border: #3a424e;
+	--autocomplete-item-border: #3a424e;
+	--autocomplete-item-hover: #2a3038;
+
+	/* Interaction Overlay Colors */
+	--hover-bg-overlay: rgba(0, 0, 0, 0.2);
+	--tag-actions-border: #3a424e;
+	--tag-close-hover: #ff4d4d;
+	--icon-unmarked-color: #4a5568;
+
+	/* Alert Text Colors (Optimized for Dark Theme readability) */
+	--alert-success-text: #a3d9bc;
+	--alert-warning-text: #ffd56b;
+	--alert-danger-text: #ffb3b3;
+	--alert-info-text: #aedce3;
+
+	/* Dynamic Cards & Modal Overlays (Dark) */
+	--card-supervisor-bg: rgba(13, 110, 253, 0.1);
+	--card-chefe-bg: rgba(253, 126, 20, 0.1);
+	--card-particular-bg: rgba(220, 53, 69, 0.1);
+	--card-voluntario-bg: rgba(25, 135, 84, 0.1);
+	--info-bg-light: rgba(76, 162, 173, 0.15);
+	--info-border-light: rgba(76, 162, 173, 0.3);
+	--warning-bg-light: rgba(255, 193, 7, 0.15);
+	--warning-border-light: rgba(255, 193, 7, 0.3);
+}
+
 html, body, #app {
-	background-color: #f5f6f8 !important;
+	background-color: var(--app-bg) !important;
+	color: var(--text-dark);
 }
 .autocomplete-container {
 	position: relative;
@@ -26,8 +132,8 @@ html, body, #app {
 	width: 100%;
 	max-height: 400px;
 	overflow-y: scroll;
-	background-color: #fff;
-	border: 1px solid #ced4da;
+	background-color: var(--autocomplete-bg);
+	border: 1px solid var(--autocomplete-border);
 	border-top: none;
 	border-radius: 0 0 0.375rem 0.375rem;
 	box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
@@ -36,19 +142,19 @@ html, body, #app {
 .autocomplete-item {
 	padding: 0.75rem;
 	cursor: pointer;
-	border-bottom: 1px solid #e9ecef;
+	border-bottom: 1px solid var(--autocomplete-item-border);
 	transition: background-color 0.15s ease-in-out;
 }
 .autocomplete-item:hover,
 .autocomplete-item.highlighted {
-	background-color: #e9ecef;
+	background-color: var(--autocomplete-item-hover);
 }
 .autocomplete-item:last-child {
 	border-bottom: none;
 }
 .tag {
-	background-color: #f8f9fa;
-	border: 1px solid #dee2e6;
+	background-color: var(--tag-bg);
+	border: 1px solid var(--border-color);
 	border-radius: 0.375rem;
 	padding: 0.375rem 0.75rem;
 	margin: 0.25rem 0;
@@ -61,9 +167,9 @@ html, body, #app {
 	box-sizing: border-box;
 }
 .tag:hover {
-	background-color: #e9ecef;
-	border-color: #adb5bd;
-	color: #343a40;
+	background-color: var(--tag-hover-bg);
+	border-color: var(--border-color-hover);
+	color: var(--tag-hover-text);
 }
 .btn-close-custom {
 	background: none;
@@ -97,47 +203,47 @@ html, body, #app {
 /* Status Colors */
 .status-pendente {
 	background-color: var(--warning-color);
-	color: #000;
+	color: var(--black);
 }
 .status-analise {
 	background-color: var(--info-color);
-	color: #fff;
+	color: var(--white);
 }
 .status-vistoria {
-	background-color: #6f42c1;
-	color: #fff;
+	background-color: var(--status-vistoria-bg);
+	color: var(--white);
 }
 .status-aprovado {
 	background-color: var(--success-color);
-	color: #fff;
+	color: var(--white);
 }
 .status-reprovado {
 	background-color: var(--danger-color);
-	color: #fff;
+	color: var(--white);
 }
 .status-cancelado {
 	background-color: var(--secondary-color);
-	color: #fff;
+	color: var(--white);
 }
 .status-nao-realizada {
-	background-color: #fd7e14;
-	color: #fff;
+	background-color: var(--status-nao-realizada-bg);
+	color: var(--white);
 }
 .status-sem-status {
 	background-color: var(--primary-color);
-	color: #fff;
+	color: var(--white);
 }
 .status-concluido {
 	background-color: var(--light-green-color);
 }
 .status-a-fazer {
 	background-color: var(--secondary-color);
-	color: #fff;
+	color: var(--white);
 }
 .form-section {
 	margin-bottom: 2rem;
 	padding: 1.5rem;
-	background-color: #f8f9fa;
+	background-color: var(--form-section-bg);
 	border-radius: 0.5rem;
 }
 .section-title {
@@ -160,7 +266,7 @@ html, body, #app {
 }
 .location-icon {
 	transform: scale(2.5);
-	color: #ced4da;
+	color: var(--border-color);
 	transition: transform 0.3s ease;
 }
 .location-icon:hover {
@@ -168,24 +274,15 @@ html, body, #app {
 }
 .location-link-full {
 	display: flex;
-	/* Para centralizar o conteúdo (o ícone) dentro do link */
 	width: 100%;
-	/* Faz o link ocupar toda a largura da div pai */
 	height: 100%;
-	/* Faz o link ocupar toda a altura da div pai */
 	justify-content: center;
-	/* Centraliza horizontalmente o ícone */
 	align-items: center;
-	/* Centraliza verticalmente o ícone */
 	text-decoration: none;
-	/* Opcional: remove o sublinhado padrão do link */
 	color: inherit;
-	/* Opcional: herda a cor do texto do pai (para o ícone) */
 }
 .location-link-full:hover {
-	background-color: rgba(255, 255, 255, 0.1);
-	/* Um leve escurecimento no hover */
-	/* ou qualquer outro efeito visual que você desejar */
+	background-color: var(--hover-bg-overlay);
 }
 @media (max-width: 768px) {
 	.form-section {
@@ -198,7 +295,7 @@ html, body, #app {
 #gpsContainer {
 	background-image: url("bgmap.png");
 	opacity: 0.5;
-	color: #000;
+	color: var(--black);
 }
 #observacao{
 	overflow-y: scroll;
@@ -218,8 +315,110 @@ html, body, #app {
 
 /* Estilo para alinhar o item de exigência */
 .exigencia-item {
-    padding-right: 1rem; /* Adiciona um pouco de espaço à direita */
-    width: 100%; /* Garante que o item ocupe toda a largura */
+    padding-right: 1rem;
+    width: 100%;
+}
+
+/* ==========================================================================
+   DESIGN SYSTEM UTILITIES & COMPONENT EXTENSIONS
+   ========================================================================== */
+
+.navbar-default-bg {
+	background-color: var(--primary-color) !important;
+	color: var(--white) !important;
+}
+
+.main-content {
+	margin-top: 80px;
+	padding-bottom: 50px;
+}
+
+.modal-header-info {
+	background-color: var(--info-color) !important;
+	color: var(--white) !important;
+}
+
+.card-supervisor {
+	border-top: 4px solid var(--primary-color) !important;
+	background-color: var(--card-supervisor-bg) !important;
+}
+
+.card-chefe {
+	border-top: 4px solid var(--warning-color) !important;
+	background-color: var(--card-chefe-bg) !important;
+}
+
+.card-particular {
+	border-top: 4px solid var(--danger-color) !important;
+	background-color: var(--card-particular-bg) !important;
+}
+
+.card-voluntario {
+	border-top: 4px solid var(--success-color) !important;
+	background-color: var(--card-voluntario-bg) !important;
+}
+
+.cnae-motivo-box {
+	background-color: var(--info-bg-light) !important;
+	border-color: var(--info-border-light) !important;
+}
+
+.cnae-warning-box {
+	background-color: var(--warning-bg-light) !important;
+	border-color: var(--warning-border-light) !important;
+}
+
+.text-theme-info {
+	color: var(--info-color) !important;
+}
+
+.badge-info-custom {
+	background-color: var(--info-color) !important;
+	font-weight: normal;
+	font-size: 0.75rem;
+}
+
+.font-small-normal {
+	font-size: 0.8rem !important;
+	text-transform: none !important;
+}
+
+.badge-cnae-risco {
+	font-size: 0.75rem !important;
+	font-weight: 600 !important;
+}
+
+.modal-overlay-custom {
+	background-color: rgba(0, 0, 0, 0.5) !important;
+	z-index: 1060 !important;
+}
+
+.toast-container-custom {
+	z-index: 1080 !important;
+}
+
+.controls-bar-sticky {
+	position: sticky !important;
+	top: 80px;
+	z-index: 10;
+}
+
+.description-text-small {
+	font-size: 0.75rem !important;
+	line-height: 1.2 !important;
+}
+
+.col-width-50 {
+	width: 50px;
+}
+
+.col-width-130 {
+	width: 130px;
+}
+
+.text-small-normal {
+	font-weight: normal;
+	font-size: 0.75rem;
 }
 
 #divStatus {
@@ -246,7 +445,7 @@ html, body, #app {
 	align-items: center;
 	gap: 4px;
 	margin-left: 10px;
-	border-left: 1px solid #dee2e6;
+	border-left: 1px solid var(--tag-actions-border);
 	padding-left: 8px;
 }
 
@@ -273,13 +472,13 @@ html, body, #app {
 }
 .tag-close-icon:hover {
 	opacity: 1;
-	color: #bd2130 !important;
+	color: var(--tag-close-hover) !important;
 }
 
 /* Colorização se não estiverem marcados (check e anotação) */
 .check-cumprido-icon.text-secondary,
 .anotacao-icon.text-secondary {
-	color: #c8d6e5 !important; /* Coloração mais clara */
+	color: var(--icon-unmarked-color) !important;
 	opacity: 0.6;
 }
 
@@ -301,77 +500,77 @@ html, body, #app {
 .btn-primary {
 	background-color: var(--primary-color) !important;
 	border-color: var(--primary-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 .btn-primary:hover, .btn-primary:focus {
-	background-color: #3b6680 !important;
-	border-color: #3b6680 !important;
+	background-color: var(--primary-hover) !important;
+	border-color: var(--primary-hover) !important;
 	filter: brightness(0.9);
 }
 
 .btn-success {
 	background-color: var(--success-color) !important;
 	border-color: var(--success-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 .btn-success:hover, .btn-success:focus {
-	background-color: #5c8b72 !important;
-	border-color: #5c8b72 !important;
+	background-color: var(--success-hover) !important;
+	border-color: var(--success-hover) !important;
 	filter: brightness(0.9);
 }
 
 .btn-warning {
 	background-color: var(--warning-color) !important;
 	border-color: var(--warning-color) !important;
-	color: #323842 !important;
+	color: var(--dark-color) !important;
 }
 .btn-warning:hover, .btn-warning:focus {
-	background-color: #c2a14b !important;
-	border-color: #c2a14b !important;
+	background-color: var(--warning-hover) !important;
+	border-color: var(--warning-hover) !important;
 	filter: brightness(0.9);
 }
 
 .btn-danger {
 	background-color: var(--danger-color) !important;
 	border-color: var(--danger-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 .btn-danger:hover, .btn-danger:focus {
-	background-color: #b75757 !important;
-	border-color: #b75757 !important;
+	background-color: var(--danger-hover) !important;
+	border-color: var(--danger-hover) !important;
 	filter: brightness(0.9);
 }
 
 .btn-info {
 	background-color: var(--info-color) !important;
 	border-color: var(--info-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 .btn-info:hover, .btn-info:focus {
-	background-color: #498590 !important;
-	border-color: #498590 !important;
+	background-color: var(--info-hover) !important;
+	border-color: var(--info-hover) !important;
 	filter: brightness(0.9);
 }
 
 .btn-secondary {
 	background-color: var(--secondary-color) !important;
 	border-color: var(--secondary-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 .btn-secondary:hover, .btn-secondary:focus {
-	background-color: #697682 !important;
-	border-color: #697682 !important;
+	background-color: var(--secondary-hover) !important;
+	border-color: var(--secondary-hover) !important;
 	filter: brightness(0.9);
 }
 
 .btn-dark {
 	background-color: var(--dark-color) !important;
 	border-color: var(--dark-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 .btn-dark:hover, .btn-dark:focus {
-	background-color: #242930 !important;
-	border-color: #242930 !important;
+	background-color: var(--dark-hover) !important;
+	border-color: var(--dark-hover) !important;
 }
 
 /* Outline Buttons */
@@ -381,7 +580,7 @@ html, body, #app {
 }
 .btn-outline-primary:hover {
 	background-color: var(--primary-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 
 .btn-outline-success {
@@ -390,7 +589,7 @@ html, body, #app {
 }
 .btn-outline-success:hover {
 	background-color: var(--success-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 
 .btn-outline-danger {
@@ -399,7 +598,7 @@ html, body, #app {
 }
 .btn-outline-danger:hover {
 	background-color: var(--danger-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 
 .btn-outline-info {
@@ -408,7 +607,7 @@ html, body, #app {
 }
 .btn-outline-info:hover {
 	background-color: var(--info-color) !important;
-	color: #ffffff !important;
+	color: var(--white) !important;
 }
 
 .btn-outline-warning {
@@ -417,29 +616,29 @@ html, body, #app {
 }
 .btn-outline-warning:hover {
 	background-color: var(--warning-color) !important;
-	color: #323842 !important;
+	color: var(--dark-color) !important;
 }
 
 /* Alerts */
 .alert-success {
 	background-color: var(--light-green-color) !important;
 	border-color: var(--success-color) !important;
-	color: #2d4c3c !important;
+	color: var(--alert-success-text) !important;
 }
 .alert-warning {
 	background-color: rgba(214, 181, 94, 0.15) !important;
 	border-color: var(--warning-color) !important;
-	color: #5b4919 !important;
+	color: var(--alert-warning-text) !important;
 }
 .alert-danger {
 	background-color: rgba(205, 106, 106, 0.15) !important;
 	border-color: var(--danger-color) !important;
-	color: #5d2b2b !important;
+	color: var(--alert-danger-text) !important;
 }
 .alert-info {
 	background-color: rgba(89, 156, 168, 0.15) !important;
 	border-color: var(--info-color) !important;
-	color: #2b4f55 !important;
+	color: var(--alert-info-text) !important;
 }
 
 /* Text and BG Utility Overrides */
@@ -479,4 +678,65 @@ html, body, #app {
 }
 .bg-secondary {
 	background-color: var(--secondary-color) !important;
+}
+
+/* Custom Card & Table Theme Styling */
+.card {
+	background-color: var(--card-bg) !important;
+	color: var(--text-dark) !important;
+	border-color: var(--border-color) !important;
+}
+.card-body {
+	background-color: var(--card-bg) !important;
+	color: var(--text-dark) !important;
+}
+.table {
+	--bs-table-bg: var(--table-bg) !important;
+	--bs-table-color: var(--table-color) !important;
+	--bs-table-border-color: var(--table-border-color) !important;
+	background-color: var(--table-bg) !important;
+	color: var(--table-color) !important;
+}
+.table th, .table td {
+	background-color: var(--table-bg) !important;
+	color: var(--table-color) !important;
+	border-color: var(--table-border-color) !important;
+}
+.table th {
+	background-color: var(--tag-bg) !important;
+	color: var(--text-dark) !important;
+}
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+	background-color: var(--table-striped-bg) !important;
+	color: var(--table-color) !important;
+}
+.table-hover > tbody > tr:hover > * {
+	background-color: var(--table-hover-bg) !important;
+	color: var(--table-color) !important;
+}
+.table-light {
+	--bs-table-bg: var(--table-bg) !important;
+	--bs-table-color: var(--table-color) !important;
+}
+.dropdown-menu {
+	background-color: var(--form-section-bg) !important;
+	border: 1px solid var(--border-color) !important;
+}
+.dropdown-item {
+	color: var(--text-dark) !important;
+}
+.dropdown-item:hover, .dropdown-item:focus {
+	background-color: var(--tag-bg) !important;
+	color: var(--text-dark) !important;
+}
+.dropdown-divider {
+	border-top-color: var(--border-color) !important;
+}
+
+/* Adapt standard helper backgrounds to dark theme */
+[data-theme="dark"] .bg-white {
+	background-color: var(--card-bg) !important;
+}
+[data-theme="dark"] .bg-light {
+	background-color: var(--tag-bg) !important;
 }

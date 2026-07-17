@@ -2192,7 +2192,7 @@ function adicionarExigencia(categoria, exigencia) {
             <span>${exigencia}</span>
             <div class="tag-actions">
                 <i class="bi bi-x-circle-fill tag-action-icon tag-close-icon" onclick="removerExigencia('${categoria}', '${encodedExigency}', '${exigencia}')" title="Remover exigência"></i>
-                <i class="bi bi-check-circle-fill tag-action-icon check-cumprido-icon ${checkColorClass}" data-exigencia-id="${exigencia}" onclick="toggleExigenciaCumprida('${exigencia}')" title="Marcar como cumprida/não cumprida"></i>
+                <i class="bi bi-check-circle-fill tag-action-icon check-cumprido-icon ${checkColorClass}" data-exigencia-id="${exigencia}" onclick="toggleExigenciaCumprida('${exigencia}')" title="Marcar como cumprida"></i>
                 <i class="bi bi-info-circle-fill tag-action-icon anotacao-icon ${iconColorClass}" data-exigencia-id="${exigencia}" onclick="abrirModalAnotacao('${exigencia}', '${exigencia}')" title="Anotações"></i>
             </div>
         `;

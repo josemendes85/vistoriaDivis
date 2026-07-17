@@ -1,7 +1,7 @@
 <template>
   <BaseLayout title="Gerenciamento de Dados" backRoute="/">
     <div class="pt-2 px-1">
-      <div class="form-section shadow-sm bg-white p-4">
+      <div class="form-section shadow-sm p-4">
         <h4 class="section-title text-center mb-4">
           <i class="bi bi-cloud-arrow-up me-2"></i>Backup & Restauração
         </h4>
@@ -40,6 +40,9 @@ const LOCAL_STORAGE_ITEM_ORDER_PREFIX = 'vistorias_process_item_order_';
 const PROCESS_KEY_PREFIX = 'processo-';
 const EVENTUAL_KEY_PREFIX = 'eventual-';
 
+const EQUIPE_KEY = 'equipeVistoria';
+const THEME_KEY = 'theme';
+
 const createBackupData = () => {
   const backupData = {};
   for (let i = 0; i < localStorage.length; i++) {
@@ -48,7 +51,9 @@ const createBackupData = () => {
       key.startsWith(PROCESS_KEY_PREFIX) ||
       key.startsWith(EVENTUAL_KEY_PREFIX) ||
       key === LOCAL_STORAGE_GROUP_ORDER_KEY ||
-      key.startsWith(LOCAL_STORAGE_ITEM_ORDER_PREFIX)
+      key.startsWith(LOCAL_STORAGE_ITEM_ORDER_PREFIX) ||
+      key === EQUIPE_KEY ||
+      key === THEME_KEY
     ) {
       backupData[key] = localStorage.getItem(key);
     }
@@ -59,7 +64,7 @@ const createBackupData = () => {
 const exportBackup = () => {
   const data = createBackupData();
   if (Object.keys(data).length === 0) {
-    showToast("Não há dados de processos ou eventuais para exportar.", 'danger');
+    showToast("Não há dados para exportar.", 'danger');
     return;
   }
 
@@ -88,7 +93,7 @@ const importBackup = (event) => {
       const backupData = JSON.parse(e.target.result);
       let importedCount = 0;
 
-      if (!confirm(`Tem certeza que deseja RESTAURAR o backup? Isso substituirá TODOS os dados de processos, eventuais e ordens (${Object.keys(backupData).length} itens) com os dados do arquivo.`)) {
+      if (!confirm(`Tem certeza que deseja RESTAURAR o backup? Isso substituirá TODOS os dados (${Object.keys(backupData).length} itens) com os dados do arquivo.`)) {
         return;
       }
 
@@ -99,7 +104,9 @@ const importBackup = (event) => {
           key.startsWith(PROCESS_KEY_PREFIX) ||
           key.startsWith(EVENTUAL_KEY_PREFIX) ||
           key === LOCAL_STORAGE_GROUP_ORDER_KEY ||
-          key.startsWith(LOCAL_STORAGE_ITEM_ORDER_PREFIX)
+          key.startsWith(LOCAL_STORAGE_ITEM_ORDER_PREFIX) ||
+          key === EQUIPE_KEY ||
+          key === THEME_KEY
         ) {
           localStorage.removeItem(key);
         }

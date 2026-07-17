@@ -2,7 +2,7 @@
   <BaseLayout title="Checklist de Incêndio" backRoute="/">
     <div class="pt-2 px-1">
       <!-- Fixed Controls Bar -->
-      <div class="controls-bar bg-white shadow-sm border-bottom py-3 px-3 mb-4 rounded-3" style="position: sticky; top: 80px; z-index: 10;">
+      <div class="controls-bar shadow-sm py-3 px-3 mb-4 rounded-3 controls-bar-sticky">
         <div class="row g-3 align-items-center">
           <!-- Search Input -->
           <div class="col-md-4">
@@ -192,11 +192,13 @@ const copyTableFormat = () => {
   position: sticky;
   top: 80px;
   z-index: 99;
+  background-color: var(--form-section-bg);
+  border: 1px solid var(--border-color);
 }
 .btn-orange {
   background-color: var(--orange-color) !important;
   border-color: var(--orange-color) !important;
-  color: #fff !important;
+  color: var(--white) !important;
 }
 .btn-orange:hover {
   filter: brightness(0.9);

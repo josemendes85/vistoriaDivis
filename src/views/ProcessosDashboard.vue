@@ -73,12 +73,12 @@
                 <table class="table table-striped table-hover m-0">
                   <thead class="table-light">
                     <tr>
-                      <th style="width: 50px"></th>
+                      <th class="col-width-50"></th>
                       <th>Processo</th>
                       <th>Instituição</th>
                       <th>Data de Início</th>
                       <th>Tipo</th>
-                      <th class="text-center" style="width: 130px">Localização</th>
+                      <th class="text-center col-width-130">Localização</th>
                     </tr>
                   </thead>
                   <tbody
@@ -100,8 +100,7 @@
                         {{ p.processo }}
                         <span
                           v-if="p.checkConcluido"
-                          class="badge bg-success ms-2 small"
-                          style="font-weight: normal; font-size: 0.75rem"
+                          class="badge bg-success ms-2 small text-small-normal"
                         >
                           <i class="bi bi-check-circle-fill me-1"></i>Concluído
                         </span>
@@ -467,7 +466,7 @@ watch([filterStatus, searchTerm, exibirConcluidos], () => {
   cursor: pointer;
 }
 .drag-process:hover {
-  background-color: #f1f1f1;
+  background-color: var(--table-hover-bg);
 }
 .drag-handle-cell {
   width: 40px;

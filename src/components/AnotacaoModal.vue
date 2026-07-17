@@ -8,7 +8,7 @@
         </div>
         <div class="modal-body">
           <p class="text-muted small mb-1"><strong>Código:</strong> {{ item?.code }}</p>
-          <p class="text-dark mb-3">{{ item?.text }}</p>
+          <p class="mb-3">{{ item?.text }}</p>
           <div class="mb-3">
             <textarea
               v-model="tempAnotacao"

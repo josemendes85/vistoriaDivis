@@ -1,8 +1,7 @@
 <template>
   <div
     v-if="show"
-    class="modal show fade d-block"
-    style="background-color: rgba(0, 0, 0, 0.5); z-index: 1060;"
+    class="modal show fade d-block modal-overlay-custom"
     tabindex="-1"
     role="dialog"
     @keydown.esc="preventClose"
@@ -10,7 +9,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
       <div class="modal-content border-0 shadow-lg">
         <div class="modal-header">
-          <h5 class="modal-title fw-bold text-dark">
+          <h5 class="modal-title fw-bold">
             <i class="bi bi-people-fill me-2 text-primary"></i>Equipe de Vistoria
           </h5>
           <!-- Hide close button when mandatory -->

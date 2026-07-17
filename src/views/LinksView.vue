@@ -3,7 +3,7 @@
     <div class="pt-2 px-1">
       
       <!-- Seção de Links -->
-      <div class="form-section shadow-sm bg-white p-4 mb-4">
+      <div class="form-section shadow-sm p-4 mb-4">
         <h4 class="section-title mb-4">
           <i class="bi bi-link-45deg me-2 text-primary"></i>Sistemas e Acessos Rápidos
         </h4>
@@ -14,8 +14,8 @@
                 <div :class="['icon-box mb-2 text-white', link.statusClass]">
                   <i :class="link.icon"></i>
                 </div>
-                <h6 class="text-dark fw-bold mb-1">{{ link.title }}</h6>
-                <p class="text-muted small mb-0" style="font-size: 0.75rem; line-height: 1.2;">{{ link.description }}</p>
+                <h6 class="fw-bold mb-1">{{ link.title }}</h6>
+                <p class="text-muted small mb-0 description-text-small">{{ link.description }}</p>
               </div>
             </a>
           </div>
@@ -23,7 +23,7 @@
       </div>
 
       <!-- Seção de Assunção de Serviço -->
-      <div class="form-section shadow-sm bg-white p-4 mb-5">
+      <div class="form-section shadow-sm p-4 mb-5">
         <h4 class="section-title mb-3">
           <i class="bi bi-shield-check me-2 text-success"></i>Assunção de Serviço
         </h4>

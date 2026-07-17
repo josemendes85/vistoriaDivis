@@ -1,670 +1,766 @@
 <template>
-  <BaseLayout :title="isEdit ? 'Editar Processo' : 'Novo Processo'" backRoute="/processos" backText="Voltar ao Painel" :navbarClass="statusClass">
+  <BaseLayout
+    :title="isEdit ? 'Editar Processo' : 'Novo Processo'"
+    backRoute="/processos"
+    backText="Voltar ao Painel"
+    :navbarClass="statusClass"
+  >
     <div class="pt-2 px-1">
       <!-- Master Form -->
       <form class="needs-validation" novalidate @submit.prevent="salvarRegistro">
         <div class="row">
           <div class="col-12">
             <!-- Vistoria Type & GPS Header -->
-        <div class="form-section mb-4">
-          <div class="row g-3 align-items-center">
-            <div class="col-md-5">
-              <label class="form-label fw-bold text-muted small"
-                >Tipo de Vistoria <span class="text-danger">*</span></label
-              >
-              <select v-model="form.tipo" class="form-select" required>
-                <option value="">Selecione...</option>
-                <option value="RLE">RLE - Registro de Licenciamento de Empresas</option>
-                <option value="RT">RT - Relatório Técnico</option>
-                <option value="ADP">ADP - Análise de Dilação de Prazo</option>
-                <option value="DPV">DPV - Dilação de Prazo Vencida</option>
-                <option value="PPCI">PPCI - Plano de Prevenção Contra Incêndio</option>
-                <option value="FTruck">FT - Food Truck</option>
-                <option value="Outros">Outros</option>
-                <option value="Eventual">Eventual</option>
-              </select>
-            </div>
-            <div class="col-md-5">
-              <label class="form-label fw-bold text-muted small"
-                >Número do Processo <span v-if="form.tipo !== 'Eventual'" class="text-danger">*</span></label
-              >
-              <div class="input-group">
-                <input
-                  :value="form.processoBusca"
-                  type="text"
-                  class="form-control"
-                  placeholder="AAA0000000000 ou 00000-00000000/0000-00"
-                  maxlength="22"
-                  :required="form.tipo !== 'Eventual'"
-                  @input="handleProcessoInput"
-                />
-                <button class="btn btn-outline-secondary" type="button" @click="copiarProcesso" title="Copiar Processo">
-                  <i class="bi bi-clipboard"></i>
-                </button>
-              </div>
-            </div>
-            <div v-if="form.tipo !== 'Eventual'" class="col-md-2 d-flex gap-2 justify-content-end pt-3">
-              <a
-                v-if="googleMapsUrl"
-                :href="googleMapsUrl"
-                target="_blank"
-                class="btn btn-outline-primary"
-                title="Google Maps"
-              >
-                <i class="bi bi-geo-alt-fill"></i> Maps
-              </a>
-              <a v-if="wazeUrl" :href="wazeUrl" target="_blank" class="btn btn-outline-success" title="Waze">
-                <i class="bi bi-cursor-fill"></i> Waze
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- ================= CONTAINER PADRÃO ================= -->
-        <div v-if="form.tipo !== 'Eventual'">
-          <!-- Dados da Instituição -->
-          <div class="form-section mb-4">
-            <h4 class="section-title"><i class="bi bi-building me-2"></i>Dados da Instituição</h4>
-            <div class="row g-3">
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">CNPJ <span class="text-danger">*</span></label>
-                <input
-                  :value="form.cnpj"
-                  type="text"
-                  class="form-control"
-                  placeholder="00.000.000/0000-00"
-                  maxlength="18"
-                  required
-                  @input="handleCnpjInput"
-                  @blur="buscarCnpj"
-                />
-              </div>
-              <div class="col-md-8">
-                <label class="form-label fw-bold text-muted small"
-                  >Nome Fantasia/Razão Social <span class="text-danger">*</span></label
-                >
-                <input
-                  v-model="form.instituicao"
-                  type="text"
-                  class="form-control text-uppercase"
-                  placeholder="Nome da Instituição"
-                  required
-                />
-              </div>
-              <div class="col-md-8">
-                <label class="form-label fw-bold text-muted small"
-                  >Endereço Completo <span class="text-danger">*</span></label
-                >
-                <textarea
-                  v-model="form.endereco"
-                  class="form-control text-uppercase"
-                  rows="2"
-                  placeholder="Rua, número, bairro, cidade - UF"
-                  required
-                ></textarea>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Coordenadas GPS</label>
-                <div class="input-group">
-                  <input
-                    v-model="form.localizacao"
-                    type="text"
-                    class="form-control"
-                    placeholder="-00.00000, -00.00000"
-                    @input="metodoGps = 'Inserido manualmente'"
-                  />
-                  <button class="btn btn-outline-success" type="button" @click="obterGps" title="Obter GPS">
-                    <i class="bi bi-geo-alt"></i>
-                  </button>
-                </div>
-                <div class="form-text small" :class="metodoGpsClass">{{ metodoGps }}</div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Classificação da Edificação -->
-          <div class="form-section mb-4">
-            <h4 class="section-title d-flex align-items-center flex-wrap gap-2">
-              <span class="d-flex align-items-center">
-                <i class="bi bi-diagram-3 me-2"></i>Classificação da Edificação
-              </span>
-              <i
-                class="bi bi-info-circle-fill icon-info-cnae"
-                @click="abrirCnaesModal"
-                title="Visualizar atividades (CNAE)"
-              ></i>
-            </h4>
-            <div class="row g-3">
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Ocupação <span class="text-danger">*</span></label>
-                <select v-model="form.ocupacao" class="form-select" id="ocupacao" required>
-                  <option value="">Selecione a ocupação</option>
-                  <optgroup label="Residenciais">
-                    <option value="01">01 - Residenciais unifamiliares</option>
-                    <option value="02">02 - Residenciais multifamiliares</option>
-                  </optgroup>
-                  <optgroup label="Transitórias">
-                    <option value="03">03 - Habitações coletivas</option>
-                    <option value="04">04 - Hotéis</option>
-                    <option value="05">05 - Hotéis residenciais</option>
-                  </optgroup>
-                  <optgroup label="Comerciais">
-                    <option value="06">06 - Comércio de pequeno porte</option>
-                    <option value="07">07 - Comércio de médio porte</option>
-                    <option value="08">08 - Comércio de grande porte</option>
-                  </optgroup>
-                  <optgroup label="Serviços Profissionais">
-                    <option value="09">09 - Escritórios</option>
-                    <option value="10">10 - Agências bancárias</option>
-                    <option value="11">11 - Laboratórios e estúdios</option>
-                    <option value="12">12 - Serviços de reparação</option>
-                  </optgroup>
-                  <optgroup label="Escolares">
-                    <option value="13">13 - Escolas em geral</option>
-                    <option value="14">14 - Escolas especiais</option>
-                    <option value="15">15 - Locais para cultura física</option>
-                    <option value="16">16 - Pré-escolas</option>
-                    <option value="17">17 - Escolas para portadores de deficiências</option>
-                  </optgroup>
-                  <optgroup label="Concentração de Público">
-                    <option value="18">18 - Museus e bibliotecas</option>
-                    <option value="19">19 - Templos religiosos</option>
-                    <option value="20">20 - Centros esportivos e de exibição</option>
-                    <option value="21">21 - Terminais de passageiros</option>
-                    <option value="22">22 - Artes cênicas e auditórios</option>
-                    <option value="23">23 - Clubes sociais</option>
-                    <option value="24">24 - Construções provisórias</option>
-                    <option value="25">25 - Restaurantes</option>
-                  </optgroup>
-                  <optgroup label="Garagens">
-                    <option value="26">26 - Garagens em geral</option>
-                    <option value="27">27 - Oficinas</option>
-                    <option value="28">28 - Hangares</option>
-                  </optgroup>
-                  <optgroup label="Hospitalares">
-                    <option value="29">29 - Hospitais veterinários</option>
-                    <option value="30">30 - Hospitais em geral</option>
-                    <option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
-                    <option value="32">32 - Clínicas</option>
-                  </optgroup>
-                  <optgroup label="Industriais">
-                    <option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
-                    <option value="34">34 - Indústrias > 300 MJ/m² e &lt; 1200 MJ/m²</option>
-                    <option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
-                  </optgroup>
-                  <optgroup label="Depósitos">
-                    <option value="36">36 - Depósitos de material incombustível</option>
-                    <option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
-                    <option value="38">38 - Depósitos > 300 MJ/m² e &lt; 1200 MJ/m²</option>
-                    <option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
-                  </optgroup>
-                  <optgroup label="Armazenamento e Instalações de alto risco">
-                    <option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
-                    <option value="41">41 - Explosivos</option>
-                    <option value="42">42 - Produtos perigosos</option>
-                  </optgroup>
-                  <optgroup label="Especiais">
-                    <option value="43">43 - Vegetações</option>
-                    <option value="44">44 - Canteiros de obras</option>
-                    <option value="45">45 - Centros esportivos (&gt; 2500 pessoas)</option>
-                    <option value="46">46 - Parques de diversões</option>
-                    <option value="47">47 - Centrais de comunicação e energia</option>
-                    <option value="48">48 - Túneis</option>
-                    <option value="49">49 - Silos</option>
-                    <option value="50">50 - Locais com restrição de liberdade</option>
-                  </optgroup>
-                  <optgroup label="Mistas">
-                    <option value="51">51 - Destinações variáveis</option>
-                  </optgroup>
-                </select>
-              </div>
-              <div class="col-md-2">
-                <label class="form-label fw-bold text-muted small">Área (m²) <span class="text-danger">*</span></label>
-                <input
-                  v-model="form.area"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="form-control"
-                  placeholder="0.00"
-                  required
-                />
-              </div>
-              <div class="col-md-2">
-                <label class="form-label fw-bold text-muted small">Altura (m) <span class="text-danger">*</span></label>
-                <input
-                  v-model="form.altura"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  class="form-control"
-                  placeholder="0.00"
-                  required
-                />
-              </div>
-              <div class="col-md-2">
-                <label class="form-label fw-bold text-muted small">Pavimentos <span class="text-danger">*</span></label>
-                <input v-model="form.pavimentos" type="number" class="form-control" placeholder="0" required />
-              </div>
-              <div class="col-md-2">
-                <label class="form-label fw-bold text-muted small"
-                  >População Fixa <span class="text-danger">*</span></label
-                >
-                <input v-model="form.populacaoFixa" type="number" class="form-control" placeholder="0" required />
-              </div>
-
-              <!-- Grau de Risco -->
-              <div class="col-md-4 mt-3">
-                <label class="form-label fw-bold text-muted small">Grau de Risco <span class="text-danger">*</span></label>
-                <select v-model="form.grauRisco" class="form-select" required>
-                  <option value="">Selecione o grau de risco</option>
-                  <option value="A">Baixo (A)</option>
-                  <option value="B-1">Médio (B-1)</option>
-                  <option value="B-2">Médio (B-2)</option>
-                  <option value="C-1">Alto (C-1)</option>
-                  <option value="C-2">Alto (C-2)</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Dados da Vistoria -->
-          <div class="form-section mb-4">
-            <h4 class="section-title"><i class="bi bi-clipboard-check me-2"></i>Dados da Vistoria</h4>
-            <div class="row g-3">
-              <div class="col-md-8">
-                <label class="form-label fw-bold text-muted small"
-                  >Responsável pela Edificação <span class="text-danger">*</span></label
-                >
-                <input
-                  v-model="form.responsavel"
-                  type="text"
-                  class="form-control text-uppercase"
-                  placeholder="Nome do responsável"
-                  required
-                />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small"
-                  >Função/Cargo <span class="text-danger">*</span></label
-                >
-                <input
-                  v-model="form.responsavelFuncao"
-                  type="text"
-                  class="form-control text-uppercase"
-                  placeholder="Ex: Síndico, Gerente"
-                  required
-                />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Telefone <span class="text-danger">*</span></label>
-                <input
-                  :value="form.responsavelTelefone"
-                  type="tel"
-                  class="form-control"
-                  placeholder="(61) 90000-0000"
-                  required
-                  @input="handlePhoneInput($event, 'responsavelTelefone')"
-                />
-              </div>
-              <div class="col-md-8">
-                <label class="form-label fw-bold text-muted small">E-mail <span class="text-danger">*</span></label>
-                <input
-                  v-model="form.responsavelEmail"
-                  type="email"
-                  class="form-control text-lowercase"
-                  placeholder="email@exemplo.com"
-                  required
-                />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Início da Vistoria</label>
-                <input v-model="form.inicio" type="datetime-local" class="form-control" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Fim da Vistoria</label>
-                <input v-model="form.fim" type="datetime-local" class="form-control" />
-              </div>
-              <div class="col-md-4" id="divStatus" :class="statusClass">
-                <label class="form-label fw-bold text-white small">Status</label>
-                <select v-model="form.status" class="form-select bg-white text-dark">
-                  <option value="Sem Status">Sem Status</option>
-                  <option value="Pendente">Pendente</option>
-                  <option value="Análise">Em Análise</option>
-                  <option value="Vistoria">Em Vistoria</option>
-                  <option value="Aprovado">Aprovado</option>
-                  <option value="Reprovado">Reprovado</option>
-                  <option value="Cancelado">Cancelado</option>
-                  <option value="Não Realizada">Não Realizada</option>
-                </select>
-              </div>
-
-              <!-- Licença Retorno Checkboxes (condicional RLE + Aprovado) -->
-              <div v-if="form.tipo === 'RLE' && form.status === 'Aprovado'" class="col-12 mt-3">
-                <div class="d-flex align-items-center gap-3 bg-light p-3 rounded">
-                  <label class="form-label mb-0 fw-bold">Licença aprovada por:</label>
-                  <div class="form-check mb-0">
-                    <input class="form-check-input" type="radio" v-model="form.retorno" id="retornoSim" value="sim" />
-                    <label class="form-check-label" for="retornoSim">1 ano</label>
-                  </div>
-                  <div class="form-check mb-0">
-                    <input class="form-check-input" type="radio" v-model="form.retorno" id="retornoNao" value="nao" />
-                    <label class="form-check-label" for="retornoNao">3 anos</label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Acompanhante -->
-          <div class="form-section mb-4">
-            <h4 class="section-title"><i class="bi bi-person me-2"></i>Dados do Acompanhante</h4>
-            <div class="row g-3">
-              <div class="col-md-7">
-                <label class="form-label fw-bold text-muted small">Nome Completo</label>
-                <input
-                  v-model="form.acompanhante"
-                  type="text"
-                  class="form-control text-uppercase"
-                  placeholder="Nome do acompanhante"
-                />
-              </div>
-              <div class="col-md-5">
-                <label class="form-label fw-bold text-muted small">Função/Cargo</label>
-                <input
-                  v-model="form.funcao"
-                  type="text"
-                  class="form-control text-uppercase"
-                  placeholder="Função na empresa"
-                />
-              </div>
-            </div>
-          </div>
-
-          <!-- ================= EXIGÊNCIAS DE SEGURANÇA DE VISTORIAS ================= -->
-          <div class="form-section mb-4">
-            <h4 class="section-title">
-              <i class="bi bi-shield-check me-2"></i>Exigências de Segurança Contra Incêndio
-            </h4>
-
-            <!-- Badges showing active categories -->
-            <div class="d-flex flex-wrap gap-2 mb-4">
-              <span
-                v-for="catCode in activeCategoryCodes"
-                :key="catCode"
-                class="badge bg-danger p-2 fs-6 position-relative d-flex align-items-center gap-2 text-wrap text-start"
-              >
-                {{ categoriasMap[catCode] }}
-                <i
-                  class="bi bi-x cursor-pointer text-white"
-                  @click="removerCategoria(catCode)"
-                  title="Remover categoria"
-                ></i>
-              </span>
-            </div>
-
-            <!-- Categories Exigency Cards -->
-            <div v-for="catCode in activeCategoryCodes" :key="catCode" class="card mb-3 p-3 border">
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <h5 class="mb-0 fw-bold text-dark">
-                  {{ categoriasMap[catCode] }}
-                  <!-- Alerta icon if category 009 is required by size check -->
-                  <i
-                    v-if="catCode === '009' && isSpkRequired"
-                    class="bi bi-exclamation-triangle-fill text-warning ms-2"
-                    title="Obrigatório pelos critérios de Área/Altura"
-                  ></i>
-                </h5>
-                <button
-                  type="button"
-                  class="btn-close"
-                  @click="removerCategoria(catCode)"
-                  aria-label="Remover"
-                ></button>
-              </div>
-
-              <!-- Input Search Box with dynamic dropdown suggestion -->
-              <div class="mb-3 position-relative">
-                <input
-                  v-model="searchExigencias[catCode]"
-                  type="text"
-                  class="form-control"
-                  :placeholder="'Adicionar exigência de ' + categoriasMap[catCode]"
-                  @focus="showSugestoes[catCode] = true"
-                  @blur="hideSugestoes(catCode)"
-                  @keydown.enter.prevent="adicionarCustomExigencia(catCode)"
-                />
-
-                <!-- Suggestions Dropdown -->
-                <ul
-                  v-if="showSugestoes[catCode] && getFiltradasSugestoes(catCode).length > 0"
-                  class="list-group position-absolute w-100 shadow-lg dropdown-suggestions"
-                >
-                  <li
-                    v-for="sugestao in getFiltradasSugestoes(catCode)"
-                    :key="sugestao"
-                    class="list-group-item list-group-item-action cursor-pointer py-2 small"
-                    @mousedown="adicionarExigencia(catCode, sugestao)"
+            <div class="form-section mb-4">
+              <div class="row g-3 align-items-center">
+                <div class="col-md-5">
+                  <label class="form-label fw-bold text-muted small"
+                    >Tipo de Vistoria <span class="text-danger">*</span></label
                   >
-                    {{ sugestao }}
-                  </li>
-                </ul>
+                  <select v-model="form.tipo" class="form-select" required>
+                    <option value="">Selecione...</option>
+                    <option value="RLE">RLE - Registro de Licenciamento de Empresas</option>
+                    <option value="RT">RT - Relatório Técnico</option>
+                    <option value="ADP">ADP - Análise de Dilação de Prazo</option>
+                    <option value="DPV">DPV - Dilação de Prazo Vencida</option>
+                    <option value="PPCI">PPCI - Plano de Prevenção Contra Incêndio</option>
+                    <option value="FTruck">FT - Food Truck</option>
+                    <option value="Outros">Outros</option>
+                    <option value="Eventual">Eventual</option>
+                  </select>
+                </div>
+                <div class="col-md-5">
+                  <label class="form-label fw-bold text-muted small"
+                    >Número do Processo <span v-if="form.tipo !== 'Eventual'" class="text-danger">*</span></label
+                  >
+                  <div class="input-group">
+                    <input
+                      :value="form.processoBusca"
+                      type="text"
+                      class="form-control"
+                      placeholder="AAA0000000000 ou 00000-00000000/0000-00"
+                      maxlength="22"
+                      :required="form.tipo !== 'Eventual'"
+                      @input="handleProcessoInput"
+                    />
+                    <button
+                      class="btn btn-outline-secondary"
+                      type="button"
+                      @click="copiarProcesso"
+                      title="Copiar Processo"
+                    >
+                      <i class="bi bi-clipboard"></i>
+                    </button>
+                  </div>
+                </div>
+                <div v-if="form.tipo !== 'Eventual'" class="col-md-2 d-flex gap-2 justify-content-end pt-3">
+                  <a
+                    v-if="googleMapsUrl"
+                    :href="googleMapsUrl"
+                    target="_blank"
+                    class="btn btn-outline-primary"
+                    title="Google Maps"
+                  >
+                    <i class="bi bi-geo-alt-fill"></i> Maps
+                  </a>
+                  <a v-if="wazeUrl" :href="wazeUrl" target="_blank" class="btn btn-outline-success" title="Waze">
+                    <i class="bi bi-cursor-fill"></i> Waze
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <!-- ================= CONTAINER PADRÃO ================= -->
+            <div v-if="form.tipo !== 'Eventual'">
+              <!-- Dados da Instituição -->
+              <div class="form-section mb-4">
+                <h4 class="section-title"><i class="bi bi-building me-2"></i>Dados da Instituição</h4>
+                <div class="row g-3">
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">CNPJ <span class="text-danger">*</span></label>
+                    <input
+                      :value="form.cnpj"
+                      type="text"
+                      class="form-control"
+                      placeholder="00.000.000/0000-00"
+                      maxlength="18"
+                      required
+                      @input="handleCnpjInput"
+                      @blur="buscarCnpj"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold text-muted small"
+                      >Nome Fantasia/Razão Social <span class="text-danger">*</span></label
+                    >
+                    <input
+                      v-model="form.instituicao"
+                      type="text"
+                      class="form-control text-uppercase"
+                      placeholder="Nome da Instituição"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold text-muted small"
+                      >Endereço Completo <span class="text-danger">*</span></label
+                    >
+                    <textarea
+                      v-model="form.endereco"
+                      class="form-control text-uppercase"
+                      rows="2"
+                      placeholder="Rua, número, bairro, cidade - UF"
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Coordenadas GPS</label>
+                    <div class="input-group">
+                      <input
+                        v-model="form.localizacao"
+                        type="text"
+                        class="form-control"
+                        placeholder="-00.00000, -00.00000"
+                        @input="metodoGps = 'Inserido manualmente'"
+                      />
+                      <button class="btn btn-outline-success" type="button" @click="obterGps" title="Obter GPS">
+                        <i class="bi bi-geo-alt"></i>
+                      </button>
+                    </div>
+                    <div class="form-text small" :class="metodoGpsClass">{{ metodoGps }}</div>
+                  </div>
+                </div>
               </div>
 
-              <!-- List of added items in this category - RESTORED ORIGINAL STYLING -->
-              <div class="d-flex flex-column gap-1">
-                <div v-for="(item, idx) in exigenciasAtivas[catCode]" :key="idx" class="tag">
-                  <span :class="{ 'text-decoration-line-through text-muted': item.cumprido }">
-                    <strong>{{ item.code }}</strong> - {{ item.text }}
+              <!-- Classificação da Edificação -->
+              <div class="form-section mb-4">
+                <h4 class="section-title d-flex align-items-center flex-wrap gap-2">
+                  <span class="d-flex align-items-center">
+                    <i class="bi bi-diagram-3 me-2"></i>Classificação da Edificação
                   </span>
-                  <div class="tag-actions">
+                  <i
+                    class="bi bi-info-circle-fill icon-info-cnae"
+                    @click="abrirCnaesModal"
+                    title="Visualizar atividades (CNAE)"
+                  ></i>
+                </h4>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold text-muted small"
+                      >Ocupação <span class="text-danger">*</span></label
+                    >
+                    <select
+                      v-model="form.ocupacao"
+                      class="form-select"
+                      id="ocupacao"
+                      @change="verificarMudancaExigencias()"
+                      required
+                    >
+                      <option value="">Selecione a ocupação</option>
+                      <optgroup label="Residenciais">
+                        <option value="01">01 - Residenciais unifamiliares</option>
+                        <option value="02">02 - Residenciais multifamiliares</option>
+                      </optgroup>
+                      <optgroup label="Transitórias">
+                        <option value="03">03 - Habitações coletivas</option>
+                        <option value="04">04 - Hotéis</option>
+                        <option value="05">05 - Hotéis residenciais</option>
+                      </optgroup>
+                      <optgroup label="Comerciais">
+                        <option value="06">06 - Comércio de pequeno porte</option>
+                        <option value="07">07 - Comércio de médio porte</option>
+                        <option value="08">08 - Comércio de grande porte</option>
+                      </optgroup>
+                      <optgroup label="Serviços Profissionais">
+                        <option value="09">09 - Escritórios</option>
+                        <option value="10">10 - Agências bancárias</option>
+                        <option value="11">11 - Laboratórios e estúdios</option>
+                        <option value="12">12 - Serviços de reparação</option>
+                      </optgroup>
+                      <optgroup label="Escolares">
+                        <option value="13">13 - Escolas em geral</option>
+                        <option value="14">14 - Escolas especiais</option>
+                        <option value="15">15 - Locais para cultura física</option>
+                        <option value="16">16 - Pré-escolas</option>
+                        <option value="17">17 - Escolas para portadores de deficiências</option>
+                      </optgroup>
+                      <optgroup label="Concentração de Público">
+                        <option value="18">18 - Museus e bibliotecas</option>
+                        <option value="19">19 - Templos religiosos</option>
+                        <option value="20">20 - Centros esportivos e de exibição</option>
+                        <option value="21">21 - Terminais de passageiros</option>
+                        <option value="22">22 - Artes cênicas e auditórios</option>
+                        <option value="23">23 - Clubes sociais</option>
+                        <option value="24">24 - Construções provisórias</option>
+                        <option value="25">25 - Restaurantes</option>
+                      </optgroup>
+                      <optgroup label="Garagens">
+                        <option value="26">26 - Garagens em geral</option>
+                        <option value="27">27 - Oficinas</option>
+                        <option value="28">28 - Hangares</option>
+                      </optgroup>
+                      <optgroup label="Hospitalares">
+                        <option value="29">29 - Hospitais veterinários</option>
+                        <option value="30">30 - Hospitais em geral</option>
+                        <option value="31">31 - Locais para pessoas com limitações físicas ou mentais</option>
+                        <option value="32">32 - Clínicas</option>
+                      </optgroup>
+                      <optgroup label="Industriais">
+                        <option value="33">33 - Indústrias ≤ 300 MJ/m²</option>
+                        <option value="34">34 - Indústrias > 300 MJ/m² e &lt; 1200 MJ/m²</option>
+                        <option value="35">35 - Indústrias ≥ 1200 MJ/m²</option>
+                      </optgroup>
+                      <optgroup label="Depósitos">
+                        <option value="36">36 - Depósitos de material incombustível</option>
+                        <option value="37">37 - Depósitos ≤ 300 MJ/m²</option>
+                        <option value="38">38 - Depósitos > 300 MJ/m² e &lt; 1200 MJ/m²</option>
+                        <option value="39">39 - Depósitos ≥ 1200 MJ/m²</option>
+                      </optgroup>
+                      <optgroup label="Armazenamento e Instalações de alto risco">
+                        <option value="40">40 - Líquidos ou gases inflamáveis e combustíveis</option>
+                        <option value="41">41 - Explosivos</option>
+                        <option value="42">42 - Produtos perigosos</option>
+                      </optgroup>
+                      <optgroup label="Especiais">
+                        <option value="43">43 - Vegetações</option>
+                        <option value="44">44 - Canteiros de obras</option>
+                        <option value="45">45 - Centros esportivos (&gt; 2500 pessoas)</option>
+                        <option value="46">46 - Parques de diversões</option>
+                        <option value="47">47 - Centrais de comunicação e energia</option>
+                        <option value="48">48 - Túneis</option>
+                        <option value="49">49 - Silos</option>
+                        <option value="50">50 - Locais com restrição de liberdade</option>
+                      </optgroup>
+                      <optgroup label="Mistas">
+                        <option value="51">51 - Destinações variáveis</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label fw-bold text-muted small"
+                      >Área (m²) <span class="text-danger">*</span></label
+                    >
+                    <input
+                      v-model="form.area"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      class="form-control"
+                      placeholder="0.00"
+                      @blur="verificarMudancaExigencias()"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label fw-bold text-muted small" title="Altura Ascendente">Alt. Asc. (m)</label>
+                    <input
+                      v-model="form.alturaAscendente"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      class="form-control"
+                      placeholder="0.00"
+                      @blur="verificarMudancaExigencias()"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label fw-bold text-muted small" title="Altura Descendente">Alt. Desc. (m)</label>
+                    <input
+                      v-model="form.alturaDescendente"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      class="form-control"
+                      placeholder="0.00"
+                      @blur="verificarMudancaExigencias()"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label fw-bold text-muted small" title="Pavimentos Superiores"
+                      >Pav. Superiores</label
+                    >
+                    <input
+                      v-model="form.pavimentosSuperiores"
+                      type="number"
+                      class="form-control"
+                      placeholder="0"
+                      @blur="verificarMudancaExigencias()"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label fw-bold text-muted small" title="Pavimentos Inferiores"
+                      >Pav. Inferiores</label
+                    >
+                    <input
+                      v-model="form.pavimentosInferiores"
+                      type="number"
+                      class="form-control"
+                      placeholder="0"
+                      @blur="verificarMudancaExigencias()"
+                    />
+                  </div>
+                  <div class="col-md-2">
+                    <label class="form-label fw-bold text-muted small">População Fixa</label>
+                    <input
+                      v-model="form.populacaoFixa"
+                      type="number"
+                      class="form-control"
+                      placeholder="0"
+                      @blur="verificarMudancaExigencias()"
+                    />
+                  </div>
+
+                  <!-- Grau de Risco -->
+                  <div class="col-md-3 mt-3">
+                    <label class="form-label fw-bold text-muted small">Grau de Risco</label>
+                    <select v-model="form.grauRisco" class="form-select" @change="verificarMudancaExigencias()">
+                      <option value="">Selecione o grau de risco</option>
+                      <option value="A">Baixo (A)</option>
+                      <option value="B-1">Médio (B-1)</option>
+                      <option value="B-2">Médio (B-2)</option>
+                      <option value="C-1">Alto (C-1)</option>
+                      <option value="C-2">Alto (C-2)</option>
+                    </select>
+                  </div>
+
+                  <!-- Quantidade de Brigadistas -->
+                  <div class="col-md-3 mt-3">
+                    <label class="form-label fw-bold text-muted small d-flex align-items-center gap-1">
+                      Qtd. de Brigadistas
+                      <i
+                        class="bi bi-info-circle-fill text-info cursor-pointer fs-6"
+                        @click="abrirBrigadaModal"
+                        title="Ver quantitativo necessário (NT 007/2011)"
+                      ></i>
+                    </label>
+                    <input
+                      v-model="form.qtdBrigadistas"
+                      type="number"
+                      min="0"
+                      class="form-control"
+                      :class="{ 'is-invalid': isQtdBrigadistasInvalid }"
+                      :placeholder="placeholderBrigadistas"
+                    />
+                    <div v-if="isQtdBrigadistasInvalid" class="invalid-feedback d-block">
+                      <i class="bi bi-exclamation-circle-fill me-1"></i>Abaixo do mínimo exigido ({{
+                        placeholderBrigadistas
+                      }}).
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Dados da Vistoria -->
+              <div class="form-section mb-4">
+                <h4 class="section-title"><i class="bi bi-clipboard-check me-2"></i>Dados da Vistoria</h4>
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold text-muted small"
+                      >Responsável pela Edificação <span class="text-danger">*</span></label
+                    >
+                    <input
+                      v-model="form.responsavel"
+                      type="text"
+                      class="form-control text-uppercase"
+                      placeholder="Nome do responsável"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small"
+                      >Função/Cargo <span class="text-danger">*</span></label
+                    >
+                    <input
+                      v-model="form.responsavelFuncao"
+                      type="text"
+                      class="form-control text-uppercase"
+                      placeholder="Ex: Síndico, Gerente"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small"
+                      >Telefone <span class="text-danger">*</span></label
+                    >
+                    <input
+                      :value="form.responsavelTelefone"
+                      type="tel"
+                      class="form-control"
+                      placeholder="(61) 90000-0000"
+                      required
+                      @input="handlePhoneInput($event, 'responsavelTelefone')"
+                    />
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold text-muted small">E-mail <span class="text-danger">*</span></label>
+                    <input
+                      v-model="form.responsavelEmail"
+                      type="email"
+                      class="form-control text-lowercase"
+                      placeholder="email@exemplo.com"
+                      required
+                    />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Início da Vistoria</label>
+                    <input v-model="form.inicio" type="datetime-local" class="form-control" />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Fim da Vistoria</label>
+                    <input v-model="form.fim" type="datetime-local" class="form-control" />
+                  </div>
+                  <div class="col-md-4" id="divStatus" :class="statusClass">
+                    <label class="form-label fw-bold small">Status</label>
+                    <select v-model="form.status" class="form-select">
+                      <option value="Sem Status">Sem Status</option>
+                      <option value="Pendente">Pendente</option>
+                      <option value="Análise">Em Análise</option>
+                      <option value="Vistoria">Em Vistoria</option>
+                      <option value="Aprovado">Aprovado</option>
+                      <option value="Reprovado">Reprovado</option>
+                      <option value="Cancelado">Cancelado</option>
+                      <option value="Não Realizada">Não Realizada</option>
+                    </select>
+                  </div>
+
+                  <!-- Licença Retorno Checkboxes (condicional RLE + Aprovado) -->
+                  <div v-if="form.tipo === 'RLE' && form.status === 'Aprovado'" class="col-12 mt-3">
+                    <div class="d-flex align-items-center gap-3 bg-light p-3 rounded">
+                      <label class="form-label mb-0 fw-bold">Licença aprovada por:</label>
+                      <div class="form-check mb-0">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          v-model="form.retorno"
+                          id="retornoSim"
+                          value="sim"
+                        />
+                        <label class="form-check-label" for="retornoSim">1 ano</label>
+                      </div>
+                      <div class="form-check mb-0">
+                        <input
+                          class="form-check-input"
+                          type="radio"
+                          v-model="form.retorno"
+                          id="retornoNao"
+                          value="nao"
+                        />
+                        <label class="form-check-label" for="retornoNao">3 anos</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Acompanhante -->
+              <div class="form-section mb-4">
+                <h4 class="section-title"><i class="bi bi-person me-2"></i>Dados do Acompanhante</h4>
+                <div class="row g-3">
+                  <div class="col-md-7">
+                    <label class="form-label fw-bold text-muted small">Nome Completo</label>
+                    <input
+                      v-model="form.acompanhante"
+                      type="text"
+                      class="form-control text-uppercase"
+                      placeholder="Nome do acompanhante"
+                    />
+                  </div>
+                  <div class="col-md-5">
+                    <label class="form-label fw-bold text-muted small">Função/Cargo</label>
+                    <input
+                      v-model="form.funcao"
+                      type="text"
+                      class="form-control text-uppercase"
+                      placeholder="Função na empresa"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <!-- ================= EXIGÊNCIAS DE SEGURANÇA DE VISTORIAS ================= -->
+              <div class="form-section mb-4">
+                <h4 class="section-title">
+                  <i class="bi bi-shield-check me-2"></i>Exigências de Segurança Contra Incêndio
+                </h4>
+
+                <!-- Badges showing active categories -->
+                <div class="d-flex flex-wrap gap-2 mb-4">
+                  <span
+                    v-for="catCode in activeCategoryCodes"
+                    :key="catCode"
+                    class="badge bg-danger p-2 fs-6 position-relative d-flex align-items-center gap-2 text-wrap text-start"
+                  >
+                    {{ categoriasMap[catCode] }}
                     <i
-                      class="bi bi-x-circle-fill tag-action-icon tag-close-icon"
-                      @click="removerExigenciaItem(catCode, idx)"
-                      title="Remover exigência"
+                      class="bi bi-x cursor-pointer text-white"
+                      @click="removerCategoria(catCode)"
+                      title="Remover categoria"
                     ></i>
-                    <i
-                      :class="[
-                        'bi',
-                        'bi-check-circle-fill',
-                        'tag-action-icon',
-                        'check-cumprido-icon',
-                        item.cumprido ? 'text-success' : 'text-secondary',
-                      ]"
-                      @click="item.cumprido = !item.cumprido"
-                      title="Marcar como cumprida/não cumprida"
-                    ></i>
-                    <i
-                      :class="[
-                        'bi',
-                        'bi-info-circle-fill',
-                        'tag-action-icon',
-                        'anotacao-icon',
-                        item.anotacao ? 'text-primary' : 'text-secondary',
-                      ]"
-                      @click="abrirAnotacaoItem(item)"
-                      title="Anotações"
-                    ></i>
+                  </span>
+                </div>
+
+                <!-- Categories Exigency Cards -->
+                <div v-for="catCode in activeCategoryCodes" :key="catCode" class="card mb-3 p-3 border">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5 class="mb-0 fw-bold text-body-emphasis">
+                      {{ categoriasMap[catCode] }}
+                      <!-- Alerta icon if category 009 is required by size check -->
+                      <i
+                        v-if="catCode === '009' && isSpkRequired"
+                        class="bi bi-exclamation-triangle-fill text-warning ms-2"
+                        title="Obrigatório pelos critérios de Área/Altura"
+                      ></i>
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      @click="removerCategoria(catCode)"
+                      aria-label="Remover"
+                    ></button>
+                  </div>
+
+                  <!-- Input Search Box with dynamic dropdown suggestion -->
+                  <div class="mb-3 position-relative">
+                    <input
+                      v-model="searchExigencias[catCode]"
+                      type="text"
+                      class="form-control"
+                      :placeholder="'Adicionar exigência de ' + categoriasMap[catCode]"
+                      @focus="showSugestoes[catCode] = true"
+                      @blur="hideSugestoes(catCode)"
+                      @keydown.enter.prevent="adicionarCustomExigencia(catCode)"
+                    />
+
+                    <!-- Suggestions Dropdown -->
+                    <ul
+                      v-if="showSugestoes[catCode] && getFiltradasSugestoes(catCode).length > 0"
+                      class="list-group position-absolute w-100 shadow-lg dropdown-suggestions"
+                    >
+                      <li
+                        v-for="sugestao in getFiltradasSugestoes(catCode)"
+                        :key="sugestao"
+                        class="list-group-item list-group-item-action cursor-pointer py-2 small"
+                        @mousedown="adicionarExigencia(catCode, sugestao)"
+                      >
+                        {{ sugestao }}
+                      </li>
+                    </ul>
+                  </div>
+
+                  <!-- List of added items in this category - RESTORED ORIGINAL STYLING -->
+                  <div class="d-flex flex-column gap-1">
+                    <div v-for="(item, idx) in exigenciasAtivas[catCode]" :key="idx" class="tag">
+                      <span :class="{ 'text-decoration-line-through text-muted': item.cumprido }">
+                        <strong>{{ item.code }}</strong> - {{ item.text }}
+                      </span>
+                      <div class="tag-actions">
+                        <i
+                          class="bi bi-x-circle-fill tag-action-icon tag-close-icon"
+                          @click="removerExigenciaItem(catCode, idx)"
+                          title="Remover exigência"
+                        ></i>
+                        <i
+                          :class="[
+                            'bi',
+                            'bi-check-circle-fill',
+                            'tag-action-icon',
+                            'check-cumprido-icon',
+                            item.cumprido ? 'text-success' : 'text-secondary',
+                          ]"
+                          @click="item.cumprido = !item.cumprido"
+                          title="Marcar como cumprida"
+                        ></i>
+                        <i
+                          :class="[
+                            'bi',
+                            'bi-info-circle-fill',
+                            'tag-action-icon',
+                            'anotacao-icon',
+                            item.anotacao ? 'text-primary' : 'text-secondary',
+                          ]"
+                          @click="abrirAnotacaoItem(item)"
+                          title="Anotações"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Add Category Dropdown -->
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-muted small">Adicionar Outra Categoria de Exigência:</label>
+                  <select class="form-select" @change="adicionarCategoriaNova($event)">
+                    <option value="">Selecione uma categoria para adicionar</option>
+                    <option
+                      v-for="(catName, catCode) in categoriasMap"
+                      :key="catCode"
+                      :value="catCode"
+                      :disabled="activeCategoryCodes.includes(catCode)"
+                    >
+                      {{ catName }}
+                    </option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Observações Gerais -->
+              <div class="form-section mb-4">
+                <h4 class="section-title"><i class="bi bi-journal-text me-2"></i>Observações Gerais</h4>
+                <div class="mb-3">
+                  <label class="form-label fw-bold text-muted small">Observações da Vistoria</label>
+                  <textarea
+                    v-model="form.observacao"
+                    rows="4"
+                    class="form-control"
+                    placeholder="Descreva observações relevantes sobre a vistoria..."
+                  ></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- ================= CONTAINER EVENTUAL ================= -->
+            <div v-else>
+              <!-- Identificação do Evento -->
+              <div class="form-section mb-4">
+                <h4 class="section-title"><i class="bi bi-file-text me-2"></i>Identificação do Evento</h4>
+                <div class="row g-3">
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold text-muted small">Nome do Evento</label>
+                    <input v-model="form.ev_evento" type="text" class="form-control text-uppercase" required />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Região Administrativa</label>
+                    <select v-model="form.ev_ra" class="form-select" required>
+                      <option value="">Selecione...</option>
+                      <option v-for="ra in regioesAdministrativas" :key="ra">{{ ra }}</option>
+                    </select>
+                  </div>
+                  <div class="col-md-8">
+                    <label class="form-label fw-bold text-muted small">Endereço do Evento</label>
+                    <input v-model="form.ev_endereco" type="text" class="form-control text-uppercase" />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Coordenadas GPS</label>
+                    <div class="input-group">
+                      <input v-model="form.ev_geo" type="text" class="form-control" placeholder="-00.0000, -00.0000" />
+                      <button class="btn btn-outline-success" type="button" @click="obterGpsEventual">
+                        <i class="bi bi-geo-alt"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Período e Capacidade -->
+              <div class="form-section mb-4">
+                <h4 class="section-title"><i class="bi bi-calendar-event me-2"></i>Período e Capacidade</h4>
+                <div class="row g-3">
+                  <div class="col-md-3">
+                    <label class="form-label fw-bold text-muted small">Data Início</label>
+                    <input v-model="form.ev_data_inicio" type="date" class="form-control" required />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label fw-bold text-muted small">Data Final</label>
+                    <input v-model="form.ev_data_fim" type="date" class="form-control" required />
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold text-muted small">Observações quanto ao período</label>
+                    <input v-model="form.ev_obs_periodo" type="text" class="form-control text-uppercase" />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Público do Evento</label>
+                    <input v-model="form.ev_publico" type="number" class="form-control" placeholder="0000" />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Área total (m²)</label>
+                    <input v-model="form.ev_area" type="number" class="form-control" placeholder="0000" />
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label fw-bold text-muted small">Realizou a vistoria?</label>
+                    <select v-model="form.ev_vistoria_realizada" class="form-select">
+                      <option>Sim</option>
+                      <option>Não</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Responsáveis e Brigada -->
+              <div class="form-section mb-4">
+                <h4 class="section-title"><i class="bi bi-person-check me-2"></i>Responsáveis</h4>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold text-muted small">Nome do Responsável</label>
+                    <input v-model="form.ev_responsavel" type="text" class="form-control text-uppercase" />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label fw-bold text-muted small">CPF do Responsável</label>
+                    <input
+                      :value="form.ev_cpf"
+                      type="text"
+                      class="form-control"
+                      placeholder="000.000.000-00"
+                      @input="handleCpfInput"
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label fw-bold text-muted small">Telefone do Responsável</label>
+                    <input
+                      :value="form.ev_telefone"
+                      type="tel"
+                      class="form-control"
+                      placeholder="(61) 90000-0000"
+                      @input="handlePhoneInput($event, 'ev_telefone')"
+                    />
+                  </div>
+                  <div class="col-md-3">
+                    <label class="form-label fw-bold text-muted small">Terá brigada?</label>
+                    <select v-model="form.ev_tem_brigada" class="form-select">
+                      <option value="">Selecione...</option>
+                      <option>Sim</option>
+                      <option>Não</option>
+                    </select>
+                  </div>
+                  <div class="col-md-9">
+                    <label class="form-label fw-bold text-muted small">Empresa de brigada</label>
+                    <input
+                      v-model="form.ev_empresa_brigada"
+                      type="text"
+                      class="form-control text-uppercase"
+                      list="lista_empresas_brigada"
+                      placeholder="Digite ou selecione a empresa..."
+                    />
+                    <datalist id="lista_empresas_brigada">
+                      <option v-for="emp in empresasBrigada" :key="emp" :value="emp"></option>
+                    </datalist>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Add Category Dropdown -->
-            <div class="mb-3">
-              <label class="form-label fw-bold text-muted small">Adicionar Outra Categoria de Exigência:</label>
-              <select class="form-select" @change="adicionarCategoriaNova($event)">
-                <option value="">Selecione uma categoria para adicionar</option>
-                <option
-                  v-for="(catName, catCode) in categoriasMap"
-                  :key="catCode"
-                  :value="catCode"
-                  :disabled="activeCategoryCodes.includes(catCode)"
-                >
-                  {{ catName }}
-                </option>
-              </select>
-            </div>
-          </div>
+            <!-- Form Actions Bar -->
+            <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3 mb-1">
+              <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Salvar</button>
+                <button type="button" class="btn btn-secondary" @click="cancelar">Cancelar</button>
+              </div>
 
-          <!-- Observações Gerais -->
-          <div class="form-section mb-4">
-            <h4 class="section-title"><i class="bi bi-journal-text me-2"></i>Observações Gerais</h4>
-            <div class="mb-3">
-              <label class="form-label fw-bold text-muted small">Observações da Vistoria</label>
-              <textarea
-                v-model="form.observacao"
-                rows="4"
-                class="form-control"
-                placeholder="Descreva observações relevantes sobre a vistoria..."
-              ></textarea>
-            </div>
-          </div>
-        </div>
+              <div class="d-flex gap-2 align-items-center">
+                <button v-if="isEdit" type="button" class="btn btn-info text-white" @click="compartilharProcesso">
+                  <i class="bi bi-share me-1"></i>Compartilhar
+                </button>
+                <button v-if="isEdit" type="button" class="btn btn-danger" @click="excluirRegistro">
+                  <i class="bi bi-trash me-1"></i>Excluir
+                </button>
 
-        <!-- ================= CONTAINER EVENTUAL ================= -->
-        <div v-else>
-          <!-- Identificação do Evento -->
-          <div class="form-section mb-4">
-            <h4 class="section-title"><i class="bi bi-file-text me-2"></i>Identificação do Evento</h4>
-            <div class="row g-3">
-              <div class="col-md-8">
-                <label class="form-label fw-bold text-muted small">Nome do Evento</label>
-                <input v-model="form.ev_evento" type="text" class="form-control text-uppercase" required />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Região Administrativa</label>
-                <select v-model="form.ev_ra" class="form-select" required>
-                  <option value="">Selecione...</option>
-                  <option v-for="ra in regioesAdministrativas" :key="ra">{{ ra }}</option>
-                </select>
-              </div>
-              <div class="col-md-8">
-                <label class="form-label fw-bold text-muted small">Endereço do Evento</label>
-                <input v-model="form.ev_endereco" type="text" class="form-control text-uppercase" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Coordenadas GPS</label>
-                <div class="input-group">
-                  <input v-model="form.ev_geo" type="text" class="form-control" placeholder="-00.0000, -00.0000" />
-                  <button class="btn btn-outline-success" type="button" @click="obterGpsEventual">
-                    <i class="bi bi-geo-alt"></i>
-                  </button>
+                <div class="form-check form-switch ms-2">
+                  <input v-model="form.checkConcluido" class="form-check-input" type="checkbox" id="checkConcluido" />
+                  <label class="form-check-label fw-bold text-success mb-0" for="checkConcluido">
+                    <i class="bi bi-check-circle me-1"></i>Concluído?
+                  </label>
                 </div>
               </div>
             </div>
-          </div>
-
-          <!-- Período e Capacidade -->
-          <div class="form-section mb-4">
-            <h4 class="section-title"><i class="bi bi-calendar-event me-2"></i>Período e Capacidade</h4>
-            <div class="row g-3">
-              <div class="col-md-3">
-                <label class="form-label fw-bold text-muted small">Data Início</label>
-                <input v-model="form.ev_data_inicio" type="date" class="form-control" required />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label fw-bold text-muted small">Data Final</label>
-                <input v-model="form.ev_data_fim" type="date" class="form-control" required />
-              </div>
-              <div class="col-md-6">
-                <label class="form-label fw-bold text-muted small">Observações quanto ao período</label>
-                <input v-model="form.ev_obs_periodo" type="text" class="form-control text-uppercase" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Público do Evento</label>
-                <input v-model="form.ev_publico" type="number" class="form-control" placeholder="0000" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Área total (m²)</label>
-                <input v-model="form.ev_area" type="number" class="form-control" placeholder="0000" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label fw-bold text-muted small">Realizou a vistoria?</label>
-                <select v-model="form.ev_vistoria_realizada" class="form-select">
-                  <option>Sim</option>
-                  <option>Não</option>
-                </select>
-              </div>
-            </div>
-          </div>
-
-          <!-- Responsáveis e Brigada -->
-          <div class="form-section mb-4">
-            <h4 class="section-title"><i class="bi bi-person-check me-2"></i>Responsáveis</h4>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label class="form-label fw-bold text-muted small">Nome do Responsável</label>
-                <input v-model="form.ev_responsavel" type="text" class="form-control text-uppercase" />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label fw-bold text-muted small">CPF do Responsável</label>
-                <input
-                  :value="form.ev_cpf"
-                  type="text"
-                  class="form-control"
-                  placeholder="000.000.000-00"
-                  @input="handleCpfInput"
-                />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label fw-bold text-muted small">Telefone do Responsável</label>
-                <input
-                  :value="form.ev_telefone"
-                  type="tel"
-                  class="form-control"
-                  placeholder="(61) 90000-0000"
-                  @input="handlePhoneInput($event, 'ev_telefone')"
-                />
-              </div>
-              <div class="col-md-3">
-                <label class="form-label fw-bold text-muted small">Terá brigada?</label>
-                <select v-model="form.ev_tem_brigada" class="form-select">
-                  <option value="">Selecione...</option>
-                  <option>Sim</option>
-                  <option>Não</option>
-                </select>
-              </div>
-              <div class="col-md-9">
-                <label class="form-label fw-bold text-muted small">Empresa de brigada</label>
-                <input
-                  v-model="form.ev_empresa_brigada"
-                  type="text"
-                  class="form-control text-uppercase"
-                  list="lista_empresas_brigada"
-                  placeholder="Digite ou selecione a empresa..."
-                />
-                <datalist id="lista_empresas_brigada">
-                  <option v-for="emp in empresasBrigada" :key="emp" :value="emp"></option>
-                </datalist>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Form Actions Bar -->
-        <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-3 mb-1">
-          <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-success"><i class="bi bi-save me-1"></i>Salvar</button>
-            <button type="button" class="btn btn-secondary" @click="cancelar">Cancelar</button>
-          </div>
-
-          <div class="d-flex gap-2 align-items-center">
-            <button v-if="isEdit" type="button" class="btn btn-info text-white" @click="compartilharProcesso">
-              <i class="bi bi-share me-1"></i>Compartilhar
-            </button>
-            <button v-if="isEdit" type="button" class="btn btn-danger" @click="excluirRegistro">
-              <i class="bi bi-trash me-1"></i>Excluir
-            </button>
-
-            <div class="form-check form-switch ms-2">
-              <input v-model="form.checkConcluido" class="form-check-input" type="checkbox" id="checkConcluido" />
-              <label class="form-check-label fw-bold text-success mb-0" for="checkConcluido">
-                <i class="bi bi-check-circle me-1"></i>Concluído?
-              </label>
-            </div>
-          </div>
-        </div>
           </div>
         </div>
       </form>
@@ -674,7 +770,14 @@
     <AnotacaoModal :item="selectedExigenciaItem" @save="salvarAnotacaoItem" />
 
     <!-- Modal de Classificação da Edificação (Atividades CNAE) -->
-    <CnaesModal :motivoRisco="motivoRisco" :cnaePrincipal="form.cnaePrincipal" :cnaeSecundarios="form.cnaeSecundarios" />
+    <CnaesModal
+      :motivoRisco="motivoRisco"
+      :cnaePrincipal="form.cnaePrincipal"
+      :cnaeSecundarios="form.cnaeSecundarios"
+    />
+
+    <!-- Modal de Dimensionamento da Brigada de Incêndio -->
+    <BrigadaModal :populacaoFixa="form.populacaoFixa" :grauRisco="form.grauRisco" />
   </BaseLayout>
 </template>
 
@@ -684,8 +787,9 @@ import { useRoute, useRouter } from "vue-router";
 import BaseLayout from "../components/BaseLayout.vue";
 import AnotacaoModal from "../components/AnotacaoModal.vue";
 import CnaesModal from "../components/CnaesModal.vue";
+import BrigadaModal from "../components/BrigadaModal.vue";
 import { DADOS_SISTEMA, regrasInclusao } from "../utils/dadosSistema.js";
-import { showToast, parseNumber } from "../utils/utils.js";
+import { showToast, parseNumber, extrairCodigoCnae, obterRiscoPorCnae, calcularBrigada } from "../utils/utils.js";
 import axios from "axios";
 import * as bootstrap from "bootstrap";
 import { NT02_TABELA2 } from "../utils/nt02_tabela2.js";
@@ -705,8 +809,10 @@ const form = ref({
   localizacao: "",
   ocupacao: "",
   area: "",
-  altura: "",
-  pavimentos: "",
+  alturaAscendente: "",
+  alturaDescendente: "",
+  pavimentosSuperiores: "",
+  pavimentosInferiores: "",
   populacaoFixa: "",
   responsavel: "",
   responsavelFuncao: "",
@@ -723,6 +829,7 @@ const form = ref({
   cnaePrincipal: "",
   cnaeSecundarios: [],
   grauRisco: "",
+  qtdBrigadistas: "",
 
   // Eventual specific
   ev_evento: "",
@@ -792,7 +899,9 @@ const salvarAnotacaoItem = (textoAnotacao) => {
   }
 };
 
+const isLoaded = ref(false);
 let cnaesModalInstance = null;
+let brigadaModalInstance = null;
 const motivoRisco = ref(null);
 const abrirCnaesModal = () => {
   const modalEl = document.getElementById("cnaesModal");
@@ -802,46 +911,33 @@ const abrirCnaesModal = () => {
   }
 };
 
-const extrairCodigoCnae = (cnaeStr) => {
-  if (!cnaeStr) return "";
-  const match = cnaeStr.match(/^(\d{4}-?\d\/?\d{2})/);
-  if (match) {
-    let raw = match[1].replace(/\D/g, "");
-    if (raw.length === 7) {
-      return `${raw.substring(0, 4)}-${raw.substring(4, 5)}/${raw.substring(5, 7)}`;
-    }
+const abrirBrigadaModal = () => {
+  const modalEl = document.getElementById("brigadaModal");
+  if (modalEl) {
+    brigadaModalInstance = new bootstrap.Modal(modalEl);
+    brigadaModalInstance.show();
   }
-  const digits = cnaeStr.replace(/\D/g, "");
-  if (digits.length >= 7) {
-    const raw = digits.substring(0, 7);
-    return `${raw.substring(0, 4)}-${raw.substring(4, 5)}/${raw.substring(5, 7)}`;
-  }
-  return "";
 };
 
-const obterRiscoPorCnae = (cnaeStr) => {
-  const code = extrairCodigoCnae(cnaeStr);
-  if (!code) return "";
-  
-  let matchingRisco = "";
-  let highestRiscoVal = 0;
-  const riscoValues = { "A": 1, "B-1": 2, "B-2": 3, "C-1": 4, "C-2": 5 };
+const placeholderBrigadistas = computed(() => {
+  const pop = parseInt(form.value.populacaoFixa, 10) || 0;
+  const risco = form.value.grauRisco || "";
+  const b = calcularBrigada(risco, pop);
+  return b.particular.toString();
+});
 
-  for (const grupo of NT02_TABELA2) {
-    for (const nivel of grupo.niveis) {
-      for (const exemplo of nivel.exemplos) {
-        if (exemplo.cnaes && exemplo.cnaes.includes(code)) {
-          const currentVal = riscoValues[nivel.risco] || 0;
-          if (currentVal > highestRiscoVal) {
-            highestRiscoVal = currentVal;
-            matchingRisco = nivel.risco;
-          }
-        }
-      }
-    }
+const isQtdBrigadistasInvalid = computed(() => {
+  if (
+    form.value.qtdBrigadistas === "" ||
+    form.value.qtdBrigadistas === null ||
+    form.value.qtdBrigadistas === undefined
+  ) {
+    return false;
   }
-  return matchingRisco;
-};
+  const entered = parseInt(form.value.qtdBrigadistas, 10);
+  const required = parseInt(placeholderBrigadistas.value, 10);
+  return entered < required;
+});
 
 const determinarGrauRisco = (silencioso = false) => {
   let highestRisco = "";
@@ -852,7 +948,7 @@ const determinarGrauRisco = (silencioso = false) => {
   let matchedOcupacao = "";
   let ajustadoArea = false;
   let originalRisco = "";
-  const riscoValues = { "A": 1, "B-1": 2, "B-2": 3, "C-1": 4, "C-2": 5 };
+  const riscoValues = { A: 1, "B-1": 2, "B-2": 3, "C-1": 4, "C-2": 5 };
 
   const verificarCnae = (cnaeStr) => {
     const code = extrairCodigoCnae(cnaeStr);
@@ -917,12 +1013,12 @@ const determinarGrauRisco = (silencioso = false) => {
     verificarCnae(form.value.cnaePrincipal);
   }
   if (form.value.cnaeSecundarios && form.value.cnaeSecundarios.length > 0) {
-    form.value.cnaeSecundarios.forEach(sec => verificarCnae(sec));
+    form.value.cnaeSecundarios.forEach((sec) => verificarCnae(sec));
   }
 
   if (highestRisco) {
     form.value.grauRisco = highestRisco;
-    
+
     if (matchedOcupacao) {
       form.value.ocupacao = matchedOcupacao;
     }
@@ -934,7 +1030,7 @@ const determinarGrauRisco = (silencioso = false) => {
       risco: highestRisco,
       ajustadoArea,
       areaVal: form.value.area,
-      originalRisco
+      originalRisco,
     };
 
     if (!silencioso) {
@@ -951,7 +1047,7 @@ watch(
     if (form.value.cnaePrincipal || (form.value.cnaeSecundarios && form.value.cnaeSecundarios.length > 0)) {
       determinarGrauRisco(true);
     }
-  }
+  },
 );
 
 // Auto populate suggestions setup
@@ -980,7 +1076,7 @@ const hideSugestoes = (catCode) => {
 const isSpkRequired = computed(() => {
   const oc = parseInt(form.value.ocupacao, 10) || 0;
   const a = parseNumber(form.value.area);
-  const h = parseNumber(form.value.altura);
+  const h = parseNumber(form.value.alturaAscendente);
 
   return (
     ([2].includes(oc) && h > 60) ||
@@ -1002,7 +1098,7 @@ const getCalculatedCategories = () => {
   const cat = ["002", "003", "004", "005", "008"];
   const oc = parseInt(form.value.ocupacao, 10) || 0;
   const areaVal = parseNumber(form.value.area);
-  const altVal = parseNumber(form.value.altura);
+  const altVal = parseNumber(form.value.alturaAscendente);
 
   if (oc > 0) {
     let selectDoc = true;
@@ -1016,8 +1112,10 @@ const getCalculatedCategories = () => {
     if (selectDoc) cat.unshift("001");
 
     // Dynamic rules check for systems
+    const popVal = parseInt(form.value.populacaoFixa, 10) || 0;
+    const riscoVal = form.value.grauRisco || "";
     for (const [codeExigencia, regras] of Object.entries(regrasInclusao)) {
-      const match = regras.some((r) => r.grupos.includes(oc) && r.check(altVal, areaVal));
+      const match = regras.some((r) => r.grupos.includes(oc) && r.check(altVal, areaVal, popVal, riscoVal));
       if (match && !cat.includes(codeExigencia)) {
         cat.push(codeExigencia);
       }
@@ -1026,8 +1124,9 @@ const getCalculatedCategories = () => {
   return cat;
 };
 
-// Watch area/height changes to recalculate active exigency categories
-watch([() => form.value.ocupacao, () => form.value.area, () => form.value.altura], () => {
+// Watch changes to recalculate active exigency categories
+// Recalculate and update active exigency categories
+const verificarMudancaExigencias = (silencioso = false) => {
   if (form.value.tipo === "Eventual") return;
   const computedCats = getCalculatedCategories();
 
@@ -1040,7 +1139,24 @@ watch([() => form.value.ocupacao, () => form.value.area, () => form.value.altura
       }
     }
   });
-});
+
+  // Remove categories that are no longer required
+  const dynamicKeys = ["001", ...Object.keys(regrasInclusao)];
+  dynamicKeys.forEach((code) => {
+    if (!computedCats.includes(code)) {
+      const index = activeCategoryCodes.value.indexOf(code);
+      if (index > -1) {
+        const hasActiveItems = exigenciasAtivas.value[code] && exigenciasAtivas.value[code].length > 0;
+        if (hasActiveItems && !silencioso) {
+          removerCategoria(code);
+        } else {
+          activeCategoryCodes.value.splice(index, 1);
+          delete exigenciasAtivas.value[code];
+        }
+      }
+    }
+  });
+};
 
 // Methods for category manipulation
 const adicionarCategoriaNova = (e) => {
@@ -1196,7 +1312,7 @@ const buscarGpsPorEndereco = async (nomeFantasia, razaoSocial, logradouroComplet
   }
   const cleanCidade = (cidade || "").trim();
   const cleanBairro = (bairro || "").trim();
-  
+
   let cleanLogradouro = (logradouroCompleto || "").trim();
   // Strip block/lot/sala information from query for better geocoding resolution
   const regexExtra = /\s+(bloco|blo|bl|lote|lt|loja|lj|sala|sl|apto|ap|casa|cs|condominio|cond)\b.*/i;
@@ -1270,8 +1386,8 @@ const buscarCnpj = async () => {
       }
 
       if (estab.atividades_secundarias && Array.isArray(estab.atividades_secundarias)) {
-        form.value.cnaeSecundarios = estab.atividades_secundarias.map(sec => 
-          `${sec.subclasse || ""} - ${sec.descricao || ""}`.trim().toUpperCase()
+        form.value.cnaeSecundarios = estab.atividades_secundarias.map((sec) =>
+          `${sec.subclasse || ""} - ${sec.descricao || ""}`.trim().toUpperCase(),
         );
       } else {
         form.value.cnaeSecundarios = [];
@@ -1451,11 +1567,30 @@ const copiarProcesso = () => {
 };
 
 const compartilharProcesso = () => {
-  const link = `${window.location.origin}${window.location.pathname}#/processo/${formId.value}`;
-  navigator.clipboard
-    .writeText(link)
-    .then(() => showToast("Link de compartilhamento copiado para a área de transferência!", "success"))
-    .catch(() => showToast("Erro ao copiar link.", "danger"));
+  // Construct payload with all current form and checklist data
+  const payload = {
+    id: formId.value,
+    ...form.value,
+    activeCategoryCodes: activeCategoryCodes.value,
+    exigenciasAtivas: exigenciasAtivas.value,
+  };
+
+  try {
+    const jsonStr = JSON.stringify(payload);
+    // Base64 encode using safe UTF-8 encoding to preserve accents and special characters
+    const base64Data = btoa(unescape(encodeURIComponent(jsonStr)));
+    
+    // Create sharing link with the data query param positioned after the hash route
+    const link = `${window.location.origin}${window.location.pathname}#/processo/${formId.value}?data=${encodeURIComponent(base64Data)}`;
+    
+    navigator.clipboard
+      .writeText(link)
+      .then(() => showToast("Link de compartilhamento copiado com todos os dados!", "success"))
+      .catch(() => showToast("Erro ao copiar link.", "danger"));
+  } catch (err) {
+    console.error("Erro ao gerar link de compartilhamento:", err);
+    showToast("Erro ao gerar link de compartilhamento.", "danger");
+  }
 };
 
 // Populate dropdowns static
@@ -1566,19 +1701,93 @@ const empresasBrigada = [
 // Load on mount
 onMounted(() => {
   const id = route.params.id;
+  const queryData = route.query.data;
   if (id) {
-    const raw = localStorage.getItem(`processo-${id}`);
-    if (raw) {
+    if (queryData) {
       try {
-        const data = JSON.parse(raw);
-        form.value = { ...form.value, ...data };
-        form.value.checkConcluido = !!data.checkConcluido;
+        const decodedStr = decodeURIComponent(escape(atob(queryData)));
+        const importedData = JSON.parse(decodedStr);
+
+        form.value = { ...form.value, ...importedData };
+        form.value.checkConcluido = !!importedData.checkConcluido;
 
         // Map legacy snake_case contact fields
-        form.value.populacaoFixa = data.populacaoFixa || data.populacao_fixa || "";
-        form.value.responsavelFuncao = data.responsavelFuncao || data.responsavel_funcao || "";
-        form.value.responsavelTelefone = data.responsavelTelefone || data.responsavel_telefone || "";
-        form.value.responsavelEmail = data.responsavelEmail || data.responsavel_email || "";
+        form.value.populacaoFixa = importedData.populacaoFixa || importedData.populacao_fixa || "";
+        form.value.responsavelFuncao = importedData.responsavelFuncao || importedData.responsavel_funcao || "";
+        form.value.responsavelTelefone = importedData.responsavelTelefone || importedData.responsavel_telefone || "";
+        form.value.responsavelEmail = importedData.responsavelEmail || importedData.responsavel_email || "";
+
+        const normalizeZero = (val) => {
+          if (val === 0 || val === "0" || val === "0.00" || val === null || val === undefined) return "";
+          return val.toString();
+        };
+
+        // Map legacy altura / pavimentos values
+        form.value.alturaAscendente = normalizeZero(importedData.alturaAscendente) || normalizeZero(importedData.altura) || "";
+        form.value.alturaDescendente = normalizeZero(importedData.alturaDescendente) || "";
+        form.value.pavimentosSuperiores =
+          normalizeZero(importedData.pavimentosSuperiores) || normalizeZero(importedData.pavimentos) || "";
+        form.value.pavimentosInferiores = normalizeZero(importedData.pavimentosInferiores) || "";
+
+        if (importedData.retorno !== undefined) {
+          form.value.retorno = importedData.retorno === true || importedData.retorno === "sim" ? "sim" : "nao";
+        }
+
+        if (importedData.activeCategoryCodes) {
+          activeCategoryCodes.value = importedData.activeCategoryCodes;
+        } else if (importedData.categoriasSelecionadas) {
+          activeCategoryCodes.value = importedData.categoriasSelecionadas.map((c) => c.padStart(3, "0"));
+        }
+
+        if (importedData.exigenciasAtivas) {
+          exigenciasAtivas.value = importedData.exigenciasAtivas;
+        }
+
+        // Save imported data in LocalStorage under recipient's browser
+        const payloadToSave = {
+          id: formId.value,
+          ...form.value,
+          activeCategoryCodes: activeCategoryCodes.value,
+          exigenciasAtivas: exigenciasAtivas.value,
+        };
+        localStorage.setItem(`processo-${formId.value}`, JSON.stringify(payloadToSave));
+
+        if (!form.value.grauRisco) {
+          determinarGrauRisco(true);
+        }
+
+        showToast("Dados do processo importados com sucesso via link!", "success");
+      } catch (err) {
+        console.error("Erro ao decodificar dados compartilhados:", err);
+        showToast("Erro ao carregar dados compartilhados do link.", "danger");
+      }
+    } else {
+      // Normal flow: load from LocalStorage
+      const raw = localStorage.getItem(`processo-${id}`);
+      if (raw) {
+        try {
+          const data = JSON.parse(raw);
+          form.value = { ...form.value, ...data };
+          form.value.checkConcluido = !!data.checkConcluido;
+
+          // Map legacy snake_case contact fields
+          form.value.populacaoFixa = data.populacaoFixa || data.populacao_fixa || "";
+          form.value.responsavelFuncao = data.responsavelFuncao || data.responsavel_funcao || "";
+          form.value.responsavelTelefone = data.responsavelTelefone || data.responsavel_telefone || "";
+          form.value.responsavelEmail = data.responsavelEmail || data.responsavel_email || "";
+
+        // Helper to normalize empty/zero structural values to empty string
+        const normalizeZero = (val) => {
+          if (val === 0 || val === "0" || val === "0.00" || val === null || val === undefined) return "";
+          return val.toString();
+        };
+
+        // Map legacy altura / pavimentos values
+        form.value.alturaAscendente = normalizeZero(data.alturaAscendente) || normalizeZero(data.altura) || "";
+        form.value.alturaDescendente = normalizeZero(data.alturaDescendente) || "";
+        form.value.pavimentosSuperiores =
+          normalizeZero(data.pavimentosSuperiores) || normalizeZero(data.pavimentos) || "";
+        form.value.pavimentosInferiores = normalizeZero(data.pavimentosInferiores) || "";
 
         // Map legacy retorno boolean
         if (data.retorno !== undefined) {
@@ -1634,6 +1843,9 @@ onMounted(() => {
       }
     }
   }
+  }
+  verificarMudancaExigencias(true);
+  isLoaded.value = true;
 });
 </script>
 
@@ -1645,12 +1857,12 @@ onMounted(() => {
   z-index: 1000;
   max-height: 250px;
   overflow-y: auto;
-  background-color: #fff;
-  border: 1px solid #ccc;
+  background-color: var(--autocomplete-bg);
+  border: 1px solid var(--autocomplete-border);
   border-radius: 4px;
 }
 .dropdown-suggestions li:hover {
-  background-color: #f1f1f1;
+  background-color: var(--autocomplete-item-hover);
 }
 .accordion-button::after {
   filter: grayscale(1);
@@ -1659,7 +1871,9 @@ onMounted(() => {
   color: var(--info-color);
   cursor: pointer;
   font-size: 1.15rem;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
   line-height: 1;
   display: inline-flex;
   align-items: center;

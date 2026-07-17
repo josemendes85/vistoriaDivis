@@ -1,4 +1,5 @@
 // Static databases for safety exigencies and conditions
+import { calcularBrigada } from "./utils.js";
 export const DADOS_SISTEMA_EVENTUAL = {
 	categorias: {
 		"001": "DOCUMENTAÇÃO E PROJETOS",
@@ -1194,4 +1195,32 @@ export const regrasInclusao = {
 		{ grupos: [36], check: (h, a) => h > 12 || a > 2000 },
 		{ grupos: [40], check: (h, a) => h > 0 || a > 0 },
 	],
+	"013": [
+		// 013: BRIGADA DE INCÊNDIO
+		{
+			grupos: [
+				1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+				21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+				41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+			],
+			check: (h, a, pop, risco) => {
+				const b = calcularBrigada(risco, pop);
+				return b.supervisor > 0 || b.chefe > 0 || b.particular > 0 || b.voluntario > 0;
+			}
+		}
+	],
+	"012": [
+		// 012: PLANO DE PREVENÇÃO CONTRA INCÊNDIO E PÂNICO (PPCI)
+		{
+			grupos: [
+				1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+				21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
+				41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+			],
+			check: (h, a, pop, risco) => {
+				const b = calcularBrigada(risco, pop);
+				return b.particular >= 2;
+			}
+		}
+	]
 };
