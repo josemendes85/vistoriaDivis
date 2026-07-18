@@ -1901,7 +1901,9 @@ export const NT02_TABELA2 = [
             "termo": "Abrigos geriátricos",
             "ocupacao": "31",
             "cnaes": [
-              "8711-5/01",
+              "8711-5/02",
+              "8711-5/03",
+              "8711-5/04",
               "8711-5/05"
             ],
             "obs": "Encontrado(s) 1 CNAE(s) correspondente(s)."

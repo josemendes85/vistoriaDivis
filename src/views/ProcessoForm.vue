@@ -154,6 +154,7 @@
                       class="form-select"
                       id="ocupacao"
                       @change="verificarMudancaExigencias()"
+                      @blur="determinarGrauRisco(false)"
                       required
                     >
                       <option value="">Selecione a ocupação</option>
@@ -926,6 +927,18 @@ const placeholderBrigadistas = computed(() => {
   return b.particular.toString();
 });
 
+const limparQtdSeIgualAoMinimo = () => {
+  const calculatedMin = parseInt(placeholderBrigadistas.value, 10) || 0;
+  if (
+    form.value.qtdBrigadistas !== "" &&
+    form.value.qtdBrigadistas !== null &&
+    form.value.qtdBrigadistas !== undefined &&
+    parseInt(form.value.qtdBrigadistas, 10) === calculatedMin
+  ) {
+    form.value.qtdBrigadistas = "";
+  }
+};
+
 const isQtdBrigadistasInvalid = computed(() => {
   if (
     form.value.qtdBrigadistas === "" ||
@@ -960,6 +973,12 @@ const determinarGrauRisco = (silencioso = false) => {
           if (exemplo.cnaes && exemplo.cnaes.includes(code)) {
             let finalRisco = nivel.risco;
             let finalOcupacao = exemplo.ocupacao;
+
+            // If an occupation is selected, only consider matching examples for that occupation
+            if (form.value.ocupacao && finalOcupacao !== form.value.ocupacao) {
+              continue;
+            }
+
             let isAdjusted = false;
             const areaVal = parseFloat(form.value.area) || 0;
 
@@ -1014,6 +1033,30 @@ const determinarGrauRisco = (silencioso = false) => {
   }
   if (form.value.cnaeSecundarios && form.value.cnaeSecundarios.length > 0) {
     form.value.cnaeSecundarios.forEach((sec) => verificarCnae(sec));
+  }
+
+  // Fallback: if occupation is selected but no direct CNAE mapping exists for it,
+  // resolve the risk level of that occupation in NT02_TABELA2
+  if (form.value.ocupacao && !highestRisco) {
+    for (const grupo of NT02_TABELA2) {
+      for (const nivel of grupo.niveis) {
+        for (const exemplo of nivel.exemplos) {
+          if (exemplo.ocupacao === form.value.ocupacao) {
+            const currentVal = riscoValues[nivel.risco] || 0;
+            if (currentVal > highestRiscoVal) {
+              highestRiscoVal = currentVal;
+              highestRisco = nivel.risco;
+              matchedTermo = exemplo.termo;
+              matchedCnae = "";
+              matchedGrupo = grupo.grupo;
+              matchedOcupacao = exemplo.ocupacao;
+              ajustadoArea = false;
+              originalRisco = nivel.risco;
+            }
+          }
+        }
+      }
+    }
   }
 
   if (highestRisco) {
@@ -1535,6 +1578,8 @@ const wazeUrl = computed(() => {
 const salvarRegistro = () => {
   const key = `processo-${formId.value}`;
 
+  limparQtdSeIgualAoMinimo();
+
   // Format saving payload
   const payload = {
     id: formId.value,
@@ -1567,6 +1612,8 @@ const copiarProcesso = () => {
 };
 
 const compartilharProcesso = () => {
+  limparQtdSeIgualAoMinimo();
+
   // Construct payload with all current form and checklist data
   const payload = {
     id: formId.value,
@@ -1743,6 +1790,12 @@ onMounted(() => {
           exigenciasAtivas.value = importedData.exigenciasAtivas;
         }
 
+        if (!form.value.grauRisco) {
+          determinarGrauRisco(true);
+        }
+
+        limparQtdSeIgualAoMinimo();
+
         // Save imported data in LocalStorage under recipient's browser
         const payloadToSave = {
           id: formId.value,
@@ -1751,10 +1804,6 @@ onMounted(() => {
           exigenciasAtivas: exigenciasAtivas.value,
         };
         localStorage.setItem(`processo-${formId.value}`, JSON.stringify(payloadToSave));
-
-        if (!form.value.grauRisco) {
-          determinarGrauRisco(true);
-        }
 
         showToast("Dados do processo importados com sucesso via link!", "success");
       } catch (err) {
@@ -1836,6 +1885,8 @@ onMounted(() => {
         if (!form.value.grauRisco) {
           determinarGrauRisco(true);
         }
+
+        limparQtdSeIgualAoMinimo();
 
         showToast("Processo carregado com sucesso!", "success");
       } catch (e) {

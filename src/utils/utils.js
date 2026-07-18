@@ -68,7 +68,7 @@ export function extrairCodigoCnae(cnaeStr) {
   return "";
 }
 
-export function obterRiscoPorCnae(cnaeStr) {
+export function obterRiscoPorCnae(cnaeStr, ocupacao) {
   const code = extrairCodigoCnae(cnaeStr);
   if (!code) return "";
   
@@ -80,6 +80,9 @@ export function obterRiscoPorCnae(cnaeStr) {
     for (const nivel of grupo.niveis) {
       for (const exemplo of nivel.exemplos) {
         if (exemplo.cnaes && exemplo.cnaes.includes(code)) {
+          if (ocupacao && exemplo.ocupacao !== ocupacao) {
+            continue;
+          }
           const currentVal = riscoValues[nivel.risco] || 0;
           if (currentVal > highestRiscoVal) {
             highestRiscoVal = currentVal;
