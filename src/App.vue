@@ -4,7 +4,7 @@
 </template>
 
 <script setup>
-import ToastNotification from './components/ToastNotification.vue';
+import ToastNotification from '@/shared/components/ToastNotification.vue';
 </script>
 
 <style>

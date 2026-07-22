@@ -1,0 +1,4 @@
+export const CONFIG = {
+  TOAST_DURATION: 3000,
+  GEOLOCATION_TIMEOUT: 10000,
+};
