@@ -2162,6 +2162,12 @@ const buscarDadosRle = async () => {
         form.value.acompanhante = acompText;
       }
 
+      // 8. Área (m²) (form.area)
+      const areaUtilizada = res.data.num_area_total_utilizada ?? rle.num_area_total_utilizada;
+      if (areaUtilizada !== undefined && areaUtilizada !== null && areaUtilizada !== "") {
+        form.value.area = areaUtilizada;
+      }
+
       showToast("Dados do processo RLE importados com sucesso!", "success");
 
       // Chamar buscarCNPJ() para enriquecimento automático de CNAEs e Tabela 2 da NT 02

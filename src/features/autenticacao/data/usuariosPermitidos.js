@@ -1,9 +1,9 @@
 // Database of users authorized to access the system
 export const USUARIOS_PERMITIDOS = [
   {
-    nomeGuerra: 'MENDES',
-    matricula: '1900010',
-    email: 'josemendes85@gmail.com'
+    nomeGuerra: 'TESTE',
+    matricula: '1234567',
+    email: 'teste@teste.com'
   },
   {
     nomeGuerra: 'ADMIN',
