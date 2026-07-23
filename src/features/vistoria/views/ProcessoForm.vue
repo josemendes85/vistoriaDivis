@@ -26,6 +26,7 @@
                       maxlength="22"
                       :required="form.tipo !== 'Eventual'"
                       @input="handleProcessoInput"
+                      @blur="handleProcessoBlur"
                     />
                     <button
                       class="btn btn-outline-secondary"
@@ -41,7 +42,13 @@
                   <label class="form-label fw-bold text-muted small"
                     >Tipo de Vistoria <span class="text-danger">*</span></label
                   >
-                  <select v-model="form.tipo" class="form-select" required>
+                  <select
+                    v-model="form.tipo"
+                    class="form-select"
+                    required
+                    @change="handleTipoChange"
+                    @blur="handleTipoBlur"
+                  >
                     <option value="">Selecione...</option>
                     <option value="RLE">RLE - Registro de Licenciamento de Empresas</option>
                     <option value="RT">RT - Relatório Técnico</option>
@@ -2027,6 +2034,167 @@ const buscarGpsPorEndereco = async (nomeFantasia, razaoSocial, logradouroComplet
 
   metodoGps.value = "Clique para obter a geolocalização atual";
   showToast("Não foi possível encontrar as coordenadas automaticamente.", "warning");
+};
+
+// Busca de Dados do Processo RLE (Redesim / SCIP CBMDF)
+const isBuscandoRle = ref(false);
+let ultimoProcessoBuscadoRle = "";
+
+const buscarDadosRle = async () => {
+  if (form.value.tipo !== "RLE") return;
+  const processoNum = (form.value.processoBusca || "").trim();
+  if (!processoNum) return;
+
+  if (isBuscandoRle.value || ultimoProcessoBuscadoRle === processoNum) return;
+
+  isBuscandoRle.value = true;
+  showToast("Processando...", "info", 0);
+
+  try {
+    let res;
+    try {
+      res = await axios.get(
+        `/scipweb/backend-scip/divis/vistoria/protocolo/${encodeURIComponent(processoNum)}`
+      );
+    } catch (proxyErr) {
+      res = await axios.get(
+        `https://sistemas.cbm.df.gov.br/scipweb/backend-scip/divis/vistoria/protocolo/${encodeURIComponent(processoNum)}`
+      );
+    }
+
+    if (res.data && res.data.divis_vistoria_rle) {
+      ultimoProcessoBuscadoRle = processoNum;
+      const rle = res.data.divis_vistoria_rle;
+      const redesim = rle.json_response_redesim?.registrosRedesim?.registroRedesim?.[0]?.dadosRedesim;
+
+      // 1. Número do Processo (form.processoBusca)
+      if (rle.num_protocolo_redesim) {
+        form.value.processoBusca = rle.num_protocolo_redesim;
+      }
+
+      // 2. CNPJ da Empresa (form.cnpj)
+      if (redesim && redesim.cnpj) {
+        const cnpjLimpo = redesim.cnpj.replace(/\D/g, "");
+        if (cnpjLimpo.length === 14) {
+          form.value.cnpj = `${cnpjLimpo.substring(0, 2)}.${cnpjLimpo.substring(2, 5)}.${cnpjLimpo.substring(5, 8)}/${cnpjLimpo.substring(8, 12)}-${cnpjLimpo.substring(12)}`;
+        } else {
+          form.value.cnpj = redesim.cnpj;
+        }
+      }
+
+      // 3. Nome Fantasia / Razão Social (form.instituicao)
+      if (redesim) {
+        const nomeFantasia = (redesim.nomeFantasia || "").trim();
+        const nomeEmpresarial = (redesim.nomeEmpresarial || "").trim();
+        let nomeCompleto = "";
+        if (nomeFantasia && nomeEmpresarial) {
+          nomeCompleto = `${nomeFantasia} / ${nomeEmpresarial}`;
+        } else {
+          nomeCompleto = nomeFantasia || nomeEmpresarial;
+        }
+        if (nomeCompleto) {
+          form.value.instituicao = nomeCompleto.toUpperCase();
+        }
+      }
+
+      // 4. Endereço Completo (form.endereco)
+      if (redesim && redesim.endereco) {
+        const end = redesim.endereco;
+        const tipoLogradouro = (end.codTipoLogradouro || "").trim();
+        const logradouro = (end.logradouro || "").trim();
+        const numLogradouro = (end.numLogradouro || "").trim();
+        const complemento = (end.complemento || "").trim();
+        const bairro = (end.bairro || "").trim();
+        const cidade = (end.cidade || redesim.regiaoAdministrativa?.nome || "BRASÍLIA").trim();
+        const uf = (end.uf || "DF").trim();
+
+        let cepDigits = (end.cep || "").replace(/\D/g, "");
+        let cepFormatado =
+          cepDigits.length === 8
+            ? `${cepDigits.substring(0, 2)}.${cepDigits.substring(2, 5)}-${cepDigits.substring(5)}`
+            : cepDigits;
+
+        const logrCompleto = `${tipoLogradouro} ${logradouro}`.trim();
+        const partesLogr = [];
+        if (logrCompleto) partesLogr.push(logrCompleto);
+        if (numLogradouro) partesLogr.push(numLogradouro);
+        if (complemento) partesLogr.push(complemento);
+
+        let enderecoStr = partesLogr.join(", ");
+        if (bairro) enderecoStr += `. ${bairro}`;
+        if (cidade || uf) enderecoStr += `, ${cidade}/${uf}`;
+        if (cepFormatado) enderecoStr += `. CEP: ${cepFormatado}`;
+
+        const pontoRef = (rle.dsc_ponto_referencia || "").trim();
+        if (pontoRef) {
+          enderecoStr += `. PONTO DE REFERÊNCIA: ${pontoRef}`;
+        }
+
+        form.value.endereco = enderecoStr.toUpperCase();
+      }
+
+      // 5. Coordenadas GPS (form.localizacao)
+      if (rle.vlr_latitude && rle.vlr_longitude) {
+        form.value.localizacao = `${rle.vlr_latitude}, ${rle.vlr_longitude}`;
+        metodoGps.value = "Obtido do RLE";
+      }
+
+      // 6. Responsável Legal (form.responsavel, responsavelFuncao, responsavelTelefone, responsavelEmail)
+      if (rle.nom_solicitante) {
+        form.value.responsavel = rle.nom_solicitante.toUpperCase();
+      }
+      if (rle.dsc_funcao_responsavel) {
+        form.value.responsavelFuncao = rle.dsc_funcao_responsavel.toUpperCase();
+      }
+      if (rle.num_telefone1_solicitante) {
+        form.value.responsavelTelefone = rle.num_telefone1_solicitante;
+      }
+      if (rle.dsc_email_solicitante) {
+        form.value.responsavelEmail = rle.dsc_email_solicitante;
+      }
+
+      // 7. Dados do Acompanhante (form.acompanhante)
+      if (rle.nom_responsavel) {
+        let acompText = rle.nom_responsavel.toUpperCase();
+        if (rle.num_telefone_responsavel) {
+          acompText += ` - TEL: ${rle.num_telefone_responsavel}`;
+        }
+        form.value.acompanhante = acompText;
+      }
+
+      showToast("Dados do processo RLE importados com sucesso!", "success");
+
+      // Chamar buscarCNPJ() para enriquecimento automático de CNAEs e Tabela 2 da NT 02
+      if (form.value.cnpj) {
+        buscarCnpj();
+      }
+    } else {
+      showToast("Dados do processo RLE não encontrados.", "warning");
+    }
+  } catch (err) {
+    console.error("Erro ao buscar processo RLE:", err);
+    showToast("Não foi possível encontrar os dados do processo RLE.", "warning");
+  } finally {
+    isBuscandoRle.value = false;
+  }
+};
+
+const handleTipoChange = () => {
+  if (form.value.tipo === "RLE" && form.value.processoBusca) {
+    buscarDadosRle();
+  }
+};
+
+const handleTipoBlur = () => {
+  if (form.value.tipo === "RLE" && form.value.processoBusca) {
+    buscarDadosRle();
+  }
+};
+
+const handleProcessoBlur = () => {
+  if (form.value.tipo === "RLE" && form.value.processoBusca) {
+    buscarDadosRle();
+  }
 };
 
 // CNPJ Public Lookup API

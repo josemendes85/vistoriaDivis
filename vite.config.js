@@ -9,6 +9,14 @@ export default defineConfig({
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
     }
+  },
+  server: {
+    proxy: {
+      '/scipweb': {
+        target: 'https://sistemas.cbm.df.gov.br',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
   }
 })
-
